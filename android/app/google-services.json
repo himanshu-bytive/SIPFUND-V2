@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "787896693688",
+    "firebase_url": "https://sipfund-45bff.firebaseio.com",
+    "project_id": "sipfund-45bff",
+    "storage_bucket": "sipfund-45bff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787896693688:android:9ac53d922fe3580a",
+        "android_client_info": {
+          "package_name": "com.octrax.sipfund"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787896693688-c4ollv72llgqdude2pd40tdvg0pvo98f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.octrax.sipfund",
+            "certificate_hash": "0d57fbe5960292edc8e65a02d86854775ec8d099"
+          }
+        },
+        {
+          "client_id": "787896693688-hi3b40pm3ln62c4q2c55jp97so8g6qit.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAneuD5T-CL_iUOX4IR5iSo-Lf0KDcqkyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787896693688-hi3b40pm3ln62c4q2c55jp97so8g6qit.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

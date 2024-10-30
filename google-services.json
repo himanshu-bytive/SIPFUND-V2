@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "775845687019",
+    "project_id": "sipfunduat-d9594",
+    "storage_bucket": "sipfunduat-d9594.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775845687019:android:7acd842b4a01ea116018ae",
+        "android_client_info": {
+          "package_name": "com.octrax.sipfund"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvwjUBbjDvQqUuklBV7ukt4hZxBSY5k6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775845687019:android:f52bde4d655a16826018ae",
+        "android_client_info": {
+          "package_name": "com.uat.sipfund"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvwjUBbjDvQqUuklBV7ukt4hZxBSY5k6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

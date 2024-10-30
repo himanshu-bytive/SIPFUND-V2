@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44.001" height="45" viewBox="0 0 44.001 45">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_38" data-name="Path 38" d="M3.092,0,6.286,20.99l-3.083,21L.01,21,3.092,0Z" transform="translate(-0.01 -0.001)" clip-rule="evenodd"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Path_40" data-name="Path 40" d="M0,3.148,20.261.01l20.26,3.138L20.261,6.286,0,3.148Z" transform="translate(-0.001 -0.01)" clip-rule="evenodd"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <path id="Path_42" data-name="Path 42" d="M2.655.01A2.645,2.645,0,1,1,.01,2.655,2.645,2.645,0,0,1,2.655.01Z" transform="translate(-0.01 -0.01)" clip-rule="evenodd"/>
+    </clipPath>
+  </defs>
+  <g id="Group_495" data-name="Group 495" transform="translate(-41 -667)">
+    <g id="Group_68" data-name="Group 68" transform="translate(41.241 666.62)">
+      <g id="Ellipse_5" data-name="Ellipse 5" transform="translate(0.759 1.38)" fill="#fff" stroke="#707070" stroke-width="3">
+        <circle cx="21.5" cy="21.5" r="21.5" stroke="none"/>
+        <circle cx="21.5" cy="21.5" r="20" fill="none"/>
+      </g>
+      <g id="_172095152">
+        <ellipse id="_117423064" cx="22" cy="22.5" rx="22" ry="22.5" transform="translate(-0.241 0.38)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.001"/>
+        <path id="_117427000" d="M3.092,0,6.286,20.99l-3.083,21L.01,21Z" transform="translate(18.901 1.927)" fill="#707070" fill-rule="evenodd"/>
+        <g id="Group_61" data-name="Group 61" transform="translate(18.91 1.928)" clip-path="url(#clip-path)">
+          <g id="Group_60" data-name="Group 60" transform="translate(1.259 3.589)">
+            <g id="Group_59" data-name="Group 59">
+              <path id="_1174279361" d="M1.867,17.415,1.422,0,.01,14.5Z" transform="translate(-0.01 -0.003)" fill="#fff" fill-rule="evenodd"/>
+              <path id="_117427048" d="M.011.011l.718,17.4L1.913,2.9Z" transform="translate(1.845 17.401)" fill="#fff" fill-rule="evenodd"/>
+            </g>
+          </g>
+        </g>
+        <path id="Path_39" data-name="Path 39" d="M3.092,0,6.286,20.99l-3.083,21L.01,21Z" transform="translate(18.901 1.927)" fill="none" fill-rule="evenodd"/>
+        <path id="_117427288" d="M0,3.148,20.261.01l20.26,3.138L20.261,6.286Z" transform="translate(1.787 19.776)" fill="#707070" fill-rule="evenodd"/>
+        <g id="Group_64" data-name="Group 64" transform="translate(1.789 19.786)" clip-path="url(#clip-path-2)">
+          <g id="Group_63" data-name="Group 63" transform="translate(3.461 1.267)">
+            <g id="Group_62" data-name="Group 62">
+              <path id="_1174267841" d="M.011,1.88l16.8-.522L2.818.01Z" transform="translate(16.788 -0.01)" fill="#fff" fill-rule="evenodd"/>
+              <path id="_117428608" d="M16.8.011,0,.543,13.994,1.882Z" transform="translate(-0.003 1.859)" fill="#fff" fill-rule="evenodd"/>
+            </g>
+          </g>
+        </g>
+        <path id="Path_41" data-name="Path 41" d="M0,3.148,20.261.01l20.26,3.138L20.261,6.286Z" transform="translate(1.787 19.776)" fill="none" fill-rule="evenodd"/>
+        <path id="_117427168" d="M2.655.01A2.645,2.645,0,1,1,.01,2.655,2.645,2.645,0,0,1,2.655.01Z" transform="translate(19.273 20.148)" fill="#dededd" fill-rule="evenodd"/>
+        <g id="Group_67" data-name="Group 67" transform="translate(19.283 20.158)" clip-path="url(#clip-path-3)">
+          <g id="Group_66" data-name="Group 66" transform="translate(0.206 0.368)">
+            <path id="_1174287761" d="M2.045.01A2.842,2.842,0,0,1,4.691,3.887,2.841,2.841,0,0,1,.01,1.723,2.821,2.821,0,0,1,.205.688,2.83,2.83,0,0,1,2.045.01Z" transform="translate(-0.01 -0.01)" fill="#fff" fill-rule="evenodd"/>
+          </g>
+        </g>
+        <path id="Path_43" data-name="Path 43" d="M2.655.01A2.645,2.645,0,1,1,.01,2.655,2.645,2.645,0,0,1,2.655.01Z" transform="translate(19.273 20.148)" fill="none" fill-rule="evenodd"/>
+      </g>
+    </g>
+    <g id="Group_69" data-name="Group 69" transform="translate(52.151 678.543)">
+      <line id="Line_6" data-name="Line 6" x1="8.273" y2="8.273" transform="translate(0 13.789)" fill="none" stroke="#707070" stroke-width="1"/>
+      <line id="Line_7" data-name="Line 7" x1="8.273" y2="8.273" transform="translate(13.951)" fill="none" stroke="#707070" stroke-width="1"/>
+      <line id="Line_8" data-name="Line 8" x1="8.273" y1="8.273" transform="translate(13.951 13.789)" fill="none" stroke="#707070" stroke-width="1"/>
+      <line id="Line_9" data-name="Line 9" x1="8.273" y1="8.273" fill="none" stroke="#707070" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
