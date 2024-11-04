@@ -1,89 +1,64 @@
-import Constants from "expo-constants";
-import * as Notifications from "expo-notifications";
-import { connect } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { Text, View, Button, Platform } from "react-native";
+import PushNotification from "react-native-push-notification";
+import DeviceInfo from 'react-native-device-info';
+import { connect } from "react-redux";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
+// Configure Push Notification
+PushNotification.configure({
+  onNotification: function (notification) {
+    console.log("Notification:", notification);
+    // Handle notification (e.g., update state)
+  },
+  requestPermissions: Platform.OS === 'ios', // Request permissions for iOS
 });
 
-function PushNotification() {
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
+function PushNotificationComponent() {
+  const [pushToken, setPushToken] = useState("");
+  const [notification, setNotification] = useState(null);
   const notificationListener = useRef();
-  const responseListener = useRef();
 
   useEffect(() => {
-    console.log("hehahaha");
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+    // Get unique device ID
+    const deviceId = DeviceInfo.getUniqueId();
+    console.log(`Device ID: ${deviceId}`);
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+    // Register for push notifications
+    PushNotification.onRegister((token) => {
+      console.log("Push Notification Token:", token);
+      setPushToken(token.token); // Store the token
+    });
+
+    // Listen for notifications
+    notificationListener.current = PushNotification.onNotification((notification) => {
+      console.log("Received Notification:", notification);
+      setNotification(notification);
+    });
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
+      // Cleanup listeners if necessary
+      PushNotification.clearAllNotifications();
     };
   }, []);
 
-  return null;
-}
-
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
+  const schedulePushNotification = () => {
+    PushNotification.localNotification({
       title: "You've got mail! 📬",
-      body: "Here is the notification body",
-      data: { data: "goes here" },
-    },
-    trigger: { seconds: 2 },
-  });
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Constants.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
+      message: "Here is the notification body",
+      playSound: true,
+      soundName: 'default',
+      actions: '["Yes", "No"]', // iOS only
+      // You can add more configuration options here
     });
-  }
+  };
 
-  return token;
+  return (
+    <View>
+      <Text>Your Push Token: {pushToken}</Text>
+      <Button title="Schedule Notification" onPress={schedulePushNotification} />
+      {notification && <Text>Notification Received: {notification.message}</Text>}
+    </View>
+  );
 }
 
 const mapStateToProps = (state) => ({
@@ -99,8 +74,9 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     resetData: () => dispatch(HomeActions.resetData()),
   };
 };
+
 export default connect(
   mapStateToProps,
   undefined,
   mapDispatchToProps
-)(PushNotification);
+)(PushNotificationComponent);

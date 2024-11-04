@@ -55,8 +55,13 @@ const storeData = async (key, value) => {
 
 export const AuthActions = {
   verify: async (dispatch, params) => {
+    console.log("REACHED HERE");
+    console.log(params);
+    
     dispatch({ type: types.FETCH_VERIFY_PENDING });
     let data = await SiteAPI.apiPostCall("/auth/verify", params);
+    console.log("GOT DATA",data);
+    
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_VERIFY_FAILURE, error: data.message });

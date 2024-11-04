@@ -1,158 +1,25 @@
-/** @format */
-
-import axios from "axios";
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
   Image,
   ActivityIndicator,
-  Platform,
-  Alert,
-  Linking,
-  BackHandler,
-  ToastAndroid,
 } from "react-native";
-import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 import { connect } from "react-redux";
-import DeviceInfo from "react-native-device-info";
 import { Colors } from "../../common";
-import apiBaseUrl from "../../common/Config";
-import Toast from "react-native-simple-toast";
 
 function SplashScreen(props) {
-  const { logout, resetData, setToken } = props;
-
-  const [updateAvailable, setUpdateAvailable] = useState();
-
-  function isUpdateAvailable(latestVersion) {
-    const appVersion = DeviceInfo.getVersion();
-
-    console.log(appVersion, latestVersion);
-
-    const oldParts = appVersion.split(".");
-    const newParts = latestVersion.split(".");
-    for (let i = 0; i < newParts.length; i++) {
-      const a = ~~newParts[i]; // parse int
-      const b = ~~oldParts[i]; // parse int
-      if (a > b) return true;
-      if (a < b) return false;
-    }
-    return false;
-  }
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // alert(JSON.stringify(apiBaseUrl?.apiBaseUrl) + "/user/getAppVersion");
-    // return;
-    axios
-      //.get(`${apiBaseUrl}/user/getAppVersion`)
-      .get(apiBaseUrl?.apiBaseUrl + "/user/getAppVersion")
-      .then((res) => {
-        const { data } = res;
-        if (isUpdateAvailable(data.Version)) {
-          Alert.alert(
-            "Update Available!",
-            "A newer version of the app is available to install",
-            [
-              {
-                text: "Update",
-                onPress: () => {
-                  setUpdateAvailable(true);
-                },
-                style: "ok",
-              },
-            ],
-            {
-              cancelable: false,
-            }
-          );
-        } else {
-          setUpdateAvailable(false);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        setUpdateAvailable(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (updateAvailable) {
-      const bundleId = DeviceInfo.getBundleId();
-      Linking.openURL(
-        `https://play.google.com/store/apps/details?id=${bundleId}`
-      );
-    }
-  }, [updateAvailable]);
-
-  useEffect(() => {
-    try {
-      // Linking.getInitialURL().then((url) => {
-      //   if (url) {
-      //     // handleOpenURL({ url });
-      //   }
-      // });
-      // alert("Shadab");
-      // Linking.addEventListener("url", ({ url }, nn) => {
-      // Handle the deep link URL
-      // const route = url.replace(/.*?:\/\//g, "");
-      // const routeName = route.split("/")[0];
-      // if (routeName === "details") {
-      //   const itemId = route.split("/")[1];
-      //   // Navigate to the Details screen with the item ID
-      //   const navigation = AppNavigator.router.getNavigator("root");
-      //   if (navigation) {
-      //     navigation.navigate("Details", { itemId });
-      //   }
-      // }
-      // });
-    } catch (error) {
-      alert("dfdsfdssssssssssssssdfdsfdssssssssssssssdfdsfdssssssssssssss");
-    }
-  });
-  const handleDeepLink = (url) => {
-    alert("qwerty");
-  };
-
-  useEffect(() => {
-    if (updateAvailable === undefined) {
-      return;
-    }
-
-    if (updateAvailable) {
-      Toast.show("Please update the app!", Toast.LONG);
-      return;
-    }
-
-    logout();
-    resetData();
-    // props.navigation.navigate("Home");
-
-    if (Platform.OS === "android") {
-      check(
-        Platform.Version >= 30
-          ? PERMISSIONS.ANDROID.READ_PHONE_NUMBERS
-          : PERMISSIONS.READ_PHONE_STATE
-      ).then((result) => {
-        if (result === RESULTS.DENIED) {
-          request(
-            Platform.Version >= 30
-              ? PERMISSIONS.ANDROID.READ_PHONE_NUMBERS
-              : PERMISSIONS.READ_PHONE_STATE
-          ).then(() => {
-            //getPhoneNumber();
-            props.navigation.navigate("verify");
-          });
-        } else {
-          //getPhoneNumber();
-          props.navigation.navigate("verify");
-        }
-      });
-    } else {
+    const timer = setTimeout(() => {
+      setLoading(false);
       props.navigation.navigate("verify");
-    }
-  }, [updateAvailable]);
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, [props.navigation]);
 
   return (
     <View style={styles.container}>
@@ -166,11 +33,7 @@ function SplashScreen(props) {
           source={require("../../../assets/icon.png")}
           style={styles.imgeWidht}
         />
-        {updateAvailable !== true ? (
-          <ActivityIndicator size={30} color={Colors.RED} />
-        ) : (
-          <Text style={styles.updateText}>{"Update the App!"}</Text>
-        )}
+        {loading && <ActivityIndicator size={30} color={Colors.RED} />}
       </View>
       <View style={styles.mainbox}>
         <Text style={styles.most_trusted}>Most trusted for</Text>
@@ -238,6 +101,7 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     resetData: () => dispatch(HomeActions.resetData()),
   };
 };
+
 export default connect(
   mapStateToProps,
   undefined,

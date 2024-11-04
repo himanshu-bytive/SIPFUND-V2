@@ -17,14 +17,12 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../common";
-import {
-  Ionicons,
-  AntDesign,
-  Feather,
-  Entypo,
-  MaterialCommunityIcons,
-  FontAwesome,
-} from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
+import Entypo from "react-native-vector-icons/Entypo";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 import { Overlay, Header, CheckBox } from "react-native-elements";
 import Toast from "react-native-simple-toast";
 

@@ -20,7 +20,7 @@ import { Colors } from "../../common";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from "@react-native-community/geolocation";
 
 const width = Dimensions.get("window").width;
 

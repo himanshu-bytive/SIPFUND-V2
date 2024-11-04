@@ -16,13 +16,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
-import Geolocation from 'react-native-geolocation-service';
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { Ionicons, AntDesign } from "react-native-vector-icons";
 import { Image, Header, CheckBox } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Geolocation from "@react-native-community/geolocation";
 
 function CreateAccountScreen(props) {
   const {

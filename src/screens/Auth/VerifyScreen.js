@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -13,36 +13,54 @@ import {
   Platform,
   TouchableOpacity,
   ActivityIndicator,
+  BackHandler,
+  ToastAndroid,
+  PermissionsAndroid,
 } from "react-native";
 import { connect } from "react-redux";
 import { Colors, FormValidate } from "../../common";
-import Geolocation from 'react-native-geolocation-service';
-import messaging from '@react-native-firebase/messaging';
-import { MaterialIcons } from "react-native-vector-icons";
-import DeviceInfo from "react-native-device-info";
-import appsFlyer from "react-native-appsflyer";
 
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useInternetStatus } from "../../components/CheckConnection";
+import DeviceInfo from "react-native-device-info";
 const width = Dimensions.get("window").width;
+// import appsFlyer from "react-native-appsflyer";
+import Geolocation from "@react-native-community/geolocation";
+import PushNotification from "react-native-push-notification";
+import axios from "axios";
 
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
-  const [displayCurrentAddress, setDisplayCurrentAddress] = useState({});
-  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } = props;
+  const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
+  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } =
+    props;
 
   useEffect(() => {
     const getPhoneNumber = async () => {
-      const phone = await DeviceInfo.getPhoneNumber();
-      if (!isNaN(phone) && phone && phone.length >= 10 && phones.length === 0) {
-        Alert.alert(
-          "Phone Number",
-          `Do you want to use ${phone} to register?`,
-          [
-            { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-            { text: "OK", onPress: () => onAction(phone.slice(-10)) },
-          ]
-        );
-      }
+      await DeviceInfo.getPhoneNumber().then((phone) => {
+        // alert(JSON.stringify(phone))
+        if (
+          !isNaN(phone) &&
+          phone != null &&
+          phone != "" &&
+          phone.length >= 10 &&
+          phones.length === 0
+        ) {
+          Alert.alert(
+            "Phone Number",
+            `Do you want to use ${phone} to register?`,
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => onAction(phone.slice(-10)) },
+            ]
+          );
+        }
+      });
     };
 
     getPhoneNumber();
@@ -61,36 +79,97 @@ function VerifyScreen(props) {
       pageActive.current = false;
       props.navigation.navigate("login");
     }
+    if (signUpSteps == 4 && pageActive.current) {
+      pageActive.current = false;
+      props.navigation.navigate("login");
+    }
   }, [signUpSteps]);
 
   useEffect(() => {
     checkAllPermissions();
-    getCurrentLocation();
+    GetCurrentLocation();
   }, []);
 
-  async function checkAllPermissions() {
-    const authStatus = await messaging().requestPermission();
-    if (authStatus) {
-      const token = await messaging().getToken();
-      setToken(token);
-      console.log("Firebase token:", token);
-    } else {
-      console.log("Notification permissions not granted");
-    }
+  function checkAllPermissions() {
+    // Request notification permissions
+    PushNotification.configure({
+      onRegister: function (registration) {
+        console.log("TOKEN:", registration.token);
+        setToken(registration.token);
+      },
+      onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);
+      },
+      // Request permissions (iOS)
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
+    });
   }
+  
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: "Location Permission",
+          message: "This app needs access to your location.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
 
-  const getCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setDisplayCurrentAddress({ latitude, longitude });
-      },
-      (error) => {
-        console.log(error);
-        Alert.alert("Error", "Unable to get location.");
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
+  const GetCurrentLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (!hasPermission) {
+      Alert.alert("Location permission denied");
+      return;
+    }
+    console.log("Permission granted");
+    
+    Geolocation.getCurrentPosition( async (position) =>{
+      const { latitude, longitude } = position.coords;
+      console.log(position);
+      console.log(latitude);
+      console.log(longitude);
+      // Fetch address details using a geocoding service
+      const apiKey = 'AIzaSyBZZFjaQWAKZd-6gvBlFAlRiw1D5bUO5FA';
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+      const response = await axios.get(url);
+      // console.log("GOT RESPONSE",response);
+      if (response.data.status === 'OK') {
+       console.log("YES");
+       const addressComponents = response.data.results[0].address_components;
+       const address = response.data.results[0].formatted_address;
+       console.log(address);
+       const city = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
+       const state = addressComponents.find(component => component.types.includes("administrative_area_level_1"))?.long_name || "";
+       const pincode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
+       console.log(city + " " + state + " " + pincode);
+       setDisplayCurrentAddress({
+        latitude : latitude,
+        longitude : longitude,
+        address : address,
+        city : city,
+        state : state,
+        pincode : pincode,
+       });
+      }else {
+        console.error("Geocoding API error:", response.data.status);
+        Alert.alert("Error", "Unable to fetch address details");
+      }
+    })
   };
 
   const [state, setState] = useState({
@@ -102,7 +181,7 @@ function VerifyScreen(props) {
   });
 
   const onAction = async (ph) => {
-    let phone = ph || state.phone;
+    let phone = ph ? ph : state.phone;
     if (phone === "") {
       phoneInput.current.focus();
       setError({ ...errors, phone: "Please enter phone number" });
@@ -110,13 +189,20 @@ function VerifyScreen(props) {
     }
 
     const eventName = "add_phone";
-    const eventValues = { phone: ph || state.phone };
+    const eventValues = {
+      phone: ph ? ph : state.phone,
+    };
 
-    appsFlyer.logEvent(eventName, eventValues, (res) => {
-      console.log("######## AppsFlyer #######", res);
-    }, (err) => {
-      console.error("######## AppsFlyer #######", err);
-    });
+    // appsFlyer.logEvent(
+    //   eventName,
+    //   eventValues,
+    //   (res) => {
+    //     console.log("######## AppsFlyer #######", res);
+    //   },
+    //   (err) => {
+    //     console.error("######## AppsFlyer #######", err);
+    //   }
+    // );
 
     clearSummery({}, "");
 
@@ -126,9 +212,10 @@ function VerifyScreen(props) {
         minorFlag: false,
         mobileNo: Number(phone),
         referenceInfo: {
-          latitude: displayCurrentAddress.latitude,
-          longitude: displayCurrentAddress.longitude,
+          latitude: displayCurrentAddress?.latitude,
+          longitude: displayCurrentAddress?.longitude,
           mobileNo: phone,
+          pincode: displayCurrentAddress?.pincode,
         },
       };
       verify(params);
@@ -152,29 +239,40 @@ function VerifyScreen(props) {
   };
 
   useEffect(() => {
-    const backHandlerSubscription = BackHandler.addEventListener("hardwareBackPress", backAction);
+    BackHandler.addEventListener("hardwareBackPress", backAction);
 
-    return () => {
-      backHandlerSubscription.remove(); // Unsubscribe from back button press
-    };
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
   }, []);
+
+  //const [InternetChecker, isInternetReachable] = useInternetStatus();
+  //InternetChecker();
+  //if (isInternetReachable === true) {
+  //console.log("Internet is Reachable");
+  //} else if (isInternetReachable === false) {
+  //alert("Please check the internet connection");
+  //console.log("No Internet Connection");
+  //}
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View style={styles.mainbox}>
-        <Text style={styles.title}>
-          Achieve Your <Text style={styles.highlight}>Dreams</Text>
+      <View>
+        <Text style={styles.slogan}>
+          Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
         </Text>
-        <Image
-          source={require("../../../assets/LoginPageImage.png")}
-          style={styles.image}
-        />
-        {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
-
-        <View style={styles.phoneList}>
+      </View>
+      <View style={styles.mainbox}>
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={require("../../../assets/logo.png")}
+            style={styles.logoimg}
+          />
+        </View>
+        <View style={{ width: width - 50, marginLeft: 100 }}>
+          {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
           {phones.map((item, key) => (
             <TouchableOpacity
               key={key}
@@ -186,16 +284,17 @@ function VerifyScreen(props) {
             </TouchableOpacity>
           ))}
         </View>
-        
         <View style={styles.or}>
-          <Text style={styles.code}>or</Text>
-          <Text style={[styles.code, { marginTop: 0 }]}>Enter Your Mobile number</Text>
+          {phones.length > 0 && <Text style={styles.code}>OR</Text>}
+          <Text style={[styles.code, { marginTop: 0 }]}>
+            Enter Your Mobile number
+          </Text>
         </View>
-
-        <View style={styles.phoneInput}>
+        <View style={styles.text_box}>
+          <MaterialIcons name="call" size={20} color="#838280" />
           <TextInput
             ref={phoneInput}
-            style={styles.input}
+            style={styles.inputsec}
             placeholder={"Phone"}
             keyboardType="numeric"
             maxLength={10}
@@ -211,13 +310,16 @@ function VerifyScreen(props) {
             <Text style={styles.error}>{errors.phone}</Text>
           </View>
         )}
-        <View>
+        <View style={styles.button}>
           {isFetching ? (
             <View style={styles.botton_box}>
               <ActivityIndicator size={30} color={Colors.WHITE} />
             </View>
           ) : (
-            <TouchableOpacity onPress={() => onAction()} style={styles.button}>
+            <TouchableOpacity
+              onPress={() => onAction()}
+              style={styles.botton_box}
+            >
               <Text style={styles.get_otp}>ENTER</Text>
             </TouchableOpacity>
           )}
@@ -228,11 +330,10 @@ function VerifyScreen(props) {
           </Text>
         </View>
       </View>
-
-      <View style={styles.footer}>
+      <View>
         <Image
           source={require("../../../assets/nse.png")}
-          style={styles.footerImage}
+          style={styles.nseimg}
         />
       </View>
     </KeyboardAvoidingView>
@@ -245,38 +346,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  slogan: {
+    fontSize: 30,
+    color: Colors.BLACK,
+    marginBottom: 30,
+  },
+  sloganRed: {
+    color: Colors.RED,
+  },
   mainbox: {
     borderRadius: 25,
     width: width - 50,
     alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
   },
-  title: {
-    fontSize: 24,
-    textAlign: "center",
-    fontWeight: "bold",
+  logoimg: {
+    marginTop: 30,
   },
-  highlight: {
-    color: "#D9534F",
+  continue: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    //paddingLeft: 70,
   },
-  image: {
-    height: 200,
-    aspectRatio: 1.5,
-    alignSelf: "center",
-    marginVertical: 20,
-    resizeMode: "contain",
-  },
-  phoneList: {
-    borderWidth: 1,
-    borderRadius: 20,
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 10,
-    borderColor: "#FFB2AA",
+  inputsec: {
+    borderBottomWidth: 1,
+    marginLeft: 5,
+    marginTop: -3,
+    borderColor: "#828282",
+    width: "50%",
   },
   phone_number: {
     flexDirection: "row",
+    //paddingLeft: 70,
   },
   number: {
     fontSize: 18,
@@ -284,35 +385,28 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   code: {
+    marginTop: 10,
     marginBottom: 5,
-    fontSize: 16,
+    fontSize: 19,
     color: "#7E7E7E",
+    //textAlign: "center",
+    //paddingLeft: 70,
   },
-  or: {
-    width: "100%",
-    alignItems: "center",
-  },
-  phoneInput: {
+  text_box: {
     flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#FFB2AA",
-    borderRadius: 5,
-    marginBottom: 20,
-    marginHorizontal: 10,
-  },
-  input: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginTop: 10,
+    alignSelf: "flex-start",
+    paddingLeft: 50,
   },
   button: {
-    backgroundColor: "#D9534F",
-    paddingVertical: 10,
+    alignItems: "center",
+  },
+  botton_box: {
+    backgroundColor: Colors.RED,
     paddingHorizontal: 50,
-    borderRadius: 5,
-    marginHorizontal: 10,
-    alignSelf: "center",
+    paddingVertical: 10,
+    marginTop: 20,
+    borderRadius: 10,
   },
   get_otp: {
     color: Colors.WHITE,
@@ -322,21 +416,17 @@ const styles = StyleSheet.create({
     color: Colors.RED,
     fontSize: 13,
   },
+  nseimg: {
+    marginTop: 30,
+    width: Dimensions.get("window").width * 0.8,
+    resizeMode: "contain",
+  },
   otp: {
     marginTop: 10,
     marginBottom: 20,
     fontSize: 12,
     color: Colors.GREY_1,
     alignItems: "center",
-  },
-  footer: {
-    alignItems: "center",
-    marginBottom: "10%",
-  },
-  footerImage: {
-    width: "100%",
-    resizeMode: "contain",
-    aspectRatio: 4.5,
   },
 });
 
@@ -347,12 +437,18 @@ const mapStateToProps = (state) => ({
   phones: state.auth.phones,
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
+  const { dispatch } = dispatchProps;
   const { AuthActions } = require("../../store/AuthRedux");
   const { GoalsActions } = require("../../store/GoalsRedux");
-  const { PushNotificationActions } = require("../../store/PushNotificationRedux");
+
+  const {
+    PushNotificationActions,
+  } = require("../../store/PushNotificationRedux");
 
   return {
+    ...stateProps,
+    ...ownProps,
     verify: (params) => {
       AuthActions.verify(dispatch, params);
     },
@@ -362,7 +458,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-
 export default connect(
   mapStateToProps,
   undefined,

@@ -1,17 +1,20 @@
-/** @format */
 
 import React, { useState, useEffect, useRef, Linking } from "react";
 import AppContainer from "./src/navigation/AppNavigator";
-import { SafeAreaView, Platform, LogBox, StatusBar } from "react-native";
+import { StatusBar, SafeAreaView, Platform, LogBox } from "react-native";
 import { Provider } from "react-redux";
-import {thunk} from 'redux-thunk'
+import {thunk} from "redux-thunk";
 import reducers from "./src/store";
 import { createStore, compose, applyMiddleware } from "redux";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/es/integration/react";
 // import * as Notifications from "expo-notifications";
+// import Constants from "expo-constants";
 import appsFlyer from "react-native-appsflyer";
-
+// import { firebase } from "@react-native-firebase/messaging";
+// import NotificationService from "./NotificationService";
+// import { requestNotifications } from "react-native-permissions";
+import 'react-native-devsettings/withAsyncStorage';
 let store = null;
 const middleware = [thunk];
 store = compose(applyMiddleware(...middleware))(createStore)(reducers);

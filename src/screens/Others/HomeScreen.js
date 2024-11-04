@@ -16,7 +16,8 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { InvestmentLists, MyImage } from "../../components";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import  Entypo from "react-native-vector-icons/Entypo";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, Input } from "react-native-elements";
 import Cart from "../../components/Cart";
 import WebView from "react-native-webview";
@@ -70,6 +71,8 @@ function HomeScreen(props) {
 
   useEffect(() => {
     setWebViewActive(false);
+    console.log(props.navigation.getState());
+    
   }, []);
 
   const loadUrl = (url) => {

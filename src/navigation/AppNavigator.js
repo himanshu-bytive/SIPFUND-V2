@@ -1,13 +1,35 @@
+/** @format */
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { AppState, Linking } from "react-native";
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LoginFlowStack, RootNavigator } from "./MainNavigator";
+import { Linking } from "react-native";
 import dynamicLinks from "@react-native-firebase/dynamic-links";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LoginFlowStack, RootNavigator } from "./MainNavigator";
-// hello 
-const Stack = createStackNavigator();
+
+const Stack = createNativeStackNavigator();
+
+const AppNavigator = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Auth">
+        <Stack.Screen name="Auth" component={LoginFlowStack} />
+        <Stack.Screen name="Root" component={RootNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const handleDeepLink = (event) => {
+  const route = event.url.replace(/.*?:\/\//g, '');
+  const routeName = route.split('/')[0];
+  
+  if (routeName === 'details') {
+    const itemId = route.split('/')[1];
+    // Assuming you have access to a navigation reference
+    navigation.navigate('Details', { itemId });
+  }
+};
 
 const handleDynamicLink = async (link) => {
   if (link) {
@@ -19,62 +41,32 @@ const handleDynamicLink = async (link) => {
 
 const MainApp = () => {
   React.useEffect(() => {
-    const handleDeepLink = (event) => {
-      // Handle deep link event here
+    const linking = {
+      prefixes: ["eks24.app.goo.gl"],
+      config: {
+        screens: {
+          Auth: "auth",
+          Root: "root",
+          Details: "details/:itemId", // Define your routes
+        },
+      },
     };
 
-    const subscription = Linking.addEventListener("url", handleDeepLink);
-
+    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+    
+    // Handle initial dynamic link
+    dynamicLinks().getInitialLink().then(handleDynamicLink);
+    
+    // Handle deep links
+    const urlListener = Linking.addEventListener("url", handleDeepLink);
+    
     return () => {
-      subscription.remove(); // Unsubscribe from linking events
+      urlListener.remove();
+      unsubscribe();
     };
   }, []);
 
-  React.useEffect(() => {
-    const getInitialLink = async () => {
-      const link = await dynamicLinks().getInitialLink();
-      if (link?.url) {
-        await handleDynamicLink(link);
-      }
-    };
-    getInitialLink();
-  }, []);
-
-  React.useEffect(() => {
-    const unsubscribeDynamicLinks = dynamicLinks().onLink(handleDynamicLink);
-    return () => unsubscribeDynamicLinks(); // Unsubscribe from dynamic links
-  }, []);
-
-  React.useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      // Handle app state changes if needed
-    };
-
-    const appStateSubscription = AppState.addEventListener("change", handleAppStateChange);
-
-    return () => {
-      appStateSubscription.remove(); // Unsubscribe from app state changes
-    };
-  }, []);
-
-  React.useEffect(() => {
-    const getInitialURL = async () => {
-      const url = await Linking.getInitialURL();
-      if (url) {
-        handleDeepLink({ url });
-      }
-    };
-    getInitialURL();
-  }, []);
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Auth">
-        <Stack.Screen name="Auth" component={LoginFlowStack} />
-        <Stack.Screen name="Root" component={RootNavigator} />
-        {/* You can add more screens here if needed */}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  return <AppNavigator />;
 };
 
 export default MainApp;

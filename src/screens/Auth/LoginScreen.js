@@ -14,11 +14,9 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Colors, Config } from "../../common";
-import {
-  AntDesign,
-  MaterialIcons,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Image, Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotificationService from "../../../NotificationService";
@@ -86,7 +84,7 @@ function LoginScreen(props) {
       //} else {
       //props.navigation.navigate("Pan");
       //}
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Root",{screen : "Home"});
     }
   }, [token, user, userDetails]);
 

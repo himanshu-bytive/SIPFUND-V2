@@ -1,12 +1,16 @@
 /** @format */
 
 import React from "react";
-import { Image, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
+  SplashScreen,
+  VerifyScreen,
+  OtpScreen,
+  CreateAccountScreen,
+  LoginScreen,
+  ForgotPasswordScreen,
   CompleteDetailsScreen,
   CompleteDetailsAddressScreen,
   CompleteDetailsBankScreen,
@@ -57,554 +61,148 @@ import {
   AddExternalHoldingScreen,
   ZoomDocuments,
 } from "../screens";
-import SplashScreen from "../screens/Auth/SplashScreen";
-import VerifyScreen from "../screens/Auth/VerifyScreen";
-import OtpScreen from "../screens/Auth/OtpScreen";
-import CreateAccountScreen from "../screens/Auth/CreateAccountScreen";
-import LoginScreen from "../screens/Auth/LoginScreen";
-import ForgotPasswordScreen from "../screens/Auth/ForgotPasswordScreen";
+import { SideMenu } from "../components";
 import RedeemScreen from "../screens/HamburgerMenu/RedeemScreen";
 import SchemeList from "../screens/HamburgerMenu/SchemeList";
 import SwitchCheckout from "../screens/HamburgerMenu/SwitchCheckout";
 import RedeemCheckout from "../screens/HamburgerMenu/RedeemCheckout";
 import OwnChoiceHoldings from "../screens/Holdings/OwnChoiceHoldings";
-import SideMenu  from "../components/SideMenu";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 export const LoginFlowStack = () => (
-  <Stack.Navigator initialRouteName="splash">
-    <Stack.Screen
-      name="splash"
-      component={SplashScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="verify"
-      component={VerifyScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="otp"
-      component={OtpScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="createAccount"
-      component={CreateAccountScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="login"
-      component={LoginScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="forgotpassword"
-      component={ForgotPasswordScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="splash" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="splash" component={SplashScreen} />
+    <Stack.Screen name="verify" component={VerifyScreen} />
+    <Stack.Screen name="otp" component={OtpScreen} />
+    <Stack.Screen name="createAccount" component={CreateAccountScreen} />
+    <Stack.Screen name="login" component={LoginScreen} />
+    <Stack.Screen name="forgotpassword" component={ForgotPasswordScreen} />
   </Stack.Navigator>
 );
 
-export const Hamburgmenu = () => (
-  <Stack.Navigator initialRouteName="dashboard">
-    <Stack.Screen
-      name="dashboard"
-      component={DashboardScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Switch"
-      component={SwitchScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Redeem"
-      component={RedeemScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="SchemeList"
-      component={SchemeList}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="SwitchCheckout"
-      component={SwitchCheckout}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="RedeemCheckout"
-      component={RedeemCheckout}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TransactionHistory"
-      component={TransactionHistoryScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Holdings"
-      component={HoldingsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="ExternalHolding"
-      component={ExternalHoldingScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="AddExternalHolding"
-      component={AddExternalHoldingScreen}
-      options={{ headerShown: false }}
-    />
+export const HamburgMenuStack = () => (
+  <Stack.Navigator initialRouteName="dashboard" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="dashboard" component={DashboardScreen} />
+    <Stack.Screen name="Switch" component={SwitchScreen} />
+    <Stack.Screen name="Redeem" component={RedeemScreen} />
+    <Stack.Screen name="SchemeList" component={SchemeList} />
+    <Stack.Screen name="SwitchCheckout" component={SwitchCheckout} />
+    <Stack.Screen name="RedeemCheckout" component={RedeemCheckout} />
+    <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen} />
+    <Stack.Screen name="Holdings" component={HoldingsScreen} />
+    <Stack.Screen name="ExternalHolding" component={ExternalHoldingScreen} />
+    <Stack.Screen name="AddExternalHolding" component={AddExternalHoldingScreen} />
   </Stack.Navigator>
 );
 
 export const HomePageStack = () => (
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Pan"
-      component={PanScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Pan" component={PanScreen} />
   </Stack.Navigator>
 );
 
 export const PlanYourGoalsStack = () => (
-  <Stack.Navigator initialRouteName="PlanHome">
-    <Stack.Screen
-      name="PlanHome"
-      component={PlanHomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="PlanSearch"
-      component={PlanSearchScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="PlanList"
-      component={PlanListScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="PlanSubmit"
-      component={PlanSubmitScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="PlanHome" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="PlanHome" component={PlanHomeScreen} />
+    <Stack.Screen name="PlanSearch" component={PlanSearchScreen} />
+    <Stack.Screen name="PlanList" component={PlanListScreen} />
+    <Stack.Screen name="PlanSubmit" component={PlanSubmitScreen} />
   </Stack.Navigator>
 );
 
 export const InvestmentPlansStack = () => (
-  <Stack.Navigator initialRouteName="InvestmentListAll">
-    <Stack.Screen
-      name="InvestmentListAll"
-      component={InvestmentsScreens}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestmentDetail"
-      component={InvestmentDetailScreens}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="AddInvestment"
-      component={AddInvestmentScreens}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestmentList"
-      component={InvestmentListScreens}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestmentSearch"
-      component={InvestmentSearchScreens}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestmentSubmit"
-      component={InvestmentSubmitScreens}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="InvestmentListAll" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="InvestmentListAll" component={InvestmentsScreens} />
+    <Stack.Screen name="InvestmentDetail" component={InvestmentDetailScreens} />
+    <Stack.Screen name="AddInvestment" component={AddInvestmentScreens} />
+    <Stack.Screen name="InvestmentList" component={InvestmentListScreens} />
+    <Stack.Screen name="InvestmentSearch" component={InvestmentSearchScreens} />
+    <Stack.Screen name="InvestmentSubmit" component={InvestmentSubmitScreens} />
   </Stack.Navigator>
 );
 
 export const TopRatedFundsStack = () => (
-  <Stack.Navigator initialRouteName="TopRatedHome">
-    <Stack.Screen
-      name="TopRatedHome"
-      component={TopRatedHomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TopRatedList"
-      component={TopRatedListScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TopRatedSearch"
-      component={TopRatedSearchScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TopRatedSubmit"
-      component={TopRatedSubmitScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="TopRatedHome" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="TopRatedHome" component={TopRatedHomeScreen} />
+    <Stack.Screen name="TopRatedList" component={TopRatedListScreen} />
+    <Stack.Screen name="TopRatedSearch" component={TopRatedSearchScreen} />
+    <Stack.Screen name="TopRatedSubmit" component={TopRatedSubmitScreen} />
   </Stack.Navigator>
 );
 
 export const HoldingsSummaryStack = () => (
-  <Stack.Navigator initialRouteName="Goals">
-    <Stack.Screen
-      name="Goals"
-      component={GoalsSummaryScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="NoGoals"
-      component={NoGoalsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="GoalsList"
-      component={GoalsListScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="GoalDetail"
-      component={GoalDetailScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestmentList"
-      component={InvestmentListScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="InvestDetail"
-      component={InvestDetailScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TopRatedFunds"
-      component={TopRatedFundsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="TopRatedFundDetails"
-      component={TopRatedFundDetailsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Owner"
-      component={OwnerChoice}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="OwnChoiceHoldings"
-      component={OwnChoiceHoldings}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="Goals" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Goals" component={GoalsSummaryScreen} />
+    <Stack.Screen name="NoGoals" component={NoGoalsScreen} />
+    <Stack.Screen name="GoalsList" component={GoalsListScreen} />
+    <Stack.Screen name="GoalDetail" component={GoalDetailScreen} />
+    <Stack.Screen name="InvestmentList" component={InvestmentListScreen} />
+    <Stack.Screen name="InvestDetail" component={InvestDetailScreen} />
+    <Stack.Screen name="TopRatedFunds" component={TopRatedFundsScreen} />
+    <Stack.Screen name="TopRatedFundDetails" component={TopRatedFundDetailsScreen} />
+    <Stack.Screen name="Owner" component={OwnerChoice} />
+    <Stack.Screen name="OwnChoiceHoldings" component={OwnChoiceHoldings} />
   </Stack.Navigator>
 );
 
 export const FundsDetailsStack = () => (
-  <Stack.Navigator initialRouteName="FundsDetails">
-    <Stack.Screen
-      name="FundsDetails"
-      component={FundsHomeScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="FundsDetails" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="FundsDetails" component={FundsHomeScreen} />
   </Stack.Navigator>
 );
 
 export const RegisterStack = () => (
-  <Stack.Navigator initialRouteName="RegisterDetails">
-    <Stack.Screen
-      name="RegisterDetails"
-      component={CompleteDetailsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="RegisterAddress"
-      component={CompleteDetailsAddressScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="RegisterBankDetails"
-      component={CompleteDetailsBankScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="UploadDocument"
-      component={UploadDocumentScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="ZoomDocuments"
-      component={ZoomDocuments}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="RegisterDetails" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="RegisterDetails" component={CompleteDetailsScreen} />
+    <Stack.Screen name="RegisterAddress" component={CompleteDetailsAddressScreen} />
+    <Stack.Screen name="RegisterBankDetails" component={CompleteDetailsBankScreen} />
+    <Stack.Screen name="UploadDocument" component={UploadDocumentScreen} />
+    <Stack.Screen name="ZoomDocuments" component={ZoomDocuments} />
   </Stack.Navigator>
 );
 
 export const OthersStack = () => (
-  <Stack.Navigator initialRouteName="Profile">
-    <Stack.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="BankAccount"
-      component={CompleteDetailsBankScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Upi"
-      component={UpiScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Existing"
-      component={ExistingScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="ReferEarn"
-      component={ReferEarnScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Notifications"
-      component={NotificationScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="NotificationView"
-      component={NotificationViewScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Relationship"
-      component={RelationshipScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="RmNotFound"
-      component={RmNotFoundScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Reports"
-      component={ReportsScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="CompleteDetail"
-      component={CompleteDetailScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="AmountHistory"
-      component={AmountHistoryScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="AboutUs"
-      component={AboutUsScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="BankAccount" component={CompleteDetailsBankScreen} />
+    <Stack.Screen name="Upi" component={UpiScreen} />
+    <Stack.Screen name="Existing" component={ExistingScreen} />
+    <Stack.Screen name="ReferEarn" component={ReferEarnScreen} />
+    <Stack.Screen name="Notifications" component={NotificationScreen} />
+    <Stack.Screen name="NotificationView" component={NotificationViewScreen} />
+    <Stack.Screen name="Relationship" component={RelationshipScreen} />
+    <Stack.Screen name="RmNotFound" component={RmNotFoundScreen} />
+    <Stack.Screen name="Reports" component={ReportsScreen} />
+    <Stack.Screen name="CompleteDetail" component={CompleteDetailScreen} />
+    <Stack.Screen name="AmountHistory" component={AmountHistoryScreen} />
+    <Stack.Screen name="AboutUs" component={AboutUsScreen} />
   </Stack.Navigator>
 );
 
 const TabNavigator = () => (
-  <Tab.Navigator
-    tabBarOptions={{
-      activeTintColor: "#ff0000",
-      inactiveTintColor: "#000",
-    }}
-  >
-    <Tab.Screen
-      name="Explore"
-      component={HomePageStack}
-      options={{
-        tabBarIcon: ({ focused }) => {
-          const imgSource = focused
-            ? require("../../assets/exploreAct.png")
-            : require("../../assets/explore.png");
-          return (
-            <View style={{ padding: 5 }}>
-              <Image
-                style={{
-                  width: 28,
-                  height: 28,
-                  aspectRatio: 1,
-                  resizeMode: "contain",
-                  marginTop: 5,
-                }}
-                source={imgSource}
-              />
-            </View>
-          );
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Plans"
-      component={InvestmentPlansStack}
-      options={{
-        tabBarIcon: ({ focused }) => {
-          const imgSource = focused
-            ? require("../../assets/planAct.png")
-            : require("../../assets/plan.png");
-          return (
-            <View style={{ padding: 5 }}>
-              <Image
-                style={{
-                  width: 28,
-                  height: 28,
-                  aspectRatio: 1,
-                  resizeMode: "contain",
-                  marginTop: 5,
-                }}
-                source={imgSource}
-              />
-            </View>
-          );
-        },
-      }}
-    />
-    <Tab.Screen
-      name="DashBoard"
-      component={Hamburgmenu}
-      options={{
-        tabBarIcon: ({ focused }) => {
-          const imgSource = focused
-            ? require("../../assets/dashboardAct.png")
-            : require("../../assets/dashboard.png");
-          return (
-            <View style={{ padding: 5 }}>
-              <Image
-                style={{
-                  width: 28,
-                  height: 28,
-                  aspectRatio: 1,
-                  resizeMode: "contain",
-                  marginTop: 5,
-                }}
-                source={imgSource}
-              />
-            </View>
-          );
-        },
-      }}
-    />
-    <Tab.Screen
-      name="YOU"
-      component={OthersStack}
-      options={{
-        tabBarIcon: ({ focused }) => {
-          const imgSource = focused
-            ? require("../../assets/userAct.png")
-            : require("../../assets/user.png");
-          return (
-            <View style={{ padding: 5 }}>
-              <Image
-                style={{
-                  width: 28,
-                  height: 28,
-                  aspectRatio: 1,
-                  resizeMode: "contain",
-                  marginTop: 5,
-                }}
-                source={imgSource}
-              />
-            </View>
-          );
-        },
-      }}
-    />
+  <Tab.Navigator>
+    <Tab.Screen name="Explore" component={HomePageStack} />
+    <Tab.Screen name="Plans" component={InvestmentPlansStack} />
+    <Tab.Screen name="Dashboard" component={HamburgMenuStack} />
+    <Tab.Screen name="You" component={OthersStack} />
   </Tab.Navigator>
 );
 
 // Main navigator for user end
-export const RootNavigator = () => {
-  // Log components before using them
-  console.log("TabNavigator:", TabNavigator);
-  console.log("InvestmentPlansStack:", InvestmentPlansStack);
-  console.log("PlanYourGoalsStack:", PlanYourGoalsStack);
-  console.log("TopRatedFundsStack:", TopRatedFundsStack);
-  console.log("OthersStack:", OthersStack);
-  console.log("HoldingsSummaryStack:", HoldingsSummaryStack);
-  console.log("FundsDetailsStack:", FundsDetailsStack);
-  console.log("RegisterStack:", RegisterStack);
-  console.log("Hamburgmenu:", Hamburgmenu);
-
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={SideMenu}
-        initialRouteName="HomeTab"
-        drawerStyle={{ width: 330 }}
-      >
-        <Drawer.Screen
-          name="HomeTab"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Investment"
-          component={InvestmentPlansStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Plan"
-          component={PlanYourGoalsStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Dashboard"
-          component={TopRatedFundsStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="You"
-          component={OthersStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Hold"
-          component={HoldingsSummaryStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Funds"
-          component={FundsDetailsStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Reg"
-          component={RegisterStack}
-          options={{ headerShown: false }}
-        />
-        <Drawer.Screen
-          name="Hamburg"
-          component={Hamburgmenu}
-          options={{ headerShown: false }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
-};
+export const RootNavigator = () => (
+  <Drawer.Navigator initialRouteName="HomeTab" drawerContent={props => <SideMenu {...props} />}>
+    <Drawer.Screen name="HomeTab" component={TabNavigator} />
+    <Drawer.Screen name="Investment" component={InvestmentPlansStack} />
+    <Drawer.Screen name="Plan" component={PlanYourGoalsStack} />
+    <Drawer.Screen name="Dashboard" component={TopRatedFundsStack} />
+    <Drawer.Screen name="You" component={OthersStack} />
+    <Drawer.Screen name="Hold" component={HoldingsSummaryStack} />
+    <Drawer.Screen name="Funds" component={FundsDetailsStack} />
+    <Drawer.Screen name="Reg" component={RegisterStack} />
+    <Drawer.Screen name="Hamburg" component={HamburgMenuStack} />
+  </Drawer.Navigator>
+);

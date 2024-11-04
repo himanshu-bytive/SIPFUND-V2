@@ -1,65 +1,26 @@
 {
   "project_info": {
-    "project_number": "775845687019",
-    "project_id": "sipfunduat-d9594",
-    "storage_bucket": "sipfunduat-d9594.appspot.com"
+    "project_number": "900972534168",
+    "project_id": "sipfund-1dee8",
+    "storage_bucket": "sipfund-1dee8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:775845687019:android:7acd842b4a01ea116018ae",
+        "mobilesdk_app_id": "1:900972534168:android:ab7e61156f5563103373ed",
         "android_client_info": {
-          "package_name": "com.octrax.sipfund"
+          "package_name": "com.sipfund"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBvwjUBbjDvQqUuklBV7ukt4hZxBSY5k6s"
+          "current_key": "AIzaSyA7FI5nSu7IVpydrlWd4_R18DpEMPfs9y8"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:775845687019:android:f52bde4d655a16826018ae",
-        "android_client_info": {
-          "package_name": "com.uat.sipfund"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBvwjUBbjDvQqUuklBV7ukt4hZxBSY5k6s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "775845687019-ibnb551i2uoaejvvrhjq2996e87ohv7o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

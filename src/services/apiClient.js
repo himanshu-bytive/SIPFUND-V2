@@ -1,7 +1,8 @@
 /** @format */
 
+import axios from "axios";
 import { Alert, NativeModules } from "react-native";
-const axios = require("axios");
+
 class ApiClient {
   baseUrl;
 
