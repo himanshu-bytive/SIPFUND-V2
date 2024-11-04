@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Text,
+  Dimensions,
 } from "react-native";
 import { Colors } from "../common";
 import MyImage from "./MyImage";
@@ -27,6 +28,8 @@ export default function InvestmentLists(props) {
     "https://res.cloudinary.com/dfwm0qaiv/image/upload/v1706781443/i3lhjgrxrew1w30lyosc.svg",
   ];
   const { data, counts, onPress } = props;
+  const { width } = Dimensions.get('window');
+const boxSize = width * 0.23; // 23% of the screen width
   if (counts) {
     return (
       <View style={styles.investment_sec}>
@@ -123,14 +126,14 @@ const styles = StyleSheet.create({
     width: "23%",
     alignItems: "center",
     margin: "1%",
-    //shadowColor: "#000",
-    //shadowOffset: {
-    //width: 0,
-    //height: 2,
-    //},
-    //shadowOpacity: 0.23,
-    //shadowRadius: 2.62,
-    //elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+    width: 0,
+    height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
   term: {
     width: "100%",
@@ -142,6 +145,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 5,
     fontSize: 13,
+    color:"black"
     //fontWeight: "bold",
   },
 });

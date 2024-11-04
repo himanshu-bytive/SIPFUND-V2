@@ -160,6 +160,7 @@ function LoginScreen(props) {
               ref={passwordInput}
               style={styles.inputsec}
               placeholder={"Password"}
+              placeholderTextColor="grey"
               maxLength={30}
               secureTextEntry={!visible}
               onChangeText={(password) => {
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 18,
     marginLeft: 5,
+    color:"black"
   },
   inputsec: {
     borderWidth: 2,
@@ -265,6 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     backgroundColor: Colors.LITTLE_WHITE,
+    color:"black"
   },
   refreshcode: {
     textAlign: "center",

@@ -296,6 +296,7 @@ function VerifyScreen(props) {
             ref={phoneInput}
             style={styles.inputsec}
             placeholder={"Phone"}
+            placeholderTextColor="grey"
             keyboardType="numeric"
             maxLength={10}
             onChangeText={(phone) => {
@@ -374,6 +375,7 @@ const styles = StyleSheet.create({
     marginTop: -3,
     borderColor: "#828282",
     width: "50%",
+    color:"black"
   },
   phone_number: {
     flexDirection: "row",
@@ -383,6 +385,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: -3,
     marginLeft: 5,
+    color:"black"
   },
   code: {
     marginTop: 10,

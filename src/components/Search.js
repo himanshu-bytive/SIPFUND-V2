@@ -76,6 +76,7 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
         value={inputText}
         onChangeText={setInputText}
         placeholder="Search any product..."
+        placeholderTextColor="black" 
       />
       {inputText ? (
         <FontAwesome5
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: "gray",
+    borderColor: "grey",
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 10,

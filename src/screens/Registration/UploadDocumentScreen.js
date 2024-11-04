@@ -12,15 +12,15 @@ import {
 import Carousel from "react-native-snap-carousel";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { MyImagePicker } from "../../components";
-import {
-  MaterialIcons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-  FontAwesome,
-  Foundation,
-} from "react-native-vector-icons";
+import MyImagePicker from "../../components/MyImagePicker";
+
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Foundation from "react-native-vector-icons/Foundation";
+
 import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -126,7 +126,7 @@ function UploadDocumentScreen(props) {
   const [document, setDocument] = useState(
     docs?.responseString?.ekycIsDone ? documentsKyc :documents 
   );
-  console.log(JSON.stringify(document));
+
   const carosuelref = useRef();
   const [reUploadInd, setReUploadInd] = useState([]);
 
@@ -334,6 +334,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     width: "80%",
     marginTop: 10,
+    color:"black"
   },
   document_status: {
     flexDirection: "row",
@@ -343,6 +344,7 @@ const styles = StyleSheet.create({
   document: {
     fontSize: 14,
     fontWeight: "bold",
+    color:'black'
   },
   pending: {
     fontSize: 14,
@@ -355,6 +357,7 @@ const styles = StyleSheet.create({
   },
   we_need: {
     fontSize: 14,
+    color:'black'
   },
   pan_sec: {
     flexDirection: "row",

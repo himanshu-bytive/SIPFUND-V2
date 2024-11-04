@@ -14,12 +14,8 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { styles } from "./PanStyle";
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Header, CheckBox } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
 

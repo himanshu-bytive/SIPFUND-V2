@@ -184,7 +184,7 @@ export const OthersStack = () => (
 );
 
 const TabNavigator = () => (
-  <Tab.Navigator>
+  <Tab.Navigator screenOptions={{ headerShown: false }}>
     <Tab.Screen name="Explore" component={HomePageStack} />
     <Tab.Screen name="Plans" component={InvestmentPlansStack} />
     <Tab.Screen name="Dashboard" component={HamburgMenuStack} />
@@ -194,7 +194,11 @@ const TabNavigator = () => (
 
 // Main navigator for user end
 export const RootNavigator = () => (
-  <Drawer.Navigator initialRouteName="HomeTab" drawerContent={props => <SideMenu {...props} />}>
+  <Drawer.Navigator
+    initialRouteName="HomeTab"
+    drawerContent={props => <SideMenu {...props} />}
+    screenOptions={{ headerShown: false }}
+  >
     <Drawer.Screen name="HomeTab" component={TabNavigator} />
     <Drawer.Screen name="Investment" component={InvestmentPlansStack} />
     <Drawer.Screen name="Plan" component={PlanYourGoalsStack} />
@@ -206,3 +210,4 @@ export const RootNavigator = () => (
     <Drawer.Screen name="Hamburg" component={HamburgMenuStack} />
   </Drawer.Navigator>
 );
+

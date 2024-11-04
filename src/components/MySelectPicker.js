@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Styles, Config, Colors, FormValidate } from "../common";
 
 const MySelectPicker = (props) => {

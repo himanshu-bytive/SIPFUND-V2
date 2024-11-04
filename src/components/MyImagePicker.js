@@ -14,7 +14,10 @@ import {
   Alert,
 } from "react-native";
 import { connect } from "react-redux";
-import { AntDesign, Entypo, FontAwesome } from "react-native-vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import { Button } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
 import DocumentInstructions from "./DocumentInstructions";
@@ -67,7 +70,39 @@ const MyImagePicker = (props) => {
     };
     checkCameraPermissions();
   }, []);
+  const docVerificationCompleted = (fileType) => {
 
+
+    if (fileType === "") {
+      fileType = "AA1";
+    }
+    /* Check if any of the address verification docs are verified */
+    for (var item in addressVerificationDocs) {
+      for (var doc in docs.responseString.documents) {
+        if (
+          docs.responseString.documents[addressVerificationDocs[item]]
+            ?.status === "PENDING"
+        ) {
+          return true;
+        } else if (
+          docs.responseString.documents[addressVerificationDocs[item]]
+            ?.status === "COMPLETE"
+        ) {
+          return false;
+        }
+      }
+    }
+
+    for (var doc in docs.responseString.documents) {
+      if (docs.responseString.documents[doc]?.docType === fileType) {
+        if (docs.responseString.documents[doc]?.status === "PENDING") {
+          return true;
+        } else if (docs.responseString.documents[doc]?.status === "COMPLETE") {
+          return false;
+        }
+      }
+    }
+  };
   useEffect(() => {
     if (items) {
       setItem(items);
@@ -265,6 +300,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     flex: 0,
     fontWeight: "bold",
+    color:"black"
   },
   image: {
     borderRadius: 10,

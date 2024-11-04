@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,21 +12,21 @@ import {
   ActivityIndicator,
   Linking,
   Platform,
-} from "react-native";
-import { connect } from "react-redux";
-import { Styles, Config, Colors, FormValidate } from "../../common";
-import { InvestmentLists, MyImage } from "../../components";
-import  Entypo from "react-native-vector-icons/Entypo";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { Header, Overlay, CheckBox, Input } from "react-native-elements";
-import Cart from "../../components/Cart";
-import WebView from "react-native-webview";
-import appsFlyer from "react-native-appsflyer";
-import FastImage from "react-native-fast-image";
-import SuggestionInput from "../../components/Search";
+} from 'react-native';
+import {connect} from 'react-redux';
+import {Styles, Config, Colors, FormValidate} from '../../common';
+import {InvestmentLists, MyImage} from '../../components';
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Header, Overlay, CheckBox, Input} from 'react-native-elements';
+import Cart from '../../components/Cart';
+import WebView from 'react-native-webview';
+import appsFlyer from 'react-native-appsflyer';
+import FastImage from 'react-native-fast-image';
+import SuggestionInput from '../../components/Search';
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 function HomeScreen(props) {
   const pageActiveGoles = useRef(false);
@@ -65,17 +65,18 @@ function HomeScreen(props) {
   // console.log("🚀 ~ HomeScreen ~ investments:", JSON.stringify(investments));
 
   const [loading, toggleLoading] = useState(false);
-  const [webUrl, setWebUrl] = useState("");
+  const [webUrl, setWebUrl] = useState('');
   const [webViewActive, setWebViewActive] = useState(false);
   const [showMorePlans, setShowMorePlans] = useState(false);
 
   useEffect(() => {
     setWebViewActive(false);
     console.log(props.navigation.getState());
-    
+    console.log('STEPS', steps);
+    console.log('USERS', users);
   }, []);
 
-  const loadUrl = (url) => {
+  const loadUrl = url => {
     setWebViewActive(true);
     setWebUrl(url);
     clearEmandateLink();
@@ -103,20 +104,20 @@ function HomeScreen(props) {
   useEffect(() => {
     if (goalDetail && pageActiveGoles.current) {
       pageActiveGoles.current = false;
-      props.navigation.navigate("PlanHome", { toggleLoading });
+      props.navigation.navigate('PlanHome', {toggleLoading});
     }
   }, [goalDetail]);
 
   useEffect(() => {
     if (investment && pageActiveInvest.current) {
       pageActiveInvest.current = false;
-      props.navigation.navigate("InvestmentDetail", { toggleLoading });
+      props.navigation.navigate('InvestmentDetail', {toggleLoading});
     }
   }, [investment]);
 
   const [visible, setVisible] = useState(false);
-  const [overlay, setOverlay] = useState("");
-  const toggleOverlay = (value) => {
+  const [overlay, setOverlay] = useState('');
+  const toggleOverlay = value => {
     setOverlay(value);
     setVisible(!visible);
   };
@@ -180,15 +181,14 @@ function HomeScreen(props) {
         leftComponent={
           <TouchableOpacity
             onPress={() => props.navigation.toggleDrawer()}
-            style={{ marginTop: 20 }}
-          >
-            <Entypo name={"menu"} size={30} color={Colors.RED} />
+            style={{marginTop: 20}}>
+            <Entypo name={'menu'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList", { fromScreen: "Home" });
+              props.navigation.navigate('TopRatedList', {fromScreen: 'Home'});
             }}
           />
         }
@@ -196,7 +196,7 @@ function HomeScreen(props) {
         containerStyle={Styles.header}
         centerComponent={
           <FastImage
-            source={require("../../../assets/icon.png")}
+            source={require('../../../assets/icon.png')}
             style={styles.logimg}
           />
         }
@@ -222,7 +222,7 @@ function HomeScreen(props) {
           {/* <Text>{JSON.stringify(users)}</Text> */}
           {steps && steps < 5 && steps >= 0 && (
             <>
-              {(users?.hasOwnProperty("users") && !users?.IIN) ||
+              {(users?.hasOwnProperty('users') && !users?.IIN) ||
                 (steps < 5 && (
                   <>
                     <View
@@ -230,19 +230,17 @@ function HomeScreen(props) {
                         users?.IIN && steps > 5
                           ? styles.home_top_completed
                           : styles.home_top
-                      }
-                    >
+                      }>
                       <View
                         style={{
-                          alignItems: "center",
+                          alignItems: 'center',
                           marginBottom: 20,
                           //alignItems: users?.IIN && steps > 3 ? "flex-start" : "center",
                           flexDirection:
-                            users?.IIN && steps > 5 ? "row" : "column",
-                        }}
-                      >
+                            users?.IIN && steps > 5 ? 'row' : 'column',
+                        }}>
                         <Image
-                          source={require("../../../assets/Hello.png")}
+                          source={require('../../../assets/Hello.png')}
                           style={
                             users?.IIN && steps > 5
                               ? styles.Helloimgsmall
@@ -251,31 +249,28 @@ function HomeScreen(props) {
                         />
                         <View
                           style={{
-                            flexDirection: "column",
-                            justifyContent: "center",
-                          }}
-                        >
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                          }}>
                           {users?.pan ||
                           props.navigation.state.params?.refresh ? (
                             <View
                               style={{
                                 alignItems:
                                   users?.IIN && steps > 5
-                                    ? "flex-start"
-                                    : "center",
+                                    ? 'flex-start'
+                                    : 'center',
                                 marginTop: 12,
-                              }}
-                            >
+                              }}>
                               <Text
                                 style={[
                                   styles.HelloIinvestor,
                                   {
                                     opacity: users?.IIN && steps > 3 ? 0.5 : 1,
                                   },
-                                ]}
-                              >
+                                ]}>
                                 {users?.IIN && steps > 5
-                                  ? "Congratulations"
+                                  ? 'Congratulations'
                                   : users?.name
                                   ? `Hello, ${users?.name}`
                                   : `Hello, Investor`}
@@ -288,10 +283,9 @@ function HomeScreen(props) {
                                     marginBottom:
                                       users?.IIN && steps > 3 ? 15 : 0,
                                   },
-                                ]}
-                              >
+                                ]}>
                                 {users?.IIN && steps > 5
-                                  ? "Your Account is Active"
+                                  ? 'Your Account is Active'
                                   : "You're almost ready to Invest"}
                               </Text>
                             </View>
@@ -300,9 +294,8 @@ function HomeScreen(props) {
                           )}
                           {users?.IIN && steps > 5 ? (
                             <Text
-                              onPress={() => props.navigation.navigate("Owner")}
-                              style={styles.startInvestmentText}
-                            >
+                              onPress={() => props.navigation.navigate('Owner')}
+                              style={styles.startInvestmentText}>
                               + Start Investing
                             </Text>
                           ) : (
@@ -312,22 +305,24 @@ function HomeScreen(props) {
                                   users?.pan ||
                                   props.navigation.state.params?.refresh
                                 ) {
-                                  props.navigation.navigate(
-                                    steps === 3
-                                      ? "RegisterDetails"
-                                      : "UploadDocument"
-                                  );
+                                  console.log('STEPS', steps);
+                                  if (steps === 3) {
+                                    props.navigation.navigate(
+                                      "Reg",{screen : 'RegisterDetails'},
+                                    );
+                                  } else {
+                                    props.navigation.navigate("Reg",{screen : 'UploadDocument'});
+                                  }
                                 } else {
-                                  props.navigation.navigate("Pan");
+                                  props.navigation.navigate('Pan');
                                 }
                               }}
-                              style={styles.botton_box}
-                            >
+                              style={styles.botton_box}>
                               <Text style={styles.get_otp}>
                                 {users?.pan ||
                                 props.navigation.state.params?.refresh
-                                  ? "COMPLETE ACCOUNT SETUP"
-                                  : "Create Account"}
+                                  ? 'COMPLETE ACCOUNT SETUP'
+                                  : 'Create Account'}
                               </Text>
                             </TouchableOpacity>
                           )}
@@ -381,22 +376,20 @@ function HomeScreen(props) {
         )}
         */}
 
-        <Text style={[styles.Plan, { marginTop: 15, marginBottom: -15 }]}>
+        <Text style={[styles.Plan, {marginTop: 15, marginBottom: -15}]}>
           Top Rated Funds
         </Text>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("TopRatedHome")}
-        >
+          onPress={() => props.navigation.navigate('TopRatedHome')}>
           <View
             style={[
               styles.education,
               styles.education_roted,
-              { marginBottom: 0 },
-            ]}
-          >
+              {marginBottom: 0},
+            ]}>
             <View style={styles.child_sec}>
               <FastImage
-                source={require("../../../assets/term7.png")}
+                source={require('../../../assets/term7.png')}
                 style={styles.fund_img}
               />
             </View>
@@ -415,7 +408,7 @@ function HomeScreen(props) {
         <Text style={styles.Plan}>Investment Plans</Text>
         <InvestmentLists
           data={showMorePlans ? investments : investments.slice(0, 4)}
-          onPress={(item) => {
+          onPress={item => {
             toggleLoading(true);
             investmentPlans(item, token);
             pageActiveInvest.current = true;
@@ -423,10 +416,9 @@ function HomeScreen(props) {
         />
         <TouchableOpacity
           style={styles.showMorePlansContainer}
-          onPress={() => setShowMorePlans(!showMorePlans)}
-        >
+          onPress={() => setShowMorePlans(!showMorePlans)}>
           <Text style={styles.showMorePlansText}>
-            {showMorePlans ? "Show less" : "Show more"}
+            {showMorePlans ? 'Show less' : 'Show more'}
           </Text>
         </TouchableOpacity>
         {/*<View style={{ alignItems: "center" }}>
@@ -444,28 +436,27 @@ function HomeScreen(props) {
 
         {/* Top roted fund section */}
         <Text style={styles.Plan}>Plan Your Goals</Text>
-        <ScrollView horizontal={true} style={{ marginHorizontal: 16 }}>
+        <ScrollView horizontal={true} style={{marginHorizontal: 16}}>
           {goals.map((item, key) => (
             <TouchableOpacity
               key={key}
               onPress={() => {
-                const eventName = "goals_clicked";
+                const eventName = 'goals_clicked';
 
                 appsFlyer.logEvent(
                   eventName,
                   item,
-                  (res) => {
-                    console.log("######## AppsFlyer #######", res);
+                  res => {
+                    console.log('######## AppsFlyer #######', res);
                   },
-                  (err) => {
-                    console.error("######## AppsFlyer #######", err);
-                  }
+                  err => {
+                    console.error('######## AppsFlyer #######', err);
+                  },
                 );
                 toggleLoading(true);
                 singleDetails(item, token);
                 pageActiveGoles.current = true;
-              }}
-            >
+              }}>
               {/* <Text>{JSON.stringify(item.iosgoalImagePath)}</Text> */}
               <View style={styles.education}>
                 <View style={styles.child_sec}>
@@ -475,7 +466,7 @@ function HomeScreen(props) {
                     // svg={Platform.OS == "android" ? false : true}
                     svg={true}
                     url={
-                      Platform.OS == "ios"
+                      Platform.OS == 'ios'
                         ? item.iosgoalImagePath
                         : item.goalImagePath
                     }
@@ -498,12 +489,11 @@ function HomeScreen(props) {
           <Text style={styles.quick_text}>Quick Access</Text>
           <ScrollView horizontal={true}>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("ReferEarn")}
-              style={[styles.education, styles.quick_access]}
-            >
+              onPress={() => props.navigation.navigate('ReferEarn')}
+              style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
                 <FastImage
-                  source={require("../../../assets/term8.png")}
+                  source={require('../../../assets/term8.png')}
                   style={styles.quick_img}
                 />
               </View>
@@ -514,12 +504,11 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("Relationship")}
-              style={[styles.education, styles.quick_access]}
-            >
+              onPress={() => props.navigation.navigate('Relationship')}
+              style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
                 <FastImage
-                  source={require("../../../assets/quick_img3.png")}
+                  source={require('../../../assets/quick_img3.png')}
                   style={styles.quick_img3}
                 />
               </View>
@@ -532,11 +521,10 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("Owner")}
-              style={[styles.education, styles.quick_access]}
-            >
+              onPress={() => props.navigation.navigate('Owner')}
+              style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
-                <AntDesign name={"search1"} size={80} color={Colors.RED} />
+                <AntDesign name={'search1'} size={80} color={Colors.RED} />
 
                 {/* <Image
                     source={require("../../../assets/quick_img3.png")}
@@ -553,15 +541,19 @@ function HomeScreen(props) {
 
         {/* top roted fund */}
         <View style={styles.border}></View>
-        <TouchableOpacity onPress={() => props.navigation.navigate("Goals")}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Goals')}>
           <Text style={styles.roted_text}>Any questions?</Text>
         </TouchableOpacity>
-        <Text style={{ marginLeft: 20, color: "grey" }}>
+        <Text style={{marginLeft: 20, color: 'grey'}}>
           We would love to have your questions!
         </Text>
         <Text
-          style={{ marginHorizontal: 50, textAlign: "center", marginTop: 20 }}
-        >
+          style={{
+            marginHorizontal: 40,
+            textAlign: 'center',
+            marginTop: 20,
+            color: 'black',
+          }}>
           SIPFund.com brings 5 things you must know before investing.
         </Text>
 
@@ -570,11 +562,10 @@ function HomeScreen(props) {
           <View style={styles.roted_bottom}>
             <View style={styles.amount_sec}>
               <TouchableOpacity
-                onPress={() => toggleOverlay("MINIMUM_AMOUNT")}
-                style={{ alignItems: "center" }}
-              >
+                onPress={() => toggleOverlay('MINIMUM_AMOUNT')}
+                style={{alignItems: 'center'}}>
                 <FastImage
-                  source={require("../../../assets/term9.png")}
+                  source={require('../../../assets/term9.png')}
                   style={styles.term9}
                 />
                 <Text style={styles.minimum}>Minimum Amount</Text>
@@ -583,11 +574,10 @@ function HomeScreen(props) {
 
             <View style={styles.amount_sec}>
               <TouchableOpacity
-                onPress={() => toggleOverlay("LOCK_INS")}
-                style={{ alignItems: "center" }}
-              >
+                onPress={() => toggleOverlay('LOCK_INS')}
+                style={{alignItems: 'center'}}>
                 <FastImage
-                  source={require("../../../assets/term10.png")}
+                  source={require('../../../assets/term10.png')}
                   style={styles.term9}
                 />
                 <Text style={styles.minimum}>Lock-ins</Text>
@@ -596,11 +586,10 @@ function HomeScreen(props) {
 
             <View style={styles.amount_sec}>
               <TouchableOpacity
-                onPress={() => toggleOverlay("FLEXIBILITY")}
-                style={{ alignItems: "center" }}
-              >
+                onPress={() => toggleOverlay('FLEXIBILITY')}
+                style={{alignItems: 'center'}}>
                 <FastImage
-                  source={require("../../../assets/term11.png")}
+                  source={require('../../../assets/term11.png')}
                   style={styles.Flexibility}
                 />
                 <Text style={styles.minimum}>Flexibility</Text>
@@ -609,11 +598,10 @@ function HomeScreen(props) {
 
             <View style={styles.amount_sec}>
               <TouchableOpacity
-                onPress={() => toggleOverlay("PAYMENT_METHODS")}
-                style={{ alignItems: "center" }}
-              >
+                onPress={() => toggleOverlay('PAYMENT_METHODS')}
+                style={{alignItems: 'center'}}>
                 <FastImage
-                  source={require("../../../assets/term12.png")}
+                  source={require('../../../assets/term12.png')}
                   style={styles.Flexibility}
                 />
                 <Text style={styles.minimum}>Payment Methods</Text>
@@ -622,11 +610,10 @@ function HomeScreen(props) {
 
             <View style={styles.amount_sec}>
               <TouchableOpacity
-                onPress={() => toggleOverlay("EASY_WITHDRAWAL")}
-                style={{ alignItems: "center" }}
-              >
+                onPress={() => toggleOverlay('EASY_WITHDRAWAL')}
+                style={{alignItems: 'center'}}>
                 <FastImage
-                  source={require("../../../assets/term13.png")}
+                  source={require('../../../assets/term13.png')}
                   style={styles.Flexibility}
                 />
                 <Text style={styles.minimum}>Easy Withdrawal</Text>
@@ -642,21 +629,20 @@ function HomeScreen(props) {
           <Text style={styles.faqs}>FAQ’s</Text>
           <View style={styles.imgbox}>
             <FastImage
-              source={require("../../../assets/FAQimg.png")}
+              source={require('../../../assets/FAQimg.png')}
               style={styles.FAQimg}
             />
           </View>
-          <View style={{ alignItems: "flex-start" }}>
+          <View style={{alignItems: 'flex-start'}}>
             <View style={styles.singletext}>
               <Entypo name="dot-single" size={40} color="#FFCE00" />
               <Text
                 onPress={() =>
                   loadUrl(
-                    "https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ"
+                    'https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ',
                   )
                 }
-                style={styles.Mutualfund}
-              >
+                style={styles.Mutualfund}>
                 What is a Mutual Fund?
               </Text>
             </View>
@@ -665,11 +651,10 @@ function HomeScreen(props) {
               <Text
                 onPress={() =>
                   loadUrl(
-                    "https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ"
+                    'https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ',
                   )
                 }
-                style={styles.Mutualfund}
-              >
+                style={styles.Mutualfund}>
                 What is Open Ended Fund?
               </Text>
             </View>
@@ -678,11 +663,10 @@ function HomeScreen(props) {
           <TouchableOpacity
             onPress={() =>
               loadUrl(
-                "https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ"
+                'https://sipfund.com/SIP-Login/build/app/index.html#/SIPFund_FAQ',
               )
             }
-            style={styles.botton_box}
-          >
+            style={styles.botton_box}>
             <Text style={styles.get_otp}>MORE FAQ’s</Text>
           </TouchableOpacity>
         </View>
@@ -696,101 +680,94 @@ function HomeScreen(props) {
           <TouchableOpacity
             onPress={() =>
               loadUrl(
-                "https://sipfund.com/blog/What-Is-a-Qualified-Institutional-Placement.html"
+                'https://sipfund.com/blog/What-Is-a-Qualified-Institutional-Placement.html',
               )
             }
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: '#fff',
               elevation: 4,
               borderRadius: 3,
               width: 340,
-            }}
-          >
+            }}>
             <FastImage
-              source={require("../../../assets/qip_img.png")}
+              source={require('../../../assets/qip_img.png')}
               style={{
-                width: "100%",
+                width: '100%',
                 aspectRatio: 3.1 / 2,
-                resizeMode: "contain",
+                resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
               loadUrl(
-                "https://sipfund.com/blog/What-is-Benchmark-in-mutual-funds.html"
+                'https://sipfund.com/blog/What-is-Benchmark-in-mutual-funds.html',
               )
             }
-            style={styles.qipimg}
-          >
+            style={styles.qipimg}>
             <FastImage
-              source={require("../../../assets/fundimg.png")}
+              source={require('../../../assets/fundimg.png')}
               style={{
                 width: 310,
                 aspectRatio: 3.1 / 2,
-                resizeMode: "contain",
+                resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              loadUrl("https://sipfund.com/blog/What-is-Credit-Rating.html")
+              loadUrl('https://sipfund.com/blog/What-is-Credit-Rating.html')
             }
-            style={styles.qipimg}
-          >
+            style={styles.qipimg}>
             <FastImage
-              source={require("../../../assets/ratingimg.png")}
+              source={require('../../../assets/ratingimg.png')}
               style={{
                 width: 310,
                 aspectRatio: 3.1 / 2,
-                resizeMode: "contain",
+                resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => loadUrl("https://sipfund.com/SIPFund_Blog.html")}
-        >
+          onPress={() => loadUrl('https://sipfund.com/SIPFund_Blog.html')}>
           <Text style={styles.view}>View All</Text>
         </TouchableOpacity>
         <View style={styles.border}></View>
       </ScrollView>
 
       <Overlay
-        isVisible={visible && overlay === "MINIMUM_AMOUNT"}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: "#fff" }}
-      >
+        isVisible={visible && overlay === 'MINIMUM_AMOUNT'}
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
-            backgroundColor: "#11370a",
-            alignItems: "center",
+            backgroundColor: '#11370a',
+            alignItems: 'center',
             paddingVertical: 5,
-          }}
-        >
+          }}>
           <FastImage
-            source={require("../../../assets/term9.png")}
-            style={{ width: 56, paddingVertical: 3 }}
+            source={require('../../../assets/term9.png')}
+            style={{width: 56, paddingVertical: 3}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is the <Text style={styles.view}>minimal amount</Text> for
             investing in Mutual Funds?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 }}>
+          <Text style={{paddingTop: 10, fontSize: 15}}>
             The minimum amount required to invest in mutual funds is very low.
             You can start investing in Systematic Investment Plan(SIP) with an
             amount of ₹500 only.
           </Text>
-          <TouchableOpacity onPress={() => toggleOverlay("")}>
+          <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
               style={{
-                color: "#ff0000",
+                color: '#ff0000',
                 paddingTop: 10,
                 fontSize: 15,
-                textAlign: "right",
-              }}
-            >
+                textAlign: 'right',
+              }}>
               CLOSE
             </Text>
           </TouchableOpacity>
@@ -798,40 +775,37 @@ function HomeScreen(props) {
       </Overlay>
 
       <Overlay
-        isVisible={visible && overlay === "LOCK_INS"}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: "#fff" }}
-      >
+        isVisible={visible && overlay === 'LOCK_INS'}
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
-            backgroundColor: "#12478D",
-            alignItems: "center",
+            backgroundColor: '#12478D',
+            alignItems: 'center',
             paddingVertical: 5,
-          }}
-        >
+          }}>
           <FastImage
-            source={require("../../../assets/term10.png")}
-            style={{ width: 56, height: 51 }}
+            source={require('../../../assets/term10.png')}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is <Text style={styles.view}>lock-in</Text> period in Mutual
             Funds?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 }}>
+          <Text style={{paddingTop: 10, fontSize: 15}}>
             A lock-in period is a specific period during which an investor is
             not allowed to redeem the units of the mutual fund either partially
             or fully. In an ELSS fund, the lock-in period is 3 years
           </Text>
-          <TouchableOpacity onPress={() => toggleOverlay("")}>
+          <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
               style={{
-                color: "#ff0000",
+                color: '#ff0000',
                 paddingTop: 10,
                 fontSize: 15,
-                textAlign: "right",
-              }}
-            >
+                textAlign: 'right',
+              }}>
               CLOSE
             </Text>
           </TouchableOpacity>
@@ -839,42 +813,39 @@ function HomeScreen(props) {
       </Overlay>
 
       <Overlay
-        isVisible={visible && overlay === "FLEXIBILITY"}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: "#fff" }}
-      >
+        isVisible={visible && overlay === 'FLEXIBILITY'}
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
-            backgroundColor: "#12478D",
-            alignItems: "center",
+            backgroundColor: '#12478D',
+            alignItems: 'center',
             paddingVertical: 5,
-          }}
-        >
+          }}>
           <FastImage
-            source={require("../../../assets/choice.png")}
-            style={{ width: 56, height: 51 }}
+            source={require('../../../assets/choice.png')}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is the <Text style={styles.view}>flexibility</Text> that Mutual
             Funds offer?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 }}>
+          <Text style={{paddingTop: 10, fontSize: 15}}>
             Mutual Funds offer flexibility to investors by means of Systematic
             Investment Plan(SIP), Systematic Withdrawal Plan (SWP), Systematic
             Transfer Plan(STP), Growth Plan,Dividend Payout or Reinvestment
             Plans.They are also affordable as they allow investors to start
             investing with a little amount as low as ₹500.
           </Text>
-          <TouchableOpacity onPress={() => toggleOverlay("")}>
+          <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
               style={{
-                color: "#ff0000",
+                color: '#ff0000',
                 paddingTop: 10,
                 fontSize: 15,
-                textAlign: "right",
-              }}
-            >
+                textAlign: 'right',
+              }}>
               CLOSE
             </Text>
           </TouchableOpacity>
@@ -882,60 +853,57 @@ function HomeScreen(props) {
       </Overlay>
 
       <Overlay
-        isVisible={visible && overlay === "PAYMENT_METHODS"}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: "#fff" }}
-      >
+        isVisible={visible && overlay === 'PAYMENT_METHODS'}
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
-            backgroundColor: "#12478D",
-            alignItems: "center",
+            backgroundColor: '#12478D',
+            alignItems: 'center',
             paddingVertical: 5,
-          }}
-        >
+          }}>
           <FastImage
-            source={require("../../../assets/term12.png")}
-            style={{ width: 56, height: 51 }}
+            source={require('../../../assets/term12.png')}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
-            what are the various{" "}
+            what are the various{' '}
             <Text style={styles.view}>payment methods</Text>
             available for an investorfor making investments?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 }}>
+          <Text style={{paddingTop: 10, fontSize: 15}}>
             Using SIPfund.com app/portal,an investor can make purchases under
             the following methods
           </Text>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 }}>NET Banking</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>{'\u2022'}</Text>
+            <Text style={{flex: 1, paddingLeft: 5}}>NET Banking</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 }}>NEFT/RTGS</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>{'\u2022'}</Text>
+            <Text style={{flex: 1, paddingLeft: 5}}>NEFT/RTGS</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 }}>UPI</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>{'\u2022'}</Text>
+            <Text style={{flex: 1, paddingLeft: 5}}>UPI</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 }}>Debit Mandate</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>{'\u2022'}</Text>
+            <Text style={{flex: 1, paddingLeft: 5}}>Debit Mandate</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 }}>Cheque</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>{'\u2022'}</Text>
+            <Text style={{flex: 1, paddingLeft: 5}}>Cheque</Text>
           </View>
-          <TouchableOpacity onPress={() => toggleOverlay("")}>
+          <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
               style={{
-                color: "#ff0000",
+                color: '#ff0000',
                 paddingTop: 10,
                 fontSize: 15,
-                textAlign: "right",
-              }}
-            >
+                textAlign: 'right',
+              }}>
               CLOSE
             </Text>
           </TouchableOpacity>
@@ -943,27 +911,25 @@ function HomeScreen(props) {
       </Overlay>
 
       <Overlay
-        isVisible={visible && overlay === "EASY_WITHDRAWAL"}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: "#fff" }}
-      >
+        isVisible={visible && overlay === 'EASY_WITHDRAWAL'}
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
-            backgroundColor: "#12478D",
-            alignItems: "center",
+            backgroundColor: '#12478D',
+            alignItems: 'center',
             paddingVertical: 5,
-          }}
-        >
+          }}>
           <FastImage
-            so4rce={require("../../../assets/overlay_img.png")}
-            style={{ width: 56, height: 51 }}
+            so4rce={require('../../../assets/overlay_img.png')}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
-            Do Mutual Funds allow{" "}
+            Do Mutual Funds allow{' '}
             <Text style={styles.view}>easy withdrawal of amount?</Text>
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 }}>
+          <Text style={{paddingTop: 10, fontSize: 15}}>
             Both Equity and Debt Mutual Funds can be technically withdrawn as
             soon as fund is available for daily sale and repurchase. Of course
             liquidity is one of the biggest advantages of investing in Mutual
@@ -971,15 +937,14 @@ function HomeScreen(props) {
             redeemed or withdrawn will be credited to investor's bank account
             within 1-4 working days depending on the type of mutual funds.
           </Text>
-          <TouchableOpacity onPress={() => toggleOverlay("")}>
+          <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
               style={{
-                color: "#ff0000",
+                color: '#ff0000',
                 paddingTop: 10,
                 fontSize: 15,
-                textAlign: "right",
-              }}
-            >
+                textAlign: 'right',
+              }}>
               CLOSE
             </Text>
           </TouchableOpacity>
@@ -988,13 +953,12 @@ function HomeScreen(props) {
       {webViewActive && (
         <View
           style={{
-            position: "absolute",
-            backgroundColor: "white",
+            position: 'absolute',
+            backgroundColor: 'white',
             zIndex: 100,
             width,
             height,
-          }}
-        >
+          }}>
           <Header
             leftComponent={
               <TouchableOpacity
@@ -1002,15 +966,14 @@ function HomeScreen(props) {
                   setWebViewActive(false);
                   // clearEmandateLink();
                 }}
-                style={{ marginTop: 20 }}
-              >
-                <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
+                style={{marginTop: 20}}>
+                <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
               </TouchableOpacity>
             }
             rightComponent={
               <Cart
                 nav={() => {
-                  props.navigation.navigate("TopRatedList");
+                  props.navigation.navigate('TopRatedList');
                 }}
               />
             }
@@ -1018,12 +981,12 @@ function HomeScreen(props) {
             containerStyle={Styles.header}
             centerComponent={
               <FastImage
-                source={require("../../../assets/icon.png")}
+                source={require('../../../assets/icon.png')}
                 style={styles.logimg}
               />
             }
           />
-          <WebView source={{ uri: webUrl }} javaScriptEnabled={true} />
+          <WebView source={{uri: webUrl}} javaScriptEnabled={true} />
         </View>
       )}
     </View>
@@ -1036,18 +999,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   containerScroll: {
-    width: "100%",
+    width: '100%',
   },
   home_top: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   home_top_completed: {
-    flexDirection: "row",
+    flexDirection: 'row',
     margin: 10,
   },
   startInvestmentText: {
     color: Colors.LIGHT_RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
   },
   logimg: {
@@ -1058,40 +1021,42 @@ const styles = StyleSheet.create({
   Helloimg: {
     marginTop: 10,
     height: 150,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   Helloimgsmall: {
-    maxWidth: "40%",
+    maxWidth: '40%',
     height: 120,
     // resizeMode: "contain",
   },
   HelloIinvestor: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+    color: 'black',
   },
   HelloIinvestor1: {
     fontSize: 14,
     color: Colors.GRAY_DEEP,
     opacity: 0.5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+    color: 'black',
   },
   Plan: {
     fontSize: 16,
     color: Colors.DEEP_GRAY,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingHorizontal: 10,
     //paddingVertical: 15,
     marginTop: 15,
   },
   education_top: {
     paddingLeft: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   education: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: Styles.width - 60,
     borderWidth: 2,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Colors.GRAY_LIGHT,
     borderRadius: 15,
     marginVertical: 20,
@@ -1099,7 +1064,7 @@ const styles = StyleSheet.create({
     //padding: 10,
     paddingHorizontal: 10,
     backgroundColor: Colors.WHITE,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 5,
@@ -1109,7 +1074,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   education_roted: {
-    width: "90%",
+    width: '90%',
     marginHorizontal: 20,
     marginVertical: 30,
   },
@@ -1121,19 +1086,20 @@ const styles = StyleSheet.create({
     //maxWidth: "70%",
   },
 
-  child_sec: { width: "30%", marginHorizontal: 10 },
+  child_sec: {width: '30%', marginHorizontal: 10},
   goals_2: {
     height: 145,
     width: 145,
   },
   education_sec: {
-    width: "65%",
+    width: '65%',
     marginTop: 10,
   },
   child: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingLeft: 10,
+    color: 'black',
   },
   child_text: {
     fontSize: 16,
@@ -1146,7 +1112,7 @@ const styles = StyleSheet.create({
     height: 4,
     marginHorizontal: 20,
     backgroundColor: Colors.GRAY_LIGHT,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -1156,15 +1122,15 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   investment_sec: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   investment: {
     borderRadius: 20,
     // backgroundColor: Colors.WHITE,
     // width: "30%",
-    alignItems: "center",
+    alignItems: 'center',
     margin: 7,
-    shadowColor: "#000",
+    shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,
     //   height: 4,
@@ -1174,31 +1140,31 @@ const styles = StyleSheet.create({
     // elevation: 4,
   },
   term: {
-    width: "100%",
+    width: '100%',
     height: 113,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   long: {
-    textAlign: "center",
+    textAlign: 'center',
     paddingVertical: 10,
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   all_plan: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginVertical: 15,
   },
   all_plan_text: {
     fontSize: 16,
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   roted_text: {
     fontSize: 20,
     color: Colors.DEEP_GRAY,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingLeft: 20,
     marginTop: 20,
   },
@@ -1214,7 +1180,7 @@ const styles = StyleSheet.create({
   quick_text: {
     fontSize: 20,
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingLeft: 20,
     marginVertical: 20,
   },
@@ -1233,29 +1199,29 @@ const styles = StyleSheet.create({
   earn: {
     color: Colors.RED,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingLeft: 10,
   },
   ship_text: {
     color: Colors.BLACK,
-    textAlign: "center",
+    textAlign: 'center',
     paddingTop: 10,
   },
   roted_bottom: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingLeft: 20,
     marginVertical: 30,
   },
   amount_sec: {
     width: 150,
     borderWidth: 3,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Colors.YELLOW_LIGHT,
     marginVertical: 20,
     marginHorizontal: 5,
     padding: 10,
     backgroundColor: Colors.WHITE,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 5,
@@ -1263,11 +1229,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-    alignItems: "center",
+    alignItems: 'center',
   },
   minimum: {
     fontSize: 13,
-    color: Colors.BLACK,
+    color: 'black',
   },
   term9: {
     width: 50,
@@ -1281,7 +1247,7 @@ const styles = StyleSheet.create({
   },
   /* Faq screen */
   mainbox: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 40,
   },
   logimg: {
@@ -1290,7 +1256,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   imgbox: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
   },
   FAQimg: {
@@ -1299,14 +1265,14 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   faqs: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginLeft: 20,
     fontSize: 22,
-    fontWeight: "bold",
-    color: "#716D6E",
+    fontWeight: 'bold',
+    color: '#716D6E',
   },
   singletext: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 10,
   },
   Mutualfund: {
@@ -1315,7 +1281,7 @@ const styles = StyleSheet.create({
     color: Colors.GREY_1,
   },
   botton_box: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: Colors.RED,
     width: width - 50,
     paddingVertical: 20,
@@ -1329,20 +1295,20 @@ const styles = StyleSheet.create({
   get_otp: {
     color: Colors.WHITE,
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   // gallary
   gallary: {
-    width: "100%",
-    alignItems: "center",
-    textAlign: "center",
+    width: '100%',
+    alignItems: 'center',
+    textAlign: 'center',
   },
   qipimg: {
     //width: 368,
     //height: 207,
     //marginVertical: 20,
     //margin: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 1,
       height: 2,
@@ -1354,21 +1320,21 @@ const styles = StyleSheet.create({
   knowledge: {
     fontSize: 22,
     color: Colors.DEEP_GRAY,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingLeft: 20,
     paddingBottom: 10,
     marginTop: 20,
   },
   view: {
     fontSize: 15,
-    textAlign: "center",
+    textAlign: 'center',
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingBottom: 5,
   },
   mutual: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   emaMainbox: {
     margin: 10,
@@ -1378,7 +1344,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 15,
     marginVertical: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   emaMutual_fund: {
     fontSize: 15,
@@ -1406,7 +1372,7 @@ const styles = StyleSheet.create({
     // marginTop: -140,
     marginHorizontal: 20,
     borderWidth: 2,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Colors.GRAY_LIGHT,
     marginVertical: 10,
     padding: 10,
@@ -1414,37 +1380,37 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   value_sec: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 10,
   },
   child5: {
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   value: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     // paddingVertical: 5,
     color: Colors.DEEP_GRAY,
   },
   rupees: {
     fontSize: 20,
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   Profit: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   investment2: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: Colors.DEEP_GRAY,
     marginVertical: 10,
   },
   showMorePlansContainer: {
     marginHorizontal: 20,
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
   },
   showMorePlansText: {
     color: Colors.RED,
@@ -1452,7 +1418,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   token: state.auth.token,
   users: state.auth.user,
   isFetching: state.home.isFetching,
@@ -1473,14 +1439,14 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { AuthActions } = require("../../store/AuthRedux");
-  const { HomeActions } = require("../../store/HomeRedux");
-  const { CartActions } = require("../../store/CartActionsRedux");
-  const { GoalsActions } = require("../../store/GoalsRedux");
-  const { InvestmentPlanActions } = require("../../store/InvestmentPlanRedux");
-  const { EmandateActions } = require("../../store/EmandateRedux");
-  const { FundDetailActions } = require("../../store/FundDetailRedux");
+  const {dispatch} = dispatchProps;
+  const {AuthActions} = require('../../store/AuthRedux');
+  const {HomeActions} = require('../../store/HomeRedux');
+  const {CartActions} = require('../../store/CartActionsRedux');
+  const {GoalsActions} = require('../../store/GoalsRedux');
+  const {InvestmentPlanActions} = require('../../store/InvestmentPlanRedux');
+  const {EmandateActions} = require('../../store/EmandateRedux');
+  const {FundDetailActions} = require('../../store/FundDetailRedux');
   return {
     ...stateProps,
     ...ownProps,
@@ -1491,16 +1457,16 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getHomeData: (params, token) => {
       HomeActions.getHomeData(dispatch, params, token);
     },
-    cartDetails: (token) => {
+    cartDetails: token => {
       CartActions.cartDetails(dispatch, token);
     },
-    goalDetails: (token) => {
+    goalDetails: token => {
       GoalsActions.goalDetails(dispatch, token);
     },
     singleDetails: (params, token) => {
       GoalsActions.singleDetails(dispatch, params, token);
     },
-    allPlans: (token) => {
+    allPlans: token => {
       InvestmentPlanActions.allPlans(dispatch, token);
     },
     investmentPlans: (params, token) => {
@@ -1515,7 +1481,7 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     goalSummaryRetrieve: (params, token) => {
       GoalsActions.goalSummaryRetrieve(dispatch, params, token);
     },
-    fundDetails: (data) => {
+    fundDetails: data => {
       FundDetailActions.fundDetails(dispatch, data);
     },
   };
@@ -1523,5 +1489,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   undefined,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(HomeScreen);

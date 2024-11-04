@@ -17,8 +17,10 @@ import {
 import { connect } from "react-redux";
 import moment from "moment";
 import { Styles, Colors, FormValidate } from "../../common";
-import { MySelectPicker, MyDatePicker, MyTextInput } from "../../components";
-import { AntDesign } from "react-native-vector-icons";
+import MySelectPicker from "../../components/MySelectPicker";
+import MyDatePicker from "../../components/MyDatePicker";
+import MyTextInput from "../../components/MyTextInput";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -39,6 +41,8 @@ const pepList = [
 
 function CompleteDetailsScreen(props) {
   const pageActive = useRef(false);
+  console.log("HELLO I REACHED HERE");
+  
   const {
     token,
     users,

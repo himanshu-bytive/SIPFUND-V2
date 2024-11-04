@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Header } from "react-native-elements";
-import { Entypo } from "react-native-vector-icons";
+import Entypo  from "react-native-vector-icons/Entypo";
 import Cart from "../../components/Cart";
 import moment from "moment";
 import { Colors } from "../../common";
