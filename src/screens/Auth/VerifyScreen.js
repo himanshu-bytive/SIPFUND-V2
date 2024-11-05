@@ -291,6 +291,7 @@ function VerifyScreen(props) {
           </Text>
         </View>
         <View style={styles.text_box}>
+          
           <MaterialIcons name="call" size={20} color="#838280" />
           <TextInput
             ref={phoneInput}
@@ -400,6 +401,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: "flex-start",
     paddingLeft: 50,
+    justifyContent:"center",
+    alignItems:"center"
   },
   button: {
     alignItems: "center",

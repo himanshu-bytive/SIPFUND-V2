@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Header } from "react-native-elements";
-import { AntDesign, Entypo } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
 import { connect } from "react-redux";
 import Cart from "../../components/Cart";
 
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 10,
     textAlign: "center",
+    color:"black"
   },
 });
 

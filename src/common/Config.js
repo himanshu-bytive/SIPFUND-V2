@@ -2,8 +2,8 @@
 
 export default {
   // apiBaseUrl: 'https://www.sipfund.com/api',
-  // apiBaseUrl: "https://sipfund.com/api", //Prod
-  apiBaseUrl: "http://159.65.145.3:8085/api", //UAT
+  apiBaseUrl: "https://sipfund.com/api", //Prod
+  // apiBaseUrl: "http://159.65.145.3:8085/api", //UAT
   // apiBaseUrl: "https://uat.sipfund.com/api",
   // apiBaseUrl: "https://api.sipfund.com/api",
   uploadPath: "/",

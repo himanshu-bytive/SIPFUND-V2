@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, ListItem, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontWeight: "bold",
     paddingVertical: 10,
+    color:"black"
   },
   report_sec: {
     flexDirection: "row",
@@ -207,6 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     paddingTop: 12,
+    color:"black"
   },
 });
 const mapStateToProps = (state) => ({

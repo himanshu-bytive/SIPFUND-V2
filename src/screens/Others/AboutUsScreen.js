@@ -16,7 +16,10 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import DeviceInfo from "react-native-device-info";
-import { Ionicons, AntDesign, Entypo } from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import { Image, Header, CheckBox, colors } from "react-native-elements";
 
 function AboutUsScreen(props) {

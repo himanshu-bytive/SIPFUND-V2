@@ -185,10 +185,10 @@ export const OthersStack = () => (
 
 const TabNavigator = () => (
   <Tab.Navigator screenOptions={{ headerShown: false }}>
-    <Tab.Screen name="Explore" component={HomePageStack} />
-    <Tab.Screen name="Plans" component={InvestmentPlansStack} />
-    <Tab.Screen name="Dashboard" component={HamburgMenuStack} />
-    <Tab.Screen name="You" component={OthersStack} />
+    <Tab.Screen name="BottomExplore" component={HomePageStack} />
+    <Tab.Screen name="BottomPlans" component={InvestmentPlansStack} />
+    <Tab.Screen name="BottomDashboard" component={HamburgMenuStack} />
+    <Tab.Screen name="BottomYou" component={OthersStack} />
   </Tab.Navigator>
 );
 
@@ -208,6 +208,7 @@ export const RootNavigator = () => (
     <Drawer.Screen name="Funds" component={FundsDetailsStack} />
     <Drawer.Screen name="Reg" component={RegisterStack} />
     <Drawer.Screen name="Hamburg" component={HamburgMenuStack} />
+    <Drawer.Screen name="HomeScreen" component={HomePageStack} />
   </Drawer.Navigator>
 );
 

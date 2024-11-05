@@ -16,15 +16,14 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialIcons,
-  Feather,
-  Entypo,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, ListItem, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -68,7 +67,7 @@ function ReferEarnScreen(props) {
     referralLink,
     getReferralLink,
   } = props;
-  console.log("🚀 ~ ReferEarnScreen ~ user:", user);
+  console.log("My User", user);
 
   const [showTC, setShowTC] = useState(false);
 
@@ -189,7 +188,7 @@ function ReferEarnScreen(props) {
               </View>
 
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("AmountHistory")}
+                onPress={() => props.navigation.navigate("You",{screen : "AmountHistory"})}
                 style={styles.earn_right}
               >
                 <MaterialIcons
@@ -528,6 +527,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.BLUE_1,
     paddingVertical: 10,
+    color:"green"
   },
   view_text: {
     fontSize: 12,
@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.GRAY_2,
   },
-  zero_text: { fontSize: 27 },
+  zero_text: { fontSize: 27,color:"black" },
   rupees_text: {
     fontSize: 27,
     color: Colors.GREEN_2,

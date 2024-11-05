@@ -18,15 +18,14 @@ import {
 import moment from "moment";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialIcons,
-  Feather,
-  Entypo,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, ListItem, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Toast from "react-native-simple-toast";
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
   zero_text: {
     fontSize: 27,
     fontWeight: "bold",
+    color:"black"
   },
   rupees_text: { color: Colors.GREEN_2 },
   botton_box: {
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: "#ccc",
     paddingLeft: 15,
+    color:"black"
   },
   get_otp: {
     color: Colors.WHITE,

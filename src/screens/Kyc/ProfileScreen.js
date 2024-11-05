@@ -24,7 +24,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import { Image, Header, CheckBox, colors } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -45,10 +44,24 @@ function ProfileScreen(props) {
     iinBank,
   } = props;
   console.log("🚀 ~ ProfileScreen ~ iinBank:", JSON.stringify(iinBank));
-  const [profileCreated, setProfileCreated] = useState(true);
-
+  console.log("My User",user.IIN);
+  console.log("IIN Bank Data:", iinBank);
+  const [showLoader, setShowLoader] = useState(false);
   useEffect(() => {
-    getProfile({ service_request: { iin: user.iin } }, token);
+    setShowLoader(true); // Show loader immediately on mount
+  
+    const hideTimer = setTimeout(() => {
+      setShowLoader(false); // Hide loader after 5 seconds
+    }, 5000); // 5 seconds for hiding the loader
+  
+    // Cleanup for the hide timer
+    return () => clearTimeout(hideTimer);
+  }, []); // Only runs on mount
+  const showDetails = iinBank?.length > 0 ;
+  console.log(showDetails);
+  
+  useEffect(() => {
+    getProfile({ service_request: { iin: user.IIN } }, token);
   }, []);
 
   useEffect(() => {
@@ -91,7 +104,7 @@ function ProfileScreen(props) {
           />
         }
       />
-      {isFetching && (
+      {showLoader && (
         <View style={Styles.loading}>
           <ActivityIndicator color={Colors.BLACK} size="large" />
         </View>
@@ -115,10 +128,10 @@ function ProfileScreen(props) {
                 color: "#fff",
               }}
             >
-              {user?.name
-                ? user?.name.split(" ").length > 1
-                  ? `${user?.name[0]}${user?.name.split(" ").pop()[0]}`
-                  : `${user?.name[0]}`
+              {profile?.INVESTOR_NAME
+                ? profile?.INVESTOR_NAME.split(" ").length > 1
+                  ? `${profile?.INVESTOR_NAME[0]}${profile?.INVESTOR_NAME.split(" ").pop()[0]}`
+                  : `${profile?.INVESTOR_NAME[0]}`
                 : ""}
             </Text>
           </View>
@@ -156,7 +169,7 @@ function ProfileScreen(props) {
           <View
             style={steps && steps > 1 ? styles.icon_bg_act : styles.icon_bg}
           >
-            <FontAwesome name={"user-o"} size={25} color={Colors.WHITE} />
+            <FontAwesome name={"user-o"} size={24} color={Colors.WHITE} />
           </View>
           <View style={styles.border}></View>
           <View
@@ -166,7 +179,7 @@ function ProfileScreen(props) {
           </View>
           <View style={styles.border}></View>
           <View
-            style={steps && steps > 3 ? styles.icon_bg_act : styles.icon_bg}
+            style={iinBank?.length > 0 ? styles.icon_bg_act : styles.icon_bg}
           >
             <Octicons name={"primitive-dot"} size={25} color={Colors.WHITE} />
           </View>
@@ -204,7 +217,7 @@ function ProfileScreen(props) {
           <Text style={styles.bottom_text}>IIN Activated</Text>
           <Text style={styles.bottom_text}>Investment</Text>
         </View>
-        {profileCreated ? (
+        { showDetails ? (
           <>
             <View style={styles.mutual_sec}>
               <Text style={styles.mutual_text}>Mutual Funds</Text>
@@ -240,7 +253,7 @@ function ProfileScreen(props) {
             {iinBank?.length > 0 ? (
               <>
                 {iinBank?.map((item, index) => (
-                  <>
+                  <View key={item?.BANK_NAME + index}> 
                     {item?.DEFAULT_BANK == "Y" && (
                       <View
                         style={{
@@ -299,7 +312,7 @@ function ProfileScreen(props) {
                         }}
                       />
                     )}
-                  </>
+                  </View>
                 ))}
               </>
             ) : (
@@ -447,11 +460,13 @@ const styles = StyleSheet.create({
     width: "23%",
     textAlign: "center",
     fontSize: 8,
+    color:"black"
   },
   bottom_text: {
     width: "20%",
     textAlign: "center",
     fontSize: 8,
+    color:'black'
   },
   border1: {
     width: "75%",
@@ -488,6 +503,7 @@ const styles = StyleSheet.create({
   customer: {
     fontSize: 15,
     height: 20,
+    color:"black"
   },
   AddBankButton: {
     width: "90%",

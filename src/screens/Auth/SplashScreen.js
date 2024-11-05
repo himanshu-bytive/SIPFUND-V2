@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
     fontSize: 20,
+    color:"black"
   },
   nseimg: {
     marginVertical: 20,

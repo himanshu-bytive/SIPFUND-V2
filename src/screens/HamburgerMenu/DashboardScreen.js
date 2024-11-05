@@ -319,6 +319,9 @@ const styles = StyleSheet.create({
     width: 203,
     marginTop: 10,
   },
+  investment: {
+    color:"black"
+  },
   transaction_sec: {
     backgroundColor: "#C3CFD9",
     marginHorizontal: 5,
@@ -329,6 +332,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 10,
+    color:"black"
   },
   history_sec: {
     flexDirection: "row",
@@ -376,6 +380,7 @@ const styles = StyleSheet.create({
   child5: {
     fontSize: 25,
     fontWeight: "bold",
+    color:"black"
   },
   value: {
     fontSize: 12,

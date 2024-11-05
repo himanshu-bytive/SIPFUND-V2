@@ -8,6 +8,7 @@ import reducers from "./src/store";
 import { createStore, compose, applyMiddleware } from "redux";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/es/integration/react";
+
 // import * as Notifications from "expo-notifications";
 // import Constants from "expo-constants";
 import appsFlyer from "react-native-appsflyer";

@@ -17,15 +17,14 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialIcons,
-  Feather,
-  Entypo,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, ListItem, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -44,6 +43,8 @@ function RelationshipScreen(props) {
   useEffect(() => {
     getrm(token);
     pageActive.current = true;
+    console.log("GOT",rmDetails);
+    
   }, []);
 
   const [state, setState] = useState({
@@ -200,8 +201,8 @@ const styles = StyleSheet.create({
   nametext: {
     paddingVertical: 5,
     fontSize: 16,
-    color: Colors.DEEP_GRAY_3,
     fontWeight: "bold",
+    color:"black"
   },
   inputsec: {
     borderWidth: 1,

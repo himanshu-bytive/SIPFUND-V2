@@ -310,7 +310,7 @@ function SideMenu(props) {
 
       <ScrollView>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("dashboard")}
+          onPress={() => props.navigation.navigate("BottomDashboard",{screen : "dashboard"})}
           style={styles.profile_sec}
         >
           <View style={styles.sideIcon}>
@@ -322,7 +322,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Profile")}
+          onPress={() => props.navigation.navigate("BottomYou",{screen : "Profile"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -349,7 +349,7 @@ function SideMenu(props) {
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("ReferEarn")}
+          onPress={() => props.navigation.navigate("You",{screen:"ReferEarn"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -368,9 +368,9 @@ function SideMenu(props) {
           onPress={() => {
             if (users?.pan) {
               if (steps === 3) {
-                props.navigation.navigate("RegisterDetails");
+                props.navigation.navigate("Reg",{screen : "RegisterDetails"});
               } else if (steps < 6) {
-                props.navigation.navigate("UploadDocument");
+                props.navigation.navigate("Reg",{screen:"UploadDocument"});
               } else {
                 Toast.show(
                   "Your registration is already completed!",
@@ -428,7 +428,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Relationship")}
+          onPress={() => props.navigation.navigate("You",{screen : "Relationship"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -457,7 +457,7 @@ function SideMenu(props) {
                 Toast.LONG
               );
             } else {
-              props.navigation.navigate("UploadDocument");
+              props.navigation.navigate("Reg",{screen :"UploadDocument"});
             }
           }}
           style={[styles.profile_sec, styles.profile]}
@@ -536,7 +536,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Notifications")}
+          onPress={() => props.navigation.navigate("You",{screen : "Notifications"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -548,7 +548,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Reports")}
+          onPress={() => props.navigation.navigate("You",{screen : "Reports"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -595,7 +595,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("AboutUs")}
+          onPress={() => props.navigation.navigate("You",{screen :"AboutUs"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>

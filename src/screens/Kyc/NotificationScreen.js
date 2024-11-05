@@ -16,15 +16,14 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialIcons,
-  Feather,
-  Entypo,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, ListItem, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -141,7 +140,7 @@ function NotificationScreen(props) {
             ]}
             onPress={() => {
               // alert("ddd");
-              props.navigation.navigate("NotificationView", item);
+              props.navigation.navigate("You",{screen : "NotificationView"}, item);
             }}
           >
             <View style={styles.rowItems}>
@@ -274,7 +273,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageStyle: { height: 20, width: 20 },
-  heading: { fontSize: 16, fontWeight: "bold" },
+  heading: { fontSize: 16, fontWeight: "bold",color:"black" },
   notificationContainer: {
     height: 70,
     width: "100%",
