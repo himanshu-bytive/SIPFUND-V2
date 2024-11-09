@@ -120,20 +120,20 @@ function TopRatedSubmitScreen(props) {
                 },
                 {
                   text: "OK",
-                  onPress: () => props.navigation.navigate("RegisterDetails"),
+                  onPress: () => props.navigation.navigate("Reg",{screen : "RegisterDetails"}),
                 },
               ]
             );
 
             return;
           }
-          props.navigation.navigate("Upi", {
+          props.navigation.navigate("You",{screen : "Upi", params : {
             cart,
             sum,
             fromCart: true,
             fromPlanGoals: false,
             isLumpsum: props.route.params.isLumpsum,
-          });
+          }});
         }}
         style={styles.botton_box}
       >
@@ -219,7 +219,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingTop: 10,
     fontSize: 15,
-    maxWidth: "70%",
+    maxWidth: "60%",
+    color:"black",
   },
   price: {
     position: "absolute",
@@ -227,6 +228,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     fontSize: 15,
     fontWeight: "bold",
+    color:'black'
   },
   fund_sec: {
     flexDirection: "row",
@@ -242,10 +244,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingTop: 10,
     paddingRight: 10,
+    color:"black"
   },
   fund_secleft: {
     fontSize: 18,
     fontWeight: "bold",
+    color:Colors.RED
   },
   mygoal: {
     fontSize: 18,

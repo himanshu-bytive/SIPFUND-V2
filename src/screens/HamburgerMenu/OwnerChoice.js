@@ -509,7 +509,7 @@ function OwnerChoice(props) {
         <Header
           leftComponent={
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("dashboard")}
+              onPress={() => props.navigation.goBack()}
               style={{ marginTop: 20 }}
             >
               <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
@@ -935,6 +935,7 @@ const styles = StyleSheet.create({
   category: {
     fontSize: 13,
     textAlign: "center",
+    color:"black"
   },
   returnsbox: { flexDirection: "row" },
 

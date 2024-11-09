@@ -14,12 +14,11 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate, Utility } from "../../common";
 import { MySlider, GoalFundType, MyImage } from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
 import PlanListScreen from "./PlanListScreen";
@@ -65,7 +64,7 @@ function PlanHomeScreen(props) {
 
   useEffect(() => {
     const backAction = () => {
-      props.navigation.state.params?.toggleLoading(false);
+      props.route.params?.toggleLoading(false);
       props.navigation.navigate("Home");
       return true;
     };
@@ -79,7 +78,7 @@ function PlanHomeScreen(props) {
   }, []);
 
   useEffect(() => {
-    props.navigation.state.params?.toggleLoading(false);
+    props.route.params?.toggleLoading(false);
   }, []);
 
   useEffect(() => {
@@ -229,7 +228,7 @@ function PlanHomeScreen(props) {
               setLumpsumAmount(0);
               setRequiredInvestment(0);
               setShowFunds(false);
-              props.navigation.state.params?.toggleLoading(false);
+              props.route.params?.toggleLoading(false);
               props.navigation.navigate("Home");
             }}
             style={{ marginTop: 20 }}
@@ -310,6 +309,8 @@ function PlanHomeScreen(props) {
                 marginLeft: 10,
               }}
               value={name}
+              color="black"
+              placeholderTextColor={"grey"}
               placeholder="Name of the child"
               onChangeText={(val) => setName(val)}
               maxLength={30}
@@ -840,7 +841,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: Colors.DEEP_GRAY,
-    maxWidth: "75%",
+    maxWidth: "70%",
   },
   childtext: {
     position: "absolute",
@@ -855,6 +856,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     paddingTop: 10,
+    color:"black"
   },
   vijay: {
     borderBottomWidth: 0,

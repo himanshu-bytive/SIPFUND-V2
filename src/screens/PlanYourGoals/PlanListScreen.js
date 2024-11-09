@@ -13,12 +13,11 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox, colors } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { MyImage, GoalFundType } from "../../components";
@@ -285,22 +284,22 @@ function PlanListScreen(props) {
           onPress={(item) => {
             fundDetails(item);
             //disableFunds();
-            navigation.navigate("FundsDetails", {
+            navigation.navigate( "Funds",{screen : "FundsDetails",params : {
               fromScreen: "PlanHome",
-            });
+            }});
           }}
           handleDelete={handleDelete}
           showModified={showModified}
         />
       )}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           //disableFunds();
           navigation.navigate("PlanSearch", { isLumpsum: isLumpsum });
         }}
       >
-        {/* <Text style={styles.add}>I would like to add more funds</Text> */}
-      </TouchableOpacity>
+        <Text style={styles.add}>I would like to add more funds</Text>
+      </TouchableOpacity> */}
       <TouchableOpacity
         onPress={() => {
           setChildName(childName);

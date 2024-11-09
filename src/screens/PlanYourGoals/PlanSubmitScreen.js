@@ -16,13 +16,12 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { MyImage } from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  EvilIcons,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -47,13 +46,13 @@ function PlanSubmitScreen(props) {
   useEffect(() => {
     if (paymentInitiated && !isFetching && pincodeInfo) {
       setPaymentInitiated(false);
-      props.navigation.navigate("TopRatedList", {
+      props.navigation.navigate("Dashboard",{screen : "TopRatedList", params : {
         fromScreen: "PlanHome",
         planName: goalDetail?.goal,
-        currentTab: props.navigation.state.params?.isLumpsum
+        currentTab: props.route.params?.isLumpsum
           ? "LUMPSUM"
           : "SIP",
-      });
+      }});
     }
   }, [paymentInitiated, isFetching]);
 
@@ -79,7 +78,7 @@ function PlanSubmitScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("Dashboard",{screen : "TopRatedList"});
             }}
           />
         }
@@ -110,7 +109,7 @@ function PlanSubmitScreen(props) {
         <View style={styles.fund_sec}>
           <Text style={styles.fund_secleft}>Fund List</Text>
           <Text style={styles.fund_secright}>
-            ₹ {props.navigation.state.params.sum.toFixed(0)}
+            ₹ {props.route.params.sum.toFixed(0)}
           </Text>
         </View>
 
@@ -162,7 +161,7 @@ function PlanSubmitScreen(props) {
           //showModified: props.navigation.state.params?.showModified,
           //});
           //newInvestment(props.navigation.state.params?.params, token);
-          newInvestment(props.navigation.state.params?.params, token);
+          newInvestment(props.route.params?.params, token);
           setPaymentInitiated(true);
           setTimeout(() => {
             getCartDetails(token);
@@ -258,6 +257,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     width: "60%",
+    color:"black"
   },
   price: {
     paddingTop: 10,
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     textAlign: "right",
     fontWeight: "bold",
+    color:"black"
   },
   fund_sec: {
     flexDirection: "row",
@@ -280,10 +281,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingTop: 10,
     paddingRight: 10,
+    color:"black"
   },
   fund_secleft: {
     fontSize: 18,
     fontWeight: "bold",
+    color:Colors.RED
   },
   mygoal: {
     fontSize: 18,

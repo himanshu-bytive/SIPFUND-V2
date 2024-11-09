@@ -23,7 +23,7 @@ import { Image, Header, Overlay } from "react-native-elements";
 import Cart from "../../components/Cart";
 import * as ImagePicker from "react-native-image-picker";
 import RNPickerSelect from "react-native-picker-select";
-import { Camera } from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { Button } from "react-native-paper";
 import RNFetchBlob from "rn-fetch-blob";
 
@@ -61,9 +61,8 @@ function CompleteDetailsBankScreen(props, route) {
   const [accountTypeList, setAccountTypeList] = useState([]);
   const [proof_of_account, setProof_of_account] = useState([]);
   const [bankList, setBankList] = useState([]);
-  const [camera, setCamera] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [cameraRef, setCameraRef] = useState(null);
+  const camera = useRef(null);
+  const device = useCameraDevice('back');
 
   const [state, setState] = useState({
     showBank: false,
@@ -884,7 +883,8 @@ function CompleteDetailsBankScreen(props, route) {
                     {
                       text: "Camera",
                       onPress: () => {
-                        setCamera(true);
+                        console.log("setCamera");
+                        
                       },
                     },
                     {
@@ -918,19 +918,18 @@ function CompleteDetailsBankScreen(props, route) {
                 transparent={true}
                 visible={camera}
                 onRequestClose={() => {
-                  setCamera(false);
+                  console.log("set camera close");
+                  
                 }}
               >
                 <SafeAreaView style={StyleSheet.absoluteFill}>
-                  <Camera
-                    style={{ flex: 1 }}
-                    ratio="16:9"
-                    // flashMode={Camera.Constants.FlashMode.on}
-                    type={type}
-                    ref={(ref) => {
-                      setCameraRef(ref);
-                    }}
-                  >
+                <Camera
+                  ref={camera}
+                  style={StyleSheet.absoluteFill}
+                  device={device}
+                  isActive={true}
+                  photo={true}
+                />
                     <View
                       style={{
                         flex: 1,
@@ -959,12 +958,11 @@ function CompleteDetailsBankScreen(props, route) {
                         </Button>
                         <TouchableOpacity
                           onPress={async () => {
-                            if (cameraRef) {
-                              let photo = await cameraRef.takePictureAsync();
+                            if (camera) {
+                              let photo = await camera.current.takePhoto();
                               // alert(JSON.stringify(photo));
                               cameraImage(photo);
                               // setImg(photo);
-                              setCamera(false);
                             }
                           }}
                         >
@@ -994,7 +992,7 @@ function CompleteDetailsBankScreen(props, route) {
                             ></View>
                           </View>
                         </TouchableOpacity>
-                        <Button
+                        {/* <Button
                           icon="axis-z-rotate-clockwise"
                           style={{ marginRight: 12 }}
                           mode="outlined"
@@ -1010,10 +1008,9 @@ function CompleteDetailsBankScreen(props, route) {
                           {type === Camera.Constants.Type.back
                             ? "Front"
                             : "Back "}
-                        </Button>
+                        </Button> */}
                       </View>
                     </View>
-                  </Camera>
                 </SafeAreaView>
               </Modal>
               {/* <Image

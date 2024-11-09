@@ -9,7 +9,7 @@ import {
   TextInput,
 } from "react-native";
 
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign  from "react-native-vector-icons/AntDesign";
 import { Image, CheckBox } from "react-native-elements";
 import { Styles, Config, Colors, FormValidate } from "../common";
 import RNPickerSelect from "react-native-picker-select";
@@ -424,7 +424,7 @@ const RenderData1 = ({
                   <View style={styles.selectfolio_sec}>
                     <View style={styles.select}>
                       <Text style={styles.no}>Min Investment</Text>
-                      <Text>
+                      <Text style={{color:"black"}}>
                         ₹
                         {item?.default_min_amount
                           ? item?.default_min_amount
@@ -751,6 +751,7 @@ const styles = StyleSheet.create({
   axis: {
     fontSize: 15,
     maxWidth: "90%",
+    color:"black"
   },
   moderately: {
     fontSize: 12,
@@ -793,6 +794,7 @@ const styles = StyleSheet.create({
   },
   new: {
     fontSize: 18,
+    color:"black"
   },
   circle: {
     height: 35,
