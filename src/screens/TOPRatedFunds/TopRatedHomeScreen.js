@@ -474,36 +474,55 @@ function TopRatedHomeScreen(props) {
     setPrice(string);
   };
 
-  function changeNumberFormat(number, decimals, recursiveCall) {
-    const decimalPoints = decimals || 2;
+  function changeNumberFormat(number, decimals = 2, recursiveCall = false) {
     const noOfLakhs = number / 100000;
     let displayStr;
     let isPlural;
-
-    function roundOf(integer) {
-      return +integer.toLocaleString(undefined, {
-        minimumFractionDigits: decimalPoints,
-        maximumFractionDigits: decimalPoints,
-      });
+  
+    // Helper function for rounding numbers with proper formatting
+    function roundOf(value) {
+      // Safely round using toFixed or Math.round to avoid NaN on large numbers
+      if (isNaN(value)) {
+        return 'Invalid number';
+      }
+      return parseFloat(value.toFixed(decimals));
     }
-
+  
+    console.log('Original number:', number);
+    console.log('No of Lakhs:', noOfLakhs);
+  
+    // If the number is in the range of lakhs
     if (noOfLakhs >= 1 && noOfLakhs <= 99) {
       const lakhs = roundOf(noOfLakhs);
       isPlural = lakhs > 1 && !recursiveCall;
       displayStr = `${lakhs} Lakh${isPlural ? "s" : ""}`;
-    } else if (noOfLakhs >= 100) {
-      const crores = roundOf(noOfLakhs / 100);
-      const crorePrefix =
-        crores >= 100000 ? changeNumberFormat(crores, decimals, true) : crores;
-      isPlural = crores > 1 && !recursiveCall;
-      displayStr = `${+crorePrefix.toFixed(2)} Cr`;
-    } else {
-      displayStr = roundOf(+number);
     }
-
+    // If the number is in the range of crores
+    else if (noOfLakhs >= 100) {
+      let crores = roundOf(noOfLakhs / 100);
+      console.log('Crores:', crores);
+  
+      // Check if crores are large enough to recurse
+      if (crores >= 100000 && !recursiveCall) {
+        console.log('Recursing with crores:', crores);
+        crores = changeNumberFormat(crores, decimals, true); // Recursively format if crores are large
+        console.log('Formatted Crore Prefix:', crores);
+      }
+  
+      // Handle pluralization
+      isPlural = crores > 1 && !recursiveCall;
+      displayStr = `${crores} Cr`;
+    }
+    // If the number is less than a lakh, display the number with decimals
+    else {
+      displayStr = roundOf(number);
+    }
+  
+    console.log('Final Display String:', displayStr);
     return displayStr;
   }
-
+  
+  
   useEffect(() => {
     if (category) {
       for (let index in category) {
@@ -844,9 +863,11 @@ function TopRatedHomeScreen(props) {
                   <View style={styles.mininvestment}>
                     <Text style={styles.min}>AUM</Text>
                     <Text style={styles.min}>
-                      {`₹ ${changeNumberFormat(
-                        item.api["PSRP-TotalMarketValueNet"]
-                      )}`}
+                      {console.log("Hellooo",item.api["PSRP-TotalMarketValueNet"])}
+                      {"₹" +
+                    changeNumberFormat(
+                      item.api["PSRP-TotalMarketValueNet"]
+                    )}
                     </Text>
                   </View>
                   <View style={styles.mininvestment}>

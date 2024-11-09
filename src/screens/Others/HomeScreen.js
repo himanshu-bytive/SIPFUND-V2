@@ -786,7 +786,7 @@ function HomeScreen(props) {
             What is the <Text style={styles.view}>minimal amount</Text> for
             investing in Mutual Funds?
           </Text>
-          <Text style={{paddingTop: 10, fontSize: 15}}>
+          <Text style={{paddingTop: 10, fontSize: 15,color:"black"}}>
             The minimum amount required to invest in mutual funds is very low.
             You can start investing in Systematic Investment Plan(SIP) with an
             amount of ₹500 only.
@@ -824,7 +824,7 @@ function HomeScreen(props) {
             What is <Text style={styles.view}>lock-in</Text> period in Mutual
             Funds?
           </Text>
-          <Text style={{paddingTop: 10, fontSize: 15}}>
+          <Text style={{paddingTop: 10, fontSize: 15,color:"black"}}>
             A lock-in period is a specific period during which an investor is
             not allowed to redeem the units of the mutual fund either partially
             or fully. In an ELSS fund, the lock-in period is 3 years
@@ -862,7 +862,7 @@ function HomeScreen(props) {
             What is the <Text style={styles.view}>flexibility</Text> that Mutual
             Funds offer?
           </Text>
-          <Text style={{paddingTop: 10, fontSize: 15}}>
+          <Text style={{paddingTop: 10, fontSize: 15,color:"black"}}>
             Mutual Funds offer flexibility to investors by means of Systematic
             Investment Plan(SIP), Systematic Withdrawal Plan (SWP), Systematic
             Transfer Plan(STP), Growth Plan,Dividend Payout or Reinvestment
@@ -903,29 +903,29 @@ function HomeScreen(props) {
             <Text style={styles.view}>payment methods</Text>
             available for an investorfor making investments?
           </Text>
-          <Text style={{paddingTop: 10, fontSize: 15}}>
+          <Text style={{paddingTop: 10, fontSize: 15,color:"black"}}>
             Using SIPfund.com app/portal,an investor can make purchases under
             the following methods
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{flex: 1, paddingLeft: 5}}>NET Banking</Text>
+            <Text style={{flex: 1, paddingLeft: 5,color:"black"}}>NET Banking</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{flex: 1, paddingLeft: 5}}>NEFT/RTGS</Text>
+            <Text style={{flex: 1, paddingLeft: 5 ,color:"black"}}>NEFT/RTGS</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{flex: 1, paddingLeft: 5}}>UPI</Text>
+            <Text style={{flex: 1, paddingLeft: 5 ,color:"black"}}>UPI</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{flex: 1, paddingLeft: 5}}>Debit Mandate</Text>
+            <Text style={{flex: 1, paddingLeft: 5,color:"black"}}>Debit Mandate</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{flex: 1, paddingLeft: 5}}>Cheque</Text>
+            <Text style={{flex: 1, paddingLeft: 5,color:"black"}}>Cheque</Text>
           </View>
           <TouchableOpacity onPress={() => toggleOverlay('')}>
             <Text
@@ -960,7 +960,7 @@ function HomeScreen(props) {
             Do Mutual Funds allow{' '}
             <Text style={styles.view}>easy withdrawal of amount?</Text>
           </Text>
-          <Text style={{paddingTop: 10, fontSize: 15}}>
+          <Text style={{paddingTop: 10, fontSize: 15,color:"black"}}>
             Both Equity and Debt Mutual Funds can be technically withdrawn as
             soon as fund is available for daily sale and repurchase. Of course
             liquidity is one of the biggest advantages of investing in Mutual
@@ -1366,6 +1366,7 @@ const styles = StyleSheet.create({
   mutual: {
     fontSize: 14,
     fontWeight: 'bold',
+    color:"black"
   },
   emaMainbox: {
     margin: 10,
