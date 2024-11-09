@@ -203,9 +203,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
+  childtext2 : {
+    color:"black"
+  },
   check: {
     fontSize: 15,
     marginTop: 10,
+    color:"black"
   },
   click_box: {
     flexDirection: "row",
@@ -216,6 +220,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 18,
+    color:"black"
   },
   price: {
     fontSize: 18,
@@ -255,6 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     marginBottom: 20,
+    color:"black"
   },
 
   click_sec: {

@@ -84,9 +84,9 @@ function AddInvestmentScreens(props) {
         selectedOption: selectTab,
       };
       investmentConfig(params);
-      props.navigation.navigate("InvestmentList", {
+      props.navigation.navigate("Investment",{screen : "InvestmentList",params : {
         isLumpsum: selectTab === "SIP" ? false : true,
-      });
+      }});
     } else {
       setInvestError("Add Investment");
       alert("Enter Investment Amount");
@@ -319,7 +319,7 @@ function AddInvestmentScreens(props) {
             value={invest}
           />
         </View>
-        <Text style={{ marginHorizontal: 30, marginTop: 10 }}>
+        <Text style={{ marginHorizontal: 30, marginTop: 10 ,color:"black"}}>
           {number2text(Number(invest))}
         </Text>
         {/* <Text style={styles.number}>Sixteen thousand</Text> */}

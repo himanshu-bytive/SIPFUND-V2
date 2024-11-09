@@ -319,7 +319,7 @@ function FundDetailScreen(props) {
                   {item.text}{" "}
                   {item.text === "Portfolio Summary" && (
                     <Text style={styles.current}>(Current Date)</Text>
-                  )}{" "}
+                  )}
                 </Text>
               </View>
               <View style={styles.holding_icon}>

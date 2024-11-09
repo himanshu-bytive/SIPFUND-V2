@@ -140,11 +140,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     fontWeight: "bold",
+    color:"black"
   },
   minimum_tex: {
     fontSize: 12,
     textAlign: "center",
     paddingVertical: 5,
+    color:"black"
   },
   detailsSection: {
     maxWidth: "30%",

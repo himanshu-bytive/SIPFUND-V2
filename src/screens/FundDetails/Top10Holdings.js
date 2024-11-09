@@ -45,12 +45,15 @@ function Top10Holdings(props) {
       : [];
     let topHoldings = [];
     let totalWeight = 0;
-    for (let i = 0; i < 5; i++) {
-      totalWeight += parseFloat(
-        detailedPortFolio?.length > 0 ? detailedPortFolio[i].Weighting : 0
-      );
-      topHoldings.push(detailedPortFolio[i]);
+    for (let i = 0; i < detailedPortFolio.length; i++) {
+      const item = detailedPortFolio[i];
+      
+      if (item && item.Weighting) {
+        totalWeight += parseFloat(item.Weighting);
+        topHoldings.push(item);
+      }
     }
+    
     setTopHoldings(topHoldings);
     setTotalWeight(totalWeight);
   }, [detailsInfo]);
@@ -115,13 +118,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   bodyCell: {
-    //padding: 5,
-    //borderRightWidth: 1,
-    borderRightColor: Colors.DEEP_GRAY,
-    //justifyContent: "center",
+    color:"black",
   },
   bodyCellRight: {
     color: Colors.RED,
+
   },
 });
 

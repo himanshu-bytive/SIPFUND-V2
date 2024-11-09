@@ -122,7 +122,7 @@ function CompleteDetailsScreen(props) {
   useEffect(() => {
     if (updateSuccess && pageActive.current) {
       pageActive.current = false;
-      props.navigation.navigate("RegisterAddress");
+      props.navigation.navigate("Reg",{screen :"RegisterAddress"});
     }
   }, [updateSuccess]);
 
@@ -595,6 +595,7 @@ function CompleteDetailsScreen(props) {
                   setState({ ...state, dob });
                 }}
                 placeholder={"DD-MM-YYYY"}
+                placeholderTextColor={"grey"}
                 maxLength={10}
               />
               <Text style={{ ...styles.error, marginLeft: 5 }}>
@@ -996,6 +997,7 @@ const styles = StyleSheet.create({
   kyc: {
     fontSize: 15,
     fontWeight: "bold",
+    color:"black"
   },
   Nominee: {
     fontSize: 15,

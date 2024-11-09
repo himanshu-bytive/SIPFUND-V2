@@ -129,7 +129,6 @@ function InvestmentSubmitScreens(props) {
           <Text style={styles.fund_secright}>₹ {sum}</Text>
         </View>
 
-        {/* Axis Asset Management Company Ltd */}
         {Object.keys(myInvestlist).map((category) => {
           return (
             <>
@@ -298,11 +297,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     fontSize: 15,
+    color:"black"
   },
   price: {
     fontSize: 15,
     textAlign: "right",
     fontWeight: "bold",
+    color:"black"
   },
   fund_sec: {
     flexDirection: "row",
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
   fund_secleft: {
     fontSize: 18,
     fontWeight: "bold",
+    color:"black"
   },
   mygoal: {
     fontSize: 18,

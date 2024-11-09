@@ -16,13 +16,12 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  EvilIcons,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { color } from "react-native-elements/dist/helpers";
@@ -44,9 +43,9 @@ function TopRatedSubmitScreen(props) {
 
   useEffect(() => {
     if (props.navigation) {
-      setCart(props.navigation.state.params.cart);
+      setCart(props.route.params.cart);
     }
-  }, [props.navigation.state.params.cart]);
+  }, [props.route.params.cart]);
 
   return (
     <View style={styles.container}>
@@ -87,7 +86,7 @@ function TopRatedSubmitScreen(props) {
           <View style={styles.education_sec}>
             <Text style={styles.child}>Summary</Text>
             <Text style={styles.child_text}>
-              {props.navigation.state.params?.planName}
+              {props.route.params?.planName}
             </Text>
           </View>
         </View>
@@ -133,7 +132,7 @@ function TopRatedSubmitScreen(props) {
             sum,
             fromCart: true,
             fromPlanGoals: false,
-            isLumpsum: props.navigation.state.params.isLumpsum,
+            isLumpsum: props.route.params.isLumpsum,
           });
         }}
         style={styles.botton_box}

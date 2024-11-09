@@ -607,7 +607,7 @@ function TopRatedListScreen(props) {
               props.navigation.navigate("TopRatedSubmit", {
                 cart: tmpCart.filter((item) => item.trxn_nature === type),
                 isLumpsum: type === "N" ? true : false,
-                planName: props.navigation.state.params?.planName,
+                planName: props.route.params?.planName,
                 // folio: folio,
               });
             }
@@ -636,7 +636,7 @@ function TopRatedListScreen(props) {
               props.navigation.navigate("TopRatedSubmit", {
                 cart: lumSumCart,
                 isLumpsum: type === "N" ? true : false,
-                planName: props.navigation.state.params?.planName,
+                planName: props.route.params?.planName,
               });
             }
           }

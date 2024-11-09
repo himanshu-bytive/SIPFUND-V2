@@ -507,6 +507,7 @@ const styles = StyleSheet.create({
 
   axis_asset: {
     fontSize: 16,
+    color:"black"
   },
   midcap: {
     fontSize: 13,
@@ -520,6 +521,7 @@ const styles = StyleSheet.create({
 
   fund: {
     fontSize: 15,
+    color:"black"
   },
   number: {
     fontSize: 15,
@@ -529,6 +531,7 @@ const styles = StyleSheet.create({
   },
   since: {
     fontSize: 12,
+    color:"black"
   },
   linechartimg: {
     height: 179,
@@ -577,6 +580,7 @@ const styles = StyleSheet.create({
   },
   min: {
     fontSize: 15,
+    color:"black"
   },
   private_sector: {
     flexDirection: "row",
@@ -602,7 +606,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   rupees_sec: { alignItems: "center" },
-  rupees_text: { fontSize: 12 },
+  rupees_text: { fontSize: 12,color:"black" },
 });
 
 const mapStateToProps = (state) => ({

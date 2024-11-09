@@ -18,7 +18,7 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { Styles, Colors } from "../../common";
 import { MySelectPicker, MyTextInput } from "../../components";
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, Overlay } from "react-native-elements";
 import Cart from "../../components/Cart";
 import * as ImagePicker from "react-native-image-picker";

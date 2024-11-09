@@ -4,10 +4,14 @@ import React from "react";
 
 export default function MySlider(props) {
   const { value, max, min, change, steps } = props;
+
+  const maxValue = Number(max); 
+  const minValue = Number(min); 
+  
   return (
     <Slider
-      maximumValue={max}
-      minimumValue={min}
+      maximumValue={maxValue}
+      minimumValue={minValue}
       step={steps}
       value={value}
       onValueChange={change}

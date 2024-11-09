@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { DataTable } from "react-native-paper";
 import { Colors } from "../../common";
 import { Tab, TabView } from "react-native-elements";
-import { Feather } from "react-native-vector-icons";
+import  Feather from "react-native-vector-icons/Feather";
 
 function RiskRating(props) {
   const { detailsInfo } = props;

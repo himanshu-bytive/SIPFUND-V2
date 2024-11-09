@@ -468,9 +468,9 @@ function InvestmentListScreens(props) {
                             style={styles.circle}
                             onPress={() => {
                               fundDetails(item);
-                              props.navigation.navigate("FundsDetails", {
+                              props.navigation.navigate("Funds",{screen : "FundsDetails", params : {
                                 fromScreen: "InvestmentList",
-                              });
+                              }});
                             }}
                           >
                             <AntDesign name="right" size={30} color="#C0392B" />
@@ -486,7 +486,7 @@ function InvestmentListScreens(props) {
                       >
                         <View style={styles.select}>
                           <Text style={styles.no}>Min Investment</Text>
-                          <Text>
+                          <Text style={{color:"black"}}>
                             ₹
                             {props.route.params?.isLumpsum
                               ? item?.lumpsum_min_amount
@@ -534,7 +534,6 @@ function InvestmentListScreens(props) {
                                         : parseInt(
                                             item?.sipDates.split(",")[0]
                                           );
-
                                       data[category][index].date = value;
                                       setDates({
                                         ...dates,
@@ -784,7 +783,7 @@ function InvestmentListScreens(props) {
             //newInvestment(params, token);
             // return;
             props.navigation.navigate("InvestmentSubmit", {
-              isLumpsum: props.navigation.state.params.isLumpsum,
+              isLumpsum: props.route.params.isLumpsum,
               params,
             });
           }
@@ -859,6 +858,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     fontSize: 20,
     fontWeight: "bold",
+    color:"black"
   },
   amount_text: {
     fontSize: 20,
@@ -907,6 +907,7 @@ const styles = StyleSheet.create({
   },
   axis: {
     fontSize: 15,
+    color:"black"
   },
   moderately: {
     fontSize: 12,
