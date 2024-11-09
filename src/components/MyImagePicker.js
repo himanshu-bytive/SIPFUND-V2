@@ -1,9 +1,9 @@
 /** @format */
 
-import React, { useState, useRef, useEffect } from "react";
-import * as ImagePicker from "react-native-image-picker";
-import { Camera, useCameraDevices } from "react-native-vision-camera";
-import SignatureScreen from "react-native-signature-canvas";
+import React, {useState, useRef, useEffect} from 'react';
+import * as ImagePicker from 'react-native-image-picker';
+import {Camera, useCameraDevice} from 'react-native-vision-camera';
+import SignatureScreen from 'react-native-signature-canvas';
 import {
   Modal,
   TouchableOpacity,
@@ -12,20 +12,20 @@ import {
   Text,
   StyleSheet,
   Alert,
-} from "react-native";
-import { connect } from "react-redux";
+} from 'react-native';
+import {connect} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import { Button } from "react-native-paper";
-import RNPickerSelect from "react-native-picker-select";
-import DocumentInstructions from "./DocumentInstructions";
-import Colors from "../common/Colors";
-import Toast from "react-native-simple-toast";
-import { check, request, PERMISSIONS } from 'react-native-permissions';
-
-const MyImagePicker = (props) => {
+import {Button} from 'react-native-paper';
+import RNPickerSelect from 'react-native-picker-select';
+import DocumentInstructions from './DocumentInstructions';
+import Colors from '../common/Colors';
+import Toast from 'react-native-simple-toast';
+import {check, request, PERMISSIONS} from 'react-native-permissions';
+import RNFS from 'react-native-fs';
+const MyImagePicker = props => {
   const {
     items,
     docs,
@@ -38,10 +38,10 @@ const MyImagePicker = (props) => {
   } = props;
 
   const selList = [
-    { value: "Aadhaar Card Front", label: "Aadhaar Card Front", fileType: "AA1" },
-    { value: "Aadhaar Card Back", label: "Aadhaar Card Back", fileType: "AA2" },
-    { value: "Passport", label: "Passport", fileType: "PA" },
-    { value: "Driving Licence", label: "Driving Licence", fileType: "DL" },
+    {value: 'Aadhaar Card Front', label: 'Aadhaar Card Front', fileType: 'AA1'},
+    {value: 'Aadhaar Card Back', label: 'Aadhaar Card Back', fileType: 'AA2'},
+    {value: 'Passport', label: 'Passport', fileType: 'PA'},
+    {value: 'Driving Licence', label: 'Driving Licence', fileType: 'DL'},
   ];
 
   const [img, setImg] = useState(null);
@@ -52,41 +52,42 @@ const MyImagePicker = (props) => {
   const [sign, setSign] = useState(false);
   const [item, setItem] = useState(selList[0]);
   const signBox = useRef(null);
-  
-  const devices = useCameraDevices();
-  const device = devices.back; // Choose back camera
-
-  const addressVerificationDocs = ["AA1", "AA2", "DL"];
-
+  const camera = useRef(null);
+  const device = useCameraDevice('back');
+  const [clickedImage, setClickedImage] = useState('');
+  const addressVerificationDocs = ['AA1', 'AA2', 'DL'];
+  const [photoUri, setPhotoUri] = useState(null);
   useEffect(() => {
     const checkCameraPermissions = async () => {
       const status = await check(PERMISSIONS.ANDROID.CAMERA);
-      if (status !== "granted") {
+      console.log('GETTING STATUS', status);
+      if (status !== 'granted') {
         const newStatus = await request(PERMISSIONS.ANDROID.CAMERA);
-        setHasPermission(newStatus === "granted");
+        setHasPermission(newStatus === 'granted');
       } else {
+        console.log('GRANTED');
+
         setHasPermission(true);
       }
     };
     checkCameraPermissions();
   }, []);
-  const docVerificationCompleted = (fileType) => {
 
-
-    if (fileType === "") {
-      fileType = "AA1";
+  const docVerificationCompleted = fileType => {
+    if (fileType === '') {
+      fileType = 'AA1';
     }
     /* Check if any of the address verification docs are verified */
     for (var item in addressVerificationDocs) {
       for (var doc in docs.responseString.documents) {
         if (
           docs.responseString.documents[addressVerificationDocs[item]]
-            ?.status === "PENDING"
+            ?.status === 'PENDING'
         ) {
           return true;
         } else if (
           docs.responseString.documents[addressVerificationDocs[item]]
-            ?.status === "COMPLETE"
+            ?.status === 'COMPLETE'
         ) {
           return false;
         }
@@ -95,9 +96,9 @@ const MyImagePicker = (props) => {
 
     for (var doc in docs.responseString.documents) {
       if (docs.responseString.documents[doc]?.docType === fileType) {
-        if (docs.responseString.documents[doc]?.status === "PENDING") {
+        if (docs.responseString.documents[doc]?.status === 'PENDING') {
           return true;
-        } else if (docs.responseString.documents[doc]?.status === "COMPLETE") {
+        } else if (docs.responseString.documents[doc]?.status === 'COMPLETE') {
           return false;
         }
       }
@@ -111,37 +112,39 @@ const MyImagePicker = (props) => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibrary({
-      mediaTypes: "photo",
+      mediaTypes: 'photo',
       allowsEditing: true,
       aspect: [4, 3],
     });
 
-    let fileType = item?.fileType || (item?.name === "Aadhaar Card Front" ? "AA1" : "AA2");
+    let fileType =
+      item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
 
     if (!result.didCancel) {
-      let params = { file: result, fileType };
+      let params = {file: result, fileType};
       console.log(params);
       fileUpload(params, token);
       setImg(result.uri);
     }
   };
 
-  const cameraImage = async (image) => {
-    let fileType = item?.fileType || (item?.name === "Aadhaar Card Front" ? "AA1" : "AA2");
-    let params = { file: image, fileType };
+  const cameraImage = async image => {
+    let fileType =
+      item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
+    let params = {file: image, fileType};
     fileUpload(params, token);
     setImg(image.uri);
   };
 
-  const signImage = (signature) => {
-    let params = { signature: signature };
+  const signImage = signature => {
+    let params = {signature: signature};
     fileUploadSign(params, token);
     setImg(signature);
     setSign(false);
   };
 
-  const setSelectDoc = (val) => {
-    const selected = selList.find((x) => x.value === val);
+  const setSelectDoc = val => {
+    const selected = selList.find(x => x.value === val);
     if (selected) {
       setItem({
         ...item,
@@ -150,87 +153,159 @@ const MyImagePicker = (props) => {
         info: selected.label,
       });
     } else {
-      setItem({ ...item, name: val });
+      setItem({...item, name: val});
     }
   };
 
-  const FileIcons = ({ item }) => (
+  const FileIcons = ({item}) => (
     <>
       <TouchableOpacity
-        style={{ marginRight: 10 }}
+        style={{marginRight: 10}}
         onPress={() => {
           if (item?.name !== null) {
             setCameraVisible(true);
           } else {
-            Toast.show("You need to select a document first!", Toast.LONG);
+            Toast.show('You need to select a document first!', Toast.LONG);
           }
-        }}
-      >
-        <Entypo name={"camera"} size={22} color="#000000" />
+        }}>
+        <Entypo name={'camera'} size={22} color="#000000" />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           if (item?.name !== null) {
             pickImage();
           } else {
-            Toast.show("You need to select a document first!", Toast.LONG);
+            Toast.show('You need to select a document first!', Toast.LONG);
           }
-        }}
-      >
+        }}>
         <Entypo name={item?.type} size={22} color="#000000" />
       </TouchableOpacity>
     </>
   );
+  const clearPhoto = () => {
+    setPhotoUri(null); // Clear the photo URI
+  };
 
-  const ShowReupload = (item) => {
+  const savePhoto = () => {
+    Alert.alert("Save Photo", "Do you want to save the photo?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Save", onPress: () => Toast.show("Photo saved!", Toast.SHORT) }
+    ]);
+  };
+  const ShowReupload = item => {
     return reUploadInd?.includes(item?.fileType);
+  };
+  const takePicture = async () => {
+    const photo = await camera.current.takePhoto();
+    console.log(photo); // Log photo object
+
+    const originalPath = photo.path;
+    console.log('Original photo path:', originalPath);
+
+    // Define a new path to copy the photo
+    const newPath = RNFS.ExternalDirectoryPath + '/photo.jpg';
+
+    // Copy the image to a new location
+    try {
+      await RNFS.copyFile(originalPath, newPath);
+      console.log('Image copied to:', newPath);
+      setPhotoUri('file://' + newPath); // Update the URI with the new file path
+    } catch (error) {
+      console.error('Error copying file:', error);
+    }
   };
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-      <View style={{ flexDirection: "row", alignItems: "center", width: "66%" }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+      <View style={{flexDirection: 'row', alignItems: 'center', width: '66%'}}>
         {item?.icon}
         {item?.multi ? (
-          <View style={{ borderBottomWidth: 2, backgroundColor: Colors.TRANSPARENT, borderColor: Colors.GRAY_LIGHT, marginTop: 5 }}>
+          <View
+            style={{
+              borderBottomWidth: 2,
+              backgroundColor: Colors.TRANSPARENT,
+              borderColor: Colors.GRAY_LIGHT,
+              marginTop: 5,
+            }}>
             <RNPickerSelect
-              placeholder={{ label: "Select an Item", value: null }}
-              style={{ inputIOS: styles.custom, inputAndroid: styles.custom, placeholder: styles.custom }}
+              placeholder={{label: 'Select an Item', value: null}}
+              style={{
+                inputIOS: styles.custom,
+                inputAndroid: styles.custom,
+                placeholder: styles.custom,
+              }}
               useNativeAndroidPickerStyle={false}
               onValueChange={setSelectDoc}
               value={item?.name}
               items={selList}
-              Icon={() => <AntDesign style={{ left: 10, top: 5 }} name="down" color={"#444"} size={18} />}
+              Icon={() => (
+                <AntDesign
+                  style={{left: 10, top: 5}}
+                  name="down"
+                  color={'#444'}
+                  size={18}
+                />
+              )}
             />
           </View>
         ) : (
           <Text style={styles.pan}>{item?.name}</Text>
         )}
-        <TouchableOpacity onPress={() => Alert.alert("Instructions", DocumentInstructions[item?.fileType] || DocumentInstructions.AADHAAR)}>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert(
+              'Instructions',
+              DocumentInstructions[item?.fileType] ||
+                DocumentInstructions.AADHAAR,
+            )
+          }>
           <AntDesign name="exclamationcircleo" size={18} color="#EE4248" />
         </TouchableOpacity>
         {docVerificationCompleted(item?.fileType) !== undefined &&
           (docVerificationCompleted(item?.fileType) ? (
-            <TouchableOpacity onPress={() => Toast.show("Verification Pending!", Toast.SHORT)}>
-              <FontAwesome name="exclamation-circle" size={18} style={{ marginLeft: 10 }} color="#D4A340" />
+            <TouchableOpacity
+              onPress={() => Toast.show('Verification Pending!', Toast.SHORT)}>
+              <FontAwesome
+                name="exclamation-circle"
+                size={18}
+                style={{marginLeft: 10}}
+                color="#D4A340"
+              />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={() => Toast.show("Document Verified", Toast.SHORT)}>
-              <FontAwesome name="check" size={18} style={{ marginLeft: 5 }} color="#00CC00" />
+            <TouchableOpacity
+              onPress={() => Toast.show('Document Verified', Toast.SHORT)}>
+              <FontAwesome
+                name="check"
+                size={18}
+                style={{marginLeft: 5}}
+                color="#00CC00"
+              />
             </TouchableOpacity>
           ))}
       </View>
-      <View style={{ width: "15%" }}>
-        {img && <Image source={{ uri: img }} style={styles.image} />}
+      <View style={{width: '15%'}}>
+        {img && <Image source={{uri: img}} style={styles.image} />}
       </View>
       <View>
-        {item?.type === "attachment" ? (
-          <View style={{ flexDirection: "row" }}>
+        {item?.type === 'attachment' ? (
+          <View style={{flexDirection: 'row'}}>
             {docVerificationCompleted(item?.fileType) === undefined ? (
               <FileIcons item={item} />
             ) : (
               <>
                 {ShowReupload(item) === undefined ? (
-                  <TouchableOpacity style={{ marginRight: 10 }} activeOpacity={0.5} onPress={() => setReUploadInd((current) => [...current, item?.fileType])}>
+                  <TouchableOpacity
+                    style={{marginRight: 10}}
+                    activeOpacity={0.5}
+                    onPress={() =>
+                      setReUploadInd(current => [...current, item?.fileType])
+                    }>
                     <Text>Re-upload</Text>
                   </TouchableOpacity>
                 ) : (
@@ -240,46 +315,70 @@ const MyImagePicker = (props) => {
             )}
           </View>
         ) : (
-          <TouchableOpacity onPress={() => { setSign(true); }}>
+          <TouchableOpacity
+            onPress={() => {
+              setSign(true);
+            }}>
             <AntDesign name="form" size={22} color="#000000" />
           </TouchableOpacity>
         )}
       </View>
-      <Modal animationType="slide" transparent={true} visible={cameraVisible} onRequestClose={() => setCameraVisible(false)}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={cameraVisible}
+        onRequestClose={() => setCameraVisible(false)}>
         {device && hasPermission ? (
-          <Camera
-            ref={setCameraRef}
-            style={{ flex: 1 }}
-            device={device}
-            isActive={cameraVisible}
-          >
-            <View style={{ flex: 1, backgroundColor: "transparent", justifyContent: "flex-end" }}>
-              <View style={{ backgroundColor: "black", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                <Button icon="close" style={{ marginLeft: 12 }} mode="outlined" color="white" onPress={() => setCameraVisible(false)}>
-                  Close
-                </Button>
-                <TouchableOpacity onPress={async () => {
-                  if (cameraRef) {
-                    const photo = await cameraRef.takePhoto();
-                    cameraImage(photo);
-                    setCameraVisible(false);
-                  }
-                }}>
-                  <View style={{ borderWidth: 2, borderRadius: 50, borderColor: "white", height: 50, width: 50, justifyContent: "center", alignItems: "center", marginBottom: 16, marginTop: 16 }}>
-                    <View style={{ borderWidth: 2, borderRadius: 50, borderColor: "white", height: 40, width: 40, backgroundColor: "white" }} />
-                  </View>
-                </TouchableOpacity>
+          <View style={{flex: 1}}>
+            {photoUri ? (
+              // Show the image preview if a photo has been taken
+            <View style={styles.imageContainer}>
+          <Image source={{ uri: photoUri }} style={styles.previewImage} />
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={clearPhoto} 
+            >
+              <AntDesign name="closecircle" size={40} color="red" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={savePhoto} // Show save alert on tick mark press
+            >
+              <AntDesign name="checkcircle" size={40} color="green" />
+            </TouchableOpacity>
+          </View>
+        </View>
+            ) : (
+              // Camera view when no photo has been taken
+              <View style={{flex: 1}}>
+                <Camera
+                  ref={camera}
+                  style={StyleSheet.absoluteFill}
+                  device={device}
+                  isActive={true}
+                  photo={true}
+                />
+                <TouchableOpacity
+                  style={styles.captureButton}
+                  onPress={takePicture} // Take picture on press
+                />
               </View>
-            </View>
-          </Camera>
+            )}
+          </View>
         ) : (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ color: "white" }}>No access to camera</Text>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'white'}}>No access to camera</Text>
           </View>
         )}
       </Modal>
-      <Modal animationType="slide" transparent={true} visible={sign} onRequestClose={() => setSign(false)}>
-        <View style={{ flex: 1 }}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={sign}
+        onRequestClose={() => setSign(false)}>
+        <View style={{flex: 1}}>
           <SignatureScreen
             ref={signBox}
             imageType="image/png"
@@ -295,12 +394,56 @@ const MyImagePicker = (props) => {
 };
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 20, // Add padding to separate from buttons
+    height:"100%",
+    width:"100%",
+    backgroundColor:"#f5dfe2"
+  },
+  previewImage: {
+    width: '100%',
+    height: 400,
+    resizeMode: 'contain',
+  },
+  captureButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "black",
+    position: "absolute",
+    bottom: 50,
+    alignSelf: "center",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20, // Add space between image and buttons
+  },
+  button: {
+    marginHorizontal: 20, // Add space between buttons
+  },
+  retakeButton: {
+    position: 'absolute',
+    bottom: 50,
+    left: '50%',
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 5,
+  },
+  retakeText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   pan: {
     marginHorizontal: 10,
     fontSize: 18,
     flex: 0,
-    fontWeight: "bold",
-    color:"black"
+    fontWeight: 'bold',
+    color: 'black',
   },
   image: {
     borderRadius: 10,
@@ -308,25 +451,25 @@ const styles = StyleSheet.create({
     height: 50,
   },
   error: {
-    color: "#ff0000",
+    color: '#ff0000',
     padding: 5,
   },
   custom: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
+    fontWeight: 'bold',
+    color: '#000',
     paddingHorizontal: 10,
   },
 });
 
 // Redux connection and export remains the same
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   token: state.auth.token,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { RegistrationActions } = require("../store/RegistrationRedux");
+  const {dispatch} = dispatchProps;
+  const {RegistrationActions} = require('../store/RegistrationRedux');
   return {
     ...stateProps,
     ...ownProps,
@@ -342,5 +485,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   undefined,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MyImagePicker);

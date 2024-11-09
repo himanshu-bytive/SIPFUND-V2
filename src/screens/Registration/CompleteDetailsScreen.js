@@ -46,6 +46,7 @@ function CompleteDetailsScreen(props) {
   const {
     token,
     users,
+    steps,
     fatcaDetails,
     nseDetails,
     userDetails,
@@ -1001,6 +1002,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontWeight: "bold",
     marginVertical: 10,
+    color:Colors.RED
   },
   checkbox_style: {
     backgroundColor: Colors.TRANSPARENT,

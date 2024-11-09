@@ -16,13 +16,12 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { MyImage } from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  EvilIcons,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -32,8 +31,11 @@ function InvestmentDetailScreens(props) {
   const { investment, isFetching } = props;
 
   useEffect(() => {
-    props.navigation.state.params?.toggleLoading(false);
+    if (props.route?.params?.toggleLoading) {
+      props.route.params.toggleLoading(false);
+    }
   }, [props]);
+  
 
   return (
     <View style={styles.container}>
@@ -162,7 +164,7 @@ function InvestmentDetailScreens(props) {
           })}
       </ScrollView>
       <TouchableOpacity
-        onPress={() => props.navigation.navigate("AddInvestment")}
+        onPress={() => props.navigation.navigate("Investment",{screen : "AddInvestment"})}
         style={styles.botton_box}
       >
         <Text style={styles.get_otp}>NEXT</Text>
@@ -241,6 +243,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontSize: 15,
     maxWidth: "85%",
+    color:"black"
   },
   price: {
     position: "absolute",
@@ -313,6 +316,7 @@ const styles = StyleSheet.create({
   far: {
     fontSize: 15,
     paddingLeft: 10,
+    color:"black"
   },
 
   year: {
@@ -324,6 +328,7 @@ const styles = StyleSheet.create({
   beat: {
     fontSize: 15,
     paddingLeft: 10,
+    color:"black"
   },
   box_sec: {
     backgroundColor: "#f9f9f9",

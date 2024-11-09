@@ -17,17 +17,15 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  MySelectPicker,
-  MyTextInput,
-  TopRatedFundType,
-} from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import MySelectPicker from "../../components/MyImagePicker";
+import MyTextInput from "../../components/MyTextInput";
+import TopRatedFundType from "../../components/TopRatedFundType";
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -48,15 +46,15 @@ function TopRatedListScreen(props) {
     updateNseRegistration,
     users,
     isFetching,
+    route
   } = props;
 
   const [cartEmpty, setCartEmpty] = useState();
   const [cart, setCart] = useState([]);
   const [selectTab, setSelectTab] = useState(
-    props.navigation.state.params?.currentTab
-      ? props.navigation.state.params?.currentTab
-      : "SIP"
+    route.params?.currentTab ? route.params.currentTab : "SIP"
   );
+
   const toggleTab = (value) => {
     setSelectTab(value);
   };
@@ -385,17 +383,15 @@ function TopRatedListScreen(props) {
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() =>
-              props.navigation.state.params?.fromScreen
-                ? props.navigation.navigate(
-                    props.navigation.state.params?.fromScreen
-                  )
-                : props.navigation.goBack()
-            }
-            style={{ marginTop: 20 }}
-          >
-            <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
-          </TouchableOpacity>
+          onPress={() =>
+            route.params?.fromScreen
+              ? props.navigation.navigate(route.params.fromScreen)
+              : props.navigation.goBack()
+          }
+          style={{ marginTop: 20 }}
+        >
+          <AntDesign name="arrowleft" size={40} color={Colors.RED} />
+        </TouchableOpacity>
         }
         containerStyle={styles.header}
         backgroundColor={Colors.LIGHT_WHITE}
@@ -466,10 +462,9 @@ function TopRatedListScreen(props) {
                 .filter((item) => item.trxn_nature === "S")
                 .map((item, key) => {
                   return (
-                    <>
+                    <View key={item?._id}>
                       {/* <Text>{JSON.stringify(item)}</Text> */}
                       <TopRatedFundType
-                        key={item?._id}
                         deleteItem={deleteItem}
                         fromSIP={true}
                         onChangeDate={onChangeDate}
@@ -502,7 +497,7 @@ function TopRatedListScreen(props) {
                         onChangeFolio={onChangeFolio}
                         type={selectTab}
                       />
-                    </>
+                    </View>
                   );
                 })}
           </>

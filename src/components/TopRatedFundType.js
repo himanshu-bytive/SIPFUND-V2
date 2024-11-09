@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, CheckBox } from "react-native-elements";
 import { Styles, Config, Colors, FormValidate } from "../common";
 import { MySelectPicker } from ".";

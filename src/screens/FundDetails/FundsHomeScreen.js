@@ -22,14 +22,13 @@ import {
   StackedBarChart,
 } from "react-native-chart-kit";
 import { Styles, Config, Colors, FormValidate, Utility } from "../../common";
-import {
-  MaterialIcons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-  FontAwesome,
-  Foundation,
-} from "react-native-vector-icons";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Foundation from 'react-native-vector-icons/Foundation';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { VictoryChartCode } from "../../components";
 import FundDetailScreen from "./FundDetailScreen";
@@ -94,7 +93,7 @@ function FundsHomeScreen(props) {
     fundChartList(
       {
         ISIN:
-          props.navigation.state.params?.fromScreen == "TopRatedList"
+            props.route.params?.fromScreen == "TopRatedList"
             ? fundDetail?.productISIN
             : fundDetail?.isin,
         from: moment(firstDay).format("YYYY-MM-DD"),
@@ -121,7 +120,7 @@ function FundsHomeScreen(props) {
       fundChartList(
         {
           ISIN:
-            props.navigation.state.params?.fromScreen == "TopRatedList"
+          props.route.params?.fromScreen == "TopRatedList"
               ? fundDetail?.productISIN
               : fundDetail?.isin,
           from: moment(firstDay).format("YYYY-MM-DD"),
@@ -137,7 +136,7 @@ function FundsHomeScreen(props) {
       fundDetailsList(
         {
           ISIN:
-            props.navigation.state.params?.fromScreen == "TopRatedList"
+          props.route.params?.fromScreen == "TopRatedList"
               ? fundDetail?.productISIN
               : fundDetail?.isin,
         },
@@ -215,7 +214,7 @@ function FundsHomeScreen(props) {
 
   useEffect(() => {
     const backAction = () => {
-      props.navigation.navigate(props.navigation.state.params?.fromScreen);
+      props.navigation.navigate(props.route.params?.fromScreen);
       return true;
     };
 
@@ -315,7 +314,7 @@ function FundsHomeScreen(props) {
           <TouchableOpacity
             onPress={() =>
               props.navigation.navigate(
-                props.navigation.state.params?.fromScreen
+                props.route.params?.fromScreen
               )
             }
             style={{ marginTop: 20 }}
@@ -453,9 +452,9 @@ function FundsHomeScreen(props) {
           </View>
         </View>
         <FundDetailScreen
-          fromScreen={props.navigation.state.params?.fromScreen}
+          fromScreen={props.route.params?.fromScreen}
           goBack={() =>
-            props.navigation.navigate(props.navigation.state.params?.fromScreen)
+            props.navigation.navigate(props.route.params?.fromScreen)
           }
         />
       </ScrollView>

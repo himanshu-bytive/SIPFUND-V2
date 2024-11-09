@@ -17,7 +17,8 @@ import {
 import { connect } from "react-redux";
 import moment from "moment";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
 import { Header, Overlay } from "react-native-elements";
 import Cart from "../../components/Cart";
 import DocumentPicker from 'react-native-document-picker';
@@ -317,7 +318,7 @@ function ExternalHoldingScreen(props) {
         </TouchableOpacity>
         <View style={styles.footer_box}>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("AddExternalHolding")}
+            onPress={() => props.navigation.navigate("Hamburg",{screen : "AddExternalHolding"})}
             style={styles.botton_box2}
           >
             <Text style={styles.proceed}>ADD HOLDING</Text>

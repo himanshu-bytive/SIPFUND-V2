@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,15 +11,15 @@ import {
   Dimensions,
   BackHandler,
   Alert,
-} from "react-native";
-import { connect } from "react-redux";
-import { Header } from "react-native-elements";
-import Entypo  from "react-native-vector-icons/Entypo";
-import Cart from "../../components/Cart";
-import moment from "moment";
-import { Colors } from "../../common";
+} from 'react-native';
+import {connect} from 'react-redux';
+import {Header} from 'react-native-elements';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Cart from '../../components/Cart';
+import moment from 'moment';
+import {Colors} from '../../common';
 
-const width = Dimensions.get("window").width;
+const width = Dimensions.get('window').width;
 
 function DashboardScreen(props) {
   const {
@@ -30,27 +30,28 @@ function DashboardScreen(props) {
     token,
     users,
   } = props;
-  
+
   const [currentValue, setCurrentValue] = useState(0);
   const [InvestedValue, setInvestedValue] = useState(0);
   const [ProfitLoss, setProfitLoss] = useState(0);
-  
+
   useEffect(() => {
     if (token) {
-      goalSummary({ phoneNumber: users?.mobileNo }, token);
-      goalSummaryRetrieve({ phoneNumber: users?.mobileNo }, token);
+      goalSummary({phoneNumber: users?.mobileNo}, token);
+      goalSummaryRetrieve({phoneNumber: users?.mobileNo}, token);
+      console.log('Current steps', steps);
     }
   }, [token]);
 
   useEffect(() => {
     const backAction = () => {
-      props.navigation.navigate("Home");
+      props.navigation.navigate('Home');
       return true;
     };
 
     const backHandlerSubscription = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
+      'hardwareBackPress',
+      backAction,
     );
 
     return () => {
@@ -59,7 +60,7 @@ function DashboardScreen(props) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener("focus", getData);
+    const unsubscribe = props.navigation.addListener('focus', getData);
     return unsubscribe;
   }, [summaryRetrieve]);
 
@@ -71,7 +72,7 @@ function DashboardScreen(props) {
         (
           parseFloat(summaryRetrieve.currentValue.toFixed(2)) -
           parseFloat(summaryRetrieve.totalInvestment.toFixed(2))
-        ).toFixed(2)
+        ).toFixed(2),
       );
     } else {
       setCurrentValue(0);
@@ -86,16 +87,15 @@ function DashboardScreen(props) {
         leftComponent={
           <TouchableOpacity
             onPress={() => props.navigation.toggleDrawer()}
-            style={{ marginTop: 20 }}
-          >
-            <Entypo name={"menu"} size={30} color={Colors.RED} />
+            style={{marginTop: 20}}>
+            <Entypo name={'menu'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList", {
-                fromScreen: "dashboard",
+              props.navigation.navigate('TopRatedList', {
+                fromScreen: 'dashboard',
               });
             }}
           />
@@ -104,21 +104,19 @@ function DashboardScreen(props) {
         containerStyle={styles.header}
         centerComponent={
           <Image
-            source={require("../../../assets/icon.png")}
+            source={require('../../../assets/icon.png')}
             style={styles.logimg}
           />
         }
       />
       <ScrollView style={styles.containerScroll}>
         <View style={styles.education1}>
-          <View style={{ alignItems: "center" }}>
+          <View style={{alignItems: 'center'}}>
             <Text style={styles.child5}>Summary</Text>
             <Text style={styles.value}>
-              Value as of {moment(new Date()).format("DD-MM-YYYY")}
+              Value as of {moment(new Date()).format('DD-MM-YYYY')}
             </Text>
-            <Text style={styles.rupees}>
-              ₹ {currentValue}
-            </Text>
+            <Text style={styles.rupees}>₹ {currentValue}</Text>
             <Text style={styles.value}>Current Value</Text>
           </View>
 
@@ -143,29 +141,55 @@ function DashboardScreen(props) {
           <TouchableOpacity
             onPress={() => {
               if (steps > 5) {
-                props.navigation.navigate("Goals");
+                // If steps are greater than 5, navigate to Goals
+                props.navigation.navigate('Hold', {screen: 'Goals'});
               } else {
-                Alert.alert(
-                  "Not Allowed!",
-                  "You have no holdings. Please complete the account opening process and upload the required documents. Do you want to continue?",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
-                    {
-                      text: "YES",
-                      onPress: () => props.navigation.navigate("RegisterDetails"),
-                    },
-                  ]
-                );
+                // If steps are 4 or less
+                if (steps < 4) {
+                  // If steps are less than 4, navigate to RegisterDetails
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You have no holdings. Please complete the account opening process and upload the required documents. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'RegisterDetails',
+                          }),
+                      },
+                    ],
+                  );
+                } else {
+                  // If steps are 4 or greater but less than or equal to 5, navigate to UploadDocument
+                  Alert.alert(
+                    'Not Allowed!',
+                    "You haven't completed the necessary document uploads. Do you want to continue?",
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'UploadDocument',
+                          }),
+                      },
+                    ],
+                  );
+                }
               }
-            }}
-          >
+            }}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/mutual_7.png")}
+                  source={require('../../../assets/mutual_7.png')}
                   style={styles.fundsmg}
                 />
               </View>
@@ -174,12 +198,11 @@ function DashboardScreen(props) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("ExternalHolding")}
-          >
+            onPress={() => props.navigation.navigate('ExternalHolding')}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/mutual_8.png")}
+                  source={require('../../../assets/mutual_8.png')}
                   style={styles.fundsmg}
                 />
               </View>
@@ -197,29 +220,55 @@ function DashboardScreen(props) {
           <TouchableOpacity
             onPress={() => {
               if (steps > 5) {
-                props.navigation.navigate("Switch");
+                // If steps are greater than 5, navigate to the Switch screen
+                props.navigation.navigate('Switch');
               } else {
-                Alert.alert(
-                  "Not Allowed!",
-                  "You have no holdings to switch. Please complete the account opening process. Do you want to continue?",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
-                    {
-                      text: "YES",
-                      onPress: () => props.navigation.navigate("RegisterDetails"),
-                    },
-                  ]
-                );
+                // If steps are 4 or less
+                if (steps < 4) {
+                  // If steps are less than 4, navigate to RegisterDetails
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You have no holdings to switch. Please complete the account opening process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'RegisterDetails',
+                          }),
+                      },
+                    ],
+                  );
+                } else {
+                  // If steps are between 4 and 5 (inclusive), navigate to UploadDocument
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You haven’t completed the document upload process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'UploadDocument',
+                          }),
+                      },
+                    ],
+                  );
+                }
               }
-            }}
-          >
+            }}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/mutual_10.png")}
+                  source={require('../../../assets/mutual_10.png')}
                   style={styles.fundsmg}
                 />
               </View>
@@ -230,29 +279,55 @@ function DashboardScreen(props) {
           <TouchableOpacity
             onPress={() => {
               if (steps > 5) {
-                props.navigation.navigate("Redeem");
+                // If steps are greater than 5, navigate to the Redeem screen
+                props.navigation.navigate('Redeem');
               } else {
-                Alert.alert(
-                  "Not Allowed!",
-                  "You have no holdings to redeem. Please complete the account opening process. Do you want to continue?",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
-                    {
-                      text: "YES",
-                      onPress: () => props.navigation.navigate("RegisterDetails"),
-                    },
-                  ]
-                );
+                // If steps are 4 or less
+                if (steps < 4) {
+                  // If steps are less than 4, navigate to RegisterDetails
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You have no holdings to redeem. Please complete the account opening process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'RegisterDetails',
+                          }),
+                      },
+                    ],
+                  );
+                } else {
+                  // If steps are between 4 and 5 (inclusive), navigate to UploadDocument
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You haven’t completed the document upload process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'UploadDocument',
+                          }),
+                      },
+                    ],
+                  );
+                }
               }
-            }}
-          >
+            }}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/mutual_6.png")}
+                  source={require('../../../assets/mutual_6.png')}
                   style={styles.fundsmg}
                 />
               </View>
@@ -263,47 +338,73 @@ function DashboardScreen(props) {
           <TouchableOpacity
             onPress={() => {
               if (steps > 5) {
-                props.navigation.navigate("TransactionHistory");
+                // If steps are greater than 5, navigate to TransactionHistory
+                props.navigation.navigate('TransactionHistory');
               } else {
-                Alert.alert(
-                  "Not Allowed!",
-                  "You have no holdings. Please complete the account opening process. Do you want to continue?",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
-                    {
-                      text: "YES",
-                      onPress: () => props.navigation.navigate("RegisterDetails"),
-                    },
-                  ]
-                );
+                // If steps are 4 or less
+                if (steps < 4) {
+                  // If steps are less than 4, navigate to RegisterDetails
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You have no holdings. Please complete the account opening process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'RegisterDetails',
+                          }),
+                      },
+                    ],
+                  );
+                } else {
+                  // If steps are between 4 and 5 (inclusive), navigate to UploadDocument
+                  Alert.alert(
+                    'Not Allowed!',
+                    'You haven’t completed the document upload process. Do you want to continue?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'YES',
+                        onPress: () =>
+                          props.navigation.navigate('Reg', {
+                            screen: 'UploadDocument',
+                          }),
+                      },
+                    ],
+                  );
+                }
               }
-            }}
-          >
+            }}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/mutual_9.png")}
+                  source={require('../../../assets/mutual_9.png')}
                   style={styles.fundsmg}
                 />
               </View>
-              <Text style={styles.transaction}>Transaction {"\n"}History</Text>
+              <Text style={styles.transaction}>Transaction {'\n'}History</Text>
             </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.history_sec2}>
-          <TouchableOpacity onPress={() => props.navigation.navigate("Owner")}>
+          <TouchableOpacity onPress={() => props.navigation.navigate("Hold",{screen : 'Owner'})}>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require("../../../assets/choice.png")}
+                  source={require('../../../assets/choice.png')}
                   style={styles.fundsmg}
                 />
               </View>
-              <Text style={styles.transaction}>Own{"\n"} Choice</Text>
+              <Text style={styles.transaction}>Own{'\n'} Choice</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -313,47 +414,47 @@ function DashboardScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {flex: 1},
   logimg: {
     height: 65,
     width: 203,
     marginTop: 10,
   },
   investment: {
-    color:"black"
+    color: 'black',
   },
   transaction_sec: {
-    backgroundColor: "#C3CFD9",
+    backgroundColor: '#C3CFD9',
     marginHorizontal: 5,
     borderRadius: 5,
   },
   transaction: {
     fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     marginVertical: 10,
-    color:"black"
+    color: 'black',
   },
   history_sec: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 15,
     marginHorizontal: 10,
   },
   history_sec2: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 7,
     marginHorizontal: 10,
   },
   Switch_sec: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   box: {
     backgroundColor: Colors.WHITE,
     marginHorizontal: 10,
     padding: 30,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -367,37 +468,37 @@ const styles = StyleSheet.create({
     width: 36,
   },
   holdings_sec: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginHorizontal: 70,
     marginVertical: 40,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   value_sec: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 10,
   },
   child5: {
     fontSize: 25,
-    fontWeight: "bold",
-    color:"black"
+    fontWeight: 'bold',
+    color: 'black',
   },
   value: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: Colors.DEEP_GRAY,
   },
   rupees: {
     fontSize: 20,
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   Profit: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   investment2: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: Colors.DEEP_GRAY,
     marginVertical: 10,
   },
@@ -412,16 +513,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   token: state.auth.token,
   users: state.auth.users,
   steps: state.home.steps,
   summaryRetrieve: state.goals.summaryRetrieve,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  const { AuthActions } = require("../../store/AuthRedux");
-  const { GoalsActions } = require("../../store/GoalsRedux");
+const mapDispatchToProps = dispatch => {
+  const {AuthActions} = require('../../store/AuthRedux');
+  const {GoalsActions} = require('../../store/GoalsRedux');
 
   return {
     logOut: () => {

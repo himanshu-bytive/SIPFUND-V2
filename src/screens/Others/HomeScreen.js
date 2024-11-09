@@ -111,7 +111,7 @@ function HomeScreen(props) {
   useEffect(() => {
     if (investment && pageActiveInvest.current) {
       pageActiveInvest.current = false;
-      props.navigation.navigate('InvestmentDetail', {toggleLoading});
+      props.navigation.navigate("Investment",{screen : 'InvestmentDetail'}, {toggleLoading});
     }
   }, [investment]);
 
@@ -188,7 +188,10 @@ function HomeScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate('Dashboard', {screen: 'TopRatedList'});
+              props.navigation.navigate('Dashboard', {
+                screen: 'TopRatedList',
+                params: { fromScreen: 'Home' },
+              });
             }}
           />
         }
@@ -253,7 +256,7 @@ function HomeScreen(props) {
                             justifyContent: 'center',
                           }}>
                           {users?.pan ||
-                          props.navigation.state.params?.refresh ? (
+                          props.route.params?.refresh ? (
                             <View
                               style={{
                                 alignItems:
@@ -303,7 +306,7 @@ function HomeScreen(props) {
                               onPress={() => {
                                 if (
                                   users?.pan ||
-                                  props.navigation.state.params?.refresh
+                                  props.route.params?.refresh
                                 ) {
                                   console.log('STEPS', steps);
                                   if (steps === 3) {
@@ -320,7 +323,7 @@ function HomeScreen(props) {
                               style={styles.botton_box}>
                               <Text style={styles.get_otp}>
                                 {users?.pan ||
-                                props.navigation.state.params?.refresh
+                                props.route.params?.refresh
                                   ? 'COMPLETE ACCOUNT SETUP'
                                   : 'Create Account'}
                               </Text>
@@ -380,7 +383,7 @@ function HomeScreen(props) {
           Top Rated Funds
         </Text>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('TopRatedHome')}>
+          onPress={() => props.navigation.navigate("Dashboard",{screen : 'TopRatedHome'})}>
           <View
             style={[
               styles.education,
@@ -489,7 +492,7 @@ function HomeScreen(props) {
           <Text style={styles.quick_text}>Quick Access</Text>
           <ScrollView horizontal={true}>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('ReferEarn')}
+              onPress={() => props.navigation.navigate('You',{screen : 'ReferEarn'})}
               style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
                 <FastImage
@@ -504,7 +507,7 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('Relationship')}
+              onPress={() => props.navigation.navigate('You',{screen : 'Relationship'})}
               style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
                 <FastImage
@@ -521,7 +524,7 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('Owner')}
+              onPress={() => props.navigation.navigate("Hold",{screen : 'Owner'})}
               style={[styles.education, styles.quick_access]}>
               <View style={styles.child_sec}>
                 <AntDesign name={'search1'} size={80} color={Colors.RED} />

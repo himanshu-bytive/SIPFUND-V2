@@ -12,7 +12,7 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign  from "react-native-vector-icons/AntDesign";
 import ReturnsCalculator from "./ReturnsCalculator";
 import Returns from "./Returns";
 import Top10Holdings from "./Top10Holdings";

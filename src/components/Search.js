@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from "react-native";
 import axios from "axios";
-import { FontAwesome5 } from "react-native-vector-icons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const SuggestionInput = ({ navigate, fundDetails }) => {
   const [inputText, setInputText] = useState("");
@@ -48,9 +48,13 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
       imagePath: `https://sipfund.sfo2.digitaloceanspaces.com/product-AMC-images/${suggestion.productAMCImage}`,
       isin: suggestion.productISIN,
     });
-    navigate("FundsDetails", {
-      fromScreen: "Home",
-    });
+  navigate("Funds", {
+  screen: "FundsDetails",
+  params: {
+    fromScreen: "Home",
+  },
+});
+
 
     setInputText("");
   };
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     fontSize: 15,
+    color:"black"
   },
   crossIcon: {
     position: "absolute",

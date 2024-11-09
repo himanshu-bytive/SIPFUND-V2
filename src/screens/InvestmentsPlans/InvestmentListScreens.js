@@ -15,13 +15,12 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  EvilIcons,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { MyImage, InvestmentFundType } from "../../components";
 import Cart from "../../components/Cart";
@@ -48,7 +47,7 @@ function InvestmentListScreens(props) {
   const [sumTotal, setSumTotal] = useState([]);
   useEffect(() => {
     setCategories(Object.keys(myInvestlist));
-  }, [props.navigation.state.params?.refresh, myInvestlist]);
+  }, [props.route.params?.refresh, myInvestlist]);
 
   useEffect(() => {
     // categories.map((category, CatIndex) => {
@@ -195,7 +194,7 @@ function InvestmentListScreens(props) {
         amc_name: data[item].amc_name,
         productCode: data[item].productCode,
         sipDates: data[item].sipDates,
-        trxn_nature: props.navigation.state.params?.isLumpsum ? "N" : "S",
+        trxn_nature: props.route.params?.isLumpsum ? "N" : "S",
         folio: "",
         sip_amount: data[item].sip,
         sip_period_day: day,
@@ -489,7 +488,7 @@ function InvestmentListScreens(props) {
                           <Text style={styles.no}>Min Investment</Text>
                           <Text>
                             ₹
-                            {props.navigation.state.params?.isLumpsum
+                            {props.route.params?.isLumpsum
                               ? item?.lumpsum_min_amount
                               : item?.sip_min_amount}
                           </Text>
@@ -721,7 +720,7 @@ function InvestmentListScreens(props) {
           for (let category in categories) {
             for (let item in myInvestlist[categories[category]]) {
               let amount = getSip(myInvestlist[categories[category]][item].sip);
-              let minAmount = props.navigation.state.params?.isLumpsum
+              let minAmount = props.route.params?.isLumpsum
                 ? myInvestlist[categories[category]][item]?.lumpsum_min_amount
                 : myInvestlist[categories[category]][item]?.sip_min_amount;
               if (amount < minAmount && amount !== 0) {
@@ -760,7 +759,7 @@ function InvestmentListScreens(props) {
                     let params = getParams(data, sum);
                     //newInvestment(params, token);
                     props.navigation.navigate("InvestmentSubmit", {
-                      isLumpsum: props.navigation.state.params.isLumpsum,
+                      isLumpsum: props.route.params.isLumpsum,
                       params,
                     });
                   },

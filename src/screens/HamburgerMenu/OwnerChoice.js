@@ -14,8 +14,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors } from "../../common";
-import { MySelectPicker } from "../../components";
-import { AntDesign } from "react-native-vector-icons";
+import MySelectPicker from "../../components/MySelectPicker";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -956,6 +956,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontSize: 15,
     width: Dimensions.get("window").width * 0.5,
+    color:"black"
   },
   axiswid: { width: "68%" },
   axis2: {
@@ -979,6 +980,7 @@ const styles = StyleSheet.create({
   },
   min: {
     fontSize: 12,
+    color:"black",
   },
   footer_sec: {
     flexDirection: "row",

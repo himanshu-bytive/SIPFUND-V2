@@ -16,13 +16,12 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { MyImage } from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  EvilIcons,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import Cart from "../../components/Cart";
 
@@ -44,13 +43,14 @@ function InvestmentSubmitScreens(props) {
   useEffect(() => {
     if (paymentInitiated && !isFetching && pincodeInfo) {
       setPaymentInitiated(false);
-      props.navigation.navigate("TopRatedList", {
-        fromScreen: "InvestmentSubmit",
-        planName: investment.investmentPlan,
-        currentTab: props.navigation.state.params?.isLumpsum
-          ? "LUMPSUM"
-          : "SIP",
-      });
+      props.navigation.navigate("Dashboard", {
+        screen: "TopRatedList",
+        params: {
+          fromScreen: "InvestmentSubmit",
+          planName: investment.investmentPlan,
+          currentTab: props.route.params?.isLumpsum ? "LUMPSUM" : "SIP",
+        },
+      });      
     }
   }, [paymentInitiated, isFetching]);
 
@@ -195,19 +195,19 @@ function InvestmentSubmitScreens(props) {
           var empIds2 = "0";
 
           var filteredArray =
-            props?.navigation?.state?.params?.params?.holdings.filter(function (
+            props?.navigation?.route?.params?.holdings.filter(function (
               itm
             ) {
               return empIds.indexOf(itm.amount) == -1;
             });
           var filteredArray2 =
-            props?.navigation?.state?.params?.params?.holdings.filter(function (
+            props?.route?.params?.params?.holdings.filter(function (
               itm
             ) {
               return empIds2.indexOf(itm.amount) == -1;
             });
-          props.navigation.state.params.params.holdings = filteredArray2;
-          newInvestment(props.navigation.state.params.params, token);
+          props.route.params.params.holdings = filteredArray2;
+          newInvestment(props.route.params.params, token);
           setPaymentInitiated(true);
           setTimeout(() => {
             getCartDetails(token);

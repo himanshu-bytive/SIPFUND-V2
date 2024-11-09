@@ -126,7 +126,10 @@ function UploadDocumentScreen(props) {
   const [document, setDocument] = useState(
     docs?.responseString?.ekycIsDone ? documentsKyc :documents 
   );
-
+  useEffect(()=>{
+    console.log("Documents",docs);
+    
+  })
   const carosuelref = useRef();
   const [reUploadInd, setReUploadInd] = useState([]);
 

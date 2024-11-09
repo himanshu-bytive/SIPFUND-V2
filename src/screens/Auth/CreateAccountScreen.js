@@ -17,7 +17,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Ionicons, AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { Image, Header, CheckBox } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
@@ -138,7 +139,7 @@ function CreateAccountScreen(props) {
       getUserDetails({}, token);
     }
     if (user) {
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Root",{screen : "Home"});
     }
     getRef();
   }, [token, user]);
@@ -238,6 +239,8 @@ function CreateAccountScreen(props) {
             ref={emailInput}
             style={styles.inputsec}
             placeholder={"Email"}
+            color="black"
+            placeholderTextColor={"grey"}
             onChangeText={(email) => {
               setError({ ...errors, email: null });
               setState({ ...state, email });
@@ -250,6 +253,8 @@ function CreateAccountScreen(props) {
             ref={passwordInput}
             style={styles.inputsec}
             placeholder={"Set Password"}
+            placeholderTextColor={"grey"}
+            color="black"
             secureTextEntry={true}
             onChangeText={(password) => {
               setError({ ...errors, password: null });
@@ -282,6 +287,7 @@ function CreateAccountScreen(props) {
               </Text>
               <TextInput
                 ref={referenceCodeInput}
+                placeholderTextColor={"grey"}
                 style={styles.inputsec}
                 autoCapitalize="characters"
                 placeholder={"Reference Code"}

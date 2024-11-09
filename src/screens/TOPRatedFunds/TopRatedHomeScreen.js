@@ -17,12 +17,11 @@ import {
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Cart from "../../components/Cart";
@@ -269,8 +268,8 @@ function TopRatedHomeScreen(props) {
       const blurListener = props.navigation.addListener("willBlur", () => {});
 
       return () => {
-        focusListener.remove();
-        blurListener.remove();
+        focusListener();
+        blurListener();
       };
     }
   }, [props.navigation]);
@@ -453,9 +452,9 @@ function TopRatedHomeScreen(props) {
       isin: item._id,
     });
     if (showInside) {
-      nav("FundsDetails", { fromScreen: "TopRatedFunds" });
+      nav("Funds",{screen : "FundsDetails", params : { fromScreen: "TopRatedHome" }});
     } else {
-      props.navigation.navigate("FundsDetails", { fromScreen: "TopRatedHome" });
+      props.navigation.navigate("Funds",{screen : "FundsDetails", params : { fromScreen: "TopRatedHome" }});
     }
   };
 
@@ -1057,7 +1056,7 @@ function TopRatedHomeScreen(props) {
                   </View>
                 </View>
               </View>
-
+             
               <View style={{ alignItems: "center" }}>
                 <TouchableOpacity
                   onPress={addToCartLumpSum}
@@ -1172,6 +1171,7 @@ const styles = StyleSheet.create({
   },
   min: {
     fontSize: 12,
+    color:"black"
   },
   footer_sec: {
     flexDirection: "row",

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Header, Image } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
-import { AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { connect } from "react-redux";
 import { Colors, Styles } from "../../common";
 import { MyImage } from "../../components";
@@ -310,7 +310,8 @@ function AddInvestmentScreens(props) {
             style={styles.cost}
             maxLength={8}
             keyboardType="numeric"
-            placeholder={"RS "}
+            placeholder={"Enter Here"}
+            placeholderTextColor={"grey"}
             onChangeText={(value) => {
               setInvestError(null);
               inputAmount(value);
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   },
   cost: {
     fontSize: 18,
-    color: Colors.DEEP_GRAY,
+    color: "black",
     paddingLeft: 10,
   },
   number: {

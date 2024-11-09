@@ -18,6 +18,7 @@ const MyTextInput = (props) => {
         {...props}
         ref={focusInput}
         placeholder={placeholder ? placeholder : "Add Data"}
+        placeholderTextColor={"grey"}
         style={[
           styles.inputsec,
           style ? style : {},
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
     padding: 10,
+    color:"black"
   },
   error: {
     color: "#ff0000",

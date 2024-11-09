@@ -116,6 +116,8 @@ function PanScreen(props) {
               autoFocus
               ref={pannumberInput}
               style={styles.inputsec}
+              color="black"
+              placeholderTextColor={"grey"}
               autoCapitalize={"characters"}
               placeholder={"Pan"}
               onChangeText={(pannumber) => {

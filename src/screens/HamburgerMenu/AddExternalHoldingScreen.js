@@ -9,9 +9,12 @@ import {
   ScrollView,
 } from "react-native";
 import { connect } from "react-redux";
-import { MySelectPicker, MyDatePicker, MyTextInput } from "../../components";
+import MySelectPicker from "../../components/MySelectPicker";
+import MyDatePicker from "../../components/MyDatePicker";
+import MyTextInput from "../../components/MyTextInput";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo"
 import { Header, Overlay } from "react-native-elements";
 
 function AddExternalHoldingScreen(props) {
