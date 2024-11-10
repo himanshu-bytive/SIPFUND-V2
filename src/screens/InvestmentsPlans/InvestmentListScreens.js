@@ -24,7 +24,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Image, Header, CheckBox } from "react-native-elements";
 import { MyImage, InvestmentFundType } from "../../components";
 import Cart from "../../components/Cart";
-import RNPickerSelect from "react-native-picker-select";
+import Picker from "react-native-picker-select";
 
 function InvestmentListScreens(props) {
   const pageActive = useRef(false);
@@ -496,165 +496,53 @@ function InvestmentListScreens(props) {
                         {configs?.selectedOption &&
                           configs?.selectedOption === "SIP" && (
                             <View style={styles.select}>
-                              <Text style={styles.no}>SIP Date</Text>
-
-                              {/* <Text style={styles.no}>
-                                {myInvestlist[category][index].sipDates.split(
-                                  ","
-                                )}
-                              </Text> */}
-                              <View style={styles.returnsbox}>
-                                <View
-                                  style={
-                                    {
-                                      // width: "48%",
-                                      // height: 120,
-                                      // alignItems: "center",
-                                      // borderWidth: 1,
-                                    }
-                                  }
-                                >
-                                  <RNPickerSelect
-                                    ref={focusInput}
-                                    placeholder={{
-                                      label: "Select a Date",
-                                      value: null,
-                                    }}
-                                    style={{
-                                      inputIOS: styles.dropDown,
-                                      inputAndroid: styles.dropDown,
-                                      placeholder: styles.dropDown,
-                                      height: 120,
-                                    }}
-                                    useNativeAndroidPickerStyle={false}
-                                    onValueChange={(value) => {
-                                      let data = myInvestlist;
-                                      let date = data[category][index]?.date
-                                        ? data[category][index]?.date
-                                        : parseInt(
-                                            item?.sipDates.split(",")[0]
-                                          );
-                                      data[category][index].date = value;
-                                      setDates({
-                                        ...dates,
-                                        [`${category}${index}`]: value,
-                                      });
-                                      myInvestments(data);
-                                    }}
-                                    value={
-                                      dates[`${category}${index}`]
-                                        ? dates[`${category}${index}`]
-                                        : defaultDate
-                                    }
-                                    // value={
-                                    //   dates[`${category}${index}`]
-                                    //     ? dates[`${category}${index}`]
-                                    //     : parseInt(item?.sipDates.split(",")[0])
-                                    // }
-                                    items={newDates}
-                                    Icon={() => {
-                                      // if (icon) return icon;
-                                      return (
-                                        <AntDesign
-                                          name="caretdown"
-                                          size={15}
-                                          style={{
-                                            marginTop: 7,
-                                            marginRight: -10,
-                                          }}
-                                          color="#C0392B"
-                                        />
-                                      );
-                                    }}
-                                    // Icon={() => {
-                                    //   return (
-
-                                    //   );
-                                    // }}
-                                  />
-                                </View>
-                                {/* <TouchableOpacity
-                                  style={{
-                                    zIndex: 1,
-                                    width: 20,
-                                    borderWidth: 1,
-                                  }}
-                                >
-                                  <AntDesign
-                                    name="caretdown"
-                                    size={15}
-                                    style={{
-                                      marginTop: 7,
-                                      marginRight: -20,
-                                    }}
-                                    color="#C0392B"
-                                  />
-                                </TouchableOpacity> */}
-                              </View>
-                              {/* <View style={{ flexDirection: "row" }}>
-                                <Text style={styles.new}>
-                                  {dates[`${category}${index}`]
+                            <Text style={styles.no}>SIP Date</Text>
+                            <View style={styles.pickerWrapper}>
+                              <Picker
+                                ref={focusInput}
+                                placeholder={{
+                                  label: "Select a Date",
+                                  value: null,
+                                }}
+                                style={{
+                                  inputIOS: styles.dropDown,
+                                  inputAndroid: styles.dropDown,
+                                  placeholder: styles.dropDown,
+                                }}
+                                useNativeAndroidPickerStyle={false}  // Disable default Android style for more control
+                                onValueChange={(value) => {
+                                  let data = myInvestlist;
+                                  let date = data[category][index]?.date
+                                    ? data[category][index]?.date
+                                    : parseInt(item?.sipDates.split(",")[0]);
+                                  data[category][index].date = value;
+                                  setDates({
+                                    ...dates,
+                                    [`${category}${index}`]: value,
+                                  });
+                                  myInvestments(data);
+                                }}
+                                value={
+                                  dates[`${category}${index}`]
                                     ? dates[`${category}${index}`]
-                                    : parseInt(item?.sipDates.split(",")[0])}
-                                </Text>
-                                <View style={{ flexDirection: "column" }}>
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      let data = myInvestlist;
-                                      let date = data[category][index]?.date
-                                        ? data[category][index]?.date
-                                        : parseInt(
-                                            item?.sipDates.split(",")[0]
-                                          );
-                                      let modifiedDate = plusMinus(
-                                        "plus",
-                                        date,
-                                        data[category][index].sipDates
-                                      );
-                                      data[category][index].date = modifiedDate;
-                                      setDates({
-                                        ...dates,
-                                        [`${category}${index}`]: modifiedDate,
-                                      });
-                                      myInvestments(data);
-                                    }}
-                                  >
-                                    <AntDesign
-                                      name="caretup"
-                                      size={15}
-                                      color="#C0392B"
-                                    />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      let data = myInvestlist;
-                                      let date = data[category][index]?.date
-                                        ? data[category][index]?.date
-                                        : parseInt(
-                                            item?.sipDates.split(",")[0]
-                                          );
-                                      let modifiedDate = plusMinus(
-                                        "minus",
-                                        date,
-                                        data[category][index].sipDates
-                                      );
-                                      data[category][index].date = modifiedDate;
-                                      setDates({
-                                        ...dates,
-                                        [`${category}${index}`]: modifiedDate,
-                                      });
-                                      myInvestments(data);
-                                    }}
-                                  >
+                                    : defaultDate
+                                }
+                                items={newDates}
+                                Icon={() => (
+                                  <View style={styles.iconContainer}>
                                     <AntDesign
                                       name="caretdown"
                                       size={15}
+                                      style={styles.icon}
                                       color="#C0392B"
                                     />
-                                  </TouchableOpacity>
-                                </View>
-                              </View> */}
+                                  </View>
+                                )}
+                              />
                             </View>
+                          </View>
+                          
+                          
                           )}
 
                         <View style={styles.select}>
@@ -782,10 +670,10 @@ function InvestmentListScreens(props) {
             // alert(JSON.stringify(params));
             //newInvestment(params, token);
             // return;
-            props.navigation.navigate("InvestmentSubmit", {
+            props.navigation.navigate("Investment",{screen : "InvestmentSubmit",params : {
               isLumpsum: props.route.params.isLumpsum,
               params,
-            });
+            }});
           }
         }}
         style={styles.botton_box}
@@ -968,13 +856,34 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
   },
   dropDown: {
-    color: Colors.BLACK,
-    width: 100,
-    height: 25,
-    alignSelf: "center",
-    textAlign: "center",
+    color: "black",
+    width: 60,  // You can adjust this based on the width of the text
+    height: 40,  // Adjust the height to make space for the content
+    justifyContent: 'center',  // Center the text vertically
+    paddingLeft: 5,  // Padding to ensure the text is not too close to the left
   },
-  returnsbox: { flexDirection: "row" },
+  
+  pickerWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc', // Optional for better visibility
+    paddingHorizontal: 5,
+  },
+  
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,  // Adjust this for spacing between text and icon
+  },
+  
+  icon: {
+    marginTop: 10,
+    marginRight: 5,
+  },
+  
+  
 });
 const mapStateToProps = (state) => ({
   token: state.auth.token,

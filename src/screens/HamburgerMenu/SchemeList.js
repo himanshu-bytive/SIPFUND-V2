@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import AntDesign  from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, SearchBar } from "react-native-elements";
 
 function SchemeList(props) {

@@ -22,7 +22,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { AuthActions } from "../store/AuthRedux";
 import { Overlay, Header, CheckBox } from "react-native-elements";
 import Toast from "react-native-simple-toast";
 
@@ -621,7 +621,8 @@ function SideMenu(props) {
                 text: "OK",
                 onPress: () => {
                   clearSummery({}, token);
-                  props.navigation.navigate("splash");
+                  AuthActions.logout();
+                  props.navigation.navigate("verify");
                 },
               },
             ]);

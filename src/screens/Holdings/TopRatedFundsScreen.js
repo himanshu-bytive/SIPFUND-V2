@@ -17,12 +17,11 @@ import { connect } from "react-redux";
 import TopRatedHomeScreen from "../TOPRatedFunds/TopRatedHomeScreen";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { HoldingFundType } from "../../components";
@@ -191,12 +190,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginVertical: 15,
     fontWeight: "bold",
+    color:"black"
   },
   Investments: {
     fontSize: 22,
     fontWeight: "bold",
     marginLeft: 30,
     marginVertical: 10,
+    color:"black"
   },
   mainbox: {
     alignItems: "center",

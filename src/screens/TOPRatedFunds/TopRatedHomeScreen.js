@@ -1205,7 +1205,7 @@ const styles = StyleSheet.create({
     height: 37,
   },
   rupees_sec: { alignItems: "center" },
-  rupees_text: { fontSize: 12 },
+  rupees_text: { fontSize: 12 ,color:"black"},
 
   // tab
   pop_top: { width: "85%" },

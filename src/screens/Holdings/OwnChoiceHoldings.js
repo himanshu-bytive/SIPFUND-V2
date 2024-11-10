@@ -17,12 +17,11 @@ import { connect } from "react-redux";
 import TopRatedHomeScreen from "../TOPRatedFunds/TopRatedHomeScreen";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { HoldingFundType } from "../../components";
@@ -120,7 +119,9 @@ function OwnChoiceHoldings(props) {
         <View>
           <Text
             style={styles.totalAmount}
-          >{`Amount: ₹ ${state?.params?.currentValue}`}</Text>
+          >
+            {console.log("hellooo",props.route.params)}
+            {`Amount: ₹ ${props.route?.params?.currentValue}`}</Text>
           {/* <Text style={styles.totalAmount}>{`Amount: ₹ ${sum.toFixed(
             2
           )}`}</Text> */}
@@ -196,17 +197,17 @@ function OwnChoiceHoldings(props) {
                         key={key}
                       >
                         <View>
-                          <Text>
+                          <Text style={{color:"black"}}>
                             {moment(new Date(trxn?.navDate)).format(
                               "DD-MM-YYYY"
                             )}{" "}
                             ({trxn?.type})
                           </Text>
-                          <Text>₹{trxn?.amount}</Text>
+                          <Text style={{color:"black"}}>₹{trxn?.amount}</Text>
                         </View>
                         <View>
-                          <Text>Nav: ₹{trxn?.currentNavValue}</Text>
-                          <Text>Units: {trxn?.units}</Text>
+                          <Text style={{color:"black"}}>Nav: ₹{trxn?.currentNavValue}</Text>
+                          <Text style={{color:"black"}}>Units: {trxn?.units}</Text>
                         </View>
                       </View>
                     ))}
@@ -253,12 +254,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginVertical: 15,
     fontWeight: "bold",
+    color:"black"
   },
   Investments: {
     fontSize: 22,
     fontWeight: "bold",
     marginLeft: 30,
     marginVertical: 10,
+    color:"black"
   },
   mainbox: {
     alignItems: "center",
@@ -415,6 +418,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: 10,
+    color:"black"
   },
   transactionContainer: {
     marginHorizontal: 10,

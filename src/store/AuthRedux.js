@@ -197,6 +197,7 @@ export const AuthActions = {
   },
   logout() {
     AsyncStorage.removeItem("USERNAME");
+    console.log("Done");
     return { type: types.LOGOUT };
   },
   creatAccount: async (dispatch, params) => {

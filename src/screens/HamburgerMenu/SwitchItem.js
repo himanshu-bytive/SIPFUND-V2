@@ -16,7 +16,9 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import { Header, Overlay, CheckBox, colors } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -79,7 +81,7 @@ function SwitchItem(props) {
     getSchemeList(params, token);
     setSchemeListKey(index);
     navToSchemeList(true);
-    // props.navigation.navigate("SchemeList");
+    props.navigation.navigate("Hamburg",{screen : "SchemeList"});
   };
 
   const add = (
@@ -158,7 +160,7 @@ function SwitchItem(props) {
       </View>
       <View style={styles.growth_sec}>
         <Text style={styles.axis_treasury}>{item.scheme}</Text>
-        <Text>
+        <Text style={{color:"black"}}>
           {item?.groupName} {item?.groupType ? `(${item?.groupType})` : ""}
         </Text>
         <View style={styles.value_sec}>
@@ -372,6 +374,7 @@ const styles = StyleSheet.create({
   axis_treasury: {
     fontSize: 13,
     marginBottom: 10,
+    color:"black"
   },
   value_sec: {
     width: "90%",

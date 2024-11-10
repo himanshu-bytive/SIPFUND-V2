@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import  AntDesign  from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, colors } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import SwitchItem from "./SwitchItem";

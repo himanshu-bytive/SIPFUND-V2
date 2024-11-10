@@ -14,7 +14,8 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import { Ionicons, AntDesign } from "react-native-vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -261,7 +262,7 @@ function GoalsSummaryScreen(props) {
 
         {/* Top Rated Funds..._sec */}
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("TopRatedFunds")}
+          onPress={() => props.navigation.navigate("Hold",{screen : "TopRatedFunds"})}
         >
           <View style={styles.education}>
             <View style={styles.education_sec}>
@@ -280,9 +281,9 @@ function GoalsSummaryScreen(props) {
         {/* Own Choice...sec */}
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate("OwnChoiceHoldings", {
+            props.navigation.navigate("Hold",{screen  : "OwnChoiceHoldings", params : {
               currentValue: currentValue,
-            })
+            }})
           }
         >
           <View style={styles.education_2}>
@@ -344,6 +345,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     paddingBottom: 50,
     fontWeight: "bold",
+    color:'black'
   },
 
   education: {
@@ -389,6 +391,7 @@ const styles = StyleSheet.create({
   child5: {
     fontSize: 25,
     fontWeight: "bold",
+    color:"black"
   },
   summery_sec: {
     width: "100%",
@@ -428,12 +431,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginLeft: 20,
+    color:"black"
   },
   number: {
     fontSize: 20,
     fontWeight: "bold",
     position: "absolute",
     right: 10,
+    color:"black"
   },
   red_color: {
     color: Colors.RED,

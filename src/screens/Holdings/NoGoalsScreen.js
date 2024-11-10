@@ -16,12 +16,11 @@ import { connect } from "react-redux";
 import { MyImage } from "../../components";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import { Image, Header, CheckBox } from "react-native-elements";
 
 function NoGoalsScreen(props) {
@@ -31,7 +30,7 @@ function NoGoalsScreen(props) {
   useEffect(() => {
     if (goalDetail && pageActiveGoles.current) {
       pageActiveGoles.current = false;
-      props.navigation.navigate("PlanHome");
+      props.navigation.navigate("Plan",{screen : "PlanHome"});
     }
   }, [goalDetail]);
 
@@ -128,10 +127,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 15,
     fontWeight: "bold",
+    color:"black"
   },
   text_goalsDesc: {
     fontSize: 15,
     marginVertical: 5,
+    color:"black"
   },
   education: {
     flexDirection: "row",
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
   child: {
     fontSize: 15,
     fontWeight: "bold",
+    color:"black"
   },
   child_text: {
     fontSize: 10,

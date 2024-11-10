@@ -187,12 +187,14 @@ const styles = StyleSheet.create({
   text_goals: {
     fontSize: 20,
     marginVertical: 15,
+    color:"black"
   },
   Investments: {
     fontSize: 22,
     fontWeight: "bold",
     marginLeft: 40,
     marginVertical: 10,
+    color:"black"
   },
   mainbox: {
     alignItems: "center",

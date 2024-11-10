@@ -545,7 +545,7 @@ function OwnerChoice(props) {
             cart && (
               <Cart
                 nav={() => {
-                  props.navigation.navigate("TopRatedList");
+                  props.navigation.navigate("Dashboard",{screen : "TopRatedList"});
                 }}
               />
             )
@@ -624,9 +624,9 @@ function OwnerChoice(props) {
                     imagePath: `https://sipfund.sfo2.digitaloceanspaces.com/product-AMC-images/${choices[0]?.nseProductDetail.productAMCImage}`,
                     isin: choices[0]?._id,
                   });
-                  props.navigation.navigate("FundsDetails", {
+                  props.navigation.navigate("Funds",{screen : "FundsDetails",params : {
                     fromScreen: "Owner",
-                  });
+                  }});
                 }}
                 style={{ flexDirection: "row", alignItems: "center" }}
               >
