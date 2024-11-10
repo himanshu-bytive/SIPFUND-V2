@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
 import { Header, Overlay, CheckBox, colors } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -106,7 +106,7 @@ function RedeemItem(props) {
       </View>
       <View style={styles.growth_sec}>
         <Text style={styles.axis_treasury}>{item.scheme}</Text>
-        <Text>
+        <Text style={{color:"black"}} >
           {item?.groupName} {item?.groupType ? `(${item?.groupType})` : ""}
         </Text>
         <View style={styles.value_sec}>
@@ -137,7 +137,7 @@ function RedeemItem(props) {
               borderColor: Colors.TRANSPARENT,
             }}
             checkedColor={
-              keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1
+              (keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1)
                 ? Colors.RED
                 : Colors.GRAY_DEEP_1
             }
@@ -147,7 +147,7 @@ function RedeemItem(props) {
             uncheckedIcon="circle-o"
             onPress={() => toggleRadio("AMOUNT")}
             disabled={
-              keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1
+              (keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1)
                 ? false
                 : true
             }
@@ -160,7 +160,7 @@ function RedeemItem(props) {
             }}
             checked={allUnits === true ? true : false}
             checkedColor={
-              keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1
+              (keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1)
                 ? Colors.RED
                 : Colors.GRAY_DEEP_1
             }
@@ -169,7 +169,7 @@ function RedeemItem(props) {
             uncheckedIcon="circle-o"
             onPress={() => toggleRadio("ALLUNITS")}
             disabled={
-              keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1
+              (keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1)
                 ? false
                 : true
             }
@@ -180,6 +180,7 @@ function RedeemItem(props) {
             <TextInput
               style={styles.inputsec}
               placeholder={`${parseFloat(item.units).toFixed(3)}`}
+              placeholderTextColor={"grey"}
               editable={false}
               selectTextOnFocus={false}
             />
@@ -188,18 +189,20 @@ function RedeemItem(props) {
               style={styles.inputsec}
               keyboardType="numeric"
               placeholder="Enter Amount"
+              placeholderTextColor={"grey"}
+              color="black"
               value={
                 values.filter((i) => i.folioNo === item.folio_no)[0]?.value
               }
               onChangeText={setAmountValue}
               editable={
-                keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1
+                (keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1)
                   ? true
                   : false
               }
             />
           )}
-          {keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1 ? (
+          {(keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1) ? (
             <Text />
           ) : (
             <TouchableOpacity onPress={() => remove(`${index}${item.scheme}`)}>
@@ -207,7 +210,7 @@ function RedeemItem(props) {
             </TouchableOpacity>
           )}
 
-          {keys !== [] && keys.indexOf(`${index}${item.scheme}`) === -1 ? (
+          {(keys.length === 0 || keys.indexOf(`${index}${item.scheme}`) === -1) ? (
             <TouchableOpacity
               onPress={() => {
                 add(
@@ -307,6 +310,7 @@ const styles = StyleSheet.create({
   axis_treasury: {
     fontSize: 13,
     marginBottom: 10,
+    color:"black"
   },
   value_sec: {
     width: "90%",

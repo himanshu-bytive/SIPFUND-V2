@@ -16,9 +16,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import Entypo from "react-native-vector-icons/Entypo";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, colors } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -81,7 +80,7 @@ function SwitchItem(props) {
     getSchemeList(params, token);
     setSchemeListKey(index);
     navToSchemeList(true);
-    props.navigation.navigate("Hamburg",{screen : "SchemeList"});
+    // props.navigation.navigate("SchemeList");
   };
 
   const add = (
@@ -247,6 +246,7 @@ function SwitchItem(props) {
             <TextInput
               style={styles.inputsec}
               placeholder={`${parseFloat(item.units).toFixed(3)}`}
+              placeholderTextColor={"grey"}
               editable={false}
               selectTextOnFocus={false}
             />
@@ -255,6 +255,7 @@ function SwitchItem(props) {
               style={styles.inputsec}
               keyboardType="numeric"
               placeholder="Enter Amount"
+              placeholderTextColor={"grey"}
               value={
                 values.filter((i) => i.folioNo === item.folio_no)[0]?.value
               }

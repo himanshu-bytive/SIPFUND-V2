@@ -28,43 +28,70 @@ const width = Dimensions.get("window").width;
 import Geolocation from "@react-native-community/geolocation";
 import PushNotification from "react-native-push-notification";
 import axios from "axios";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
+  const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } =
     props;
 
+  // useEffect(() => {
+  //   const getPhoneNumber = async () => {
+  //     await DeviceInfo.getPhoneNumber().then((phone) => {
+  //       // alert(JSON.stringify(phone))
+  //       if (
+  //         !isNaN(phone) &&
+  //         phone != null &&
+  //         phone != "" &&
+  //         phone.length >= 10 &&
+  //         phones.length === 0
+  //       ) { 
+  //         Alert.alert(
+  //           "Phone Number",
+  //           `Do you want to use ${phone} to register?`,
+  //           [
+  //             {
+  //               text: "Cancel",
+  //               onPress: () => console.log("Cancel Pressed"),
+  //               style: "cancel",
+  //             },
+  //             { text: "OK", onPress: () => onAction(phone.slice(-10)) },
+  //           ]
+  //         );
+  //       }
+  //     });
+  //   };
+
+  //   getPhoneNumber();
+  // }, []);
+
   useEffect(() => {
-    const getPhoneNumber = async () => {
-      await DeviceInfo.getPhoneNumber().then((phone) => {
-        // alert(JSON.stringify(phone))
-        if (
-          !isNaN(phone) &&
-          phone != null &&
-          phone != "" &&
-          phone.length >= 10 &&
-          phones.length === 0
-        ) {
-          Alert.alert(
-            "Phone Number",
-            `Do you want to use ${phone} to register?`,
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
-              },
-              { text: "OK", onPress: () => onAction(phone.slice(-10)) },
-            ]
-          );
+    // Function to log all AsyncStorage data
+    const logAsyncStorageData = async () => {
+      try {
+        // Retrieve all keys
+        const keys = await AsyncStorage.getAllKeys();
+        
+        // Retrieve all values based on the keys
+        if (keys.length > 0) {
+          const data = await AsyncStorage.multiGet(keys);
+          data.forEach(([key, value]) => {
+            console.log(`Key: ${key}, Value: ${value}`);
+          });
+        } else {
+          console.log('No data found in AsyncStorageeeee');
         }
-      });
+      } catch (error) {
+        console.error('Error fetching data from AsyncStorage:', error);
+      }
     };
 
-    getPhoneNumber();
-  }, []);
+    // Call the function to log AsyncStorage data when the page loads
+    logAsyncStorageData();
+  }, []); // Empty dependency array means this runs only once when the component mounts
+
 
   useEffect(() => {
     if (signUpSteps == 0 && pageActive.current) {
@@ -79,10 +106,10 @@ function VerifyScreen(props) {
       pageActive.current = false;
       props.navigation.navigate("login");
     }
-    if (signUpSteps == 4 && pageActive.current) {
-      pageActive.current = false;
-      props.navigation.navigate("login");
-    }
+    // if (signUpSteps == 4 && pageActive.current) {
+    //   pageActive.current = false;
+    //   props.navigation.navigate("login");
+    // }
   }, [signUpSteps]);
 
   useEffect(() => {
@@ -149,7 +176,6 @@ function VerifyScreen(props) {
       const response = await axios.get(url);
       // console.log("GOT RESPONSE",response);
       if (response.data.status === 'OK') {
-       console.log("YES");
        const addressComponents = response.data.results[0].address_components;
        const address = response.data.results[0].formatted_address;
        console.log(address);
@@ -181,6 +207,7 @@ function VerifyScreen(props) {
   });
 
   const onAction = async (ph) => {
+    setIsLoading(true);
     let phone = ph ? ph : state.phone;
     if (phone === "") {
       phoneInput.current.focus();
@@ -219,6 +246,7 @@ function VerifyScreen(props) {
         },
       };
       verify(params);
+      setIsLoading(false);
       setState({ ...state, phone: "" });
     } else {
       phoneInput.current.focus();
@@ -313,7 +341,7 @@ function VerifyScreen(props) {
           </View>
         )}
         <View style={styles.button}>
-          {isFetching ? (
+          {isLoading ? (
             <View style={styles.botton_box}>
               <ActivityIndicator size={30} color={Colors.WHITE} />
             </View>

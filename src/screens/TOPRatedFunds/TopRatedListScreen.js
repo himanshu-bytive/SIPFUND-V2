@@ -487,9 +487,9 @@ function TopRatedListScreen(props) {
 
                           item.amcName = item?.amc_name;
                           fundDetails(item);
-                          props.navigation.navigate("FundsDetails", {
+                          props.navigation.navigate("Funds",{screen : "FundsDetails",params : {
                             fromScreen: "TopRatedList",
-                          });
+                          }});
                         }}
                         folio={folio}
                         setFolio={setFolio}

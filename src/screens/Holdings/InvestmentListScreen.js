@@ -66,13 +66,13 @@ function InvestmentListScreen(props) {
       }
     );
     InvestmentSummaryDetails(item);
-    props.navigation.navigate("InvestDetail");
+    props.navigation.navigate("Investment",{screen : "InvestDetail"});
   };
 
   useEffect(() => {
     if (investment && pageActiveInvest.current) {
       pageActiveInvest.current = false;
-      props.navigation.navigate("InvestmentDetail");
+      props.navigation.navigate("Investment",{screen : "InvestmentDetail"});
     }
   }, [investment]);
 

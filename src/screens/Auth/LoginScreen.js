@@ -38,7 +38,11 @@ function LoginScreen(props) {
   } = props;
   const [visible, setVisible] = useState(false);
   const [appToken, setAppToken] = useState("-");
+  const [loginStatus, setLoginStatus] = useState(null);
+  const intervalRef = useRef(null); 
   /* Retrieve password if saved */
+  console.log("ENTER");
+  
   useEffect(() => {
     new NotificationService(onRegister);
 
@@ -72,21 +76,37 @@ function LoginScreen(props) {
       }
     }
   }, [wrongPassCount]);
+  
+   // useEffect to run the checkLoginStatus every 0.5 seconds
+   useEffect(() => {
+    // Set the interval to run every 500ms (0.5 seconds)
+    intervalRef.current = setInterval(() => {
+      checkLoginStatus();
+    }, 500); // 500ms = 0.5 seconds
 
-  useEffect(() => {
-    if (token && pageActive.current) {
-      pageActive.current = false;
-      getUserDetails({}, token);
+    // Clean up the interval on unmount or when no longer needed
+    return () => clearInterval(intervalRef.current);
+  }, []); // Empty dependency array ensures this only runs once on mount
+
+
+  const checkLoginStatus = async () => {
+    const status = await AsyncStorage.getItem('LOGIN');
+    console.log("GOT STATUS",status);
+    
+    setLoginStatus(status);
+  };
+
+   // useEffect to fetch user details and navigate based on loginStatus
+   useEffect(() => {
+    if (loginStatus === 'SUCCESS' && pageActive.current) {
+      pageActive.current = false; // Prevent further checks after user details are fetched
+      if (token) {
+        getUserDetails({}, token); // Fetch user details based on token
+        props.navigation.navigate("Root", { screen: "Home" }); // Navigate to Home after successful login
+        clearInterval(intervalRef.current); // Stop the 0.5s loop once navigation happens
+      }
     }
-    if (user) {
-      //if (user.pan) {
-      //props.navigation.navigate("Home");
-      //} else {
-      //props.navigation.navigate("Pan");
-      //}
-      props.navigation.navigate("Root",{screen : "Home"});
-    }
-  }, [token, user, userDetails]);
+  }, [loginStatus, token]); // Dependencies on loginStatus and token to re-run when they change
 
   const [state, setState] = useState({
     password: "",
@@ -110,6 +130,8 @@ function LoginScreen(props) {
       scope: "user",
       deviceToken: appToken,
     };
+    console.log("password page",params);
+    
     login(params, Config.loginToken);
     setState({ ...state, password: "", term: false });
   };
@@ -160,7 +182,7 @@ function LoginScreen(props) {
               ref={passwordInput}
               style={styles.inputsec}
               placeholder={"Password"}
-              placeholderTextColor="grey"
+              placeholderTextColor={"grey"}
               maxLength={30}
               secureTextEntry={!visible}
               onChangeText={(password) => {

@@ -19,7 +19,10 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign, MaterialIcons } from "react-native-vector-icons";
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import { Header, Overlay, CheckBox, SearchBar } from "react-native-elements";
 import Toast from "react-native-simple-toast";
 
@@ -371,10 +374,12 @@ const styles = StyleSheet.create({
   // },
   folio: {
     fontSize: 15,
+    color:"black"
   },
   switchTo: {
     fontSize: 15,
     textAlign: "center",
+    color:"black"
   },
   scheme_sec: {
     flexDirection: "row",

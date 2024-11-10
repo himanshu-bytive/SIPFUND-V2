@@ -25,6 +25,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { AuthActions } from "../store/AuthRedux";
 import { Overlay, Header, CheckBox } from "react-native-elements";
 import Toast from "react-native-simple-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SideMenu(props) {
   const pageActiveKyc = useRef(false);
@@ -171,7 +172,38 @@ function SideMenu(props) {
       props.navigation.toggleDrawer();
     }
   }, [emandateLists]);
+  const clearAllData = async () => {
+    const keys = await AsyncStorage.getAllKeys();
+    console.log("fetching all data before clearing");
 
+    if (keys.length > 0) {
+      const data = await AsyncStorage.multiGet(keys);
+      data.forEach(([key, value]) => {
+        console.log(`Key: ${key}, Value: ${value}`);
+      });
+    } else {
+      console.log('No data found in AsyncStorage');
+    }
+    try {
+      await AsyncStorage.clear();
+      console.log("All data has been cleared from AsyncStorage.");
+    } catch (error) {
+      console.error("Error clearing AsyncStorage: ", error);
+    }
+
+    console.log("fetching all data after clearing");
+    const ke = await AsyncStorage.getAllKeys();
+
+    if (ke.length > 0) {
+      const data = await AsyncStorage.multiGet(ke);
+      data.forEach(([key, value]) => {
+        console.log(`Key: ${key}, Value: ${value}`);
+      });
+    } else {
+      console.log('No data found in AsyncStorage');
+    }
+    
+  };
   return (
     <View style={styles.container}>
       <View
@@ -310,7 +342,7 @@ function SideMenu(props) {
 
       <ScrollView>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("BottomDashboard",{screen : "dashboard"})}
+          onPress={() => props.navigation.navigate("Dashboard",{screen : "dashboard"})}
           style={styles.profile_sec}
         >
           <View style={styles.sideIcon}>
@@ -322,7 +354,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("BottomYou",{screen : "Profile"})}
+          onPress={() => props.navigation.navigate("You",{screen : "Profile"})}
           style={[styles.profile_sec, styles.profile]}
         >
           <View style={styles.sideIcon}>
@@ -622,6 +654,7 @@ function SideMenu(props) {
                 onPress: () => {
                   clearSummery({}, token);
                   AuthActions.logout();
+                  clearAllData();
                   props.navigation.navigate("verify");
                 },
               },
@@ -653,7 +686,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     marginVertical: 5,
   },
-  profile: { backgroundColor: Colors.WHITE },
+  profile: { backgroundColor: Colors.WHITE,color:"black" },
   mutual1: {
     width: 100,
     height: 100,

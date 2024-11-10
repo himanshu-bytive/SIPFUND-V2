@@ -55,25 +55,22 @@ const storeData = async (key, value) => {
 
 export const AuthActions = {
   verify: async (dispatch, params) => {
+    console.log("Login Params",params);
+    
     dispatch({ type: types.FETCH_VERIFY_PENDING });
     let data = await SiteAPI.apiPostCall("/auth/verify", params);
+    console.log("Login params Response",data);
+    
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_VERIFY_FAILURE, error: data.message });
     } else {
-      // Alert.alert("SIP Fund", data.responseString, [
-      //     {
-      //         text: "OK",
-      //         onPress: () => {
       dispatch({
         type: types.FETCH_VERIFY_SUCCESS,
         phone: params.mobileNo,
         signUpSteps: data.signUpSteps,
         validFlag: data.validFlag,
       });
-      //         },
-      //     },
-      // ]);
     }
   },
   otp: async (dispatch, params) => {
@@ -184,10 +181,11 @@ export const AuthActions = {
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_LOGIN_FAILURE, error: data.message });
+      await AsyncStorage.setItem('LOGIN', 'FAIL');
     } else {
       /* Save the password to storage */
       storeData(toString(params.username), params.password);
-
+      await AsyncStorage.setItem('LOGIN', 'SUCCESS');
       dispatch({
         type: types.FETCH_LOGIN_SUCCESS,
         user: data,
@@ -197,6 +195,7 @@ export const AuthActions = {
   },
   logout() {
     AsyncStorage.removeItem("USERNAME");
+    AsyncStorage.removeItem('LOGIN');
     console.log("Done");
     return { type: types.LOGOUT };
   },

@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import  AntDesign  from "react-native-vector-icons/AntDesign";
+import  AntDesign from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, colors } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import SwitchItem from "./SwitchItem";
@@ -150,7 +150,7 @@ function SwitchScreen(props) {
 
     if (filteredArray.length >= 1) {
       setSwitchCheckoutDetails(filteredArray);
-      props.navigation.navigate("SwitchCheckout");
+      props.navigation.navigate("Hamburg",{screen : "SwitchCheckout"});
     } else {
       alert("Please add a scheme");
     }
@@ -160,7 +160,7 @@ function SwitchScreen(props) {
     let filteredArray = addedScheme.filter((item) => item.type === "EXTERNAL");
     if (filteredArray.length >= 1) {
       setSwitchExternalCheckoutDetails(filteredArray);
-      props.navigation.navigate("SwitchCheckout");
+      props.navigation.navigate("Hamburg",{screen : "SwitchCheckout"});
     } else {
       alert("Please add a scheme");
     }

@@ -339,7 +339,7 @@ function DashboardScreen(props) {
             onPress={() => {
               if (steps > 5) {
                 // If steps are greater than 5, navigate to TransactionHistory
-                props.navigation.navigate('TransactionHistory');
+                props.navigation.navigate('Hamburg',{screen : 'TransactionHistory'});
               } else {
                 // If steps are 4 or less
                 if (steps < 4) {
@@ -526,7 +526,7 @@ const mapDispatchToProps = dispatch => {
 
   return {
     logOut: () => {
-      AuthActions.logOut(dispatch);
+      AuthActions.logout(dispatch);
     },
     goalSummary: (params, token) => {
       GoalsActions.goalSummary(dispatch, params, token);

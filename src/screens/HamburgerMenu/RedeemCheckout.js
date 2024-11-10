@@ -19,7 +19,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign, MaterialIcons } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Header, Overlay, CheckBox, SearchBar } from "react-native-elements";
 import Toast from "react-native-simple-toast";
 
@@ -337,6 +338,7 @@ const styles = StyleSheet.create({
   axis_treasury: {
     fontSize: 15,
     marginBottom: 10,
+    color:"black"
   },
   unit: {
     fontSize: 15,

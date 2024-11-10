@@ -81,6 +81,8 @@ function ForgotPasswordScreen(props) {
           ref={emailInput}
           style={styles.inputsec}
           placeholder={"Enter Email Address"}
+          placeholderTextColor={"grey"}
+          color="black"
           onChangeText={(email) => {
             setError({ ...errors, email: null });
             setState({ ...state, email });
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 17,
     paddingVertical: 15,
+    color:"black"
   },
   inputsec: {
     borderBottomWidth: 2,
@@ -152,7 +155,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginTop: 5,
   },
-  confrom_button: { fontSize: 15 },
+  confrom_button: { fontSize: 15,color:"black" },
   bottom: { alignItems: "center" },
   botton_box: {
     backgroundColor: Colors.LIGHT_RED,

@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { Entypo, AntDesign } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Header, Overlay } from "react-native-elements";
 import Cart from "../../components/Cart";
 
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
     width: "30%",
     fontSize: 12,
     fontWeight: "bold",
+    color:"black"
   },
   axis: {
     width: "70%",

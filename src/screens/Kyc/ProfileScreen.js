@@ -21,7 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Image, Header, CheckBox, colors } from "react-native-elements";
@@ -181,7 +181,7 @@ function ProfileScreen(props) {
           <View
             style={iinBank?.length > 0 ? styles.icon_bg_act : styles.icon_bg}
           >
-            <Octicons name={"primitive-dot"} size={25} color={Colors.WHITE} />
+           <FontAwesome5 name="dot-circle" size={25} color={Colors.WHITE} />
           </View>
         </View>
 
@@ -208,7 +208,7 @@ function ProfileScreen(props) {
           <View
             style={steps && steps === 6 ? styles.icon_bg_act : styles.icon_bg}
           >
-            <FontAwesome name={"rupee"} size={25} color={Colors.WHITE} />
+            <FontAwesome name="rupee-sign" size={25} color={Colors.WHITE} />
           </View>
         </View>
 

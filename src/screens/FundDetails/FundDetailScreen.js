@@ -295,7 +295,7 @@ function FundDetailScreen(props) {
 
   const getFundData = async (isin) => {
     const { data } = await axios.get(
-      `http://159.65.145.3:8085/api/minmax/search?isin=${isin}`
+      `https://sipfund.com/api/minmax/search?isin=${isin}`
     );
 
     setItem(data?.responseString);

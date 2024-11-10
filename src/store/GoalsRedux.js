@@ -1,5 +1,6 @@
 /** @format */
 
+import { persistor } from "../../App";
 import SiteAPI from "../services/SiteApis";
 import { Alert } from "react-native";
 const types = {
@@ -175,6 +176,7 @@ export const GoalsActions = {
       summary: {},
       // summary: data?.responseString,
     });
+    persistor.purge();
   },
   goalSummary: async (dispatch, params, token) => {
     dispatch({ type: types.FETCH_SUMMARY_PENDING });

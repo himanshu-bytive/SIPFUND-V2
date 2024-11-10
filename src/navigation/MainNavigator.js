@@ -202,8 +202,8 @@ export const RootNavigator = () => (
     <Drawer.Screen name="HomeTab" component={TabNavigator} />
     <Drawer.Screen name="Investment" component={InvestmentPlansStack} />
     <Drawer.Screen name="Plan" component={PlanYourGoalsStack} />
-    <Drawer.Screen name="Dashboard" component={TopRatedFundsStack} />
-    <Drawer.Screen name="You" component={OthersStack} />
+    <Drawer.Screen name="TopRatedFunds" component={TopRatedFundsStack} />
+    <Drawer.Screen name="OtherStackYou" component={OthersStack} />
     <Drawer.Screen name="Hold" component={HoldingsSummaryStack} />
     <Drawer.Screen name="Funds" component={FundsDetailsStack} />
     <Drawer.Screen name="Reg" component={RegisterStack} />

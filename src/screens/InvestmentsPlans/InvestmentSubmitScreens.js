@@ -43,7 +43,7 @@ function InvestmentSubmitScreens(props) {
   useEffect(() => {
     if (paymentInitiated && !isFetching && pincodeInfo) {
       setPaymentInitiated(false);
-      props.navigation.navigate("Dashboard", {
+      props.navigation.navigate("TopRatedFunds", {
         screen: "TopRatedList",
         params: {
           fromScreen: "InvestmentSubmit",

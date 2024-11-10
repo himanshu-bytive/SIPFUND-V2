@@ -140,7 +140,7 @@ function NotificationScreen(props) {
             ]}
             onPress={() => {
               // alert("ddd");
-              props.navigation.navigate("You",{screen : "NotificationView"}, item);
+              props.navigation.navigate("You",{screen : "NotificationView",params:{ item}});
             }}
           >
             <View style={styles.rowItems}>
@@ -177,7 +177,7 @@ function NotificationScreen(props) {
                     </Text>
                     <Text
                       numberOfLines={1}
-                      style={{ width: Dimensions.get("window").width / 1.5 }}
+                      style={{ width: Dimensions.get("window").width / 1.5,color:"black" }}
                     >
                       {item?.notificationtemplate?.message}
                     </Text>
