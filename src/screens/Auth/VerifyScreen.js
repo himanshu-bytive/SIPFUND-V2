@@ -34,9 +34,7 @@ function VerifyScreen(props) {
   const phoneInput = useRef(null);
   const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
-  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } =
-    props;
-
+  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } = props;
   // useEffect(() => {
   //   const getPhoneNumber = async () => {
   //     await DeviceInfo.getPhoneNumber().then((phone) => {
@@ -207,34 +205,21 @@ function VerifyScreen(props) {
   });
 
   const onAction = async (ph) => {
-    setIsLoading(true);
+    setIsLoading(true); // Show loader when ENTER is clicked
+  
     let phone = ph ? ph : state.phone;
     if (phone === "") {
       phoneInput.current.focus();
       setError({ ...errors, phone: "Please enter phone number" });
+      setIsLoading(false); // Hide loader immediately if there's an error
       return;
     }
-
-    const eventName = "add_phone";
-    const eventValues = {
-      phone: ph ? ph : state.phone,
-    };
-
-    // appsFlyer.logEvent(
-    //   eventName,
-    //   eventValues,
-    //   (res) => {
-    //     console.log("######## AppsFlyer #######", res);
-    //   },
-    //   (err) => {
-    //     console.error("######## AppsFlyer #######", err);
-    //   }
-    // );
-
+  
     clearSummery({}, "");
-
+  
     if (FormValidate.isPhone(phone)) {
       pageActive.current = true;
+      
       let params = {
         minorFlag: false,
         mobileNo: Number(phone),
@@ -245,14 +230,20 @@ function VerifyScreen(props) {
           pincode: displayCurrentAddress?.pincode,
         },
       };
+  
       verify(params);
-      setIsLoading(false);
-      setState({ ...state, phone: "" });
+      
+      // Set a timer to hide the loader after 5 seconds
+      setTimeout(() => {
+        setIsLoading(false); // Hide the loader after 5 seconds
+      }, 5000);
     } else {
       phoneInput.current.focus();
       setError({ ...errors, phone: "Please check your mobile number" });
+      setIsLoading(false); // Hide loader immediately if there's an error
     }
   };
+  
 
   const backAction = () => {
     Alert.alert("Hold on!", "Are you sure you want to go back?", [
@@ -342,7 +333,7 @@ function VerifyScreen(props) {
         )}
         <View style={styles.button}>
           {console.log("Loading  state",isLoading)}
-          {isLoading ? (
+          {isLoading  ? (
             <View style={styles.botton_box}>
               <ActivityIndicator size={30} color={Colors.WHITE} />
             </View>
