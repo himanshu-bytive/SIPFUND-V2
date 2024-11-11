@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     height: 136,
     width: 136,
   },
-  number: { fontSize: 22, marginTop: 20 },
+  number: { fontSize: 22, marginTop: 20,color:"black" },
   inputsec: {
     borderWidth: 2,
     borderColor: Colors.GRAY_LIGHT,

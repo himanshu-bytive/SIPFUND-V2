@@ -67,30 +67,30 @@ function VerifyScreen(props) {
   //   getPhoneNumber();
   // }, []);
 
-  useEffect(() => {
-    // Function to log all AsyncStorage data
-    const logAsyncStorageData = async () => {
-      try {
-        // Retrieve all keys
-        const keys = await AsyncStorage.getAllKeys();
+  // useEffect(() => {
+  //   // Function to log all AsyncStorage data
+  //   const logAsyncStorageData = async () => {
+  //     try {
+  //       // Retrieve all keys
+  //       const keys = await AsyncStorage.getAllKeys();
         
-        // Retrieve all values based on the keys
-        if (keys.length > 0) {
-          const data = await AsyncStorage.multiGet(keys);
-          data.forEach(([key, value]) => {
-            console.log(`Key: ${key}, Value: ${value}`);
-          });
-        } else {
-          console.log('No data found in AsyncStorageeeee');
-        }
-      } catch (error) {
-        console.error('Error fetching data from AsyncStorage:', error);
-      }
-    };
+  //       // Retrieve all values based on the keys
+  //       if (keys.length > 0) {
+  //         const data = await AsyncStorage.multiGet(keys);
+  //         data.forEach(([key, value]) => {
+  //           console.log(`Key: ${key}, Value: ${value}`);
+  //         });
+  //       } else {
+  //         console.log('No data found in AsyncStorageeeee');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data from AsyncStorage:', error);
+  //     }
+  //   };
 
-    // Call the function to log AsyncStorage data when the page loads
-    logAsyncStorageData();
-  }, []); // Empty dependency array means this runs only once when the component mounts
+  //   // Call the function to log AsyncStorage data when the page loads
+  //   logAsyncStorageData();
+  // }, []); // Empty dependency array means this runs only once when the component mounts
 
 
   useEffect(() => {
@@ -341,6 +341,7 @@ function VerifyScreen(props) {
           </View>
         )}
         <View style={styles.button}>
+          {console.log("Loading  state",isLoading)}
           {isLoading ? (
             <View style={styles.botton_box}>
               <ActivityIndicator size={30} color={Colors.WHITE} />

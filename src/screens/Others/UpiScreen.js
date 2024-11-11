@@ -15,7 +15,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
-import { AntDesign, Entypo } from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
 import { Image, Header, CheckBox, Overlay } from "react-native-elements";
 import WebView from "react-native-webview";
 import SiteAPI from "../../services/SiteApis";
@@ -371,7 +372,7 @@ function UpiScreen(props) {
         // folio: "",
         sip_amount: parseInt(data[item].amount),
       };
-      //if (props.navigation.state.params.fromCart) {
+      //if (props.route.params.fromCart) {
       //format = {
       //amc: data[item].amc,
       //amount: data[item].sip_amount,
@@ -399,7 +400,7 @@ function UpiScreen(props) {
       //? data[item]?.sip_period_day
       //: data[item].sipDates[0],
       //};
-      //} else if (props.navigation.state.params.fromPlanGoals) {
+      //} else if (props.route.params.fromPlanGoals) {
       //format = {
       //amc: data[item].schemeInfo.amc_code,
       //amount: data[item].schemeInfo.sip,
@@ -408,7 +409,7 @@ function UpiScreen(props) {
       //reinvest: "Z",
       //sip_amount: data[item].schemeInfo.sip
       //? data[item].schemeInfo?.sip
-      //: props.navigation.state.params?.showModified
+      //: props.route.params?.showModified
       //? data[item].schemeInfo?.allocationAmountModifiled
       //? data[item].schemeInfo?.allocationAmountModifiled.toFixed(0)
       //: 0
@@ -504,7 +505,7 @@ function UpiScreen(props) {
         ifsc_code: profile?.IFSC_CODE,
         iin: user?.IIN,
         instrm_ac_no: " ",
-        instrm_amount: props.navigation.state.params?.sum,
+        instrm_amount: props.route.params?.sum,
         instrm_bank: profile?.BANK_NAME,
         instrm_branch: " ",
         instrm_charges: " ",
@@ -551,16 +552,16 @@ function UpiScreen(props) {
         sip_micr_no: " ",
         sub_broker_arn_code: " ",
         sub_broker_code: " ",
-        sub_trxn_type: props.navigation.state.params?.isLumpsum ? "N" : "S",
-        trans_count: props.navigation.state.params?.cart.length,
+        sub_trxn_type: props.route.params?.isLumpsum ? "N" : "S",
+        trans_count: props.route.params?.cart.length,
         trxn_acceptance: upi || mandate ? "OL" : "ALL",
         trxn_execution: " ",
         umrn: mandate && umrn ? umrn.UMRN_NO : " ",
         until_cancelled: "Y",
         utr: "",
-        groupId: props.navigation.state.params?.groupId,
-        groupType: props.navigation.state.params?.groupType,
-        groupName: props.navigation.state.params?.groupName,
+        groupId: props.route.params?.groupId,
+        groupType: props.route.params?.groupType,
+        groupName: props.route.params?.groupName,
       },
       childtrans: getTransactions(props.navigation.state?.params?.cart),
       //childtrans: props.navigation.state?.params?.cart,

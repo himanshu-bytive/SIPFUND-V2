@@ -16,7 +16,7 @@ function SplashScreen(props) {
     const timer = setTimeout(() => {
       setLoading(false);
       props.navigation.navigate("verify");
-    }, 5000); // 5 seconds
+    }, 3000); // 5 seconds
 
     return () => clearTimeout(timer); // Cleanup timer on unmount
   }, [props.navigation]);

@@ -118,21 +118,21 @@ function ReferEarnScreen(props) {
       alert("Kindly start investing to unlock your refferal code.");
     }
   };
-
-  return (
-    <View style={styles.container}>
-      {/* header  */}
+  const displayHeader = () => {
+    return (
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("Home")}
+            onPress={() => { 
+              props.navigation.navigate("Home");
+              setShowTC(false);
+            }}
             style={{ marginTop: 20 }}
           >
-            <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
+            <AntDesign name="arrowleft" size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         backgroundColor={Colors.PEACH}
-        // backgroundColor={Colors.WHITE}
         centerComponent={
           <Image
             source={require("../../../assets/icon.png")}
@@ -147,13 +147,48 @@ function ReferEarnScreen(props) {
           />
         }
       />
+    );
+  };
+  const displayHeader2 = () => {
+    return (
+      <Header
+        leftComponent={
+          <TouchableOpacity
+            onPress={() => { 
+              setShowTC(false);
+            }}
+            style={{ marginTop: 20 }}
+          >
+            <AntDesign name="arrowleft" size={30} color={Colors.RED} />
+          </TouchableOpacity>
+        }
+        backgroundColor={Colors.PEACH}
+        centerComponent={
+          <Image
+            source={require("../../../assets/icon.png")}
+            style={styles.logimg}
+          />
+        }
+        rightComponent={
+          <Cart
+            nav={() => {
+              props.navigation.navigate("TopRatedList");
+            }}
+          />
+        }
+      />
+    );
+  };
+  return (
+    <View style={styles.container}>
+      {showTC === false ? displayHeader() : null}
+
       {isFetching && (
         <View style={Styles.loading}>
           <ActivityIndicator color={Colors.BLACK} size="large" />
         </View>
       )}
       <ScrollView>
-        {/* invest section */}
         {!showTC ? (
           <>
             <View style={styles.invest_sec}>
@@ -417,7 +452,7 @@ function ReferEarnScreen(props) {
           </>
         ) : (
           <>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setShowTC(false);
               }}
@@ -429,7 +464,8 @@ function ReferEarnScreen(props) {
             >
               <AntDesign name={"arrowleft"} size={25} />
               <Text style={{ paddingLeft: 5 }}>Go Back</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            {showTC === true ? displayHeader2() : null}
 
             {/* How You Earn section */}
             <View style={[styles.invest_sec, styles.earn_sec]}>

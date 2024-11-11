@@ -1055,7 +1055,7 @@ function CompleteDetailsBankScreen(props, route) {
       >
         <View style={{ padding: 10 }}>
           <Text
-            style={{ paddingVertical: 5, fontSize: 18, fontWeight: "bold" }}
+            style={{ paddingVertical: 5, fontSize: 18, fontWeight: "bold",color:"black" }}
           >
             Thank you for creating your investor account!
           </Text>
@@ -1108,6 +1108,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 12,
+    color:"black"
   },
   occupation: {
     fontSize: 15,

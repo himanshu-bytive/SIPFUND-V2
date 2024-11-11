@@ -38,9 +38,19 @@ function NotificationScreen(props) {
     deleteNotifications,
     delLoading,
   } = props;
-
+  const [showLoader, setShowLoader] = useState(false);
   // useEffect(() => {
   // }, []);
+  useEffect(() => {
+    setShowLoader(true); // Show loader immediately on mount
+  
+    const hideTimer = setTimeout(() => {
+      setShowLoader(false); // Hide loader after 5 seconds
+    }, 5000); // 5 seconds for hiding the loader
+  
+    // Cleanup for the hide timer
+    return () => clearTimeout(hideTimer);
+  }, []); // Only runs on mount
 
   useEffect(() => {
     const unsubscribe = props?.navigation.addListener("didFocus", () => {
@@ -111,7 +121,7 @@ function NotificationScreen(props) {
         // }
       />
 
-      {isFetching && (
+      {showLoader && (
         <View
           style={{
             backgroundColor: "#fffe",
@@ -140,7 +150,7 @@ function NotificationScreen(props) {
             ]}
             onPress={() => {
               // alert("ddd");
-              props.navigation.navigate("You",{screen : "NotificationView",params:{ item}});
+              props.navigation.navigate("OtherStackYou",{screen : "NotificationView",params:{ item}});
             }}
           >
             <View style={styles.rowItems}>

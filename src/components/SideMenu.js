@@ -303,7 +303,7 @@ function SideMenu(props) {
               key={key}
               onPress={() => handlEemandate(item)}
             >
-              <Text>{item?.description}</Text>
+              <Text style={{color:"black"}}>{item?.description}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity onPress={() => setVisibleEmandate(false)}>
@@ -320,6 +320,8 @@ function SideMenu(props) {
           <Text style={styles.amc}>ENTER ACH-MANDATE AMOUNT</Text>
           <TextInput
             value={emandateValue}
+            placeholderTextColor={"grey"}
+            color="black"
             onChangeText={(val) => setEmandateValue(val)}
             style={styles.inputsec}
             placeholder="Amount"
@@ -442,7 +444,7 @@ function SideMenu(props) {
             if (steps >= 4 && steps < 6) {
               alert("Your IIN is inactive. Please wait for activation!");
             } else {
-              props.navigation.navigate("Existing");
+              props.navigation.navigate("You",{screen : "Existing"});
             }
           }}
           style={[styles.profile_sec, styles.profile]}
@@ -730,10 +732,12 @@ const styles = StyleSheet.create({
     //marginLeft: 15,
     marginVertical: 10,
     fontWeight: "bold",
+    color:"black"
   },
   emaMutual_fund: {
     fontSize: 15,
     marginVertical: 10,
+    color:"black"
   },
   emaCancel: {
     fontSize: 15,
@@ -747,6 +751,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 20,
+    color:"black"
   },
   inputsec: {
     borderBottomWidth: 1,

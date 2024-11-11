@@ -324,25 +324,26 @@ function AddInvestmentScreens(props) {
         </Text>
         {/* <Text style={styles.number}>Sixteen thousand</Text> */}
         <View style={styles.yearly_section}>
-          <View>
-            <Text style={styles.cost_top}>
-              ₹ {calculateReturnAmount(invest, 5, 12)}
-            </Text>
-            <Text style={styles.cost_botton}>In 5 Years</Text>
-          </View>
-          <View>
-            <Text style={styles.cost_top}>
-              ₹ {calculateReturnAmount(invest, 7, 12)}
-            </Text>
-            <Text style={styles.cost_botton}>In 7 Years</Text>
-          </View>
-          <View>
-            <Text style={styles.cost_top}>
-              ₹ {calculateReturnAmount(invest, 10, 12)}
-            </Text>
-            <Text style={styles.cost_botton}>In 10 Years</Text>
-          </View>
-        </View>
+  <View style={styles.cost_container}>
+    <Text style={styles.cost_top}>
+      ₹ {calculateReturnAmount(invest, 5, 12)}
+    </Text>
+    <Text style={styles.cost_botton}>In 5 Years</Text>
+  </View>
+  <View style={styles.cost_container}>
+    <Text style={styles.cost_top}>
+      ₹ {calculateReturnAmount(invest, 7, 12)}
+    </Text>
+    <Text style={styles.cost_botton}>In 7 Years</Text>
+  </View>
+  <View style={styles.cost_container}>
+    <Text style={styles.cost_top}>
+      ₹ {calculateReturnAmount(invest, 10, 12)}
+    </Text>
+    <Text style={styles.cost_botton}>In 10 Years</Text>
+  </View>
+</View>
+
         <Text style={styles.return}>
           Note : Assuming returns at {investment?.expectedReturn}%
         </Text>
@@ -483,17 +484,23 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     backgroundColor: Colors.PINK,
     marginVertical: 5,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly", // Evenly space out the children
+    alignItems: "center",  // Align items vertically in the center
+  },
+  cost_container: {
+    flex: 1, // Ensure equal space for each item
+    alignItems: "center", // Center the content within each view
+    justifyContent: "center", // Center vertically
   },
   cost_top: {
     fontSize: 20,
     color: Colors.RED,
     fontWeight: "bold",
     paddingHorizontal: 3,
-  },
+  },  
   cost_botton: {
     fontSize: 15,
     color: Colors.DEEP_GRAY,

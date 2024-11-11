@@ -284,6 +284,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 4,
     paddingBottom: 4,
+    color:"black"
   },
   proceedButtonContainer: {
     backgroundColor: Colors.LIGHT_RED,

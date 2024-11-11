@@ -126,13 +126,25 @@ function UploadDocumentScreen(props) {
   const [document, setDocument] = useState(
     docs?.responseString?.ekycIsDone ? documentsKyc :documents 
   );
+  const [showLoader, setShowLoader] = useState(false);
   useEffect(()=>{
     console.log("Documents",docs);
     
   })
   const carosuelref = useRef();
   const [reUploadInd, setReUploadInd] = useState([]);
-
+  
+  useEffect(() => {
+    setShowLoader(true); // Show loader immediately on mount
+  
+    const hideTimer = setTimeout(() => {
+      setShowLoader(false); // Hide loader after 5 seconds
+    }, 3000); // 5 seconds for hiding the loader
+  
+    // Cleanup for the hide timer
+    return () => clearTimeout(hideTimer);
+  }, []); // Only runs on mount
+  
   useEffect(() => {
     const backAction = () => {
       return true;
@@ -257,7 +269,7 @@ function UploadDocumentScreen(props) {
           />
         }
       />
-      {isFetching && (
+      {showLoader && (
         <View style={Styles.loading}>
           <ActivityIndicator color={Colors.BLACK} size="large" />
         </View>

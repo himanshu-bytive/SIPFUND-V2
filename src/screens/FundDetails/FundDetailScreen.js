@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     fontSize: 18,
   },
-  amount_tex: { fontSize: 18 },
+  amount_tex: { fontSize: 18,color:"black" },
   fundRisk: {
     fontSize: 12,
   },

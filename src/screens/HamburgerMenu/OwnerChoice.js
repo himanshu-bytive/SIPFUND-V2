@@ -1081,7 +1081,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flex: 1,
   },
-  amount_tex: { fontSize: 18 },
+  amount_tex: { fontSize: 18,color:"black" },
   dropDown: {
     color: Colors.BLACK,
     fontSize: 16,
