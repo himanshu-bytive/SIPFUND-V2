@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Alert,
@@ -14,18 +14,18 @@ import {
   ActivityIndicator,
   StatusBar,
   ToastAndroid,
-} from "react-native";
-import { connect } from "react-redux";
-import { Styles, Config, Colors, FormValidate } from "../common";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Feather from "react-native-vector-icons/Feather";
-import Entypo from "react-native-vector-icons/Entypo";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { AuthActions } from "../store/AuthRedux";
-import { Overlay, Header, CheckBox } from "react-native-elements";
-import Toast from "react-native-simple-toast";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react-native';
+import {connect} from 'react-redux';
+import {Styles, Config, Colors, FormValidate} from '../common';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {AuthActions} from '../store/AuthRedux';
+import {Overlay, Header, CheckBox} from 'react-native-elements';
+import Toast from 'react-native-simple-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SideMenu(props) {
   const pageActiveKyc = useRef(false);
@@ -59,7 +59,7 @@ function SideMenu(props) {
   const [visibleKyc, setVisibleKyc] = useState(false);
   const [visibleEmandate, setVisibleEmandate] = useState(false);
   const [visibleEmandateValue, setVisibleEmandateValue] = useState(null);
-  const [emandateValue, setEmandateValue] = useState("");
+  const [emandateValue, setEmandateValue] = useState('');
   const [enableMandate, setEnableMandate] = useState(false);
   const [enableKyc, setEnableKyc] = useState(false);
 
@@ -84,13 +84,13 @@ function SideMenu(props) {
   }, [popupVisible]);
 
   useEffect(() => {
-    getProfile({ service_request: { iin: userDetails?.IIN } }, token);
+    getProfile({service_request: {iin: userDetails?.IIN}}, token);
   }, [userDetails]);
 
   useEffect(() => {
     if (docs) {
       let selectedData = docs?.responseString?.documents
-        ? docs.responseString.documents.find((x) => x.docType == "AVATAR")
+        ? docs.responseString.documents.find(x => x.docType == 'AVATAR')
         : null;
       if (selectedData?.fileName) {
         setImg(docs.baseUrl + selectedData?.fileName);
@@ -106,17 +106,17 @@ function SideMenu(props) {
     }
   }, [kycLists]);
 
-  const handleKyc = (value) => {
+  const handleKyc = value => {
     setVisibleKyc(false);
     pageActiveKyc.current = true;
     let params = {
       service_request: {
         amc_code: value.amc_code,
-        client_callback_url: "sipfund.com",
+        client_callback_url: 'sipfund.com',
         investor_email: userDetails.email,
         investor_mobile_no: userDetails.mobileNo,
         pan: userDetails.pan,
-        return_flag: "Y",
+        return_flag: 'Y',
       },
     };
     postRequest(params, token);
@@ -129,16 +129,16 @@ function SideMenu(props) {
     }
   }, [kycDetails]);
 
-  const handlEemandate = (value) => {
+  const handlEemandate = value => {
     setVisibleEmandate(false);
     setVisibleEmandateValue(value);
-    props.navigation.navigate("Explore");
+    props.navigation.navigate('Explore');
   };
 
   const handlEemandateValue = () => {
     setVisibleEmandateValue(null);
     var date = new Date();
-    date = date.toDateString().split(" ");
+    date = date.toDateString().split(' ');
     if (emandateValue) {
       let params = {
         service_request: {
@@ -146,17 +146,17 @@ function SideMenu(props) {
           acc_type: profile?.AC_TYPE,
           ach_amount: emandateValue,
           ach_fromdate: `${date[2]}-${date[1]}-${date[3]}`,
-          ach_todate: "31-Dec-2099",
+          ach_todate: '31-Dec-2099',
           Bank_holder_name: userDetails?.name,
           bank_name: profile?.BANK_NAME,
           branch_name: profile?.BRANCH_NAME,
           channel_type: visibleEmandateValue.channel_type,
           ifsc_code: profile?.IFSC_CODE,
           iin: userDetails.IIN,
-          micr_no: "",
-          return_flag: "Y",
+          micr_no: '',
+          return_flag: 'Y',
           //return_flag: visibleEmandateValue.return_flag,
-          uc: "Y",
+          uc: 'Y',
         },
       };
       emandateRegistration(params, token);
@@ -174,7 +174,7 @@ function SideMenu(props) {
   }, [emandateLists]);
   const clearAllData = async () => {
     const keys = await AsyncStorage.getAllKeys();
-    console.log("fetching all data before clearing");
+    console.log('fetching all data before clearing');
 
     if (keys.length > 0) {
       const data = await AsyncStorage.multiGet(keys);
@@ -186,12 +186,12 @@ function SideMenu(props) {
     }
     try {
       await AsyncStorage.clear();
-      console.log("All data has been cleared from AsyncStorage.");
+      console.log('All data has been cleared from AsyncStorage.');
     } catch (error) {
-      console.error("Error clearing AsyncStorage: ", error);
+      console.error('Error clearing AsyncStorage: ', error);
     }
 
-    console.log("fetching all data after clearing");
+    console.log('fetching all data after clearing');
     const ke = await AsyncStorage.getAllKeys();
 
     if (ke.length > 0) {
@@ -202,22 +202,20 @@ function SideMenu(props) {
     } else {
       console.log('No data found in AsyncStorage');
     }
-    
   };
   return (
     <View style={styles.container}>
       <View
         style={{
           backgroundColor: Colors.RED,
-          flexDirection: "row",
+          flexDirection: 'row',
           paddingVertical: 10,
-          alignItems: "center",
-        }}
-      >
+          alignItems: 'center',
+        }}>
         {img ? (
           <Image
-            source={{ uri: img }}
-            style={{ margin: 7, width: 50, height: 50, borderRadius: 100 }}
+            source={{uri: img}}
+            style={{margin: 7, width: 50, height: 50, borderRadius: 100}}
           />
         ) : (
           <View
@@ -225,46 +223,42 @@ function SideMenu(props) {
               height: 50,
               width: 50,
               borderRadius: 25,
-              backgroundColor: "grey",
+              backgroundColor: 'grey',
               //marginVertical: 15,
               marginHorizontal: 5,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
             <Text
               style={{
                 fontSize: 25,
-                color: "#fff",
-              }}
-            >
+                color: '#fff',
+              }}>
               {userDetails?.name
-                ? userDetails?.name.split(" ").length > 1
+                ? userDetails?.name.split(' ').length > 1
                   ? `${userDetails?.name[0]}${
-                      userDetails?.name.split(" ").pop()[0]
+                      userDetails?.name.split(' ').pop()[0]
                     }`
                   : `${userDetails?.name[0]}`
-                : ""}
+                : ''}
             </Text>
           </View>
         )}
-        <View>
-          <Text numberOfLines={1} style={styles.profileText}>
-            {profile?.INVESTOR_NAME}
-          </Text>
-          {profile && profile.ACTIVATION_STATUS === "YES" ? (
+        <View style={{width: '80%'}}>
+          <Text style={styles.profileNameText}>{profile?.INVESTOR_NAME}</Text>
+          {profile && profile.ACTIVATION_STATUS === 'YES' ? (
             <Text style={styles.account_active}>Account Active</Text>
           ) : (
-            <Text style={styles.account_inactive}>Account InActive</Text>
+            <Text style={styles.account_inactive}>Account Inactive</Text>
           )}
         </View>
         <Feather
           style={{
-            position: "absolute",
+            position: 'absolute',
             right: 10,
             top: 20,
           }}
-          name={"chevron-left"}
+          name={'chevron-left'}
           size={35}
           color={Colors.LIGHT_WHITE}
           onPress={() => {
@@ -274,8 +268,7 @@ function SideMenu(props) {
       </View>
       <Overlay
         isVisible={visibleKyc}
-        overlayStyle={{ margin: 10, borderRadius: 10, backgroundColor: "#fff" }}
-      >
+        overlayStyle={{margin: 10, borderRadius: 10, backgroundColor: '#fff'}}>
         <View style={styles.emaMainbox}>
           <Text style={styles.emaAmc}>Choose AMC Option:</Text>
           {kycLists.map((item, key) => (
@@ -291,8 +284,7 @@ function SideMenu(props) {
 
       <Overlay
         isVisible={visibleEmandate}
-        overlayStyle={{ margin: 10, borderRadius: 10, backgroundColor: "#fff" }}
-      >
+        overlayStyle={{margin: 10, borderRadius: 10, backgroundColor: '#fff'}}>
         <View style={styles.emaMainbox}>
           <Text style={styles.emaAmc}>Choose E-Mandate Option:</Text>
           {emandateLists.map((item, key) => (
@@ -301,9 +293,8 @@ function SideMenu(props) {
                 marginVertical: 8,
               }}
               key={key}
-              onPress={() => handlEemandate(item)}
-            >
-              <Text style={{color:"black"}}>{item?.description}</Text>
+              onPress={() => handlEemandate(item)}>
+              <Text style={{color: 'black'}}>{item?.description}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity onPress={() => setVisibleEmandate(false)}>
@@ -314,27 +305,25 @@ function SideMenu(props) {
 
       <Overlay
         isVisible={visibleEmandateValue ? true : false}
-        overlayStyle={{ margin: 10, borderRadius: 10, backgroundColor: "#fff" }}
-      >
+        overlayStyle={{margin: 10, borderRadius: 10, backgroundColor: '#fff'}}>
         <View style={styles.mainbox}>
           <Text style={styles.amc}>ENTER ACH-MANDATE AMOUNT</Text>
           <TextInput
             value={emandateValue}
-            placeholderTextColor={"grey"}
+            placeholderTextColor={'grey'}
             color="black"
-            onChangeText={(val) => setEmandateValue(val)}
+            onChangeText={val => setEmandateValue(val)}
             style={styles.inputsec}
             placeholder="Amount"
           />
-          <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
+          <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
             <TouchableOpacity onPress={() => setVisibleEmandateValue(null)}>
               <Text style={styles.refreshcode}>CANCEL</Text>
             </TouchableOpacity>
             <TouchableOpacity>
               <Text
                 onPress={() => handlEemandateValue()}
-                style={styles.refreshcode}
-              >
+                style={styles.refreshcode}>
                 SUBMIT
               </Text>
             </TouchableOpacity>
@@ -344,11 +333,12 @@ function SideMenu(props) {
 
       <ScrollView>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("Dashboard",{screen : "dashboard"})}
-          style={styles.profile_sec}
-        >
+          onPress={() =>
+            props.navigation.navigate('Dashboard', {screen: 'dashboard'})
+          }
+          style={styles.profile_sec}>
           <View style={styles.sideIcon}>
-            <AntDesign name={"appstore1"} size={30} color={Colors.RED} />
+            <AntDesign name={'appstore1'} size={30} color={Colors.RED} />
           </View>
           <View>
             <Text style={styles.know_text}>Dashboard</Text>
@@ -356,12 +346,11 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen : "Profile"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() => props.navigation.navigate('You', {screen: 'Profile'})}
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <FontAwesome
-              name={"user-o"}
+              name={'user-o'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -383,12 +372,13 @@ function SideMenu(props) {
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen:"ReferEarn"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() =>
+            props.navigation.navigate('You', {screen: 'ReferEarn'})
+          }
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <MaterialCommunityIcons
-              name={"wallet-giftcard"}
+              name={'wallet-giftcard'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -402,13 +392,13 @@ function SideMenu(props) {
           onPress={() => {
             if (users?.pan) {
               if (steps === 3) {
-                props.navigation.navigate("Reg",{screen : "RegisterDetails"});
+                props.navigation.navigate('Reg', {screen: 'RegisterDetails'});
               } else if (steps < 6) {
-                props.navigation.navigate("Reg",{screen:"UploadDocument"});
+                props.navigation.navigate('Reg', {screen: 'UploadDocument'});
               } else {
                 Toast.show(
-                  "Your registration is already completed!",
-                  Toast.LONG
+                  'Your registration is already completed!',
+                  Toast.LONG,
                 );
               }
               // props.navigation.navigate(
@@ -417,14 +407,13 @@ function SideMenu(props) {
               //     : "UploadDocument"
               // )
             } else {
-              props.navigation.navigate("Pan");
+              props.navigation.navigate('Pan');
             }
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <FontAwesome
-              name={"user-o"}
+              name={'user-o'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -437,21 +426,20 @@ function SideMenu(props) {
         <TouchableOpacity
           onPress={() => {
             // props.navigation.navigate("Existing");
-            if (profile?.ACTIVATION_STATUS == "YES") {
-              Toast.show("Your account is already active", Toast.LONG);
+            if (profile?.ACTIVATION_STATUS == 'YES') {
+              Toast.show('Your account is already active', Toast.LONG);
               return;
             }
             if (steps >= 4 && steps < 6) {
-              alert("Your IIN is inactive. Please wait for activation!");
+              alert('Your IIN is inactive. Please wait for activation!');
             } else {
-              props.navigation.navigate("You",{screen : "Existing"});
+              props.navigation.navigate('You', {screen: 'Existing'});
             }
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <AntDesign
-              name={"filetext1"}
+              name={'filetext1'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -462,12 +450,13 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen : "Relationship"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() =>
+            props.navigation.navigate('You', {screen: 'Relationship'})
+          }
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <FontAwesome
-              name={"stack-exchange"}
+              name={'stack-exchange'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -481,24 +470,23 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() => {
-            if (profile?.ACTIVATION_STATUS == "YES") {
-              Toast.show("Your account is already active.", Toast.LONG);
+            if (profile?.ACTIVATION_STATUS == 'YES') {
+              Toast.show('Your account is already active.', Toast.LONG);
               return;
             }
             if (steps < 4) {
               Toast.show(
                 "We didn't find any investment account for your PAN",
-                Toast.LONG
+                Toast.LONG,
               );
             } else {
-              props.navigation.navigate("Reg",{screen :"UploadDocument"});
+              props.navigation.navigate('Reg', {screen: 'UploadDocument'});
             }
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <MaterialCommunityIcons
-              name={"file-upload"}
+              name={'file-upload'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -513,34 +501,33 @@ function SideMenu(props) {
         <TouchableOpacity
           onPress={() => {
             if (userDetails?.signUpSteps < 4) {
-              Alert.alert("Your IIN is not created. Please click on register.");
+              Alert.alert('Your IIN is not created. Please click on register.');
               return;
             }
 
-            if (userDetails?.IIN && profile?.KYC_STATUS === "Y") {
-              if (profile?.ACTIVATION_STATUS === "YES") {
+            if (userDetails?.IIN && profile?.KYC_STATUS === 'Y') {
+              if (profile?.ACTIVATION_STATUS === 'YES') {
                 Toast.show(
-                  "Your KYC is already registered and your account is active. You can start your investment journey now",
-                  Toast.LONG
+                  'Your KYC is already registered and your account is active. You can start your investment journey now',
+                  Toast.LONG,
                 );
               } else {
                 Toast.show(
-                  "Your KYC is already registered. Please upload the documents in the documents section to proceed with your account activation",
-                  Toast.LONG
+                  'Your KYC is already registered. Please upload the documents in the documents section to proceed with your account activation',
+                  Toast.LONG,
                 );
               }
             } else if (userDetails?.IIN) {
               getList(token);
               pageActiveKyc.current = true;
             } else {
-              Alert.alert("Your IIN is not created. Please click on register.");
+              Alert.alert('Your IIN is not created. Please click on register.');
             }
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <MaterialCommunityIcons
-              name={"account-search"}
+              name={'account-search'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -556,13 +543,12 @@ function SideMenu(props) {
               emandateOptions(token);
               pageActiveEmandate.current = true;
             } else {
-              Alert.alert("Your IIN is inactive. Please wait for activation.");
+              Alert.alert('Your IIN is inactive. Please wait for activation.');
             }
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <Entypo name={"hair-cross"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <Entypo name={'hair-cross'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>E-Mandate</Text>
@@ -570,11 +556,12 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen : "Notifications"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() =>
+            props.navigation.navigate('You', {screen: 'Notifications'})
+          }
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <FontAwesome name={"bell"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <FontAwesome name={'bell'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>Notification</Text>
@@ -582,11 +569,10 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen : "Reports"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() => props.navigation.navigate('You', {screen: 'Reports'})}
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <AntDesign name={"profile"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <AntDesign name={'profile'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>Reports</Text>
@@ -597,11 +583,10 @@ function SideMenu(props) {
         <Text style={[styles.know_text, styles.know]}>Communicate</Text>
 
         <TouchableOpacity
-          onPress={() => Linking.openURL("mailto:info@sipfund.com")}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() => Linking.openURL('mailto:info@sipfund.com')}
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <Entypo name={"mail"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <Entypo name={'mail'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>Mail Us</Text>
@@ -614,14 +599,13 @@ function SideMenu(props) {
             // alert(rmDetails?.data.mobileNo);
             Linking.openURL(
               rmDetails?.data.mobileNo
-                ? "tel:" + rmDetails?.data.mobileNo
-                : `tel:+919513355663`
+                ? 'tel:' + rmDetails?.data.mobileNo
+                : `tel:+919513355663`,
             );
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <FontAwesome name={"phone"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <FontAwesome name={'phone'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>Call Us</Text>
@@ -629,12 +613,11 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("You",{screen :"AboutUs"})}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          onPress={() => props.navigation.navigate('You', {screen: 'AboutUs'})}
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <FontAwesome
-              name={"address-book"}
+              name={'address-book'}
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -645,27 +628,26 @@ function SideMenu(props) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            Alert.alert("Logout", "Do you want to log out?", [
+            Alert.alert('Logout', 'Do you want to log out?', [
               {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
               },
               {
-                text: "OK",
+                text: 'OK',
                 onPress: () => {
                   clearSummery({}, token);
                   AuthActions.logout();
                   clearAllData();
-                  props.navigation.navigate("verify");
+                  props.navigation.navigate('verify');
                 },
               },
             ]);
           }}
-          style={[styles.profile_sec, styles.profile]}
-        >
+          style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
-            <Feather name={"log-out"} size={30} color={Colors.GRAY_LIGHT_4} />
+            <Feather name={'log-out'} size={30} color={Colors.GRAY_LIGHT_4} />
           </View>
           <View>
             <Text style={[styles.know_text, styles.know]}>Logout</Text>
@@ -680,26 +662,30 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight,
   },
+  profileNameText:{
+  flexWrap: 'wrap', 
+  fontSize: 16,
+  },
   profile_sec: {
-    flexDirection: "row",
+    flexDirection: 'row',
 
     backgroundColor: Colors.GRAY_LIGHT_3,
     paddingHorizontal: 20,
     paddingVertical: 7,
     marginVertical: 5,
   },
-  profile: { backgroundColor: Colors.WHITE,color:"black" },
+  profile: {backgroundColor: Colors.WHITE, color: 'black'},
   mutual1: {
     width: 100,
     height: 100,
   },
   account_active: {
-    color: "#32CD32",
+    color: '#32CD32',
     fontSize: 15,
     marginVertical: 3,
   },
   account_inactive: {
-    color: "#FF6347",
+    color: '#FF6347',
     fontSize: 15,
     marginVertical: 3,
   },
@@ -715,7 +701,7 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     //width: "60%",
   },
-  know: { color: Colors.BLACK },
+  know: {color: Colors.BLACK},
   border: {
     marginTop: 10,
     marginBottom: 10,
@@ -731,13 +717,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     //marginLeft: 15,
     marginVertical: 10,
-    fontWeight: "bold",
-    color:"black"
+    fontWeight: 'bold',
+    color: 'black',
   },
   emaMutual_fund: {
     fontSize: 15,
     marginVertical: 10,
-    color:"black"
+    color: 'black',
   },
   emaCancel: {
     fontSize: 15,
@@ -749,18 +735,18 @@ const styles = StyleSheet.create({
   },
   amc: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
-    color:"black"
+    color: 'black',
   },
   inputsec: {
     borderBottomWidth: 1,
     borderColor: Colors.GRAY_LIGHT,
-    width: "95%",
+    width: '95%',
     marginTop: 5,
   },
   refreshcode: {
-    textAlign: "right",
+    textAlign: 'right',
     color: Colors.RED,
     fontSize: 15,
     marginHorizontal: 10,
@@ -771,7 +757,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   token: state.auth.token,
   steps: state.home.steps,
   docs: state.registration.documents,
@@ -790,17 +776,17 @@ const mapStateToProps = (state) => ({
   users: state.auth.user,
 });
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { EkycActions } = require("../store/EkycRedux");
-  const { EmandateActions } = require("../store/EmandateRedux");
-  const { AuthActions } = require("../store/AuthRedux");
-  const { GoalsActions } = require("../store/GoalsRedux");
-  const { SideMenuActions } = require("../store/SideMenuRedux");
+  const {dispatch} = dispatchProps;
+  const {EkycActions} = require('../store/EkycRedux');
+  const {EmandateActions} = require('../store/EmandateRedux');
+  const {AuthActions} = require('../store/AuthRedux');
+  const {GoalsActions} = require('../store/GoalsRedux');
+  const {SideMenuActions} = require('../store/SideMenuRedux');
 
   return {
     ...stateProps,
     ...ownProps,
-    getList: (token) => {
+    getList: token => {
       EkycActions.getList(dispatch, token);
     },
     postRequest: (params, token) => {
@@ -809,19 +795,19 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getProfile: (params, token) => {
       AuthActions.getProfile(dispatch, params, token);
     },
-    emandateOptions: (token) => {
+    emandateOptions: token => {
       EmandateActions.emandateOptions(dispatch, token);
     },
     emandateRegistration: (params, token) => {
       EmandateActions.emandateRegistration(dispatch, params, token);
     },
-    toggleEmandatePopup: (state) => {
+    toggleEmandatePopup: state => {
       EmandateActions.toggleEmandatePopup(dispatch, state);
     },
     clearSummery: (params, token) => {
       GoalsActions.clearSummery(dispatch, params, token);
     },
-    getrm: (token) => {
+    getrm: token => {
       SideMenuActions.getrm(dispatch, token);
     },
   };
@@ -829,5 +815,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   undefined,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SideMenu);
