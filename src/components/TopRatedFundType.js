@@ -125,7 +125,7 @@ const TopRatedFundType = props => {
               color: '#888',
             }}
             containerStyle={{
-              paddingRight: 17,
+              paddingRight: 20,
               color: '#000',
             }}
             icon={
@@ -140,8 +140,7 @@ const TopRatedFundType = props => {
           {fromSIP && (
             <View style={styles.select}>
               <Text style={styles.no}>SIP Date</Text>
-              <View style={styles.returnsbox}>
-                <View style={{}}>
+                <View style={{marginLeft:50}}>
                   <DatePicker
                     items={dates}
                     value={
@@ -162,59 +161,7 @@ const TopRatedFundType = props => {
                       backgroundColor: 'white', // Background color if needed
                     }}
                   />
-                  {/* item?.sip_period_day
-                          ? item?.sip_period_day
-                          : parseInt(item?.sipDates?.split(",")[0]) */}
-
-                  {/* <RNPickerSelect
-                      ref={focusInput}
-                      placeholder={{
-                        label: "Select a Date",
-                        value: null,
-                      }}
-                      style={{
-                        inputIOS: styles.dropDown,
-                        inputAndroid: styles.dropDown,
-                        placeholder: styles.dropDown,
-                      }}
-                      useNativeAndroidPickerStyle={false}
-                      onValueChange={(value) => {
-                        // setDates({
-                        //   ...dates,
-                        //   [`${category}${index}`]: value,
-                        // });
-                      }}
-                      value={item?.sip_period_day}
-                      selectedValue={item?.sip_period_day}
-                      // value={
-                      //   dates[`${category}${index}`]
-                      //     ? dates[`${category}${index}`]
-                      //     : parseInt(item?.sipDates.split(",")[0])
-                      // }
-                      items={dates}
-                      Icon={() => {
-                        // if (icon) return icon;
-                        return (
-                          <AntDesign
-                            name="caretdown"
-                            size={15}
-                            style={{
-                              marginTop: 7,
-                              marginRight: -25,
-                            }}
-                            color="#C0392B"
-                          />
-                        );
-                      }}
-                    /> */}
-                </View>
               </View>
-              {/* <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.new}>
-                    {item?.sip_period_day ? item?.sip_period_day : 5}
-                  </Text>
-                  <AntDesign name="caretdown" size={20} color="#C0392B" />
-                </View> */}
             </View>
           )}
           <View style={styles.select}>
@@ -227,6 +174,7 @@ const TopRatedFundType = props => {
             <Text style={{fontSize: 13, color: 'black'}}>
               Your SIP will start from{' '}
               <Text style={{color: '#BD3A29'}}>
+                {console.log("Start",item.sip_from_date)}
                 {item?.sip_from_date + ' '}
               </Text>
               To <Text style={{color: '#BD3A29'}}>{item?.sip_end_date}</Text>
@@ -301,7 +249,7 @@ const styles = StyleSheet.create({
   },
   select: {
     alignItems: 'center',
-    //width: "31%",
+    width: "31%",
   },
   no: {
     fontSize: 14,

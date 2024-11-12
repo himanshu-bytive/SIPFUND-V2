@@ -639,7 +639,7 @@ function SideMenu(props) {
                 onPress: () => {
                   clearSummery({}, token);
                   AuthActions.logout();
-                  clearAllData();
+                  // clearAllData();
                   props.navigation.navigate('verify');
                 },
               },

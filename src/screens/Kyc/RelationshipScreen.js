@@ -157,6 +157,8 @@ function RelationshipScreen(props) {
             ref={dataInput}
             style={styles.inputsec}
             placeholder={"Add Query"}
+            placeholderTextColor={"grey"}
+            color="black"
             onChangeText={(data) => {
               setError({ ...errors, data: null });
               setState({ ...state, data });

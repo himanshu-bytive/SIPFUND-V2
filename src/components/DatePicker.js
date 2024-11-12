@@ -11,6 +11,7 @@ const DatePicker = ({ items, value, k, onChange }) => {
     <>
       <RNPickerSelect
         ref={focusInput}
+        placeholderTextColor={"black"}
         placeholder={{
           label: "Select date",
           value: null,
@@ -21,9 +22,10 @@ const DatePicker = ({ items, value, k, onChange }) => {
           placeholder: styles.dropDown,
           height: 12,
           minHeight: 30,
+          color:"black"
         }}
         containerStyle={{ width: 150, height: 70 }}
-        useNativeAndroidPickerStyle={false}
+        useNativeAndroidPickerStyle={true}
         onValueChange={(value) => {
           onChange(value);
           // alert(value);

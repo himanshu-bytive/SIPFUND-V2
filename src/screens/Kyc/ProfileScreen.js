@@ -99,7 +99,7 @@ function ProfileScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
             }}
           />
         }
@@ -169,7 +169,7 @@ function ProfileScreen(props) {
           <View
             style={steps && steps > 1 ? styles.icon_bg_act : styles.icon_bg}
           >
-            <FontAwesome name={"user-o"} size={24} color={Colors.WHITE} />
+            <FontAwesome name={"user"} size={24} color={Colors.WHITE} />
           </View>
           <View style={styles.border}></View>
           <View
