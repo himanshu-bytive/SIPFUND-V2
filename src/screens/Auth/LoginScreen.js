@@ -91,7 +91,7 @@ function LoginScreen(props) {
 
   const checkLoginStatus = async () => {
     const status = await AsyncStorage.getItem('LOGIN');
-    console.log("GOT STATUS",status);
+    // console.log("GOT STATUS",status);
     
     setLoginStatus(status);
   };
@@ -137,15 +137,7 @@ function LoginScreen(props) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        backgroundColor: "#fff",
-      }}
-      behavior="position"
-      enabled
-    >
+    <>
       <Header
         leftComponent={
           <TouchableOpacity
@@ -230,7 +222,7 @@ function LoginScreen(props) {
           </View>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </>
   );
 }
 

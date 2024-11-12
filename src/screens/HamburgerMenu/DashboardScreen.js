@@ -11,6 +11,7 @@ import {
   Dimensions,
   BackHandler,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {Header} from 'react-native-elements';
@@ -18,6 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Cart from '../../components/Cart';
 import moment from 'moment';
 import {Colors} from '../../common';
+import SiteApis from '../../services/SiteApis';
 
 const width = Dimensions.get('window').width;
 
@@ -34,14 +36,57 @@ function DashboardScreen(props) {
   const [currentValue, setCurrentValue] = useState(0);
   const [InvestedValue, setInvestedValue] = useState(0);
   const [ProfitLoss, setProfitLoss] = useState(0);
+  const [DashboardData, setDashboardData] = useState(null);
+  useEffect(() => {
+    // Check if token exists before making API calls
+    if (token) {
+      // Define the phoneNumber based on the user's mobile number
+      const data = {phoneNumber: users?.mobileNo};
+
+      // Asynchronous function to call APIs
+      const fetchData = async () => {
+        try {
+          // Call goalSummary and goalSummaryRetrieve (assuming these are async functions)
+          await goalSummary(data, token);
+          await goalSummaryRetrieve(data, token);
+
+          // Log the current steps (assuming steps is updated correctly in your state)
+          console.log('Current steps', steps);
+
+          // Make the API call to /investments/dashboard
+          const apiData = await SiteApis.apiGetCall(
+            '/investments/dashboard',
+            data,
+            token,
+          );
+          // Log the data received from the API call
+          setDashboardData(apiData?.data);
+
+          console.log('API data:', apiData);
+
+          // If needed, update the state or handle the response here
+          // setSomeState(apiData);  // Example, if you want to set the response to state
+        } catch (error) {
+          console.error('Error during API calls:', error);
+        }
+      };
+
+      // Call the fetchData function to make the requests
+      fetchData();
+    }
+  }, [token]); // Re-run when token or users?.mobileNo changes
 
   useEffect(() => {
-    if (token) {
-      goalSummary({phoneNumber: users?.mobileNo}, token);
-      goalSummaryRetrieve({phoneNumber: users?.mobileNo}, token);
-      console.log('Current steps', steps);
+    if (DashboardData) {
+      console.log('Updated DashboardData', DashboardData);
+      setProfitLoss(
+        (
+          parseFloat(DashboardData.currentValue.toFixed(2)) -
+          parseFloat(DashboardData.totalInvestment.toFixed(2))
+        ).toFixed(2),
+      );
     }
-  }, [token]);
+  }, [DashboardData]);
 
   useEffect(() => {
     const backAction = () => {
@@ -68,12 +113,6 @@ function DashboardScreen(props) {
     if (summaryRetrieve?.currentValue && summaryRetrieve?.totalInvestment) {
       setCurrentValue(parseFloat(summaryRetrieve.currentValue.toFixed(2)));
       setInvestedValue(parseFloat(summaryRetrieve.totalInvestment.toFixed(2)));
-      setProfitLoss(
-        (
-          parseFloat(summaryRetrieve.currentValue.toFixed(2)) -
-          parseFloat(summaryRetrieve.totalInvestment.toFixed(2))
-        ).toFixed(2),
-      );
     } else {
       setCurrentValue(0);
       setInvestedValue(0);
@@ -94,9 +133,9 @@ function DashboardScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate('TopRatedList', {
+              props.navigation.navigate("TopRatedFunds",{screen : 'TopRatedList',params : {
                 fromScreen: 'dashboard',
-              });
+              }});
             }}
           />
         }
@@ -116,17 +155,35 @@ function DashboardScreen(props) {
             <Text style={styles.value}>
               Value as of {moment(new Date()).format('DD-MM-YYYY')}
             </Text>
-            <Text style={styles.rupees}>₹ {currentValue}</Text>
+            {DashboardData ? (
+              <Text style={styles.rupees}>
+                ₹ {DashboardData.currentValue.toFixed(2)}
+              </Text>
+            ) : (
+              <ActivityIndicator size="large" color={Colors.RED} />
+            )}
             <Text style={styles.value}>Current Value</Text>
           </View>
 
           <View style={styles.value_sec}>
             <View style={styles.Profit}>
-              <Text style={styles.investment}>{`₹ ${InvestedValue}`}</Text>
+              {DashboardData ? (
+                <Text style={styles.rupees}>
+                  ₹ {DashboardData.netTotalInvestment.toFixed(2)}
+                </Text>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.RED} />
+              )}
               <Text style={styles.investment2}>Investment</Text>
             </View>
             <View style={styles.Profit}>
-              <Text style={styles.investment}>₹ {ProfitLoss}</Text>
+              {DashboardData ? (
+                <Text style={styles.rupees}>
+                  ₹ {ProfitLoss}
+                </Text>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.RED} />
+              )}
               <Text style={styles.investment2}>Profit/Loss</Text>
             </View>
           </View>
@@ -339,7 +396,9 @@ function DashboardScreen(props) {
             onPress={() => {
               if (steps > 5) {
                 // If steps are greater than 5, navigate to TransactionHistory
-                props.navigation.navigate('Hamburg',{screen : 'TransactionHistory'});
+                props.navigation.navigate('Hamburg', {
+                  screen: 'TransactionHistory',
+                });
               } else {
                 // If steps are 4 or less
                 if (steps < 4) {
@@ -396,7 +455,10 @@ function DashboardScreen(props) {
         </View>
 
         <View style={styles.history_sec2}>
-          <TouchableOpacity onPress={() => props.navigation.navigate("Hold",{screen : 'Owner'})}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('Hold', {screen: 'Owner'})
+            }>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image

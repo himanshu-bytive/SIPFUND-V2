@@ -19,18 +19,20 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
 
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (inputText.length > 1) {
+      if (inputText.length >= 1) {
         try {
           const response = await axios.get(
             `http://159.65.145.3:8085/api/amc/search?amcname=${inputText}`
           );
           if (response?.data?.results && response?.data?.results?.length > 10) {
+            setShowSuggestions(true);
             setSuggestions(response.data.results.slice(0, 10));
           } else {
-            setSuggestions(response.data.results);
+            setShowSuggestions(false);
+            // setSuggestions(response.data.results);
           }
-          setShowSuggestions(true);
         } catch (error) {
+          setShowSuggestions(false);
           console.error(error);
         }
       } else {
@@ -72,9 +74,9 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
         style={[
           styles.input,
           {
-            borderBottomLeftRadius: showSuggestions ? 0 : 10,
-            borderBottomRightRadius: showSuggestions ? 0 : 10,
-            borderBottomWidth: showSuggestions ? 0 : 1,
+            borderBottomLeftRadius: showSuggestions ? 10 : 10,
+            borderBottomRightRadius: showSuggestions ? 10 : 10,
+            borderBottomWidth: showSuggestions ? 1 : 1,
           },
         ]}
         value={inputText}
@@ -91,7 +93,7 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
           onPress={handleBlur}
         />
       ) : null}
-      {showSuggestions && (
+      {showSuggestions && inputText.length >=1 && (
         <View style={styles.suggestionContainer}>
           <FlatList
             data={suggestions}
@@ -148,8 +150,10 @@ const styles = StyleSheet.create({
     top: 50,
     backgroundColor: "#ffffff",
     zIndex: 100,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    marginTop:5,
+    marginLeft:2
   },
   flatList: {
     maxHeight: 200,

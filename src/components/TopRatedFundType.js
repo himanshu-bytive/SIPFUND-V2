@@ -1,17 +1,17 @@
 /** @format */
 
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import React, {useState, useRef, useEffect, useContext} from 'react';
+import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { Image, CheckBox } from "react-native-elements";
-import { Styles, Config, Colors, FormValidate } from "../common";
-import { MySelectPicker } from ".";
-import { connect } from "react-redux";
-import RNPickerSelect from "react-native-picker-select";
-import DatePicker from "../components/DatePicker";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Image, CheckBox} from 'react-native-elements';
+import {Styles, Config, Colors, FormValidate} from '../common';
+import {MySelectPicker} from '.';
+import {connect} from 'react-redux';
+import RNPickerSelect from 'react-native-picker-select';
+import DatePicker from '../components/DatePicker';
 
-const TopRatedFundType = (props) => {
+const TopRatedFundType = props => {
   const {
     onPress,
     item,
@@ -38,11 +38,11 @@ const TopRatedFundType = (props) => {
   useEffect(() => {
     if (item?.sipDates) {
       if (item?.sipDates.length > 0) {
-        var sipDates = item?.sipDates.split(",");
-        var newDates = sipDates.map((object) => {
+        var sipDates = item?.sipDates.split(',');
+        var newDates = sipDates.map(object => {
           return {
-            label: ("0" + object.replace(/\s/g, "")).slice(-2),
-            value: ("0" + object.replace(/\s/g, "")).slice(-2),
+            label: ('0' + object.replace(/\s/g, '')).slice(-2),
+            value: ('0' + object.replace(/\s/g, '')).slice(-2),
           };
         });
         setDates(newDates);
@@ -56,12 +56,12 @@ const TopRatedFundType = (props) => {
   useEffect(() => {
     if (item?.existingFolio) {
       setValues(
-        item?.existingFolio.map((items) => {
+        item?.existingFolio.map(items => {
           return {
             value: items.folio,
             label: items.folio,
           };
-        })
+        }),
       );
     }
   }, [item]);
@@ -84,7 +84,7 @@ const TopRatedFundType = (props) => {
 
           <AntDesign
             onPress={() => deleteItem(item?.product_name)}
-            name={"delete"}
+            name={'delete'}
             size={25}
             color={Colors.RED}
           />
@@ -94,8 +94,7 @@ const TopRatedFundType = (props) => {
         <View style={styles.border_sec}>
           <View style={styles.border}>
             <View
-              style={{ borderWidth: 1, borderColor: Colors.DEEP_GRAY }}
-            ></View>
+              style={{borderWidth: 1, borderColor: Colors.DEEP_GRAY}}></View>
           </View>
           <View style={styles.icons}>
             <TouchableOpacity style={styles.circle} onPress={onPress}>
@@ -113,27 +112,27 @@ const TopRatedFundType = (props) => {
             placeholder={
               values
                 ? values.length > 0
-                  ? "Select Folio"
-                  : "New Folio"
-                : "New Folio"
+                  ? 'Select Folio'
+                  : 'New Folio'
+                : 'New Folio'
             }
-            onChange={(val) => {
+            onChange={val => {
               setFolio1(val);
               onChangeFolio(val, index, type);
             }}
             style={{
               fontSize: 12,
-              color: "#888",
+              color: '#888',
             }}
             containerStyle={{
               paddingRight: 17,
-              color: "#000",
+              color: '#000',
             }}
             icon={
               <AntDesign
-                style={{ top: 7 }}
+                style={{marginTop:15}}
                 name="down"
-                color={"#888"}
+                color={'#888'}
                 size={18}
               />
             }
@@ -147,24 +146,21 @@ const TopRatedFundType = (props) => {
                     items={dates}
                     value={
                       item?.sip_period_day
-                        ? ("0" + item?.sip_period_day).slice(-2)
-                        : ("0" + parseInt(item?.sipDates?.split(",")[0])).slice(
-                            -2
-                          ) // '04'
+                        ? ('0' + item?.sip_period_day).slice(-2)
+                        : ('0' + parseInt(item?.sipDates?.split(',')[0])).slice(
+                            -2,
+                          )
                     }
-                    // value={
-                    //   item?.sip_period_day
-                    //     ? item?.sip_period_day
-                    //     : (
-                    //         "0" + parseInt(item?.sipDates?.split(",")[0])
-                    //       ).slice(-2) // '04'
-                    // }
-                    onChange={(e) => {
+                    onChange={e => {
                       if (onChangeDate && e) {
                         onChangeDate(e, index);
                       }
                     }}
                     k={() => {}}
+                    style={{
+                      color: 'black', // Change text color
+                      backgroundColor: 'white', // Background color if needed
+                    }}
                   />
                   {/* item?.sip_period_day
                           ? item?.sip_period_day
@@ -222,18 +218,18 @@ const TopRatedFundType = (props) => {
             </View>
           )}
           <View style={styles.select}>
-            <Text style={styles.no}>{fromSIP ? "SIP" : "Amount"}</Text>
+            <Text style={styles.no}>{fromSIP ? 'SIP' : 'Amount'}</Text>
             <Text style={styles.new}>₹{item?.amount}</Text>
           </View>
         </View>
         {fromSIP && (
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontSize: 13 }}>
-              Your SIP will start from{" "}
-              <Text style={{ color: "#BD3A29" }}>
-                {item?.sip_from_date + " "}
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 13, color: 'black'}}>
+              Your SIP will start from{' '}
+              <Text style={{color: '#BD3A29'}}>
+                {item?.sip_from_date + ' '}
               </Text>
-              To <Text style={{ color: "#BD3A29" }}>{item?.sip_end_date}</Text>
+              To <Text style={{color: '#BD3A29'}}>{item?.sip_end_date}</Text>
             </Text>
           </View>
         )}
@@ -248,7 +244,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
     backgroundColor: Colors.WHITE,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 5,
@@ -261,15 +257,16 @@ const styles = StyleSheet.create({
     borderColor: Colors.GREY_1,
   },
   company: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
   management: {
     marginLeft: 10,
-    width: "70%",
+    width: '70%',
   },
   axis: {
     fontSize: 15,
+    color: 'black',
   },
   moderately: {
     fontSize: 12,
@@ -278,31 +275,32 @@ const styles = StyleSheet.create({
   axisimg: {
     height: 50,
     width: 50,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   checkbox: {
-    position: "absolute",
+    position: 'absolute',
     right: -20,
     top: -15,
   },
   border_sec: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 10,
   },
   border: {
-    width: "80%",
+    width: '80%',
   },
   icons: {
-    width: "10%",
+    width: '10%',
     marginTop: -15,
     marginLeft: 10,
   },
   selectfolio_sec: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:"center"
   },
   select: {
-    alignItems: "center",
+    alignItems: 'center',
     //width: "31%",
   },
   no: {
@@ -311,6 +309,7 @@ const styles = StyleSheet.create({
   },
   new: {
     fontSize: 16,
+    color: 'black',
   },
   circle: {
     borderWidth: 2,
@@ -324,22 +323,22 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
     width: 100,
     height: 25,
-    alignSelf: "center",
-    textAlign: "center",
+    alignSelf: 'center',
+    textAlign: 'center',
   },
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   cart: state.cartActions.cart,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { CartActions } = require("../store/CartActionsRedux");
+  const {dispatch} = dispatchProps;
+  const {CartActions} = require('../store/CartActionsRedux');
   return {
     ...stateProps,
     ...ownProps,
-    updateCart: (cart) => {
+    updateCart: cart => {
       CartActions.updateCart(dispatch, cart);
     },
   };
@@ -347,5 +346,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   undefined,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(TopRatedFundType);

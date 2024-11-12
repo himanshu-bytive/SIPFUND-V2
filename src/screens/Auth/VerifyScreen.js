@@ -236,7 +236,7 @@ function VerifyScreen(props) {
       // Set a timer to hide the loader after 5 seconds
       setTimeout(() => {
         setIsLoading(false); // Hide the loader after 5 seconds
-      }, 5000);
+      }, 10000);
     } else {
       phoneInput.current.focus();
       setError({ ...errors, phone: "Please check your mobile number" });

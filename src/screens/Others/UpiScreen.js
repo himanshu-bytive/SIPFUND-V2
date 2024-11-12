@@ -633,7 +633,7 @@ function UpiScreen(props) {
           leftComponent={
             <TouchableOpacity
               // onPress={() => props.navigation.toggleDrawer()}
-              onPress={() => props.navigation.navigate("TopRatedSubmit")}
+              onPress={() => props.navigation.goBack()}
               style={{ marginTop: 25 }}
             >
               {/* <Entypo name={"menu"} size={30} color={Colors.RED} /> */}

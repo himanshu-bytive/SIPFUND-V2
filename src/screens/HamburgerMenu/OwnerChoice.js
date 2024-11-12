@@ -1052,7 +1052,7 @@ const styles = StyleSheet.create({
   bordersec: {
     borderWidth: 1,
     borderColor: Colors.GRAY_DEEP_1,
-    paddingVertical: 5,
+    paddingVertical: 0,
     paddingHorizontal: 10,
     marginTop: 3,
     height: 45,
