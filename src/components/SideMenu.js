@@ -54,6 +54,8 @@ function SideMenu(props) {
     rmDetails,
     getrm,
     users,
+    resetApp,
+    logout
   } = props;
   const [img, setImg] = useState(null);
   const [visibleKyc, setVisibleKyc] = useState(false);
@@ -636,11 +638,18 @@ function SideMenu(props) {
               },
               {
                 text: 'OK',
-                onPress: () => {
-                  clearSummery({}, token);
-                  AuthActions.logout();
-                  // clearAllData();
-                  props.navigation.navigate('verify');
+                onPress: async () => {
+                  console.log('Clearing summary...');
+                  await clearSummery({}, token);
+                  
+                  console.log('Resetting Redux state...');
+                  await resetApp();
+                  
+                  console.log('Logging out...');
+                  await logout();
+                  
+                  console.log('Navigating to verify screen...');
+                  props.navigation.navigate("Auth",{screen :'verify'});
                 },
               },
             ]);
@@ -810,6 +819,12 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getrm: token => {
       SideMenuActions.getrm(dispatch, token);
     },
+    resetApp : () =>{
+      AuthActions.resetApp(dispatch);
+    },
+    logout : () => {
+      AuthActions.logout();
+    }
   };
 };
 export default connect(

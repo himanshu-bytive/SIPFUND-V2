@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const types = {
   LOGOUT: "LOGOUT",
-
+  RESET: "RESET",
   FETCH_VERIFY_PENDING: "FETCH_VERIFY_PENDING",
   FETCH_VERIFY_SUCCESS: "FETCH_VERIFY_SUCCESS",
   FETCH_VERIFY_FAILURE: "FETCH_VERIFY_FAILURE",
@@ -193,11 +193,22 @@ export const AuthActions = {
       });
     }
   },
-  logout() {
-    AsyncStorage.removeItem("USERNAME");
-    AsyncStorage.removeItem('LOGIN');
-    console.log("Done");
+  logout : async () => {
+    console.log("Logging out...");
+    await AsyncStorage.removeItem("USERNAME");
+    await AsyncStorage.removeItem('LOGIN');
+    console.log("Done logging out.");
     return { type: types.LOGOUT };
+  },
+  resetApp : async (dispatch) => {
+    try {
+      console.log("Dispatching RESET action...");
+      dispatch({ type: types.RESET });
+
+      console.log("App state has been reset.");
+    } catch (error) {
+      console.error("Error during resetApp:", error);
+    }
   },
   creatAccount: async (dispatch, params) => {
     dispatch({ type: types.FETCH_CREAT_ACCOUNT_PENDING });
@@ -415,6 +426,10 @@ export const reducer = (state = initialState, action) => {
         token: `Bearer ${token}`,
         wrongPassCount: 0,
       };
+    }
+    case types.RESET: {
+      // Reset the state to initial state
+      return { ...initialState, phones: state.phones };
     }
     case types.LOGOUT:
       return Object.assign({}, initialState, { phones: state.phones });

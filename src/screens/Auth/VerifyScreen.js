@@ -113,6 +113,7 @@ function VerifyScreen(props) {
   useEffect(() => {
     checkAllPermissions();
     GetCurrentLocation();
+    setIsLoading(false);
   }, []);
 
   function checkAllPermissions() {

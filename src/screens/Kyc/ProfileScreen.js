@@ -43,9 +43,7 @@ function ProfileScreen(props) {
     navigation,
     iinBank,
   } = props;
-  console.log("🚀 ~ ProfileScreen ~ iinBank:", JSON.stringify(iinBank));
-  console.log("My User",user.IIN);
-  console.log("IIN Bank Data:", iinBank);
+ 
   const [showLoader, setShowLoader] = useState(false);
   useEffect(() => {
     setShowLoader(true); // Show loader immediately on mount
