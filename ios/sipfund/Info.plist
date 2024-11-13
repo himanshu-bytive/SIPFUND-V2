@@ -17,11 +17,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string> <!-- Replace with your app version -->
+    <string>1.0.57</string> <!-- Replace with your app version -->
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>1.0.0</string> <!-- Replace with your current project version -->
+    <string>78</string> <!-- Replace with your current project version -->
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>

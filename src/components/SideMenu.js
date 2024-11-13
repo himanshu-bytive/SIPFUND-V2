@@ -26,6 +26,7 @@ import {AuthActions} from '../store/AuthRedux';
 import {Overlay, Header, CheckBox} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { HomeActions } from '../store/HomeRedux';
 
 function SideMenu(props) {
   const pageActiveKyc = useRef(false);
@@ -55,7 +56,8 @@ function SideMenu(props) {
     getrm,
     users,
     resetApp,
-    logout
+    logout,
+    resetData,
   } = props;
   const [img, setImg] = useState(null);
   const [visibleKyc, setVisibleKyc] = useState(false);
@@ -642,6 +644,8 @@ function SideMenu(props) {
                   console.log('Clearing summary...');
                   await clearSummery({}, token);
                   
+                  await resetData();
+
                   console.log('Resetting Redux state...');
                   await resetApp();
                   
@@ -824,6 +828,9 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
     logout : () => {
       AuthActions.logout();
+    },
+    resetData : () =>{
+      HomeActions.resetData();
     }
   };
 };

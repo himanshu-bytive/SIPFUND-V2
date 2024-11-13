@@ -162,13 +162,13 @@ function CompleteDetailsBankScreen(props, route) {
       setTimeout(() => {
         setState({
           accountType:
-            !props?.navigation?.state?.params?.newBankAccount &&
+            !props?.route?.params?.newBankAccount &&
             nseDetails.acc_type.ACC_TYPE,
           accountNumber:
-            !props?.navigation?.state?.params?.newBankAccount &&
+            !props?.route?.params?.newBankAccount &&
             nseDetails.acc_no,
           ifsc:
-            !props?.navigation?.state?.params?.newBankAccount &&
+            !props?.route?.params?.newBankAccount &&
             nseDetails.ifsc_code,
           bank: nseDetails.bank_name.BANK_CODE,
           branchName: nseDetails.branch_name,
@@ -476,7 +476,7 @@ function CompleteDetailsBankScreen(props, route) {
 
     // setTimeout(() => createRegister(paramsNew, token), 3000);
     setTimeout(() => {
-      if (!props?.navigation?.state?.params?.newBankAccount) {
+      if (!props?.route?.params?.newBankAccount) {
         createRegister(paramsNew, token);
         setTimeout(() => {
           FatcaKYC(FatcaObj, token);
@@ -822,7 +822,7 @@ function CompleteDetailsBankScreen(props, route) {
           )}
 
           {/* click_box */}
-          {!props?.navigation?.state?.params?.newBankAccount ? (
+          {!props?.route?.params?.newBankAccount ? (
             <View style={styles.footer}>
               <View style={styles.click_box}>
                 <TouchableOpacity
@@ -851,7 +851,7 @@ function CompleteDetailsBankScreen(props, route) {
                 
                 style={{ marginVertical: 10 }}
               > */}
-              {props?.navigation?.state?.params?.newBankAccount && (
+              {props?.route?.params?.newBankAccount && (
                 <View style={{ marginBottom: 10, marginHorizontal: 10 }}>
                   <Text style={styles.occupation}>
                     Proof Of Account <Text style={styles.error}>*</Text>

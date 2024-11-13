@@ -475,8 +475,8 @@ function UpiScreen(props) {
 
   const getParams = (upi, mandate) => {
     // console.log(
-    //   "🚀 ~ getParams ~ props.navigation.state?.params?.cart:",
-    //   props.navigation.state?.params?.cart
+    //   "🚀 ~ getParams ~ props.route.params?.cart:",
+    //   props.route.params?.cart
     // );
     // return;
 
@@ -484,7 +484,7 @@ function UpiScreen(props) {
       service_request: {
         ac_no: profile?.AC_NO,
         ach_amt: res?.responseString?.length
-          ? props?.navigation?.state.params?.sum
+          ? props?.route?.params?.sum
           : 100000,
         ach_enddate: endDate(),
         ach_fromdate: fromDate(),
@@ -563,8 +563,8 @@ function UpiScreen(props) {
         groupType: props.route.params?.groupType,
         groupName: props.route.params?.groupName,
       },
-      childtrans: getTransactions(props.navigation.state?.params?.cart),
-      //childtrans: props.navigation.state?.params?.cart,
+      childtrans: getTransactions(props.route.params?.cart),
+      //childtrans: props.route.params?.cart,
     };
   };
 
@@ -590,7 +590,7 @@ function UpiScreen(props) {
       resetWebUrl();
       setWebViewActive(false);
       deletCart(
-        props.navigation.state?.params?.cart.map((item) => item._id),
+        props.route.params?.cart.map((item) => item._id),
         token
       );
       getCartDetails(token);
@@ -601,7 +601,7 @@ function UpiScreen(props) {
       resetWebUrl();
       setWebViewActive(false);
       deletCart(
-        props.navigation.state?.params?.cart.map((item) => item._id),
+        props.route.params?.cart.map((item) => item._id),
         token
       );
       getCartDetails(token);
@@ -751,7 +751,7 @@ function UpiScreen(props) {
                       }
                       let params = getParams(true, false);
                       console.log(
-                        "🚀 ~ UpiScreen ~ params:",
+                        "Upi",
                         JSON.stringify(params)
                       );
                       setClicked(true);

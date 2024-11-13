@@ -64,7 +64,7 @@ function PlanSearchScreen(props) {
         name: value.productName,
         productCode: value.productISIN,
         isin: value.productISIN,
-        default_min_amount: props.navigation.state.params?.isLumpsum
+        default_min_amount: props.route.params?.isLumpsum
           ? value.minimumLumpsumAmount
           : value.minimumSIPAmount,
         default_date: value?.sipDates.split(",")[0],
