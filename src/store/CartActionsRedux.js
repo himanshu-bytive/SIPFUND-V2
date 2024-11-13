@@ -28,6 +28,7 @@ export const CartActions = {
   addItem: async (dispatch, token) => {
     dispatch({ type: types.FETCH_ADD_ITEM_PENDING });
     let data = await SiteAPI.apiPostCall("/addCart", {}, token);
+    
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_ADD_ITEM_FAILURE, error: data.message });
@@ -58,6 +59,8 @@ export const CartActions = {
   addItomToSip: async (dispatch, params, token) => {
     dispatch({ type: types.FETCH_ADD_ITEM_SIP_PENDING });
     let data = await SiteAPI.apiPostCall("/addCart", params, token);
+    console.log("MY DATA",data);
+    
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_ADD_ITEM_SIP_FAILURE, error: data.message });
@@ -75,6 +78,8 @@ export const CartActions = {
   cartDetails: async (dispatch, token) => {
     dispatch({ type: types.FETCH_CART_DETAILS_PENDING });
     let data = await SiteAPI.apiGetCall("/addCart", {}, token);
+    console.log("CARTDETAILS",data.cartDetails[0]);
+    
     if (data.error) {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_CART_DETAILS_FAILURE, error: data.message });

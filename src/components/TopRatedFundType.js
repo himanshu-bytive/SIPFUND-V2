@@ -37,6 +37,7 @@ const TopRatedFundType = props => {
 
   useEffect(() => {
     if (item?.sipDates) {
+      
       if (item?.sipDates.length > 0) {
         var sipDates = item?.sipDates.split(',');
         var newDates = sipDates.map(object => {
@@ -174,7 +175,7 @@ const TopRatedFundType = props => {
             <Text style={{fontSize: 13, color: 'black'}}>
               Your SIP will start from{' '}
               <Text style={{color: '#BD3A29'}}>
-                {console.log("Start",item.sip_from_date)}
+                {console.log("Start",item)}
                 {item?.sip_from_date + ' '}
               </Text>
               To <Text style={{color: '#BD3A29'}}>{item?.sip_end_date}</Text>

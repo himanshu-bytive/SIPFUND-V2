@@ -83,6 +83,9 @@ function HomeScreen(props) {
           setUsername(storedUsername);
           setIsUsernameFetched(true); 
           console.log("Hi", storedUsername);
+          console.log("Your steps",steps);
+          console.log("User",users);
+          
         }
       } catch (error) {
         console.error('Error retrieving username:', error);
@@ -117,6 +120,8 @@ function HomeScreen(props) {
   }, [emandateLink]);
 
   useEffect(() => {
+    console.log("TOKEN",token);
+    
     if (token) {
       getsteps({}, token);
       getHomeData({}, token);
@@ -331,7 +336,7 @@ function HomeScreen(props) {
                           )}
                           {users?.IIN && steps > 5 ? (
                             <Text
-                              onPress={() => props.navigation.navigate("Owner")}
+                              onPress={() => props.navigation.navigate("Hold",{screen : "Owner"})}
                               style={styles.startInvestmentText}
                             >
                               + Start Investing
@@ -1105,6 +1110,7 @@ const styles = StyleSheet.create({
   HelloIinvestor: {
     fontSize: 14,
     fontWeight: "bold",
+    color:"black"
   },
   HelloIinvestor1: {
     fontSize: 14,

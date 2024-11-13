@@ -106,7 +106,7 @@ function LoginScreen(props) {
 
   const checkLoginStatus = async () => {
     const status = await AsyncStorage.getItem('LOGIN');
-    console.log("GOT STATUS",status);
+    // console.log("GOT STATUS",status);
     
     setLoginStatus(status);
   };

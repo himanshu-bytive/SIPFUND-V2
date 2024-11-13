@@ -436,7 +436,8 @@ function TopRatedHomeScreen(props) {
         groupType: "toprated",
       },
     };
-
+    console.log("GOT THE PARAMS",params);
+    
     // setTimeout(() => {
     toggleOverlay();
     addItomToSip(params, token);

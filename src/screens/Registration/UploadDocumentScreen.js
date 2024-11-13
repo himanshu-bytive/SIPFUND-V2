@@ -35,7 +35,7 @@ const documentsMap = {
   AVATAR: "Avatar",
   DL: "Driving License",
   IP: "IIN Physical Form",
-  //KF: "Investor Form",
+  // KF: "Investor Form",
   AC: "Investor Form",
 };
 
@@ -166,12 +166,12 @@ function UploadDocumentScreen(props) {
   }, [token, uploadSuccess]);
 
   useEffect(() => {
-    if (docs) props.navigation.navigate("UploadDocument");
+    if (docs) props.navigation.navigate("Reg",{screen : "UploadDocument"});
   }, [docs]);
 
   const zoomDocuments = (uri) => {
     setUri(uri);
-    props.navigation.navigate("ZoomDocuments");
+    props.navigation.navigate("Reg",{screen : "ZoomDocuments"});
   };
 
   const renderitem = ({ item, index }) => {
@@ -185,7 +185,7 @@ function UploadDocumentScreen(props) {
           width: Styles.width - 50,
         }}
       >
-        <Text style={{ marginBottom: 5 }}>
+        <Text style={{ marginBottom: 5,color:"black" }}>
           {documentsMap[item.docType]
             ? documentsMap[item.docType]
             : item.docType}
@@ -218,7 +218,7 @@ function UploadDocumentScreen(props) {
           }}
         >
           <View>
-            <Icon name="arrow-back-ios" size={20} />
+            <Icon name="arrow-back-ios" color={"black"} size={20} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -235,7 +235,7 @@ function UploadDocumentScreen(props) {
           }}
         >
           <View>
-            <Icon name="arrow-forward-ios" size={20} />
+            <Icon name="arrow-forward-ios" color={"black"} size={20} />
           </View>
         </TouchableOpacity>
       </View>
@@ -264,7 +264,7 @@ function UploadDocumentScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
             }}
           />
         }
@@ -289,9 +289,9 @@ function UploadDocumentScreen(props) {
           </Text>
         </View>
 
-        {/* container_sec */}
         <View style={styles.container_sec}>
           <Text style={styles.we_need}>We need the Required Documents</Text>
+          {console.log("MyDocument",document)}
           {document.map((item, key) => (
             <View key={key} style={styles.pan_sec}>
               {/* {
@@ -355,6 +355,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: "45%",
     marginTop: 20,
+
   },
   document: {
     fontSize: 14,
@@ -385,6 +386,7 @@ const styles = StyleSheet.create({
   },
   review_documents: {
     backgroundColor: "#EAE9EE",
+    color:"black"
   },
   review: {
     fontSize: 20,
