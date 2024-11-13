@@ -85,7 +85,7 @@ export const HomeActions = {
       timeoutRef = setTimeout(() => {
         HomeActions.updatePan(dispatch, params, tokan);
         SideMenuActions.updateInn(dispatch, newParams, tokan);
-        AuthActions.getProfile(dispatch, params, tokan);
+        AuthActions.getProfile(dispatch,{ service_request: { iin: newParams.iin  } }, tokan);
         RegistrationActions.getDocuments(dispatch, tokan);
       }, 1000);
     } else {

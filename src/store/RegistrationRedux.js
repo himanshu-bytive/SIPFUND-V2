@@ -4,6 +4,7 @@ import SiteAPI from "../services/SiteApis";
 import { Alert } from "react-native";
 import axios from "axios";
 import Config from "../common/Config";
+import { AuthActions } from "./AuthRedux";
 const types = {
   GET_OCCUPATION: "GET_OCCUPATION",
 
@@ -226,6 +227,10 @@ export const RegistrationActions = {
           : data.IIN,
       });
       if (!params?.hasOwnProperty("process_flag")) {
+        const newParams = { iin: data.IIN }; // Adjust as necessary
+        console.log("YES HITTING USER API",data.IIN);
+        
+        await AuthActions.getProfile(dispatch, { service_request: newParams }, token);
         FatcaKYC(dispatch, params.FatcaObj, token);
       }
     }
