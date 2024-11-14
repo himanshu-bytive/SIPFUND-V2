@@ -545,7 +545,9 @@ function OwnerChoice(props) {
             cart && (
               <Cart
                 nav={() => {
-                  props.navigation.navigate("Dashboard",{screen : "TopRatedList"});
+                  props.navigation.navigate("TopRatedList", {
+                    fromScreen: "Owner"
+                  });                  
                 }}
               />
             )

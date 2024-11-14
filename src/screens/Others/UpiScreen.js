@@ -665,7 +665,7 @@ function UpiScreen(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 22 }}>
+                  <Text style={{ fontSize: 22,color:"black" }}>
                     Your Payment is {`${capitalizeWord(PaymentStatus)}`}
                   </Text>
                   <View
@@ -680,29 +680,29 @@ function UpiScreen(props) {
                     }}
                   >
                     <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}>Customer ID</Text>
-                      <Text style={{ marginLeft: 10 }}>{CustId}</Text>
+                      <Text style={{ fontWeight: "bold",color:"black" }}>Customer ID</Text>
+                      <Text style={{ marginLeft: 10,color:"black" }}>{CustId}</Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}>
+                      <Text style={{ fontWeight: "bold",color:"black" }}>
                         Payment Reference Number
                       </Text>
-                      <Text style={{ marginLeft: 10 }}>{PaymentRefNo}</Text>
+                      <Text style={{ marginLeft: 10,color:"black" }}>{PaymentRefNo}</Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}>Payment Status</Text>
-                      <Text style={{ marginLeft: 10 }}>{PaymentStatus}</Text>
+                      <Text style={{ fontWeight: "bold",color:"black" }}>Payment Status</Text>
+                      <Text style={{ marginLeft: 10 ,color:"black"}}>{PaymentStatus}</Text>
                     </View>
                     <View style={{ flexDirection: "row", width: "60%" }}>
-                      <Text style={{ fontWeight: "bold" }}>
+                      <Text style={{ fontWeight: "bold",color:"black" }}>
                         Payment Message
                       </Text>
-                      <Text style={{ marginLeft: 10 }}>{PaymentMsg}</Text>
+                      <Text style={{ marginLeft: 10 ,color:"black"}}>{PaymentMsg}</Text>
                     </View>
                     <TouchableOpacity
                       activeOpacity={0.5}
                       onPress={() => {
-                        props.navigation.navigate("Home");
+                        props.navigation.navigate("Root",{screen : "Home"});
                       }}
                       style={{
                         height: 40,
@@ -717,7 +717,7 @@ function UpiScreen(props) {
                       <Text style={{ color: "white" }}>Go To Dashboard</Text>
                     </TouchableOpacity>
                   </View>
-                  <Text
+                 {PaymentStatus != "PENDING" &&  <Text
                     style={{
                       fontSize: 20,
                       marginVertical: 10,
@@ -727,7 +727,7 @@ function UpiScreen(props) {
                   >
                     Thank You for the payment. An automated payment reciept will
                     be sent to your registered email
-                  </Text>
+                  </Text>}
                 </View>
               </View>
             </>

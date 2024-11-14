@@ -46,7 +46,7 @@ function PlanSubmitScreen(props) {
   useEffect(() => {
     if (paymentInitiated && !isFetching && pincodeInfo) {
       setPaymentInitiated(false);
-      props.navigation.navigate("Dashboard",{screen : "TopRatedList", params : {
+      props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList", params : {
         fromScreen: "PlanHome",
         planName: goalDetail?.goal,
         currentTab: props.route.params?.isLumpsum

@@ -49,8 +49,8 @@ function RedeemCheckout(props) {
 
   const remove = (key, type) => {
     Alert.alert(
-      "Exit from Sipfund!",
-      "Do you want to close this application?",
+      "Are you sure?",
+      "Do you want to remove this scheme.",
       [
         {
           text: "Cancel",

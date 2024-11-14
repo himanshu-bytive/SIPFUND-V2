@@ -418,6 +418,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.DEEP_GRAY,
     width: "60%",
     fontSize: 16,
+    color:"black"
   },
   botton_box: {
     width: "30%",
