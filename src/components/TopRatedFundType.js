@@ -138,31 +138,34 @@ const TopRatedFundType = props => {
               />
             }
           />
-          {fromSIP && (
+         {fromSIP && (
             <View style={styles.select}>
               <Text style={styles.no}>SIP Date</Text>
-                <View style={{marginLeft:50}}>
+                <View style={{marginTop:-20}}>
                   <DatePicker
                     items={dates}
                     value={
                       item?.sip_period_day
-                        ? ('0' + item?.sip_period_day).slice(-2)
-                        : ('0' + parseInt(item?.sipDates?.split(',')[0])).slice(
-                            -2,
-                          )
+                        ? ("0" + item?.sip_period_day).slice(-2)
+                        : ("0" + parseInt(item?.sipDates?.split(",")[0])).slice(
+                            -2
+                          ) // '04'
                     }
-                    onChange={e => {
+                    onChange={(e) => {
                       if (onChangeDate && e) {
                         onChangeDate(e, index);
                       }
                     }}
                     k={() => {}}
-                    style={{
-                      color: 'black', // Change text color
-                      backgroundColor: 'white', // Background color if needed
-                    }}
+                    style={{color:"white"}}
                   />
               </View>
+              <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.new}>
+                    {item?.sip_period_day ? item?.sip_period_day : 5}
+                  </Text>
+                  <AntDesign name="caretdown" size={20} color="#C0392B" />
+                </View>
             </View>
           )}
           <View style={styles.select}>
@@ -171,7 +174,7 @@ const TopRatedFundType = props => {
           </View>
         </View>
         {fromSIP && (
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',marginTop:10}}>
             <Text style={{fontSize: 13, color: 'black'}}>
               Your SIP will start from{' '}
               <Text style={{color: '#BD3A29'}}>
@@ -246,11 +249,14 @@ const styles = StyleSheet.create({
   selectfolio_sec: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:"center"
+    alignItems:"center",
   },
   select: {
-    alignItems: 'center',
-    width: "31%",
+    width: "auto",
+    backgroundColor:"white",
+    marginTop:10,
+    height:"auto",
+    alignItems:"center"
   },
   no: {
     fontSize: 14,
@@ -259,6 +265,7 @@ const styles = StyleSheet.create({
   new: {
     fontSize: 16,
     color: 'black',
+    marginRight:5
   },
   circle: {
     borderWidth: 2,
