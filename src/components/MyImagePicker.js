@@ -57,6 +57,7 @@ const MyImagePicker = props => {
   const [clickedImage, setClickedImage] = useState('');
   const addressVerificationDocs = ['AA1', 'AA2', 'DL'];
   const [photoUri, setPhotoUri] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     const checkCameraPermissions = async () => {
       const status = await check(PERMISSIONS.ANDROID.CAMERA);
@@ -110,6 +111,14 @@ const MyImagePicker = props => {
     }
   }, [items]);
 
+  const handleCameraPress = () => {
+    if (item?.name !== null) {
+      setModalVisible(true); // Show the modal when the camera button is pressed
+    } else {
+      Toast.show('You need to select a document first!', Toast.LONG); // Show Toast if no document is selected
+    }
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibrary({
       mediaTypes: 'photo',
@@ -160,16 +169,38 @@ const MyImagePicker = props => {
   const FileIcons = ({item}) => (
     <>
       <TouchableOpacity
-        style={{marginRight: 10}}
-        onPress={() => {
-          if (item?.name !== null) {
-            setCameraVisible(true);
-          } else {
-            Toast.show('You need to select a document first!', Toast.LONG);
-          }
-        }}>
+        style={{ marginRight: 10 }}
+        onPress={handleCameraPress} // Trigger the modal on press
+         // setCameraVisible(true);
+      >
         <Entypo name={'camera'} size={22} color="#000000" />
       </TouchableOpacity>
+
+      {/* Modal */}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalVisible} // Control visibility with the modalVisible state
+        onRequestClose={() => setModalVisible(false)} // Close the modal when back button is pressed (on Android)
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%', alignItems: 'center' }}>
+            {/* Icon */}
+            <Entypo name="camera" size={40} color="black" style={{ marginBottom: 15 }} />
+            {/* Message */}
+            <Text style={{ fontSize: 18, textAlign: 'center',color:"black" }}>
+              The camera feature is currently under maintenance. Please upload your document manually using icon <Entypo name={item?.type} size={22} color="#000000" />
+            </Text>
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)} // Close modal when clicked
+              style={{ marginTop: 20, padding: 10, backgroundColor: Colors.RED, borderRadius: 5 }}
+            >
+              <Text style={{ color: '#fff' }}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <TouchableOpacity
         onPress={() => {
           if (item?.name !== null) {
@@ -187,9 +218,9 @@ const MyImagePicker = props => {
   };
 
   const savePhoto = () => {
-    Alert.alert("Save Photo", "Do you want to save the photo?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Save", onPress: () => Toast.show("Photo saved!", Toast.SHORT) }
+    Alert.alert('Save Photo', 'Do you want to save the photo?', [
+      {text: 'Cancel', style: 'cancel'},
+      {text: 'Save', onPress: () => Toast.show('Photo saved!', Toast.SHORT)},
     ]);
   };
   const ShowReupload = item => {
@@ -332,23 +363,20 @@ const MyImagePicker = props => {
           <View style={{flex: 1}}>
             {photoUri ? (
               // Show the image preview if a photo has been taken
-            <View style={styles.imageContainer}>
-          <Image source={{ uri: photoUri }} style={styles.previewImage} />
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={clearPhoto} 
-            >
-              <AntDesign name="closecircle" size={40} color="red" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={savePhoto} // Show save alert on tick mark press
-            >
-              <AntDesign name="checkcircle" size={40} color="green" />
-            </TouchableOpacity>
-          </View>
-        </View>
+              <View style={styles.imageContainer}>
+                <Image source={{uri: photoUri}} style={styles.previewImage} />
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity style={styles.button} onPress={clearPhoto}>
+                    <AntDesign name="closecircle" size={40} color="red" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={savePhoto} // Show save alert on tick mark press
+                  >
+                    <AntDesign name="checkcircle" size={40} color="green" />
+                  </TouchableOpacity>
+                </View>
+              </View>
             ) : (
               // Camera view when no photo has been taken
               <View style={{flex: 1}}>
@@ -396,12 +424,12 @@ const MyImagePicker = props => {
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingBottom: 20, // Add padding to separate from buttons
-    height:"100%",
-    width:"100%",
-    backgroundColor:"#f5dfe2"
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#f5dfe2',
   },
   previewImage: {
     width: '100%',
@@ -412,15 +440,15 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "black",
-    position: "absolute",
+    backgroundColor: 'black',
+    position: 'absolute',
     bottom: 50,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20, // Add space between image and buttons
   },
   button: {
