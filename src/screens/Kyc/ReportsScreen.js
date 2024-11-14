@@ -70,8 +70,7 @@ const tax = [
 ];
 
 function ReportsScreen(props) {
-  const { token, isFetching, urls, downloadReport, downloadReportWithParams } =
-    props;
+  const { token, isFetching, urls, downloadReport, downloadReportWithParams } = props;
 
   return (
     <View style={styles.container}>
@@ -114,6 +113,7 @@ function ReportsScreen(props) {
         {reports.map((item) => (
           <View style={styles.report_sec}>
             <View style={styles.tax_left}>
+            {console.log(item)}
               <Text style={styles.tax_left_text}>{item.number}</Text>
               <Text style={styles.tax_left_text}>{item.title}</Text>
             </View>
@@ -122,6 +122,7 @@ function ReportsScreen(props) {
                 onPress={() => downloadReport(item.api, token)}
                 style={styles.botton_box}
               >
+                {console.log(item.link)}
                 <Text style={styles.get_otp}>{item.link}</Text>
               </TouchableOpacity>
             </View>

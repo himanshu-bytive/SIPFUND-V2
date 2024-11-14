@@ -99,6 +99,7 @@ function TopRatedSubmitScreen(props) {
         </View>
         {cart.map((item) => (
           <View style={styles.sbi_sec}>
+            {console.log("Item",item)}
             <Image source={{ uri: item?.image_path }} style={styles.Hybrid} />
             <Text style={styles.sbi_text}>{item?.product_name}</Text>
             <Text style={styles.price}>₹ {item?.amount}</Text>
@@ -127,7 +128,7 @@ function TopRatedSubmitScreen(props) {
 
             return;
           }
-          props.navigation.navigate("You",{screen : "Upi", params : {
+          props.navigation.navigate("OtherStackYou",{screen : "Upi", params : {
             cart,
             sum,
             fromCart: true,

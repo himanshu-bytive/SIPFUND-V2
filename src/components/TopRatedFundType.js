@@ -26,7 +26,7 @@ const TopRatedFundType = props => {
     type,
     key,
   } = props;
-
+  console.log('item from TepRate',JSON.stringify(item,0,2))
   const [values, setValues] = useState([]);
 
   const [folio1, setFolio1] = useState();
@@ -175,8 +175,8 @@ const TopRatedFundType = props => {
             <Text style={{fontSize: 13, color: 'black'}}>
               Your SIP will start from{' '}
               <Text style={{color: '#BD3A29'}}>
-                {console.log("Start",item)}
-                {item?.sip_from_date + ' '}
+                {console.log("Start",sip_from_date)}
+                {sip_from_date + ' '}
               </Text>
               To <Text style={{color: '#BD3A29'}}>{item?.sip_end_date}</Text>
             </Text>

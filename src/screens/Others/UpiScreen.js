@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Button,
@@ -12,18 +12,18 @@ import {
   ActivityIndicator,
   Dimensions,
   Alert,
-} from "react-native";
-import { connect } from "react-redux";
-import { Styles, Config, Colors, FormValidate } from "../../common";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
-import { Image, Header, CheckBox, Overlay } from "react-native-elements";
-import WebView from "react-native-webview";
-import SiteAPI from "../../services/SiteApis";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { MySelectPicker, MyTextInput } from "../../components";
-import moment from "moment";
-import { capitalizeWord } from "../../utils/generalPurposeFunctions";
+} from 'react-native';
+import {connect} from 'react-redux';
+import {Styles, Config, Colors, FormValidate} from '../../common';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {Image, Header, CheckBox, Overlay} from 'react-native-elements';
+import WebView from 'react-native-webview';
+import SiteAPI from '../../services/SiteApis';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MySelectPicker, MyTextInput} from '../../components';
+import moment from 'moment';
+import {capitalizeWord} from '../../utils/generalPurposeFunctions';
 
 function UpiScreen(props) {
   const {
@@ -73,21 +73,21 @@ function UpiScreen(props) {
     const response = await SiteAPI.apiGetCall(
       `/retrieveData/mandateList?iin=${users.IIN}`,
       {},
-      token
+      token,
     );
     setRes(response);
   }, []);
 
   const mobileEmailRelation = [
-    { value: "SE", label: "Self" },
-    { value: "SP", label: "Spouse" },
-    { value: "DC", label: "Dependent Children" },
-    { value: "DS", label: "Dependent Siblings" },
-    { value: "DP", label: "Dependent Parents" },
-    { value: "GD", label: "Guardian" },
-    { value: "PM", label: "PMS" },
-    { value: "CD", label: "Custodian" },
-    { value: "PO", label: "POA" },
+    {value: 'SE', label: 'Self'},
+    {value: 'SP', label: 'Spouse'},
+    {value: 'DC', label: 'Dependent Children'},
+    {value: 'DS', label: 'Dependent Siblings'},
+    {value: 'DP', label: 'Dependent Parents'},
+    {value: 'GD', label: 'Guardian'},
+    {value: 'PM', label: 'PMS'},
+    {value: 'CD', label: 'Custodian'},
+    {value: 'PO', label: 'POA'},
   ];
 
   useEffect(() => {
@@ -101,12 +101,12 @@ function UpiScreen(props) {
       setWebViewActive(false);
       //setWebUrl("");
       resetWebUrl();
-      props.navigation.navigate("Profile");
-      props.navigation.navigate("Home");
+      // props.navigation.navigate("Profile");
+      props.navigation.navigate('Home');
     }
   }, [isFetching, error]);
   useEffect(() => {
-    const unsubscribe = props?.navigation.addListener("didFocus", () => {
+    const unsubscribe = props?.navigation.addListener('didFocus', () => {
       resetWebUrl();
       setCustId();
       setPaymentRefNo();
@@ -125,66 +125,75 @@ function UpiScreen(props) {
   }, [token]);
 
   useEffect(() => {
+    console.log('paymentStaus', PaymentStatus);
+    console.log('CustID', CustId);
+  }, [PaymentStatus]);
+
+  useEffect(() => {
     if (emandateSuccess && isPageActive.current) {
       isPageActive.current = false;
       Alert.alert(
-        "Success",
-        "Transaction completed successfully. Please check your E-Mail/SMS to authorize transaction.",
+        'Success',
+        'Transaction completed successfully. Please check your E-Mail/SMS to authorize transaction.',
         [
           {
-            text: "Cancel",
-            onPress: () => props.navigation.navigate("Home"),
-            style: "cancel",
+            text: 'Cancel',
+            onPress: () => {
+              setPaymentStatus(undefined);
+              props.navigation.navigate('Home');
+            },
+            style: 'cancel',
           },
           {
-            text: "OK",
+            text: 'OK',
             onPress: () => {
-              props.navigation.navigate("Home");
+              setPaymentStatus(undefined);
+              props.navigation.navigate('Home');
             },
           },
-        ]
+        ],
       );
     }
   }, [emandateSuccess]);
   const monthsArr = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   const fromDate = () => {
     const date = new Date();
 
     return (
-      ("00" + date.getDate()).match(/\d{2}$/) +
-      "-" +
+      ('00' + date.getDate()).match(/\d{2}$/) +
+      '-' +
       monthsArr[date.getMonth()] +
-      "-" +
+      '-' +
       date.getFullYear()
     );
   };
   const endDate = () => {
-    var new_date = moment().add("days", 1).add(30, "y").format("DD-MMM-YYYY");
+    var new_date = moment().add('days', 1).add(30, 'y').format('DD-MMM-YYYY');
     return new_date;
 
     return (
-      ("00" + date.getDate() + 1).match(/\d{2}$/) +
-      "-" +
+      ('00' + date.getDate() + 1).match(/\d{2}$/) +
+      '-' +
       monthsArr[date.getMonth()] +
-      "-" +
+      '-' +
       (parseInt(date.getFullYear(), 10) + 30)
     );
   };
 
-  const sipFromDate = (default_date) => {
+  const sipFromDate = default_date => {
     const date = new Date();
 
     let month = date.getMonth();
@@ -209,9 +218,9 @@ function UpiScreen(props) {
     let day = default_date;
     if (!default_date || default_date == 0) day = 1;
 
-    return ("00" + day).match(/\d{2}$/) + "-" + monthsArr[month] + "-" + year;
+    return ('00' + day).match(/\d{2}$/) + '-' + monthsArr[month] + '-' + year;
   };
-  const sipEndDate = (default_date) => {
+  const sipEndDate = default_date => {
     const date = new Date();
 
     let month = date.getMonth();
@@ -237,10 +246,10 @@ function UpiScreen(props) {
     if (!default_date || default_date == 0) day = 1;
 
     return (
-      ("00" + day).match(/\d{2}$/) +
-      "-" +
+      ('00' + day).match(/\d{2}$/) +
+      '-' +
       monthsArr[month] +
-      "-" +
+      '-' +
       (parseInt(year, 10) + 30)
     );
   };
@@ -257,7 +266,7 @@ function UpiScreen(props) {
     return day;
   };
 
-  const handleNseDetailsUnavailability = (data) => {
+  const handleNseDetailsUnavailability = data => {
     setExtraNseDetails(data);
     setShowNseInputs(true);
   };
@@ -279,28 +288,28 @@ function UpiScreen(props) {
       mfu_can: updatedNseData?.MFU_CAN,
       father_name: updatedNseData?.FATHER_NAME,
       mother_name: updatedNseData?.MOTHER_NAME,
-      res_phone: "",
-      res_fax: "",
-      off_phone: "",
-      off_fax: "",
-      nri_addr1: "",
-      nri_addr2: "",
-      nri_addr3: "",
-      nri_city: "",
-      nri_state: "",
-      nri_pincode: "",
-      nri_country: "",
-      branch_addr2: "",
-      branch_addr3: "",
+      res_phone: '',
+      res_fax: '',
+      off_phone: '',
+      off_fax: '',
+      nri_addr1: '',
+      nri_addr2: '',
+      nri_addr3: '',
+      nri_city: '',
+      nri_state: '',
+      nri_pincode: '',
+      nri_country: '',
+      branch_addr2: '',
+      branch_addr3: '',
       branch_city: updatedNseData?.BRANCH_CITY,
       branch_pincode: updatedNseData?.BRANCH_PINCODE,
       branch_country: updatedNseData?.BRANCH_COUNTRY,
       no_of_nominee: updatedNseData?.NOMINEE_COUNT,
-      nominee1_type: "",
+      nominee1_type: '',
       nominee1_name: extraNseDetails?.NOMINEE_OPTED
         ? updatedNseData?.NOM1_NAME
-        : "",
-      nominee1_dob: "",
+        : '',
+      nominee1_dob: '',
       nominee1_addr1: updatedNseData?.NOM1_ADDRESS1,
       nominee1_addr2: updatedNseData?.NOM1_ADDRESS2,
       nominee1_addr3: updatedNseData?.NOM1_ADDRESS3,
@@ -309,23 +318,23 @@ function UpiScreen(props) {
       nominee1_pincode: updatedNseData?.NOM1_PINCODE,
       nominee1_relation: updatedNseData?.NOM1_RELATION,
       nominee1_percent: updatedNseData?.NOM1_PERCENTAGE,
-      nominee1_guard_name: "",
-      nominee1_guard_pan: "",
-      nominee2_type: "N",
-      nominee2_name: "",
-      nominee2_dob: "",
-      nominee2_relation: "",
+      nominee1_guard_name: '',
+      nominee1_guard_pan: '',
+      nominee2_type: 'N',
+      nominee2_name: '',
+      nominee2_dob: '',
+      nominee2_relation: '',
       nominee2_percent: 0,
-      nominee2_guard_name: "",
-      nominee2_guard_pan: "",
-      nominee3_type: "N",
-      nominee3_Name: "",
-      nominee3_dob: "",
-      nominee3_relation: "",
+      nominee2_guard_name: '',
+      nominee2_guard_pan: '',
+      nominee3_type: 'N',
+      nominee3_Name: '',
+      nominee3_dob: '',
+      nominee3_relation: '',
       nominee3_percent: 0,
-      nominee3_guard_name: "",
-      nominee3_guard_pan: "",
-      dp_id: "",
+      nominee3_guard_name: '',
+      nominee3_guard_pan: '',
+      dp_id: '',
       Iin: users?.IIN,
       inv_name: updatedNseData?.INVESTOR_NAME,
       Dob: updatedNseData?.DATE_OF_BIRTH,
@@ -349,7 +358,7 @@ function UpiScreen(props) {
       mobile_relation: extraNseDetails?.mobile_relation,
       email_relation: extraNseDetails?.email_relation,
       NOMINEE_OPTED: updatedNseData?.NOM1_NAME
-        ? "Y"
+        ? 'Y'
         : extraNseDetails?.NOMINEE_OPTED,
       NOM1_PAN: extraNseDetails?.NOM1_PAN,
       broker_code: updatedNseData?.BROK_DLR_CODE,
@@ -360,7 +369,7 @@ function UpiScreen(props) {
     setShowNseInputs(false);
   };
 
-  const getTransactions = (data) => {
+  const getTransactions = data => {
     let formatted = [];
     let format = {};
     const d = new Date();
@@ -448,28 +457,31 @@ function UpiScreen(props) {
 
   const getPaymentMode = (upi, mandate) => {
     if (upi) {
-      return "UPI";
+      return 'UPI';
     } else if (mandate) {
-      return "M";
+      return 'M';
     } else {
-      return "OL";
+      return 'OL';
     }
   };
 
   const showNseDetailsAlert = () => {
     Alert.alert(
-      "Details Missing!",
-      "Verification e-mails are being triggered by NSE every week to your registered e-mail ID. Please verify to proceed further with the payment.",
+      'Details Missing!',
+      'Verification e-mails are being triggered by NSE every week to your registered e-mail ID. Please verify to proceed further with the payment.',
       [
         {
-          text: "Go Back to HomeScreen",
-          onPress: () => props.navigation.navigate("Home"),
+          text: 'Go Back to HomeScreen',
+          onPress: () => {
+            setPaymentStatus(undefined);
+            props.navigation.navigate('Home');
+          },
         },
         {
-          text: "I have already verified",
+          text: 'I have already verified',
           onPress: () => setAlreadySubmitted(true),
         },
-      ]
+      ],
     );
   };
 
@@ -488,77 +500,77 @@ function UpiScreen(props) {
           : 100000,
         ach_enddate: endDate(),
         ach_fromdate: fromDate(),
-        advisory_charge: " ",
+        advisory_charge: ' ',
         bank: profile?.BANK_NAME,
         billdesk_bank: profile?.BANK_NAME,
-        cheque_deposit_mode: " ",
+        cheque_deposit_mode: ' ',
         Client_callback_url:
-          "http://sipfund.com/SIP-Login/build/app/index.html#/paymentStatus",
+          'http://sipfund.com/SIP-Login/build/app/index.html#/paymentStatus',
         // https://sipfund.com/SIP-Login/build/app/index.html#/netstatus
         // Client_callback_url: "www.sipfund.com",
-        dd_charge: " ",
-        debit_amount_type: "M",
-        demat_user: "N",
-        dp_id: " ",
-        euin: " ",
-        euin_opted: "N",
+        dd_charge: ' ',
+        debit_amount_type: 'M',
+        demat_user: 'N',
+        dp_id: ' ',
+        euin: ' ',
+        euin_opted: 'N',
         ifsc_code: profile?.IFSC_CODE,
         iin: user?.IIN,
-        instrm_ac_no: " ",
+        instrm_ac_no: ' ',
         instrm_amount: props.route.params?.sum,
         instrm_bank: profile?.BANK_NAME,
-        instrm_branch: " ",
-        instrm_charges: " ",
-        instrm_date: " ",
-        instrm_no: " ",
-        micr: " ",
-        neft_ifsc: " ",
-        no_of_nominee: "0",
-        nominee1_addr1: " ",
-        nominee1_addr2: " ",
-        nominee1_addr3: " ",
-        nominee1_city: " ",
-        nominee1_dob: " ",
-        nominee1_guard_name: " ",
-        nominee1_guard_pan: " ",
-        nominee1_name: " ",
-        nominee1_percent: " ",
-        nominee1_pincode: " ",
-        nominee1_relation: " ",
-        nominee1_state: " ",
-        nominee2_dob: " ",
-        nominee2_guard_name: " ",
-        nominee2_guard_pan: " ",
-        nominee2_name: " ",
-        nominee2_percent: " ",
-        nominee2_relation: " ",
-        nominee3_dob: " ",
-        nominee3_guard_name: " ",
-        nominee3_guard_pan: " ",
-        nominee3_Name: " ",
-        nominee3_percent: " ",
-        nominee3_relation: " ",
-        nominee_flag: "C",
+        instrm_branch: ' ',
+        instrm_charges: ' ',
+        instrm_date: ' ',
+        instrm_no: ' ',
+        micr: ' ',
+        neft_ifsc: ' ',
+        no_of_nominee: '0',
+        nominee1_addr1: ' ',
+        nominee1_addr2: ' ',
+        nominee1_addr3: ' ',
+        nominee1_city: ' ',
+        nominee1_dob: ' ',
+        nominee1_guard_name: ' ',
+        nominee1_guard_pan: ' ',
+        nominee1_name: ' ',
+        nominee1_percent: ' ',
+        nominee1_pincode: ' ',
+        nominee1_relation: ' ',
+        nominee1_state: ' ',
+        nominee2_dob: ' ',
+        nominee2_guard_name: ' ',
+        nominee2_guard_pan: ' ',
+        nominee2_name: ' ',
+        nominee2_percent: ' ',
+        nominee2_relation: ' ',
+        nominee3_dob: ' ',
+        nominee3_guard_name: ' ',
+        nominee3_guard_pan: ' ',
+        nominee3_Name: ' ',
+        nominee3_percent: ' ',
+        nominee3_relation: ' ',
+        nominee_flag: 'C',
         payment_mode: getPaymentMode(upi, mandate),
-        poa: "N",
-        remarks: " ",
-        Return_paymnt_flag: "Y",
-        rtgs_code: " ",
+        poa: 'N',
+        remarks: ' ',
+        Return_paymnt_flag: 'Y',
+        rtgs_code: ' ',
         sip_ac_type: profile?.AC_TYPE,
         sip_acc_no: profile?.AC_NO,
         sip_bank: profile?.BANK_NAME,
         sip_branch: profile?.BRANCH_NAME,
         sip_ifsc_code: profile?.IFSC_CODE,
-        sip_micr_no: " ",
-        sub_broker_arn_code: " ",
-        sub_broker_code: " ",
-        sub_trxn_type: props.route.params?.isLumpsum ? "N" : "S",
+        sip_micr_no: ' ',
+        sub_broker_arn_code: ' ',
+        sub_broker_code: ' ',
+        sub_trxn_type: props.route.params?.isLumpsum ? 'N' : 'S',
         trans_count: props.route.params?.cart.length,
-        trxn_acceptance: upi || mandate ? "OL" : "ALL",
-        trxn_execution: " ",
-        umrn: mandate && umrn ? umrn.UMRN_NO : " ",
-        until_cancelled: "Y",
-        utr: "",
+        trxn_acceptance: upi || mandate ? 'OL' : 'ALL',
+        trxn_execution: ' ',
+        umrn: mandate && umrn ? umrn.UMRN_NO : ' ',
+        until_cancelled: 'Y',
+        utr: '',
         groupId: props.route.params?.groupId,
         groupType: props.route.params?.groupType,
         groupName: props.route.params?.groupName,
@@ -569,44 +581,46 @@ function UpiScreen(props) {
   };
 
   function getParameterByName(name, url) {
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(url);
     if (!results) return null;
-    if (!results[2]) return "";
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
-  const handleWebviewStateChange = (webViewState) => {
-    if (webViewState.url && webViewState.url.includes("/netstatus")) {
+  const handleWebviewStateChange = webViewState => {
+    if (webViewState.url && webViewState.url.includes('/netstatus')) {
+      console.log('Got Response Link', webViewState.url);
+
       console.log(
-        "🚀 ~ handleWebviewStateChange ~ getParameterByName",
-        getParameterByName("CustId", webViewState.url)
+        '🚀 ~ handleWebviewStateChange ~ getParameterByName',
+        getParameterByName('CustId', webViewState.url),
       );
-      setCustId(getParameterByName("CustId", webViewState.url));
-      setPaymentRefNo(getParameterByName("PaymentRefNo", webViewState.url));
-      setPaymentStatus(getParameterByName("PaymentStatus", webViewState.url));
-      setPaymentMsg(getParameterByName("PaymentMsg", webViewState.url));
+      setCustId(getParameterByName('CustId', webViewState.url));
+      setPaymentRefNo(getParameterByName('PaymentRefNo', webViewState.url));
+      setPaymentStatus(getParameterByName('PaymentStatus', webViewState.url));
+      setPaymentMsg(getParameterByName('PaymentMsg', webViewState.url));
       resetWebUrl();
       setWebViewActive(false);
       deletCart(
-        props.route.params?.cart.map((item) => item._id),
-        token
+        props.route.params?.cart.map(item => item._id),
+        token,
       );
       getCartDetails(token);
     } else if (
       webViewState.url &&
-      webViewState.url.includes("play.google.com")
+      webViewState.url.includes('play.google.com')
     ) {
       resetWebUrl();
       setWebViewActive(false);
       deletCart(
-        props.route.params?.cart.map((item) => item._id),
-        token
+        props.route.params?.cart.map(item => item._id),
+        token,
       );
       getCartDetails(token);
-      props.navigation.navigate("Profile");
-      props.navigation.navigate("Home");
+      // props.navigation.navigate("Profile");
+      props.navigation.navigate('Home');
     }
   };
 
@@ -616,15 +630,14 @@ function UpiScreen(props) {
       {isFetching && (
         <View
           style={{
-            backgroundColor: "#fffe",
-            width: Dimensions.get("window").width,
-            height: Dimensions.get("window").height,
-            position: "absolute",
+            backgroundColor: '#fffe',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+            position: 'absolute',
             zIndex: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           <ActivityIndicator size={60} color="black" />
         </View>
       )}
@@ -633,104 +646,120 @@ function UpiScreen(props) {
           leftComponent={
             <TouchableOpacity
               // onPress={() => props.navigation.toggleDrawer()}
-              onPress={() => props.navigation.goBack()}
-              style={{ marginTop: 25 }}
-            >
+              onPress={() => {
+                setPaymentStatus(undefined);
+                props.navigation.navigate('Home');
+              }}
+              style={{marginTop: 25}}>
               {/* <Entypo name={"menu"} size={30} color={Colors.RED} /> */}
-              <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
+              <AntDesign name={'arrowleft'} size={40} color={Colors.RED} />
             </TouchableOpacity>
           }
           containerStyle={styles.header}
           backgroundColor={Colors.LIGHT_WHITE}
           centerComponent={
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require('../../../assets/icon.png')}
               style={styles.logimg}
             />
           }
         />
         <ScrollView style={Styles.containerScroll}>
-          {CustId && PaymentRefNo && PaymentStatus && PaymentMsg ? (
-            <>
-              <View style={styles.container}>
-                <Image
-                  source={require("../../../assets/payment.png")}
-                  style={{ height: 350, width: 400 }}
-                />
-                <View
-                  style={{
-                    // alignItems: "flex-start",
-                    // borderWidth: 1,
-                    // width: "90%",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 22,color:"black" }}>
+          {PaymentStatus != undefined ? (
+            <View style={styles.container}>
+              <Image
+                source={require('../../../assets/payment.png')}
+                style={{height: 350, width: 400}}
+              />
+              <View
+                style={{
+                  // alignItems: "flex-start",
+                  // borderWidth: 1,
+                  // width: "90%",
+                  alignItems: 'center',
+                }}>
+                {PaymentStatus === 'SUCCESS' && (
+                  <Text style={{fontSize: 22, color: 'black'}}>
                     Your Payment is {`${capitalizeWord(PaymentStatus)}`}
                   </Text>
-                  <View
-                    style={{
-                      // height: 250,
-                      width: Dimensions.get("window").width - 40,
-                      backgroundColor: "#DEF5FD",
-                      marginVertical: 20,
-                      borderRadius: 10,
-                      elevation: 10,
-                      padding: 20,
-                    }}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold",color:"black" }}>Customer ID</Text>
-                      <Text style={{ marginLeft: 10,color:"black" }}>{CustId}</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold",color:"black" }}>
-                        Payment Reference Number
-                      </Text>
-                      <Text style={{ marginLeft: 10,color:"black" }}>{PaymentRefNo}</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold",color:"black" }}>Payment Status</Text>
-                      <Text style={{ marginLeft: 10 ,color:"black"}}>{PaymentStatus}</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", width: "60%" }}>
-                      <Text style={{ fontWeight: "bold",color:"black" }}>
+                )}
+                <View
+                  style={{
+                    // height: 250,
+                    width: Dimensions.get('window').width - 40,
+                    backgroundColor: '#DEF5FD',
+                    marginVertical: 20,
+                    borderRadius: 10,
+                    elevation: 10,
+                    padding: 20,
+                  }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={{fontWeight: 'bold', color: 'black'}}>
+                      Customer ID
+                    </Text>
+                    <Text style={{marginLeft: 10, color: 'black'}}>
+                      {CustId}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={{fontWeight: 'bold', color: 'black'}}>
+                      Payment Reference Number
+                    </Text>
+                    <Text style={{marginLeft: 10, color: 'black'}}>
+                      {PaymentRefNo}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={{fontWeight: 'bold', color: 'black'}}>
+                      Payment Status
+                    </Text>
+                    <Text style={{marginLeft: 10, color: 'black'}}>
+                      {PaymentStatus}
+                    </Text>
+                  </View>
+                  {PaymentStatus !== 'SUCCESS' && (
+                    <View style={{flexDirection: 'row', width: '60%'}}>
+                      <Text style={{fontWeight: 'bold', color: 'black'}}>
                         Payment Message
                       </Text>
-                      <Text style={{ marginLeft: 10 ,color:"black"}}>{PaymentMsg}</Text>
+                      <Text style={{marginLeft: 10, color: 'black'}}>
+                        {PaymentMsg}
+                      </Text>
                     </View>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => {
-                        props.navigation.navigate("Root",{screen : "Home"});
-                      }}
-                      style={{
-                        height: 40,
-                        width: 150,
-                        backgroundColor: "#C03A2B",
-                        borderRadius: 20,
-                        marginTop: 20,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text style={{ color: "white" }}>Go To Dashboard</Text>
-                    </TouchableOpacity>
-                  </View>
-                 {PaymentStatus != "PENDING" &&  <Text
+                  )}
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => {
+                      setPaymentStatus(undefined);
+                      props.navigation.navigate('Explore', {screen: 'Home'});
+                    }}
+                    style={{
+                      height: 40,
+                      width: 150,
+                      backgroundColor: '#C03A2B',
+                      borderRadius: 20,
+                      marginTop: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{color: 'white'}}>Go To Dashboard</Text>
+                  </TouchableOpacity>
+                </View>
+                {console.log('Status', PaymentStatus)}
+                {PaymentStatus === 'SUCCESS' && (
+                  <Text
                     style={{
                       fontSize: 20,
                       marginVertical: 10,
-                      alignItems: "flex-start",
-                      width: Dimensions.get("window").width - 40,
-                    }}
-                  >
+                      alignItems: 'flex-start',
+                      width: Dimensions.get('window').width - 40,
+                    }}>
                     Thank You for the payment. An automated payment reciept will
                     be sent to your registered email
-                  </Text>}
-                </View>
+                  </Text>
+                )}
               </View>
-            </>
+            </View>
           ) : (
             <View style={styles.container}>
               <View>
@@ -750,17 +779,13 @@ function UpiScreen(props) {
                         }
                       }
                       let params = getParams(true, false);
-                      console.log(
-                        "Upi",
-                        JSON.stringify(params)
-                      );
+                      console.log('Upi', JSON.stringify(params));
                       setClicked(true);
                       checkout(params, token);
                     }}
-                    style={[styles.botton_box, styles.botton_box_none]}
-                  >
+                    style={[styles.botton_box, styles.botton_box_none]}>
                     <Image
-                      source={require("../../../assets/Upi_img.png")}
+                      source={require('../../../assets/Upi_img.png')}
                       style={styles.upiImage}
                     />
                   </TouchableOpacity>
@@ -782,8 +807,7 @@ function UpiScreen(props) {
                       setClicked(true);
                       checkout(params, token);
                     }}
-                    style={styles.botton_box}
-                  >
+                    style={styles.botton_box}>
                     <Text style={styles.get_otp}>Internet Banking</Text>
                   </TouchableOpacity>
                 </View>
@@ -802,36 +826,36 @@ function UpiScreen(props) {
                       }
 
                       if (!res.validFlag) {
-                        alert("Something went wrong!");
+                        alert('Something went wrong!');
                         return;
                       }
 
                       if (!res.responseString.length) {
                         Alert.alert(
-                          "No Mandate",
+                          'No Mandate',
                           "You haven't registered mandate. Do you want to register E-Mandate?",
                           [
                             {
-                              text: "Cancel",
-                              onPress: () => console.log("Cancel Pressed"),
-                              style: "cancel",
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
                             },
                             {
-                              text: "OK",
+                              text: 'OK',
                               onPress: () => {
                                 emandateOptions(token);
                                 toggleEmandatePopup(true);
                                 //pageActiveEmandate.current = true;
                               },
                             },
-                          ]
+                          ],
                         );
                         return;
                       }
 
                       const data = res.responseString.map(
-                        (item) =>
-                          `${item.achReports["UMRN_NO"]} (₹${item.achReports["AMOUNT"]})`
+                        item =>
+                          `${item.achReports['UMRN_NO']} (₹${item.achReports['AMOUNT']})`,
                       );
                       setEmandateListsUmrn(data);
                       setVisibleEmandateUmrn(true);
@@ -839,8 +863,7 @@ function UpiScreen(props) {
                       //setClicked(true);
                       //checkout(params, token, true);
                     }}
-                    style={styles.botton_box}
-                  >
+                    style={styles.botton_box}>
                     <Text style={styles.get_otp}>e-Mandate</Text>
                   </TouchableOpacity>
                 </View>
@@ -851,13 +874,12 @@ function UpiScreen(props) {
         {webViewActive && (
           <View
             style={{
-              position: "absolute",
-              backgroundColor: "white",
+              position: 'absolute',
+              backgroundColor: 'white',
               zIndex: 100,
-              width: Dimensions.get("window").width,
-              height: Dimensions.get("window").height,
-            }}
-          >
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height,
+            }}>
             <Header
               leftComponent={
                 <TouchableOpacity
@@ -865,12 +887,11 @@ function UpiScreen(props) {
                     setWebViewActive(false);
                     //setWebUrl("");
                     resetWebUrl();
-                    props.navigation.navigate("Profile");
-                    props.navigation.navigate("Home");
+                    // props.navigation.navigate("Profile");
+                    props.navigation.navigate('Home');
                   }}
-                  style={{ marginTop: 20 }}
-                >
-                  <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
+                  style={{marginTop: 20}}>
+                  <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
                 </TouchableOpacity>
               }
               rightComponent={
@@ -882,12 +903,11 @@ function UpiScreen(props) {
                     borderColor: Colors.RED,
                     padding: 5,
                     borderRadius: 7,
-                  }}
-                >
+                  }}>
                   <Text style={styles.textkn}>
                     {users?.name
-                      ? `${users?.name[0]}${users?.name.split(" ").pop()[0]}`
-                      : ""}
+                      ? `${users?.name[0]}${users?.name.split(' ').pop()[0]}`
+                      : ''}
                   </Text>
                 </View>
               }
@@ -895,13 +915,13 @@ function UpiScreen(props) {
               containerStyle={Styles.header}
               centerComponent={
                 <Image
-                  source={require("../../../assets/icon.png")}
+                  source={require('../../../assets/icon.png')}
                   style={styles.logimg}
                 />
               }
             />
             <WebView
-              source={{ uri: webUrl }}
+              source={{uri: webUrl}}
               onNavigationStateChange={handleWebviewStateChange}
               onLoadStart={() => {
                 setLoading(true);
@@ -913,19 +933,18 @@ function UpiScreen(props) {
             {loading && (
               <View
                 style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "40%",
+                  position: 'absolute',
+                  top: '50%',
+                  left: '40%',
                   height: 80,
                   width: 120,
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   zIndex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   elevation: 10,
                   borderRadius: 10,
-                }}
-              >
+                }}>
                 <ActivityIndicator size={30} color={Colors.RED} />
                 <Text>Loading...</Text>
                 <Text>Please Wait</Text>
@@ -938,9 +957,8 @@ function UpiScreen(props) {
           overlayStyle={{
             margin: 10,
             borderRadius: 10,
-            backgroundColor: "#fff",
-          }}
-        >
+            backgroundColor: '#fff',
+          }}>
           <View style={styles.emaMainbox}>
             <Text style={styles.emaAmc}>Select One UMRN:</Text>
             {emandateListsUmrn.map((item, key) => (
@@ -956,14 +974,13 @@ function UpiScreen(props) {
                     ...params,
                     service_request: {
                       ...params.service_request,
-                      umrn: item.split(" ")[0],
+                      umrn: item.split(' ')[0],
                     },
                   };
                   setClicked(true);
                   checkout(params, token, true);
                   isPageActive.current = true;
-                }}
-              >
+                }}>
                 <Text>{item}</Text>
               </TouchableOpacity>
             ))}
@@ -985,49 +1002,47 @@ function UpiScreen(props) {
           </Text>
           <View style={styles.overlayContainer}>
             <Text style={styles.occupation}>
-              {"Mobile Relation"}
+              {'Mobile Relation'}
               <Text style={styles.error}>*</Text>
             </Text>
             <MySelectPicker
               values={mobileEmailRelation}
-              placeholder={"Select Mobile Relation"}
+              placeholder={'Select Mobile Relation'}
               defultValue={extraNseDetails?.mobile_relation}
-              onChange={(phone) => {
+              onChange={phone => {
                 setExtraNseDetails({
                   ...extraNseDetails,
-                  ["mobile_relation"]: phone,
+                  ['mobile_relation']: phone,
                 });
               }}
             />
 
             <Text style={styles.occupation}>
-              {"Email Relation"}
+              {'Email Relation'}
               <Text style={styles.error}>*</Text>
             </Text>
             <MySelectPicker
               values={mobileEmailRelation}
-              placeholder={"Select email Relation"}
+              placeholder={'Select email Relation'}
               defultValue={extraNseDetails?.email_relation}
-              onChange={(mailRelation) => {
+              onChange={mailRelation => {
                 setExtraNseDetails({
                   ...extraNseDetails,
-                  ["email_relation"]: mailRelation,
+                  ['email_relation']: mailRelation,
                 });
               }}
             />
 
             <TouchableOpacity
               onPress={handleSubmitExtraNseDetails}
-              style={styles.botton_box2}
-            >
+              style={styles.botton_box2}>
               <Text style={styles.get_otp2}>Next</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 setAlreadySubmitted(true);
                 setShowNseInputs(false);
-              }}
-            >
+              }}>
               <Text style={styles.link}>I have already submitted</Text>
             </TouchableOpacity>
           </View>
@@ -1040,8 +1055,8 @@ function UpiScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#fff",
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   header: {
     borderBottomColor: Colors.BLACK,
@@ -1059,30 +1074,30 @@ const styles = StyleSheet.create({
   textkn: {
     fontSize: 22,
     color: Colors.RED,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   payusing: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 40,
     marginBottom: 20,
   },
   mainbox: {
     margin: 5,
-    width: "80%",
-    backgroundColor: "#f9f9f9",
+    width: '80%',
+    backgroundColor: '#f9f9f9',
     borderRadius: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   button: {
-    width: "90%",
+    width: '90%',
     borderWidth: 1,
     borderColor: Colors.RED,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     marginVertical: 20,
   },
   botton_box: {
-    alignItems: "center",
+    alignItems: 'center',
     //marginVertical: 10,
     paddingVertical: 10,
     height: 60,
@@ -1095,8 +1110,8 @@ const styles = StyleSheet.create({
   get_otp: {
     color: Colors.BLACK,
     fontSize: 20,
-    fontWeight: "bold",
-    textAlignVertical: "center",
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
     flex: 1,
   },
   emaMainbox: {
@@ -1107,7 +1122,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     //marginLeft: 15,
     marginVertical: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   emaMutual_fund: {
     fontSize: 15,
@@ -1123,17 +1138,17 @@ const styles = StyleSheet.create({
   //},
   amc: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   inputsec: {
     borderBottomWidth: 1,
     borderColor: Colors.GRAY_LIGHT,
-    width: "95%",
+    width: '95%',
     marginTop: 5,
   },
   refreshcode: {
-    textAlign: "right",
+    textAlign: 'right',
     color: Colors.RED,
     fontSize: 15,
     marginHorizontal: 10,
@@ -1151,16 +1166,16 @@ const styles = StyleSheet.create({
   get_otp2: {
     color: Colors.WHITE,
     fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   overlayCloseIcon: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginRight: 5,
     marginVertical: 5,
   },
   nseInfoText: {
-    maxWidth: "90%",
+    maxWidth: '90%',
     fontSize: 16,
     paddingVertical: 10,
     marginBottom: 10,
@@ -1170,17 +1185,17 @@ const styles = StyleSheet.create({
     //width: "85%",
   },
   error: {
-    color: "#ff0000",
+    color: '#ff0000',
     padding: 5,
   },
   link: {
-    color: "red",
-    alignSelf: "center",
+    color: 'red',
+    alignSelf: 'center',
     marginTop: -10,
     marginBottom: 10,
   },
 });
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   token: state.auth.token,
   users: state.auth.user,
   profile: state.auth.profile,
@@ -1197,12 +1212,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { AuthActions } = require("../../store/AuthRedux");
-  const { CheckoutActions } = require("../../store/CheckoutRedux");
-  const { CartActions } = require("../../store/CartActionsRedux");
-  const { EmandateActions } = require("../../store/EmandateRedux");
-  const { RegistrationActions } = require("../../store/RegistrationRedux");
+  const {dispatch} = dispatchProps;
+  const {AuthActions} = require('../../store/AuthRedux');
+  const {CheckoutActions} = require('../../store/CheckoutRedux');
+  const {CartActions} = require('../../store/CartActionsRedux');
+  const {EmandateActions} = require('../../store/EmandateRedux');
+  const {RegistrationActions} = require('../../store/RegistrationRedux');
   return {
     ...stateProps,
     ...ownProps,
@@ -1220,7 +1235,7 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
           childtrans: params?.childtrans,
         },
         token,
-        mandate
+        mandate,
       );
       // CheckoutActions.checkoutButton(dispatch, params, token, mandate);
     },
@@ -1233,13 +1248,13 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     deletCart: (items, token) => {
       CartActions.deletCart(dispatch, items, token);
     },
-    getCartDetails: (token) => {
+    getCartDetails: token => {
       CartActions.cartDetails(dispatch, token);
     },
-    emandateOptions: (token) => {
+    emandateOptions: token => {
       EmandateActions.emandateOptions(dispatch, token);
     },
-    toggleEmandatePopup: (state) => {
+    toggleEmandatePopup: state => {
       EmandateActions.toggleEmandatePopup(dispatch, state);
     },
     updateNseRegistration: (params, token) => {
@@ -1256,5 +1271,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   undefined,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(UpiScreen);

@@ -146,7 +146,7 @@ function TopRatedListScreen(props) {
     let day = date.getDate();
     let month = date.getMonth();
     let year = date.getFullYear();
-
+    console.log('monnth dat year' , month,sipDay,year)
     if (month === 11) {
       month = 0;
       year = year + 1;
@@ -186,6 +186,7 @@ function TopRatedListScreen(props) {
         cart[index].sip_from_date = sipFromDate(e, false);
         cart[index].sip_end_date = sipEndDate(e, false);
         cart[index].sip_period_day = ("0" + e).slice(-2);
+        console.log('cart' , cart)
         setCart(cart);
         setTempCartState(cart);
         setSelectTab("LUMPSUMS");
@@ -223,13 +224,14 @@ function TopRatedListScreen(props) {
         }
       });
       setCart(newArr);
+      console.log(JSON.stringify(newArr,0,2),'jsdjkvsjk')
       // setLoading(false);
       setLumSumCart(LumSumArr);
       // setCart(cartDetails.cartDetails);
       // setLumSumCart(cartDetails.cartDetails);
       var newCart = newArr?.map((item, index) => {
-        item.sip_from_date = sipFromDate(item?.sip_from_date);
-        item.sip_end_date = sipEndDate(item?.sip_end_date);
+        item.sip_from_date = item?.sip_from_date;
+        item.sip_end_date = item?.sip_end_date;
         return item;
       });
 

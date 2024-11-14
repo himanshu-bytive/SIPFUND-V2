@@ -113,13 +113,14 @@ function FundDetailScreen(props) {
     let day = date.getDate();
     let month = date.getMonth();
     let year = date.getFullYear();
-
+    console.log('day month year',sipDay,month,year)
     if (month === 11) {
       month = 0;
       year = year + 1;
     } else {
       month += 1;
     }
+    console.log('day month year',sipDay,month,year)
 
     if (day > sipDay) {
       if (month === 11) {
@@ -129,7 +130,6 @@ function FundDetailScreen(props) {
         month += 1;
       }
     }
-
     return (
       ("00" + sipDay).match(/\d{2}$/) + "-" + monthsArr[month] + "-" + year
     );

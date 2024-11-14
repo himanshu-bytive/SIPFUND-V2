@@ -50,7 +50,7 @@ function ProfileScreen(props) {
   
     const hideTimer = setTimeout(() => {
       setShowLoader(false); // Hide loader after 5 seconds
-    }, 2000); // 5 seconds for hiding the loader
+    }, 1000); // 5 seconds for hiding the loader
   
     // Cleanup for the hide timer
     return () => clearTimeout(hideTimer);

@@ -113,6 +113,7 @@ function VerifyScreen(props) {
   useEffect(() => {
     checkAllPermissions();
     GetCurrentLocation();
+    openNotificationChannel();
     setIsLoading(false);
   }, []);
 
@@ -135,6 +136,20 @@ function VerifyScreen(props) {
       popInitialNotification: true,
       requestPermissions: true,
     });
+  }
+
+  function openNotificationChannel () {
+    PushNotification.createChannel(
+      {
+        channelId: "download-channel", // Unique ID for the channel
+        channelName: "File Downloads", // The name of the channel
+        channelDescription: "A channel for default notifications", // Description of the channel
+        soundName: 'default', // Sound for notifications
+        importance: PushNotification.Importance.HIGH, // Notification importance level
+        vibrate: true, // Enable vibration for notifications
+      },
+      (created) => console.log(`createChannel returned '${created}'`) // Will log 'true' once the channel is created
+    );
   }
   
   const requestLocationPermission = async () => {

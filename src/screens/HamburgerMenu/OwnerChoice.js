@@ -277,8 +277,9 @@ function OwnerChoice(props) {
   const [visible, setVisible] = useState(false);
   const [selectTab, setSelectTab] = useState("SIP");
   const [states, setStates] = useState({
-    amount: "5000",
+    amount: "1000",
     // date: 5,
+    lumsumAmount: " 5000",
     productName: "",
     productCode: "",
     amcCode: "",
@@ -325,7 +326,7 @@ function OwnerChoice(props) {
         product_code: states.productCode,
         product_name: states.productName,
         reinvest: "Z",
-        amount: states.amount,
+        amount: states.lumsumAmount,
         sip_amount: states.amount,
         image_path: states.imagePath,
       },
@@ -763,7 +764,7 @@ function OwnerChoice(props) {
                         onChangeText={(amount) => {
                           removeSpecialChars(amount);
                         }}
-                        placeholder={`₹5000`}
+                        placeholder={`₹1000`}
                         style={styles.amount_tex2}
                       />
                     </View>
@@ -878,7 +879,7 @@ function OwnerChoice(props) {
                     <Text style={styles.amount_tex}>Amount</Text>
                     <View style={styles.bordersec}>
                       <TextInput
-                        value={numberWithCommas(states.amount)}
+                        value={numberWithCommas(states.lumsumAmount)}
                         keyboardType="numeric"
                         onChangeText={(amount) => {
                           removeSpecialChars(amount);
