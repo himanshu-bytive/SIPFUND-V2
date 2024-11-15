@@ -349,7 +349,7 @@ function HomeScreen(props) {
                                 props.route.params?.refresh
                               ) {
                                 console.log('STEPS', steps);
-                                if (!username) {
+                                if (steps === 3) {
                                   props.navigation.navigate(
                                     "Reg",{screen : 'RegisterDetails'},
                                   );
@@ -362,8 +362,8 @@ function HomeScreen(props) {
                             }}
                             style={styles.botton_box}>
                             <Text style={styles.get_otp}>
-                              {users?.pan ||
-                              props.route.params?.refresh
+                              {console.log(users)}
+                              {steps === 4
                                 ? 'COMPLETE ACCOUNT SETUP'
                                 : 'Create Account'}
                             </Text>
