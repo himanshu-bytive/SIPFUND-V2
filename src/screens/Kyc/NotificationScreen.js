@@ -84,7 +84,7 @@ function NotificationScreen(props) {
       
       <Header
         leftComponent={
-          <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ marginTop: 5 }}>
+          <TouchableOpacity onPress={() => props.navigation.navigate("Home")} style={{ marginTop: 5 }}>
             <AntDesign name={"arrowleft"} size={20} color={Colors.WHITE} />
           </TouchableOpacity>
         }

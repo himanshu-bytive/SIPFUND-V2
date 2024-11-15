@@ -16,8 +16,8 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { InvestmentLists, MyImage } from "../../components";
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from "react-native-vector-icons/Entypo";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Header, Overlay, CheckBox, Input } from "react-native-elements";
 import Cart from "../../components/Cart";
 import WebView from "react-native-webview";
@@ -83,9 +83,6 @@ function HomeScreen(props) {
           setUsername(storedUsername);
           setIsUsernameFetched(true); 
           console.log("Hi", storedUsername);
-          console.log("Your steps",steps);
-          console.log("User",users);
-          
         }
       } catch (error) {
         console.error('Error retrieving username:', error);
@@ -120,8 +117,6 @@ function HomeScreen(props) {
   }, [emandateLink]);
 
   useEffect(() => {
-    console.log("TOKEN",token);
-    
     if (token) {
       getsteps({}, token);
       getHomeData({}, token);
@@ -136,14 +131,14 @@ function HomeScreen(props) {
   useEffect(() => {
     if (goalDetail && pageActiveGoles.current) {
       pageActiveGoles.current = false;
-      props.navigation.navigate("Plan",{screen : 'PlanHome', params :  {toggleLoading}});
+      props.navigation.navigate("Plan",{screen : "PlanHome", params : { toggleLoading }});
     }
   }, [goalDetail]);
 
   useEffect(() => {
     if (investment && pageActiveInvest.current) {
       pageActiveInvest.current = false;
-      props.navigation.navigate("Investment",{screen : 'InvestmentDetail'}, {toggleLoading});
+      props.navigation.navigate("Investment",{screen  : "InvestmentDetail", params : { toggleLoading }});
     }
   }, [investment]);
 
@@ -155,11 +150,11 @@ function HomeScreen(props) {
   };
 
   // useEffect(() => {
-  //   console.log("routeName=", props.navigation.state.routeName);
+  //   console.log("routeName=", props.route.routeName);
   // }, []);
 
   // const backAction = () => {
-  //   if (props.navigation.state.routeName === "Home") {
+  //   if (props.route.routeName === "Home") {
   //     Alert.alert(
   //       "Exit from Sipfund!",
   //       "Do you want to close this application?",
@@ -220,12 +215,9 @@ function HomeScreen(props) {
         }
         rightComponent={
           <Cart
-          nav={() => {
-            props.navigation.navigate('TopRatedFunds', {
-              screen: 'TopRatedList',
-              params: { fromScreen: 'Home' },
-            });
-          }}
+            nav={() => {
+              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList",params :  { fromScreen: "Home" }});
+            }}
           />
         }
         backgroundColor={Colors.LIGHT_WHITE}
@@ -250,7 +242,7 @@ function HomeScreen(props) {
       <ScrollView style={styles.containerScroll}>
         {/* <Text>
           {users?.hasOwnProperty("users") ? 1 : 0}
-          {props.navigation.state.params?.refresh ? "refresh" : "Not"}
+          {props.route.params?.refresh ? "refresh" : "Not"}
           Steps:- {steps}
           IIN:- {users?.IIN}
         </Text> */}
@@ -292,7 +284,7 @@ function HomeScreen(props) {
                           }}
                         >
                           {users?.pan ||
-                          props.route.params?.refresh?.refresh ? (
+                          props.route.params?.refresh ? (
                             <View
                               style={{
                                 alignItems:
@@ -344,29 +336,23 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                             onPress={() => {
-                              if (
-                                users?.pan 
-                              ) {
-                                console.log('STEPS', steps);
-                                if (steps < 3) {
-                                  props.navigation.navigate(
-                                    "Reg",{screen : 'RegisterDetails'},
-                                  );
-                                } else {
-                                  props.navigation.navigate("Reg",{screen : 'UploadDocument'});
-                                }
+                              if (users?.pan || props.route.params?.refresh) {
+                                props.navigation.navigate(
+                                  !username ? "Reg" : "Reg",  // Navigate to either "Reg" or "UploadDocument"
+                                  { screen: !username ? "RegisterDetails" : "UploadDocument" }  // Pass the screen as a parameter
+                                );
                               } else {
-                                props.navigation.navigate('Pan');
+                                props.navigation.navigate("HomeScreen",{screen : "Pan"});
                               }
                             }}
-                            style={styles.botton_box}>
+                            style={styles.botton_box}
+                          >
                             <Text style={styles.get_otp}>
-                              {console.log(users)}
-                              {steps > 2
-                                ? 'COMPLETE ACCOUNT SETUP'
-                                : 'Create Account'}
+                              {users?.pan || props.route.params?.refresh
+                                ? "COMPLETE ACCOUNT SETUP"
+                                : "Create Account"}
                             </Text>
-                          </TouchableOpacity>
+                          </TouchableOpacity>                          
                           )}
                         </View>
                       </View>
@@ -422,7 +408,7 @@ function HomeScreen(props) {
           Top Rated Funds
         </Text>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("TopRatedFunds",{screen : "TopRatedHome"})}
+          onPress={() => props.navigation.navigate("TopRatedFunds",{screen :"TopRatedHome"})}
         >
           <View
             style={[
@@ -535,7 +521,7 @@ function HomeScreen(props) {
           <Text style={styles.quick_text}>Quick Access</Text>
           <ScrollView horizontal={true}>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('You',{screen : 'ReferEarn'})}
+              onPress={() => props.navigation.navigate("OtherStackYou",{screen : "ReferEarn"})}
               style={[styles.education, styles.quick_access]}
             >
               <View style={styles.child_sec}>
@@ -551,7 +537,7 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('You',{screen : 'Relationship'})}
+              onPress={() => props.navigation.navigate("Relationship")}
               style={[styles.education, styles.quick_access]}
             >
               <View style={styles.child_sec}>
@@ -569,7 +555,7 @@ function HomeScreen(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("Hold",{screen : 'Owner'})}
+              onPress={() => props.navigation.navigate("Hold",{screen :"Owner"})}
               style={[styles.education, styles.quick_access]}
             >
               <View style={styles.child_sec}>
@@ -597,12 +583,8 @@ function HomeScreen(props) {
           We would love to have your questions!
         </Text>
         <Text
-          style={{
-            marginHorizontal: 40,
-            textAlign: 'center',
-            marginTop: 20,
-            color: 'black',
-          }}>
+          style={{ marginHorizontal: 50, textAlign: "center", marginTop: 20,color:"black" }}
+        >
           SIPFund.com brings 5 things you must know before investing.
         </Text>
 
@@ -818,7 +800,7 @@ function HomeScreen(props) {
             What is the <Text style={styles.view}>minimal amount</Text> for
             investing in Mutual Funds?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15 ,color:"black"}}>
+          <Text style={{ paddingTop: 10, fontSize: 15,color:"black" }}>
             The minimum amount required to invest in mutual funds is very low.
             You can start investing in Systematic Investment Plan(SIP) with an
             amount of ₹500 only.
@@ -950,7 +932,7 @@ function HomeScreen(props) {
           </Text>
           <View style={{ flexDirection: "row" }}>
             <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5,color:"black" }}>NET Banking</Text>
+            <Text style={{ flex: 1, paddingLeft: 5 ,color:"black"}}>NET Banking</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text>{"\u2022"}</Text>
@@ -958,15 +940,15 @@ function HomeScreen(props) {
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 ,color:"black"}}>UPI</Text>
+            <Text style={{ flex: 1, paddingLeft: 5,color:"black" }}>UPI</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 ,color:"black"}}>Debit Mandate</Text>
+            <Text style={{ flex: 1, paddingLeft: 5,color:"black" }}>Debit Mandate</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <Text>{"\u2022"}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5 ,color:"black"}}>Cheque</Text>
+            <Text style={{ flex: 1, paddingLeft: 5,color:"black" }}>Cheque</Text>
           </View>
           <TouchableOpacity onPress={() => toggleOverlay("")}>
             <Text
@@ -1051,7 +1033,7 @@ function HomeScreen(props) {
             rightComponent={
               <Cart
                 nav={() => {
-                  props.navigation.navigate("TopRatedList");
+                  props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
                 }}
               />
             }
@@ -1113,10 +1095,9 @@ const styles = StyleSheet.create({
   },
   HelloIinvestor1: {
     fontSize: 14,
-    color: Colors.GRAY_DEEP,
+    color: "black",
     opacity: 0.5,
     fontWeight: "bold",
-    color: 'black',
   },
   Plan: {
     fontSize: 16,
@@ -1177,7 +1158,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     paddingLeft: 10,
-    color: 'black',
+    color:"black"
   },
   child_text: {
     fontSize: 16,
@@ -1311,7 +1292,7 @@ const styles = StyleSheet.create({
   },
   minimum: {
     fontSize: 13,
-    color: 'black',
+    color: Colors.BLACK,
   },
   term9: {
     width: 50,
@@ -1413,7 +1394,7 @@ const styles = StyleSheet.create({
   mutual: {
     fontSize: 14,
     fontWeight: "bold",
-     color:"black"
+    color:"black"
   },
   emaMainbox: {
     margin: 10,

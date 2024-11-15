@@ -647,11 +647,12 @@ const styles = StyleSheet.create({
   selectfolio_sec: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginLeft: 10,
+    marginLeft: 0,
+    paddingHorizontal:10
   },
   select: {
     alignItems: "center",
-    width: "32%",
+    width: "auto",
   },
   no: {
     fontSize: 15,
