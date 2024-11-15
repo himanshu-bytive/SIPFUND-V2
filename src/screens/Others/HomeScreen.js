@@ -345,11 +345,10 @@ function HomeScreen(props) {
                             <TouchableOpacity
                             onPress={() => {
                               if (
-                                users?.pan ||
-                                props.route.params?.refresh
+                                users?.pan 
                               ) {
                                 console.log('STEPS', steps);
-                                if (steps === 3) {
+                                if (steps < 3) {
                                   props.navigation.navigate(
                                     "Reg",{screen : 'RegisterDetails'},
                                   );
@@ -363,7 +362,7 @@ function HomeScreen(props) {
                             style={styles.botton_box}>
                             <Text style={styles.get_otp}>
                               {console.log(users)}
-                              {steps === 4
+                              {steps > 2
                                 ? 'COMPLETE ACCOUNT SETUP'
                                 : 'Create Account'}
                             </Text>

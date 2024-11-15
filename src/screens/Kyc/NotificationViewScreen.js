@@ -1,85 +1,87 @@
 /** @format */
 
-import React, { useState, useRef, useEffect, useContext } from "react";
-import {
-  StyleSheet,
-  Button,
-  View,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-  StatusBar,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Dimensions, StatusBar, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import { Styles, Config, Colors, FormValidate } from "../../common";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Image, Header } from "react-native-elements";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Colors from "../../common/Colors";
 
-import { Image, Header, ListItem, Overlay } from "react-native-elements";
-import { ScrollView } from "react-native-gesture-handler";
-import Cart from "../../components/Cart";
+const { width } = Dimensions.get("window");
 
-const { height, width } = Dimensions.get("window");
 function NotificationViewScreen(props) {
-  const { notificationtemplate, notification } = props.route.params;
-  const {
-    isFetching,
-    getNotifications,
-    readNotifications,
-    token,
-    notificationData,
-  } = props;
+  // Extracting params from route
+  const { notificationtemplate, notification } = props.route.params || {}; 
+  console.log("NotificationViewScreen Props:", notificationtemplate, notification);
+  
+  const { readNotifications, token } = props;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    readNotifications(notification?.id, token);
-  }, []);
+    // Ensure the data is available before proceeding
+    if (!notificationtemplate || !notification) {
+      console.log("Notification data is not available yet.");
+      setLoading(false);  // Stop loading if no data is found
+      return;
+    }
+
+    // Mark notification as read
+    readNotifications(notification.id, token);
+    setLoading(false); // Data has been loaded, set loading to false
+  }, [notificationtemplate, notification, token]);
+
+  // If the data is loading, show the activity indicator
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color={Colors.RED} />
+      </View>
+    );
+  }
+
+  // If data is not available, show a fallback message
+  if (!notificationtemplate || !notification) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ fontSize: 18, color: "gray", textAlign: "center", marginTop: 20 }}>
+          Notification data is missing or invalid.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        animated={true}
-        backgroundColor="pink"
-        barStyle="light-content"
-      />
+      <StatusBar animated={true} backgroundColor="pink" barStyle="light-content" />
+
       <Header
         leftComponent={
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={{ marginTop: 5 }}
-          >
+          <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ marginTop: 5 }}>
             <AntDesign name={"arrowleft"} size={20} color={Colors.WHITE} />
           </TouchableOpacity>
         }
         backgroundColor={Colors.RED}
         height={100}
         centerComponent={
-          <Text
-            style={{ color: Colors.WHITE, fontSize: 20, fontWeight: "800" }}
-          >
-            {notificationtemplate?.name}
+          <Text style={{ color: Colors.WHITE, fontSize: 20, fontWeight: "800" }}>
+            {notificationtemplate?.name || "Notification"}
           </Text>
         }
       />
+
       <ScrollView>
-        {notificationtemplate?.image?.length > 0 && (
+        {notificationtemplate?.image && (
           <View style={{ marginTop: 20 }}>
             <Image
               source={{ uri: notificationtemplate?.image }}
-              style={{
-                height: width / 1.7,
-                width: width,
-              }}
+              style={{ height: width / 1.7, width: width }}
               resizeMode={"contain"}
             />
           </View>
         )}
+
         <View style={{ marginHorizontal: 15, marginVertical: 20 }}>
-          <Text style={{ fontSize: 18 }}>{notificationtemplate?.message}</Text>
+          <Text style={{ fontSize: 18,color:"black" }}>{notificationtemplate?.message}</Text>
         </View>
       </ScrollView>
     </View>
@@ -87,91 +89,18 @@ function NotificationViewScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  logimg: {
-    height: 65,
-    width: 203,
-    marginTop: 10,
-  },
-  contain: { marginHorizontal: 10 },
-  sipfund_sec: {
-    backgroundColor: Colors.GRAY_LIGHT_5,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-  },
-  nametext: { color: Colors.WHITE },
-  Transaction: {
-    backgroundColor: Colors.LIGHT_WHITE,
-    alignItems: "center",
-    marginHorizontal: 10,
-    paddingBottom: 10,
-  },
-  Transaction_text: {
-    fontSize: 18,
-    color: Colors.BLACK,
-    paddingVertical: 10,
-  },
-  bottomlogimg: {
-    height: 67,
-    width: 212,
-  },
-  rowItems: {
-    flexDirection: "row",
-    // justifyContent: "space-between",
-    alignItems: "center",
-  },
-  contentRight: {
-    width: "80%",
-    height: 70,
-    padding: 10,
-  },
-  contentLeft: {
-    width: "20%",
-    height: 70,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imageStyle: { height: 20, width: 20 },
-  heading: { fontSize: 16, fontWeight: "bold" },
-  notificationContainer: {
-    height: 70,
-    width: "100%",
-    backgroundColor: "#FFF2EF",
-    borderBottomWidth: 0.2,
-  },
+  container: { flex: 1 },
 });
+
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  users: state.auth.users,
-  isFetching: state.sideMenu.isFetching,
-  notificationData: state.sideMenu.notificationData,
 });
 
-const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { AuthActions } = require("../../store/AuthRedux");
+const mapDispatchToProps = (dispatch) => {
   const { SideMenuActions } = require("../../store/SideMenuRedux");
-
   return {
-    ...stateProps,
-    ...ownProps,
-    logOut: () => {
-      AuthActions.logOut(dispatch);
-    },
-    getNotifications: (token) => {
-      SideMenuActions.getNotifications(dispatch, token);
-    },
-    readNotifications: (params, token) => {
-      SideMenuActions.readNotifications(dispatch, params, token);
-    },
+    readNotifications: (id, token) => SideMenuActions.readNotifications(dispatch, id, token),
   };
 };
-export default connect(
-  mapStateToProps,
-  undefined,
-  mapDispatchToProps
-)(NotificationViewScreen);
 
-// export default NotificationViewScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationViewScreen);

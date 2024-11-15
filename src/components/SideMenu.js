@@ -561,7 +561,7 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('You', {screen: 'Notifications'})
+            props.navigation.navigate('OtherStackYou', {screen: 'Notifications'})
           }
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
@@ -640,17 +640,15 @@ function SideMenu(props) {
               },
               {
                 text: 'OK',
-                onPress: async () => {
+                onPress: () => {
                   console.log('Clearing summary...');
-                  await clearSummery({}, token);
-                  
-                  await resetData();
 
+                  clearSummery({}, token);
                   console.log('Resetting Redux state...');
-                  await resetApp();
+                  resetApp();
                   
                   console.log('Logging out...');
-                  await logout();
+                  logout();
                   
                   console.log('Navigating to verify screen...');
                   props.navigation.navigate("Auth",{screen :'verify'});
