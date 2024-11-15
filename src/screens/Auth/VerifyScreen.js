@@ -17,7 +17,7 @@ import {
   ToastAndroid,
   PermissionsAndroid,
 } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Colors, FormValidate } from "../../common";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -34,7 +34,14 @@ function VerifyScreen(props) {
   const phoneInput = useRef(null);
   const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
-  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery } = props;
+  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp } = props;
+
+  // const reduxState = useSelector((state) => state); // renaming to `reduxState`
+
+  // useEffect(() => {
+  //   // Log the complete Redux state when the page loads
+  //   console.log('Redux state on page load:', reduxState);
+  // }, [reduxState]); // re-run if `reduxState` changes
   // useEffect(() => {
   //   const getPhoneNumber = async () => {
   //     await DeviceInfo.getPhoneNumber().then((phone) => {
@@ -115,6 +122,7 @@ function VerifyScreen(props) {
     GetCurrentLocation();
     openNotificationChannel();
     setIsLoading(false);
+    resetApp();
   }, []);
 
   function checkAllPermissions() {
@@ -498,6 +506,9 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     clearSummery: (params, token) => {
       GoalsActions.clearSummery(dispatch, params, token);
     },
+    resetApp : () => {
+      AuthActions.resetApp(dispatch);
+    }
   };
 };
 export default connect(

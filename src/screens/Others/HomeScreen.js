@@ -349,7 +349,7 @@ function HomeScreen(props) {
                                 props.route.params?.refresh
                               ) {
                                 console.log('STEPS', steps);
-                                if (steps === 3) {
+                                if (!username) {
                                   props.navigation.navigate(
                                     "Reg",{screen : 'RegisterDetails'},
                                   );
