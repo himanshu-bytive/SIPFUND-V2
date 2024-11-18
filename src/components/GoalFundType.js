@@ -218,6 +218,8 @@ const RenderData1 = ({
       for (let i in dates.split(",")) {
         if (parseInt(dates.split(",")[i]) === parseInt(value)) {
           newValue = parseInt(dates.split(",")[parseInt(i)]);
+          console.log("NEWVALUE1",newValue);
+          
           // if (parseInt(i) === dates.split(",").length - 1) {
           //   newValue = parseInt(dates.split(",")[0]);
           //   alert("22");
@@ -225,6 +227,8 @@ const RenderData1 = ({
           //   newValue = parseInt(dates.split(",")[parseInt(i)]);
           //   alert("11");
           // }
+        }else{
+          console.log("NEWVALUE2",newValue);
         }
       }
     } else {
@@ -232,8 +236,10 @@ const RenderData1 = ({
         if (parseInt(dates.split(",")[i]) === parseInt(value)) {
           if (parseInt(i) === 0) {
             newValue = parseInt(dates.split(",")[dates.split(",").length - 1]);
+            console.log("NEWVALUE3",newValue);
           } else {
             newValue = parseInt(dates.split(",")[parseInt(i) - 1]);
+            console.log("NEWVALUE4",newValue);
           }
         }
       }
@@ -314,7 +320,7 @@ const RenderData1 = ({
                   <View style={styles.selectfolio_sec}>
                     <View style={styles.select}>
                       <Text style={styles.no}>Min Investment</Text>
-                      <Text style={{color:"black"}}>
+                      <Text style={{color:"black",marginTop:15}}>
                         ₹
                         {item?.default_min_amount
                           ? item?.default_min_amount
@@ -326,60 +332,6 @@ const RenderData1 = ({
                         <Text style={styles.no}>SIP Date</Text>
 
                         <View style={styles.returnsbox}>
-                          <View
-                            style={
-                              {
-                                // width: "48%",
-                                // height: 120,
-                                // alignItems: "center",
-                                // borderWidth: 1,
-                              }
-                            }
-                          >
-                            {/* <Text>{JSON.stringify(item?.sip_period_day)}</Text> */}
-
-                            {/* <RNPickerSelect
-                            ref={focusInput}
-                            placeholder={{
-                              label: "Select date",
-                              value: null,
-                            }}
-                            style={{
-                              inputIOS: styles.dropDown,
-                              inputAndroid: styles.dropDown,
-                              placeholder: styles.dropDown,
-                              height: 12,
-                              minHeight: 30,
-                            }}
-                            containerStyle={{ width: 150, height: 70 }}
-                            useNativeAndroidPickerStyle={false}
-                            onValueChange={(value) => {
-                              // alert(value);
-                              onChange(k, value, "sip_period_day");
-                              // let data = myInvestlist;
-                              // let date = data[category][index]?.date
-                              //   ? data[category][index]?.date
-                              //   : parseInt(item?.sipDates.split(",")[0]);
-                              // data[category][index].date = value;
-                              // setDates({
-                              //   ...dates,
-                              //   [`${category}${index}`]: value,
-                              // });
-                              // myInvestments(data);
-                            }}
-                            value={
-                              item?.sip_period_day
-                                ? item?.sip_period_day
-                                : defaultDate
-                            }
-                            items={newDates}
-                            // Icon={() => {
-                            //   return (
-
-                            //   );
-                            // }}
-                          /> */}
-                          </View>
                           <DatePickerFun
                             item={item}
                             k={k}
@@ -387,67 +339,7 @@ const RenderData1 = ({
                             plusMinus={plusMinus}
                             defaultDate={defaultDate}
                           />
-                          {/* <TouchableOpacity
-                                  style={{
-                                    zIndex: 1,
-                                    width: 20,
-                                    borderWidth: 1,
-                                  }}
-                                >
-                                  <AntDesign
-                                    name="caretdown"
-                                    size={15}
-                                    style={{
-                                      marginTop: 7,
-                                      marginRight: -20,
-                                    }}
-                                    color="#C0392B"
-                                  />
-                                </TouchableOpacity> */}
                         </View>
-                        {/* <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.new}>
-                            {item?.sip_period_day
-                              ? item?.sip_period_day
-                              : parseInt(item?.sipDates?.split(",")[0])}
-                          </Text>
-                          <View style={{ flexDirection: "column" }}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                plusMinus(
-                                  "plus",
-                                  item?.sip_period_day
-                                    ? item?.sip_period_day
-                                    : item?.sipDates?.split(",")[0],
-                                  item?.sipDates
-                                )
-                              }
-                            >
-                              <AntDesign
-                                name="caretup"
-                                size={15}
-                                color="#C0392B"
-                              />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={() =>
-                                plusMinus(
-                                  "minus",
-                                  item.sip_period_day
-                                    ? item.sip_period_day
-                                    : item.sipDates.split(",")[0],
-                                  item.sipDates
-                                )
-                              }
-                            >
-                              <AntDesign
-                                name="caretdown"
-                                size={15}
-                                color="#C0392B"
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        </View> */}
                       </View>
                     )}
 
@@ -527,7 +419,12 @@ export default function GoalFundType(props) {
   // }, []);
 
   const onChange = async (key, value, name) => {
+    
     let data = JSON.parse(JSON.stringify(newData));
+    console.log("NEW DATA",newData);
+    
+    console.log("DATA",data);
+    
     data[key].schemeInfo[name] =
       isNaN(value) || value === "" ? "0" : parseInt(value, 10).toString();
     myGoles(data);
@@ -535,11 +432,16 @@ export default function GoalFundType(props) {
   };
 
   const DatePickerFun = ({ item, k, newDates, plusMinus, defaultDate }) => {
+    console.log("ITEM",item);
+    
     return (
       <>
         <DatePicker
           items={newDates}
           // value={("0" + item?.sip_period_day).slice(-2)}
+          sip_period_day={item?.sip_period_day
+            ? ("0" + item?.sip_period_day).slice(-2)
+            : defaultDate}
           value={
             item?.sip_period_day
               ? ("0" + item?.sip_period_day).slice(-2)
@@ -602,6 +504,9 @@ export default function GoalFundType(props) {
 }
 
 const styles = StyleSheet.create({
+  returnsbox:{
+    marginTop:-10
+  },
   hybrid_sec: {
     marginVertical: 10,
     backgroundColor: "#fff",

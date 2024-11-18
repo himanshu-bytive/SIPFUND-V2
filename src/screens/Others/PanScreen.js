@@ -14,7 +14,7 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { styles } from "./PanStyle";
-import Entypo from "react-native-vector-icons/Entypo";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Header, CheckBox } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
@@ -86,10 +86,10 @@ function PanScreen(props) {
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() => props.navigation.toggleDrawer()}
+            onPress={() => props.navigation.goBack()}
             style={{ marginTop: 20 }}
           >
-            <Entypo name={"menu"} size={30} color={Colors.RED} />
+            <AntDesign name="arrowleft" size={40} color={Colors.RED} />
           </TouchableOpacity>
         }
         containerStyle={styles.header}

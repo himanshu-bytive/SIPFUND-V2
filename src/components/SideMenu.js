@@ -665,6 +665,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
+    marginTop:40
   },
   profileNameText:{
   flexWrap: 'wrap', 
