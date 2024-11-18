@@ -144,6 +144,8 @@ const TopRatedFundType = props => {
                 <View style={{marginTop:-20}}>
                   <DatePicker
                     items={dates}
+                    sip_period_day={item?.sip_period_day ? item?.sip_period_day : 5}
+                    showIcon={true}
                     value={
                       item?.sip_period_day
                         ? ("0" + item?.sip_period_day).slice(-2)
@@ -160,12 +162,12 @@ const TopRatedFundType = props => {
                     style={{color:"white"}}
                   />
               </View>
-              <View style={{ flexDirection: "row" }}>
+              {/* <View style={{ flexDirection: "row" }}>
                   <Text style={styles.new}>
                     {item?.sip_period_day ? item?.sip_period_day : 5}
                   </Text>
                   <AntDesign name="caretdown" size={20} color="#C0392B" />
-                </View>
+              </View> */}
             </View>
           )}
           <View style={styles.select}>

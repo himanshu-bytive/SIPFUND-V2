@@ -58,6 +58,7 @@ const MyImagePicker = props => {
   const addressVerificationDocs = ['AA1', 'AA2', 'DL'];
   const [photoUri, setPhotoUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [photoMetaData, setphotoMetaData] = useState(null);
   useEffect(() => {
     const checkCameraPermissions = async () => {
       const status = await check(PERMISSIONS.ANDROID.CAMERA);
@@ -111,13 +112,13 @@ const MyImagePicker = props => {
     }
   }, [items]);
 
-  const handleCameraPress = () => {
-    if (item?.name !== null) {
-      setModalVisible(true); // Show the modal when the camera button is pressed
-    } else {
-      Toast.show('You need to select a document first!', Toast.LONG); // Show Toast if no document is selected
-    }
-  };
+  // const handleCameraPress = () => {
+  //   if (item?.name !== null) {
+  //     setModalVisible(true); // Show the modal when the camera button is pressed
+  //   } else {
+  //     Toast.show('You need to select a document first!', Toast.LONG); // Show Toast if no document is selected
+  //   }
+  // };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibrary({
@@ -131,19 +132,19 @@ const MyImagePicker = props => {
 
     if (!result.didCancel) {
       let params = {file: result, fileType};
-      console.log(params);
+      console.log('Uploaded', JSON.stringify(params));
       fileUpload(params, token);
       setImg(result.uri);
     }
   };
 
-  const cameraImage = async image => {
-    let fileType =
-      item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
-    let params = {file: image, fileType};
-    fileUpload(params, token);
-    setImg(image.uri);
-  };
+  // const cameraImage = async image => {
+  //   let fileType =
+  //     item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
+  //   let params = {file: image, fileType};
+  //   fileUpload(params, token);
+  //   setImg(image.uri);
+  // };
 
   const signImage = signature => {
     let params = {signature: signature};
@@ -169,38 +170,12 @@ const MyImagePicker = props => {
   const FileIcons = ({item}) => (
     <>
       <TouchableOpacity
-        style={{ marginRight: 10 }}
-        onPress={handleCameraPress} // Trigger the modal on press
-         // setCameraVisible(true);
-      >
+        style={{marginRight: 10}}
+        onPress={() => {
+          setCameraVisible(true);
+        }}>
         <Entypo name={'camera'} size={22} color="#000000" />
       </TouchableOpacity>
-
-      {/* Modal */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible} // Control visibility with the modalVisible state
-        onRequestClose={() => setModalVisible(false)} // Close the modal when back button is pressed (on Android)
-      >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%', alignItems: 'center' }}>
-            {/* Icon */}
-            <Entypo name="camera" size={40} color="black" style={{ marginBottom: 15 }} />
-            {/* Message */}
-            <Text style={{ fontSize: 18, textAlign: 'center',color:"black" }}>
-              The camera feature is currently under maintenance. Please upload your document manually using icon <Entypo name={item?.type} size={22} color="#000000" />
-            </Text>
-            {/* Close Button */}
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)} // Close modal when clicked
-              style={{ marginTop: 20, padding: 10, backgroundColor: Colors.RED, borderRadius: 5 }}
-            >
-              <Text style={{ color: '#fff' }}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
       <TouchableOpacity
         onPress={() => {
           if (item?.name !== null) {
@@ -214,13 +189,26 @@ const MyImagePicker = props => {
     </>
   );
   const clearPhoto = () => {
-    setPhotoUri(null); // Clear the photo URI
+    setphotoMetaData(null); // Clear the photo URI
   };
 
   const savePhoto = () => {
     Alert.alert('Save Photo', 'Do you want to save the photo?', [
       {text: 'Cancel', style: 'cancel'},
-      {text: 'Save', onPress: () => Toast.show('Photo saved!', Toast.SHORT)},
+      {
+        text: 'Save',
+        onPress: () => {
+          let fileType =
+          item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
+        let params = {
+          file: {...photoMetaData, uri: `file://` + photoMetaData?.path},
+          fileType: fileType,
+        };
+        fileUpload(params, token);
+        clearPhoto();
+        setCameraVisible(false);
+        },
+      },
     ]);
   };
   const ShowReupload = item => {
@@ -229,21 +217,9 @@ const MyImagePicker = props => {
   const takePicture = async () => {
     const photo = await camera.current.takePhoto();
     console.log(photo); // Log photo object
-
+    setphotoMetaData(photo);
     const originalPath = photo.path;
     console.log('Original photo path:', originalPath);
-
-    // Define a new path to copy the photo
-    const newPath = RNFS.ExternalDirectoryPath + '/photo.jpg';
-
-    // Copy the image to a new location
-    try {
-      await RNFS.copyFile(originalPath, newPath);
-      console.log('Image copied to:', newPath);
-      setPhotoUri('file://' + newPath); // Update the URI with the new file path
-    } catch (error) {
-      console.error('Error copying file:', error);
-    }
   };
 
   return (
@@ -361,10 +337,10 @@ const MyImagePicker = props => {
         onRequestClose={() => setCameraVisible(false)}>
         {device && hasPermission ? (
           <View style={{flex: 1}}>
-            {photoUri ? (
+            {photoMetaData ? (
               // Show the image preview if a photo has been taken
               <View style={styles.imageContainer}>
-                <Image source={{uri: photoUri}} style={styles.previewImage} />
+                <Image source={{uri: `file://` + photoMetaData?.path }} style={styles.previewImage} />
                 <View style={styles.buttonsContainer}>
                   <TouchableOpacity style={styles.button} onPress={clearPhoto}>
                     <AntDesign name="closecircle" size={40} color="red" />

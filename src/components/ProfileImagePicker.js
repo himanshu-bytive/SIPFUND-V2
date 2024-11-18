@@ -61,6 +61,7 @@ const ProfileImagePicker = (props) => {
         file: photo,
         fileType: docType,
       };
+      
       fileUpload(params, token);
       setImg(photo.uri);
     }

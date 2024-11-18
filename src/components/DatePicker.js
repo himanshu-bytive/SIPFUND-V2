@@ -1,57 +1,29 @@
 /** @format */
 
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
-import { Colors } from "../common";
-
-const DatePicker = ({ items, value, k, onChange }) => {
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {Colors} from '../common';
+import {Picker} from '@react-native-picker/picker';
+import AntDesign from "react-native-vector-icons/AntDesign";
+const DatePicker = ({items, value, k, onChange,sip_period_day,showIcon}) => {
   const focusInput = React.createRef();
   return (
     <>
-      <RNPickerSelect
+      <Picker
         ref={focusInput}
-        placeholder={{
-          label: "Select date",
-          value: null,
-        }}
-        style={{
-          inputIOS: styles.dropDown,
-          inputAndroid: styles.dropDown,
-          placeholder: styles.dropDown,
-          height: 12,
-          minHeight: 30,
-        }}
-        containerStyle={{ width: 150, height: 70 }}
-        useNativeAndroidPickerStyle={false}
-        onValueChange={(value) => {
-          onChange(value);
-          // alert(value);
-          // onChange(k, value, "sip_period_day");
-          // let data = myInvestlist;
-          // let date = data[category][index]?.date
-          //   ? data[category][index]?.date
-          //   : parseInt(item?.sipDates.split(",")[0]);
-          // data[category][index].date = value;
-          // setDates({
-          //   ...dates,
-          //   [`${category}${index}`]: value,
-          // });
-          // myInvestments(data);
-        }}
-        value={value}
-        // value={
-        //   item?.sip_period_day
-        //     ? item?.sip_period_day
-        //     : parseInt(item?.sipDates?.split(",")[0])
-        // }
-        items={items}
-        // Icon={() => {
-        //   return (
-
-        //   );
-        // }}
-      />
+        selectedValue={value}
+        onValueChange={(val, itemIndex) => onChange(val)}>
+        {items?.map(item => (
+          <Picker.Item label={item?.label} value={item?.value} />
+        ))}
+        {/* <Picker.Item label="JavaScript" value="js" /> */}
+      </Picker>
+      <View style={{flexDirection: 'row',marginTop:-30}}>
+        <Text style={styles.new}>
+          {sip_period_day ? sip_period_day : 5}
+        </Text>
+        <AntDesign name="caretdown" size={20} color="#C0392B" />
+      </View>
     </>
   );
 };
@@ -63,7 +35,12 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
     width: 100,
     height: 25,
-    alignSelf: "center",
-    textAlign: "center",
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  new: {
+    fontSize: 16,
+    color: 'black',
+    marginRight:5
   },
 });
