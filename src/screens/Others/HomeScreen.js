@@ -73,6 +73,9 @@ function HomeScreen(props) {
   const [isUsernameFetched, setIsUsernameFetched] = useState(false);
   useEffect(() => {
     setWebViewActive(false);
+    console.log("STEPS COUNT",steps);
+    console.log("MY USER",users);
+    
   }, []);
   
   useEffect(() => {
@@ -97,7 +100,7 @@ function HomeScreen(props) {
       } else {
         clearInterval(intervalId); // Clear the interval if username is fetched
       }
-    }, 2000); // Poll every 2 seconds
+    }, 500); // Poll every 2 seconds
 
     return () => clearInterval(intervalId); // Clear interval on unmount
   }, [isUsernameFetched]); // Add isUsernameFetched to the dependency array
@@ -318,6 +321,7 @@ function HomeScreen(props) {
                                   },
                                 ]}
                               >
+                                {console.log("YOUR STEPS",steps)}
                                 {users?.IIN && steps > 5
                                   ? "Your Account is Active"
                                   : "You're almost ready to Invest"}
@@ -337,10 +341,7 @@ function HomeScreen(props) {
                             <TouchableOpacity
                             onPress={() => {
                               if (users?.pan || props.route.params?.refresh) {
-                                props.navigation.navigate(
-                                  !username ? "Reg" : "Reg",  // Navigate to either "Reg" or "UploadDocument"
-                                  { screen: !username ? "RegisterDetails" : "UploadDocument" }  // Pass the screen as a parameter
-                                );
+                                props.navigation.navigate("Reg",{ screen: !username ? "RegisterDetails" : "UploadDocument" });
                               } else {
                                 props.navigation.navigate("HomeScreen",{screen : "Pan"});
                               }
@@ -348,7 +349,7 @@ function HomeScreen(props) {
                             style={styles.botton_box}
                           >
                             <Text style={styles.get_otp}>
-                              {users?.pan || props.route.params?.refresh
+                              {users?.pan || username
                                 ? "COMPLETE ACCOUNT SETUP"
                                 : "Create Account"}
                             </Text>

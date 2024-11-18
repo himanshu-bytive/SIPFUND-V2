@@ -56,7 +56,8 @@ const storeData = async (key, value) => {
 export const AuthActions = {
   verify: async (dispatch, params) => {
     console.log("Login Params",params);
-    
+    await AsyncStorage.removeItem("USERNAME");
+    await AsyncStorage.removeItem('LOGIN');
     dispatch({ type: types.FETCH_VERIFY_PENDING });
     let data = await SiteAPI.apiPostCall("/auth/verify", params);
     console.log("Login params Response",data);
@@ -74,6 +75,8 @@ export const AuthActions = {
     }
   },
   otp: async (dispatch, params) => {
+    console.log("PARAMS",params);
+    
     dispatch({ type: types.FETCH_OTP_PENDING });
     let data = await SiteAPI.apiPostCall("/auth/validate", params);
     if (data.error) {
@@ -197,15 +200,11 @@ export const AuthActions = {
     console.log("Logging out...");
     await AsyncStorage.removeItem("USERNAME");
     await AsyncStorage.removeItem('LOGIN');
-    console.log("Done logging out.");
     return { type: types.LOGOUT };
   },
   resetApp : async (dispatch) => {
     try {
-      console.log("Dispatching RESET action...");
       dispatch({ type: types.RESET });
-
-      console.log("App state has been reset.");
     } catch (error) {
       console.error("Error during resetApp:", error);
     }

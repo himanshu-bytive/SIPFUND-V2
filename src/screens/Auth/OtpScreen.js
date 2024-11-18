@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, } from "react";
 import {
   StyleSheet,
   View,
@@ -11,18 +11,15 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Alert,
   Text,
 } from "react-native";
 import { connect } from "react-redux";
 import SmsRetriever from "react-native-sms-retriever";
 import { Colors } from "../../common";
+const width = Dimensions.get("window").width;
 import OTPInputView from "@twotalltotems/react-native-otp-input";
-import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
 import Geolocation from "@react-native-community/geolocation";
-
-const width = Dimensions.get("window").width;
 
 function OtpScreen(props) {
   const pageActive = useRef(false);
@@ -32,10 +29,10 @@ function OtpScreen(props) {
     phone,
     isFetching,
     signUpSteps,
+    // appToken
   } = props;
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const [appToken, setAppToken] = useState("-");
-  const [verificationCode, setVerificationCode] = useState("");
 
   useEffect(() => {
     new NotificationService(onRegister);
@@ -59,7 +56,7 @@ function OtpScreen(props) {
 
   /* Auto read OTP */
   useEffect(() => {
-    const _startSmsListener = async () => {
+    _startSmsListener = async () => {
       try {
         const registered = await SmsRetriever.startSmsRetriever();
         if (registered) {
@@ -91,45 +88,46 @@ function OtpScreen(props) {
   }, []);
 
   useEffect(() => {
-    if (signUpSteps === 1 && pageActive.current) {
+    if (signUpSteps == 1 && pageActive.current) {
       pageActive.current = false;
       props.navigation.navigate("createAccount");
     }
   }, [signUpSteps]);
 
-  const GetCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        reverseGeocode(latitude, longitude);
-      },
-      (error) => {
-        console.error(error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
-
-  const reverseGeocode = async (latitude, longitude) => {
-    try {
-      let response = await Location.reverseGeocodeAsync({
-        latitude,
-        longitude,
-      });
-      for (let item of response) {
-        setDisplayCurrentAddress({
-          latitude: latitude,
-          longitude: longitude,
-          address: item?.name,
-          city: item?.city,
-          state: item?.street,
-          pincode: item?.postalCode,
-        });
+  const GetCurrentLocation = async () => {
+    Geolocation.getCurrentPosition( async (position) =>{
+      const { latitude, longitude } = position.coords;
+      console.log(position);
+      console.log(latitude);
+      console.log(longitude);
+      // Fetch address details using a geocoding service
+      const apiKey = 'AIzaSyBZZFjaQWAKZd-6gvBlFAlRiw1D5bUO5FA';
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+      const response = await axios.get(url);
+      // console.log("GOT RESPONSE",response);
+      if (response.data.status === 'OK') {
+       const addressComponents = response.data.results[0].address_components;
+       const address = response.data.results[0].formatted_address;
+       console.log(address);
+       const city = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
+       const state = addressComponents.find(component => component.types.includes("administrative_area_level_1"))?.long_name || "";
+       const pincode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
+       console.log(city + " " + state + " " + pincode);
+       setDisplayCurrentAddress({
+        latitude : latitude,
+        longitude : longitude,
+        address : address,
+        city : city,
+        state : state,
+        pincode : pincode,
+       });
+      }else {
+        console.error("Geocoding API error:", response.data.status);
+        Alert.alert("Error", "Unable to fetch address details");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    })
   };
+  const [verificationCode, setVerificationCode] = useState("");
 
   const onAction = async (text) => {
     if (text.length === 4) {
@@ -138,7 +136,7 @@ function OtpScreen(props) {
         minorFlag: false,
         mobileNo: phone,
         otp: text,
-        platform: Platform.OS === "ios" ? "IOS" : "ANDROID",
+        platform: Platform.OS == "ios" ? "IOS" : "ANDROID",
         referenceInfo: {
           latitude: displayCurrentAddress?.latitude,
           longitude: displayCurrentAddress?.longitude,
@@ -147,18 +145,6 @@ function OtpScreen(props) {
         },
       };
       pageActive.current = true;
-
-      const eventName = "add_otp";
-      appsFlyer.logEvent(
-        eventName,
-        params,
-        (res) => {
-          console.log("######## AppsFlyer #######", res);
-        },
-        (err) => {
-          console.error("######## AppsFlyer #######", err);
-        }
-      );
 
       otp(params);
       setVerificationCode("");
@@ -248,8 +234,20 @@ function OtpScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  containerScroll: {
-    width: "100%",
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.GREY_1,
+  },
+  slogan: {
+    fontSize: 30,
+    color: Colors.BLACK,
+    marginTop: 100,
+    marginBottom: 20,
+  },
+  sloganRed: {
+    color: Colors.RED,
   },
   containBox: {
     alignItems: "center",
@@ -275,16 +273,27 @@ const styles = StyleSheet.create({
   otpsec: {
     alignItems: "center",
   },
+  inputsec: {
+    borderBottomWidth: 4,
+    width: 35,
+    borderColor: Colors.GREY_1,
+    marginLeft: 4,
+    marginRight: 4,
+  },
   get_otp: {
     color: Colors.RED,
   },
-  nseimg: {},
+  nseimg: {
+    //marginVertical: 50,
+  },
   number: {
     fontSize: 18,
     textAlign: "center",
     paddingTop: 4,
     paddingBottom: 4,
-    color:"black"
+  },
+  containerScroll: {
+    width: "100%",
   },
   proceedButtonContainer: {
     backgroundColor: Colors.LIGHT_RED,
@@ -296,15 +305,6 @@ const styles = StyleSheet.create({
   proceedButtonText: {
     fontSize: 20,
     color: Colors.WHITE,
-  },
-  slogan: {
-    fontSize: 30,
-    color: Colors.BLACK,
-    marginTop: 100,
-    marginBottom: 20,
-  },
-  sloganRed: {
-    color: Colors.RED,
   },
 });
 
@@ -329,7 +329,6 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
   };
 };
-
 export default connect(
   mapStateToProps,
   undefined,

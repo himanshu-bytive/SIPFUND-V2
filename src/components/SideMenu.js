@@ -641,16 +641,9 @@ function SideMenu(props) {
               {
                 text: 'OK',
                 onPress: () => {
-                  console.log('Clearing summary...');
-
                   clearSummery({}, token);
-                  console.log('Resetting Redux state...');
                   resetApp();
-                  
-                  console.log('Logging out...');
                   logout();
-                  
-                  console.log('Navigating to verify screen...');
                   props.navigation.navigate("Auth",{screen :'verify'});
                 },
               },
