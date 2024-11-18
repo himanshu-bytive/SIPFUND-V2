@@ -247,7 +247,7 @@ function UploadDocumentScreen(props) {
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("Home", { refresh: true })}
+            onPress={() => props.navigation.navigate("Explore",{screen : "Home",params : { refresh: true }})}
             style={{ marginTop: 20 }}
           >
             <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />

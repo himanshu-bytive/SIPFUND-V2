@@ -26,7 +26,7 @@ function PanScreen(props) {
 
   useEffect(() => {
     if (pan) {
-      props.navigation.navigate("Home", { refresh: true });
+      props.navigation.navigate("Explore",{screen : "Home", params : { refresh: true }});
     }
   }, [pan]);
 

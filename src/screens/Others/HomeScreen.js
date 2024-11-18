@@ -340,7 +340,7 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                             onPress={() => {
-                              if (users?.pan || props.route.params?.refresh) {
+                              if (users?.pan || username) {
                                 props.navigation.navigate("Reg",{ screen: !username ? "RegisterDetails" : "UploadDocument" });
                               } else {
                                 props.navigation.navigate("HomeScreen",{screen : "Pan"});
