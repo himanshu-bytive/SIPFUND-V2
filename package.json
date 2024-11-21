@@ -49,6 +49,7 @@
     "react-native-gesture-handler": "^2.20.0",
     "react-native-image-picker": "^7.1.2",
     "react-native-modal-datetime-picker": "^18.0.0",
+    "react-native-otp-inputs": "^7.4.0",
     "react-native-otp-verify": "^1.1.8",
     "react-native-paper": "^5.12.5",
     "react-native-permissions": "^5.0.0",

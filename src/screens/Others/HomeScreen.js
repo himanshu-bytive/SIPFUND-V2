@@ -25,6 +25,7 @@ import appsFlyer from "react-native-appsflyer";
 import FastImage from "react-native-fast-image";
 import SuggestionInput from "../../components/Search";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RegistrationActions } from "../../store/RegistrationRedux";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -36,6 +37,7 @@ function HomeScreen(props) {
     token,
     logOut,
     users,
+    pan,
     isFetching,
     error,
     steps,
@@ -62,6 +64,7 @@ function HomeScreen(props) {
     goalSummary,
     goalSummaryRetrieve,
     fundDetails,
+    setdocumentStatus
   } = props;
   // console.log("🚀 ~ HomeScreen ~ investments:", JSON.stringify(investments));
 
@@ -75,7 +78,8 @@ function HomeScreen(props) {
     setWebViewActive(false);
     console.log("STEPS COUNT",steps);
     console.log("MY USER",users);
-    
+    console.log("PAN",pan);
+    setdocumentStatus();
   }, []);
   
   useEffect(() => {
@@ -340,7 +344,7 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                             onPress={() => {
-                              if (users?.pan || username) {
+                              if (users?.pan || pan || username) {
                                 props.navigation.navigate("Reg",{ screen: !username ? "RegisterDetails" : "UploadDocument" });
                               } else {
                                 props.navigation.navigate("HomeScreen",{screen : "Pan"});
@@ -349,7 +353,7 @@ function HomeScreen(props) {
                             style={styles.botton_box}
                           >
                             <Text style={styles.get_otp}>
-                              {users?.pan || username
+                              {users?.pan || pan || username
                                 ? "COMPLETE ACCOUNT SETUP"
                                 : "Create Account"}
                             </Text>
@@ -1483,6 +1487,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   users: state.auth.user,
   isFetching: state.home.isFetching,
+  pan : state.home.pan,
   error: state.home.error,
   steps: state.home.steps,
   home: state.home.home,
@@ -1545,6 +1550,7 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     fundDetails: (data) => {
       FundDetailActions.fundDetails(dispatch, data);
     },
+    setdocumentStatus : () => dispatch(RegistrationActions.setdocumentStatus())
   };
 };
 export default connect(

@@ -7,7 +7,9 @@ import Config from "../common/Config";
 import { AuthActions } from "./AuthRedux";
 const types = {
   GET_OCCUPATION: "GET_OCCUPATION",
-
+  DOCUMENT_UPLOAD_STATUS_SUCCESS : "DOCUMENT_UPLOAD_STATUS_SUCCESS",
+  DOCUMENT_UPLOAD_STATUS_FAILURE : "DOCUMENT_UPLOAD_STATUS_FAILURE",
+  DOCUMENT_UPLOAD_STATUS_PENDING : "DOCUMENT_UPLOAD_STATUS_PENDING",
   FETCH_CITY_PENDING: "FETCH_CITY_PENDING",
   FETCH_CITY_SUCCESS: "FETCH_CITY_SUCCESS",
   FETCH_CITY_FAILURE: "FETCH_CITY_FAILURE",
@@ -365,33 +367,37 @@ export const RegistrationActions = {
   },
   fileUpload: async (dispatch, params, token) => {
     dispatch({ type: types.FETCH_FILE_UPLOAD_PENDING });
+    dispatch({ type: types.DOCUMENT_UPLOAD_STATUS_PENDING }); // Show loader
+    console.log("Dispatching DOCUMENT_UPLOAD_STATUS_PENDING");
+  
     let data = await SiteAPI.uploadImgApi(
       `/documents/uploads?docType=${params.fileType}`,
       params.file,
       token
     );
-
-    if (!data.validFlag) {
+  
+    console.log("IMAGE RESPONSE", data);
+  
+    if (data.vaildFlag) {
       alert(data.responseString);
-      //Alert.alert("SIP Fund", JSON.stringify(data.message), [
-      //{
-      //text: "OK",
-      //onPress: () => {
-      //dispatch({ type: types.FETCH_FILE_UPLOAD_SUCCESS });
-      //},
-      //},
-      //]);
-      dispatch({ type: types.FETCH_FILE_UPLOAD_SUCCESS, uploadSuccess: true });
+      dispatch({ type: types.DOCUMENT_UPLOAD_STATUS_SUCCESS }); // Hide loader on success
+      console.log("Dispatching DOCUMENT_UPLOAD_STATUS_SUCCESS");
+      dispatch({
+        type: types.FETCH_FILE_UPLOAD_SUCCESS,
+        uploadSuccess: true,
+      });
     } else {
-      if (!data.responseString.includes("doc type not found")) {
+      if (data.responseString.includes("doc type not found")) {
         Alert.alert(data.responseString);
       }
+      dispatch({ type: types.DOCUMENT_UPLOAD_STATUS_FAILURE }); // Hide loader on failure
+      console.log("Dispatching DOCUMENT_UPLOAD_STATUS_FAILURE");
       dispatch({
         type: types.FETCH_FILE_UPLOAD_FAILURE,
         error: data.responseString,
       });
     }
-  },
+  },  
   fileUploadSign: async (dispatch, params, token) => {
     dispatch({ type: types.FETCH_FILE_UPLOAD_PENDING });
     let data = await SiteAPI.apiPostCall(
@@ -399,6 +405,8 @@ export const RegistrationActions = {
       params,
       token
     );
+    console.log("DATA",data);
+    
     let data1 = await SiteAPI.apiPostCall(`/template/ACH_FORM1`, params, token);
     if (data.error) {
       Alert.alert("SIP Fund", JSON.stringify(data.message), [
@@ -406,8 +414,8 @@ export const RegistrationActions = {
           text: "OK",
           onPress: () => {
             dispatch({
-              type: types.FETCH_FILE_UPLOAD_SUCCESS,
-              uploadSuccess: true,
+              type: types.FETCH_FILE_UPLOAD_FAILURE,
+              error: data.responseString,
             });
           },
         },
@@ -415,8 +423,8 @@ export const RegistrationActions = {
     } else {
       Alert.alert(data.responseString);
       dispatch({
-        type: types.FETCH_FILE_UPLOAD_FAILURE,
-        error: data.responseString,
+        type: types.FETCH_FILE_UPLOAD_SUCCESS,
+        uploadSuccess: true,
       });
     }
   },
@@ -451,10 +459,16 @@ export const RegistrationActions = {
     }
   },
 
+  setdocumentStatus(){
+    console.log("Reached");
+    
+    return { type: types.DOCUMENT_UPLOAD_STATUS_FAILURE}
+   },
+
   fetchMinorGaurdianRelationship: async (dispatch, list) => {
     dispatch({
       type: types.FETCH_MINOR_RELATIONSHIP_PENDING,
-    });
+    });  
 
     let data = await SiteAPI.apiGetCall(
       `/nsemasterapi/getMinorGuardianRelationship`
@@ -506,6 +520,7 @@ const initialState = {
   updatedNseData: null,
   nomineeRelationship: [],
   minorGaurdianRelationship: [],
+  DocumentUploadStatus : false
 };
 
 export const reducer = (state = initialState, action) => {
@@ -577,6 +592,28 @@ export const reducer = (state = initialState, action) => {
         error,
       };
     }
+    case types.DOCUMENT_UPLOAD_STATUS_PENDING: {
+      console.log("Setting DocumentUploadStatus to true");
+      return {
+        ...state,
+        DocumentUploadStatus: true, // Show loader
+      };
+    }
+    case types.DOCUMENT_UPLOAD_STATUS_FAILURE: {
+      console.log("Setting DocumentUploadStatus to false (failure)");
+      return {
+        ...state,
+        DocumentUploadStatus: false, // Hide loader
+      };
+    }
+    case types.DOCUMENT_UPLOAD_STATUS_SUCCESS: {
+      console.log("Setting DocumentUploadStatus to false (success)");
+      return {
+        ...state,
+        DocumentUploadStatus: false, // Hide loader
+      };
+    }
+    
     case types.GET_OCCUPATION: {
       return {
         ...state,

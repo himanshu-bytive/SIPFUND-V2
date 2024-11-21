@@ -29,12 +29,13 @@ import Geolocation from "@react-native-community/geolocation";
 import PushNotification from "react-native-push-notification";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { HomeActions } from "../../store/HomeRedux";
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
   const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
-  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp } = props;
+  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp,resetData,pan } = props;
 
   // const reduxState = useSelector((state) => state); // renaming to `reduxState`
 
@@ -116,15 +117,65 @@ function VerifyScreen(props) {
     //   props.navigation.navigate("login");
     // }
   }, [signUpSteps]);
-
   useEffect(() => {
-    checkAllPermissions();
-    GetCurrentLocation();
-    openNotificationChannel();
-    setIsLoading(false);
-    resetApp();
+    async function initialize() {
+      checkAllPermissions(); // Ensure all permissions are requested first
+      await requestSmsPermission(); // SMS permission can be requested after
+      await GetCurrentLocation(); // Fetch location after permissions
+      await requestCameraPermission();
+      openNotificationChannel(); // Configure push notifications
+      setIsLoading(false); // Update loading state
+      resetApp(); // Reset app-related state
+      resetData(); // Reset data state
+      console.log("PAN VERIFY SCREEN", pan); // Log pan for debugging
+    }
+  
+    initialize();
   }, []);
 
+    const requestSmsPermission = async () => {
+      try {
+        // Request READ_SMS permission (you can also request SEND_SMS if needed)
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_SMS,
+          {
+            title: 'SMS Permission',
+            message: 'This app needs access to your SMS messages.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+    
+        // Return whether permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+
+    const requestCameraPermission = async () => {
+      try {
+        // Request CAMERA permission
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'This app needs access to your camera.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+    
+        // Return whether permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
   function checkAllPermissions() {
     // Request notification permissions
     PushNotification.configure({
@@ -188,6 +239,8 @@ function VerifyScreen(props) {
     console.log("Permission granted");
     
     Geolocation.getCurrentPosition( async (position) =>{
+      console.log("Getting the locations");
+      
       const { latitude, longitude } = position.coords;
       console.log(position);
       console.log(latitude);
@@ -485,6 +538,7 @@ const mapStateToProps = (state) => ({
   isFetching: state.auth.isFetching,
   signUpSteps: state.auth.signUpSteps,
   phones: state.auth.phones,
+  pan : state.home.pan,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
@@ -506,9 +560,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     clearSummery: (params, token) => {
       GoalsActions.clearSummery(dispatch, params, token);
     },
-    resetApp : () => {
-      AuthActions.resetApp(dispatch);
-    }
+    resetApp : () => dispatch(AuthActions.resetApp()),
+    resetData: () => dispatch(HomeActions.resetData())
   };
 };
 export default connect(

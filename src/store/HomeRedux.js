@@ -58,6 +58,8 @@ export const HomeActions = {
       dispatch({ type: types.FETCH_UPDATE_PAN_PENDING });
 
       let data = await SiteAPI.apiPostCall("/user/userPan", params, tokan);
+      console.log("UPDATE PAN",data);
+      
       if (data.error) {
         if (data.message) Alert.alert(data.message);
         dispatch({ type: types.FETCH_UPDATE_PAN_FAILURE, error: data.message });
@@ -170,7 +172,7 @@ export const reducer = (state = initialState, action) => {
         error: null,
         pan,
       };
-    }
+    }    
     case types.FETCH_UPDATE_PAN_FAIL: {
       return {
         isFetching: false,

@@ -643,6 +643,7 @@ function SideMenu(props) {
                 onPress: () => {
                   clearSummery({}, token);
                   resetApp();
+                  resetData();
                   logout();
                   props.navigation.navigate("Auth",{screen :'verify'});
                 },
@@ -815,14 +816,10 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getrm: token => {
       SideMenuActions.getrm(dispatch, token);
     },
-    resetApp : () =>{
-      AuthActions.resetApp(dispatch);
-    },
+    resetApp : () => dispatch(AuthActions.resetApp()),
+    resetData: () => dispatch(HomeActions.resetData()),
     logout : () => {
       AuthActions.logout();
-    },
-    resetData : () =>{
-      HomeActions.resetData();
     }
   };
 };

@@ -121,16 +121,17 @@ function UploadDocumentScreen(props) {
     uploadSuccess,
     isFetching,
     setUri,
-    userDetails
+    userDetails,
+    DocumentUploadStatus
   } = props;
   const [document, setDocument] = useState(
     docs?.responseString?.ekycIsDone ? documentsKyc :documents 
   );
   const [showLoader, setShowLoader] = useState(false);
   useEffect(()=>{
-    console.log("Documents",docs);
+    console.log("Documents Status",DocumentUploadStatus);
     
-  })
+  },[DocumentUploadStatus])
   const carosuelref = useRef();
   const [reUploadInd, setReUploadInd] = useState([]);
   
@@ -243,6 +244,13 @@ function UploadDocumentScreen(props) {
   };
 
   return (
+    <>
+    {DocumentUploadStatus ? ( <View style={styles.loading}>
+                <View>
+                  <Text style={{color:Colors.BLACK,marginBottom:20}}>Uploading your document... Please hold on</Text>
+                </View>
+                <ActivityIndicator size={30} color={Colors.RED} />
+              </View>) : (
     <View style={styles.container}>
       <Header
         leftComponent={
@@ -291,7 +299,6 @@ function UploadDocumentScreen(props) {
 
         <View style={styles.container_sec}>
           <Text style={styles.we_need}>We need the Required Documents</Text>
-          {console.log("MyDocument",document)}
           {document.map((item, key) => (
             <View key={key} style={styles.pan_sec}>
               {/* {
@@ -332,12 +339,25 @@ function UploadDocumentScreen(props) {
         </View>
       </ScrollView>
     </View>
+  )}
+  </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loading: {
+    flex: 1,                        // Take up all available space
+    justifyContent: 'center',       // Vertically center the loader
+    alignItems: 'center',           // Horizontally center the loader
+    position: 'absolute',           // Ensure it overlays other content
+    top: 0,                         // Start from the top
+    left: 0,                        // Start from the left
+    right: 0,                       // Stretch to the right
+    bottom: 0,                      // Stretch to the bottom
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: semi-transparent background
   },
   logimg: {
     height: 65,
@@ -404,6 +424,7 @@ const mapStateToProps = (state) => ({
   steps: state.home.steps,
   user: state.home.user,
   userDetails: state.registration.userDetails,
+  DocumentUploadStatus : state.registration.DocumentUploadStatus
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {

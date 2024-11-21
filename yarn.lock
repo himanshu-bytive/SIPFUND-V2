@@ -1667,7 +1667,7 @@
   dependencies:
     "merge-options" "^3.0.4"
 
-"@react-native-clipboard/clipboard@^1.15.0":
+"@react-native-clipboard/clipboard@*", "@react-native-clipboard/clipboard@^1.15.0":
   "integrity" "sha512-YDMC3E956jn9zE11uKGcQDKS1SO9q72iNHxZyrKY5y9XYwZcA9vo3Xk74+zRnf7cM48drDO0s9lyAPUlOvyhrw=="
   "resolved" "https://registry.npmjs.org/@react-native-clipboard/clipboard/-/clipboard-1.15.0.tgz"
   "version" "1.15.0"
@@ -5995,6 +5995,11 @@
   "version" "18.0.0"
   dependencies:
     "prop-types" "^15.7.2"
+
+"react-native-otp-inputs@^7.4.0":
+  "integrity" "sha512-+phHrlcQQ63VuOrHaOZze7LP9WmzUGxGMlQx2A/jhPhYkCi/5hXDjxNcWyPXCy/RFRoLX+70HNpGqTgo0mDg7Q=="
+  "resolved" "https://registry.npmjs.org/react-native-otp-inputs/-/react-native-otp-inputs-7.4.0.tgz"
+  "version" "7.4.0"
 
 "react-native-otp-verify@^1.1.8":
   "integrity" "sha512-hlgNqVBhmsxh/LHJWEVrbku81GXMS0QDJiHLhQW96dr3awYYbrkVf7979zYqi5rSTEajUQzHShvMQwOc0gIlBA=="

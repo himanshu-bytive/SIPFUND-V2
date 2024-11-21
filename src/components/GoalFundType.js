@@ -211,7 +211,7 @@ const RenderData1 = ({
   let schemeInfo = Array.isArray(data.schemeInfo)
     ? data.schemeInfo
     : [data.schemeInfo];
-
+   
   const plusMinus = (type, value, dates) => {
     let newValue = 0;
     if (type === "plus") {
@@ -460,17 +460,6 @@ export default function GoalFundType(props) {
     <>
       {newData?.map((item, key) => (
         <View key={key}>
-          {/* <Text>{JSON.stringify(item)}</Text> */}
-          {/* {randerData(
-            item,
-            key,
-            onPress,
-            onChange,
-            handleDelete,
-            selectedOption,
-            showModified,
-            focusInput
-          )} */}
           <RenderData1
             data={item}
             k={key}
@@ -487,20 +476,6 @@ export default function GoalFundType(props) {
       ))}
     </>
   );
-  return newData.map((item, key) => (
-    <View key={key}>
-      {/* {randerData(
-        item,
-        key,
-        onPress,
-        onChange,
-        handleDelete,
-        selectedOption,
-        showModified,
-        focusInput
-      )} */}
-    </View>
-  ));
 }
 
 const styles = StyleSheet.create({

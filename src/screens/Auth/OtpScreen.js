@@ -12,15 +12,15 @@ import {
   Image,
   TouchableOpacity,
   Text,
+  Keyboard,
 } from "react-native";
 import { connect } from "react-redux";
-import SmsRetriever from "react-native-sms-retriever";
 import { Colors } from "../../common";
 const width = Dimensions.get("window").width;
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import NotificationService from "../../../NotificationService";
 import Geolocation from "@react-native-community/geolocation";
-
+import RNOtpVerify from "react-native-otp-verify";
 function OtpScreen(props) {
   const pageActive = useRef(false);
   const {
@@ -56,26 +56,27 @@ function OtpScreen(props) {
 
   /* Auto read OTP */
   useEffect(() => {
-    _startSmsListener = async () => {
-      try {
-        const registered = await SmsRetriever.startSmsRetriever();
-        if (registered) {
-          SmsRetriever.addSmsListener((event) => {
-            var rx = /[0-9][0-9][0-9][0-9]/;
-            const matches = rx.exec(event.message);
-            if (matches && matches.length) {
-              setVerificationCode(matches[0]);
-              SmsRetriever.removeSmsListener();
-            }
-          });
-        }
-      } catch (error) {
-        console.log(JSON.stringify(error));
-      }
-    };
+    RNOtpVerify.getHash()
+    .then(console.log)
+    .catch(console.log)
 
-    _startSmsListener();
+    RNOtpVerify.getOtp()
+    .then(p => RNOtpVerify.addListener(OtpHandler))
+    .catch(p=> console.log(p))
+
+    return () => RNOtpVerify.removeListener();
   }, []);
+
+  const OtpHandler = (message) =>{
+    console.log("MESSAGE",message);
+    
+    const otp = /(\d{4})/g.exec(message)[1];
+    // this.setState({otp});
+    console.log("OTP",otp);
+    setVerificationCode(otp);
+    RNOtpVerify.removeListener();
+    Keyboard.dismiss();
+  }
 
   useEffect(() => {
     if (verificationCode) {

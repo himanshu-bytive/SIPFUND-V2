@@ -65,6 +65,7 @@ function CompleteDetailsScreen(props) {
 
   const [occupationsList, setOccupationsList] = useState([]);
   const [incomesList, setIncomesList] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
 
   const mobileEmailRelation = [
     { value: "SE", label: "Self" },
@@ -125,6 +126,17 @@ function CompleteDetailsScreen(props) {
       props.navigation.navigate("Reg",{screen :"RegisterAddress"});
     }
   }, [updateSuccess]);
+
+  useEffect(() => {
+    setShowLoader(true); // Show loader immediately on mount
+  
+    const hideTimer = setTimeout(() => {
+      setShowLoader(false); // Hide loader after 5 seconds
+    }, 2000); // 5 seconds for hiding the loader
+  
+    // Cleanup for the hide timer
+    return () => clearTimeout(hideTimer);
+  }, []); // Only runs on mount
 
   useEffect(() => {
     settings(token);
@@ -526,7 +538,7 @@ function CompleteDetailsScreen(props) {
           />
         }
       />
-      {isFetching && (
+      {showLoader && (
         <View style={Styles.loading}>
           <ActivityIndicator color={Colors.BLACK} size="large" />
         </View>

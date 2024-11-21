@@ -47,7 +47,6 @@ const MyImagePicker = props => {
   const [img, setImg] = useState(null);
   const [cameraVisible, setCameraVisible] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [hasPermission, setHasPermission] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
   const [sign, setSign] = useState(false);
   const [item, setItem] = useState(selList[0]);
@@ -59,21 +58,8 @@ const MyImagePicker = props => {
   const [photoUri, setPhotoUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [photoMetaData, setphotoMetaData] = useState(null);
-  useEffect(() => {
-    const checkCameraPermissions = async () => {
-      const status = await check(PERMISSIONS.ANDROID.CAMERA);
-      console.log('GETTING STATUS', status);
-      if (status !== 'granted') {
-        const newStatus = await request(PERMISSIONS.ANDROID.CAMERA);
-        setHasPermission(newStatus === 'granted');
-      } else {
-        console.log('GRANTED');
-
-        setHasPermission(true);
-      }
-    };
-    checkCameraPermissions();
-  }, []);
+  const [previewPhoto, setPreviewPhoto] = useState("");
+  const [isReUploadVisible, setIsReUploadVisible] = useState(false);
 
   const docVerificationCompleted = fileType => {
     if (fileType === '') {
@@ -134,7 +120,10 @@ const MyImagePicker = props => {
       let params = {file: result, fileType};
       console.log('Uploaded', JSON.stringify(params));
       fileUpload(params, token);
+      
       setImg(result.uri);
+
+      setReUploadInd(current => [...current, fileType]);
     }
   };
 
@@ -148,6 +137,8 @@ const MyImagePicker = props => {
 
   const signImage = signature => {
     let params = {signature: signature};
+    console.log('SIGNATURE', params);
+
     fileUploadSign(params, token);
     setImg(signature);
     setSign(false);
@@ -192,6 +183,31 @@ const MyImagePicker = props => {
     setphotoMetaData(null); // Clear the photo URI
   };
 
+  const handleReUploadClick = () => {
+    setIsReUploadVisible(true);
+  };
+
+  const OnReUpload = () => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          onPress={() => setCameraVisible(true)}
+          style={{marginRight: 15}}>
+          <Entypo name={'camera'} size={25} color="#000000" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => pickImage()}>
+          <FontAwesome name="paperclip" size={25} color="#000000" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  useEffect(() => {
+  if (previewPhoto) {
+    console.log("Updated previewPhoto:", previewPhoto);
+  }
+}, [previewPhoto]); 
+
   const savePhoto = () => {
     Alert.alert('Save Photo', 'Do you want to save the photo?', [
       {text: 'Cancel', style: 'cancel'},
@@ -199,14 +215,22 @@ const MyImagePicker = props => {
         text: 'Save',
         onPress: () => {
           let fileType =
-          item?.fileType || (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
-        let params = {
-          file: {...photoMetaData, uri: `file://` + photoMetaData?.path},
-          fileType: fileType,
-        };
-        fileUpload(params, token);
-        clearPhoto();
-        setCameraVisible(false);
+            item?.fileType ||
+            (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
+          const photoUri = `file://` + photoMetaData?.path;  
+          console.log("HJGFSDF",photoUri);
+          
+          let params = {
+            file: {...photoMetaData, uri: photoUri},
+            fileType: fileType,
+          };
+          console.log('PARAMS', params);
+          setPreviewPhoto(photoUri);
+          
+          fileUpload(params, token);
+          clearPhoto();
+          setCameraVisible(false);
+          setReUploadInd(current => [...current, fileType]);
         },
       },
     ]);
@@ -216,7 +240,7 @@ const MyImagePicker = props => {
   };
   const takePicture = async () => {
     const photo = await camera.current.takePhoto();
-    console.log(photo); // Log photo object
+    console.log('PHOTO CLICKED', photo);
     setphotoMetaData(photo);
     const originalPath = photo.path;
     console.log('Original photo path:', originalPath);
@@ -228,8 +252,9 @@ const MyImagePicker = props => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingRight: 50,
       }}>
-      <View style={{flexDirection: 'row', alignItems: 'center', width: '66%'}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', width: '70%'}}>
         {item?.icon}
         {item?.multi ? (
           <View
@@ -296,25 +321,35 @@ const MyImagePicker = props => {
             </TouchableOpacity>
           ))}
       </View>
-      <View style={{width: '15%'}}>
+      <View
+        style={{
+          width: '16%',
+        }}>
+          {console.log("IMG",img)}
         {img && <Image source={{uri: img}} style={styles.image} />}
       </View>
+
       <View>
         {item?.type === 'attachment' ? (
           <View style={{flexDirection: 'row'}}>
-            {docVerificationCompleted(item?.fileType) === undefined ? (
+            {docVerificationCompleted(item?.fileType) === false || undefined ? (
               <FileIcons item={item} />
             ) : (
               <>
-                {ShowReupload(item) === undefined ? (
-                  <TouchableOpacity
-                    style={{marginRight: 10}}
-                    activeOpacity={0.5}
-                    onPress={() =>
-                      setReUploadInd(current => [...current, item?.fileType])
-                    }>
-                    <Text>Re-upload</Text>
-                  </TouchableOpacity>
+                {ShowReupload(item) ? (
+                  <View>
+                    {!isReUploadVisible && (
+                      <View>
+                        {console.log("DSDD",previewPhoto)}
+                      <TouchableOpacity onPress={handleReUploadClick}>
+                        <Text style={{color: 'black', fontSize: 15}}>
+                          Re-Upload
+                        </Text>
+                      </TouchableOpacity>
+                      </View>
+                    )}
+                    {isReUploadVisible && OnReUpload()}
+                  </View>
                 ) : (
                   <FileIcons item={item} />
                 )}
@@ -323,6 +358,7 @@ const MyImagePicker = props => {
           </View>
         ) : (
           <TouchableOpacity
+            style={{marginLeft: 30}}
             onPress={() => {
               setSign(true);
             }}>
@@ -335,47 +371,43 @@ const MyImagePicker = props => {
         transparent={true}
         visible={cameraVisible}
         onRequestClose={() => setCameraVisible(false)}>
-        {device && hasPermission ? (
-          <View style={{flex: 1}}>
-            {photoMetaData ? (
-              // Show the image preview if a photo has been taken
-              <View style={styles.imageContainer}>
-                <Image source={{uri: `file://` + photoMetaData?.path }} style={styles.previewImage} />
-                <View style={styles.buttonsContainer}>
-                  <TouchableOpacity style={styles.button} onPress={clearPhoto}>
-                    <AntDesign name="closecircle" size={40} color="red" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={savePhoto} // Show save alert on tick mark press
-                  >
-                    <AntDesign name="checkcircle" size={40} color="green" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              // Camera view when no photo has been taken
-              <View style={{flex: 1}}>
-                <Camera
-                  ref={camera}
-                  style={StyleSheet.absoluteFill}
-                  device={device}
-                  isActive={true}
-                  photo={true}
-                />
+        <View style={{flex: 1}}>
+          {photoMetaData ? (
+            // Show the image preview if a photo has been taken
+            <View style={styles.imageContainer}>
+              <Image
+                source={{uri: `file://` + photoMetaData?.path}}
+                style={styles.previewImage}
+              />
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.button} onPress={clearPhoto}>
+                  <AntDesign name="closecircle" size={40} color="red" />
+                </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.captureButton}
-                  onPress={takePicture} // Take picture on press
-                />
+                  style={styles.button}
+                  onPress={savePhoto} // Show save alert on tick mark press
+                >
+                  <AntDesign name="checkcircle" size={40} color="green" />
+                </TouchableOpacity>
               </View>
-            )}
-          </View>
-        ) : (
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'white'}}>No access to camera</Text>
-          </View>
-        )}
+            </View>
+          ) : (
+            // Camera view when no photo has been taken
+            <View style={{flex: 1}}>
+              <Camera
+                ref={camera}
+                style={StyleSheet.absoluteFill}
+                device={device}
+                isActive={true}
+                photo={true}
+              />
+              <TouchableOpacity
+                style={styles.captureButton}
+                onPress={takePicture} // Take picture on press
+              />
+            </View>
+          )}
+        </View>
       </Modal>
       <Modal
         animationType="slide"
@@ -390,6 +422,7 @@ const MyImagePicker = props => {
             saveImageFileInExtStorage={false}
             onEmpty={() => setSign(false)}
             backgroundColor="transparent"
+            penColor="black"
           />
         </View>
       </Modal>
@@ -416,7 +449,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'black',
+    backgroundColor: 'grey',
     position: 'absolute',
     bottom: 50,
     alignSelf: 'center',
@@ -444,7 +477,7 @@ const styles = StyleSheet.create({
   },
   pan: {
     marginHorizontal: 10,
-    fontSize: 18,
+    fontSize: 14,
     flex: 0,
     fontWeight: 'bold',
     color: 'black',
@@ -459,7 +492,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   custom: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#000',
     paddingHorizontal: 10,

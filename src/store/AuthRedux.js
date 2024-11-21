@@ -202,12 +202,8 @@ export const AuthActions = {
     await AsyncStorage.removeItem('LOGIN');
     return { type: types.LOGOUT };
   },
-  resetApp : async (dispatch) => {
-    try {
-      dispatch({ type: types.RESET });
-    } catch (error) {
-      console.error("Error during resetApp:", error);
-    }
+  resetApp() {
+    return { type: types.RESET };
   },
   creatAccount: async (dispatch, params) => {
     dispatch({ type: types.FETCH_CREAT_ACCOUNT_PENDING });
@@ -426,10 +422,9 @@ export const reducer = (state = initialState, action) => {
         wrongPassCount: 0,
       };
     }
-    case types.RESET: {
-      // Reset the state to initial state
-      return { ...initialState, phones: state.phones };
-    }
+    case types.RESET:
+      return Object.assign({}, initialState, {phones : state.phones});
+
     case types.LOGOUT:
       return Object.assign({}, initialState, { phones: state.phones });
     default:
