@@ -26,6 +26,7 @@ import FastImage from "react-native-fast-image";
 import SuggestionInput from "../../components/Search";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RegistrationActions } from "../../store/RegistrationRedux";
+import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -80,7 +81,15 @@ function HomeScreen(props) {
     console.log("MY USER",users);
     console.log("PAN",pan);
     setdocumentStatus();
+    logCurrentStack();
   }, []);
+
+  const navigation = useNavigation();
+
+  const logCurrentStack = () => {
+    const state = navigation.getState();
+    console.log("Current stack",state); // This will log the navigation state, including the routes in the stack
+  };
   
   useEffect(() => {
     const fetchUsername = async () => {

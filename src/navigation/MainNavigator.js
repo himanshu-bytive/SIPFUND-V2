@@ -91,6 +91,13 @@ export const LoginFlowStack = () => (
   </Stack.Navigator>
 );
 
+export const Initialpage = () =>(
+  <Stack.Navigator initialRouteName="verify"
+  screenOptions={{headerShown: false}}  >
+    <Stack.Screen name="verify" component={VerifyScreen} />
+  </Stack.Navigator>
+)
+
 export const HamburgMenuStack = () => (
   <Stack.Navigator
     initialRouteName="dashboard"

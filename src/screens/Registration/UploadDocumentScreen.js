@@ -301,10 +301,6 @@ function UploadDocumentScreen(props) {
           <Text style={styles.we_need}>We need the Required Documents</Text>
           {document.map((item, key) => (
             <View key={key} style={styles.pan_sec}>
-              {/* {
-                userDetails?.ekycIsDone?
-                :
-              } */}
               {docs && (
                 <MyImagePicker
                   items={item}
@@ -325,7 +321,6 @@ function UploadDocumentScreen(props) {
         <View
           style={{ flexDirection: "row", marginHorizontal: 10, marginTop: 20 }}
         >
-          {/* <ScrollView horizontal={true} ref={scrollViewRef} > */}
           {docs?.responseString.documents ? (
             <Carousel
               ref={carosuelref}

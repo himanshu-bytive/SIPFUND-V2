@@ -117,14 +117,20 @@ function SplashScreen(props) {
               : PERMISSIONS.READ_PHONE_STATE
           ).then(() => {
             //getPhoneNumber();
+            console.log("Helo");
+            
             props.navigation.navigate("verify");
           });
         } else {
           //getPhoneNumber();
+          console.log("jh");
+          
           props.navigation.navigate("verify");
         }
       });
     } else {
+      console.log("jkg");
+      
       props.navigation.navigate("verify");
     }
   }, [updateAvailable]);

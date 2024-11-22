@@ -642,10 +642,10 @@ function SideMenu(props) {
                 text: 'OK',
                 onPress: () => {
                   clearSummery({}, token);
-                  resetApp();
-                  resetData();
+                  // resetApp();
+                  // resetData();
                   logout();
-                  props.navigation.navigate("Auth",{screen :'verify'});
+                  props.navigation.navigate("Reset",{screen  : "verify"});
                 },
               },
             ]);

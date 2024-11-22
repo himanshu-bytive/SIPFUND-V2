@@ -17,7 +17,7 @@ import {connect} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Button} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import DocumentInstructions from './DocumentInstructions';
@@ -58,7 +58,7 @@ const MyImagePicker = props => {
   const [photoUri, setPhotoUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [photoMetaData, setphotoMetaData] = useState(null);
-  const [previewPhoto, setPreviewPhoto] = useState("");
+  const [previewPhoto, setPreviewPhoto] = useState('');
   const [isReUploadVisible, setIsReUploadVisible] = useState(false);
 
   const docVerificationCompleted = fileType => {
@@ -120,7 +120,7 @@ const MyImagePicker = props => {
       let params = {file: result, fileType};
       console.log('Uploaded', JSON.stringify(params));
       fileUpload(params, token);
-      
+
       setImg(result.uri);
 
       setReUploadInd(current => [...current, fileType]);
@@ -175,7 +175,7 @@ const MyImagePicker = props => {
             Toast.show('You need to select a document first!', Toast.LONG);
           }
         }}>
-        <Entypo name={item?.type} size={22} color="#000000" />
+        <FontAwesome name="paperclip" size={25} color="#000000" />
       </TouchableOpacity>
     </>
   );
@@ -192,7 +192,7 @@ const MyImagePicker = props => {
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => setCameraVisible(true)}
-          style={{marginRight: 15}}>
+          style={{marginRight: 10}}>
           <Entypo name={'camera'} size={25} color="#000000" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => pickImage()}>
@@ -203,10 +203,10 @@ const MyImagePicker = props => {
   };
 
   useEffect(() => {
-  if (previewPhoto) {
-    console.log("Updated previewPhoto:", previewPhoto);
-  }
-}, [previewPhoto]); 
+    if (previewPhoto) {
+      console.log('Updated previewPhoto:', previewPhoto);
+    }
+  }, [previewPhoto]);
 
   const savePhoto = () => {
     Alert.alert('Save Photo', 'Do you want to save the photo?', [
@@ -217,16 +217,16 @@ const MyImagePicker = props => {
           let fileType =
             item?.fileType ||
             (item?.name === 'Aadhaar Card Front' ? 'AA1' : 'AA2');
-          const photoUri = `file://` + photoMetaData?.path;  
-          console.log("HJGFSDF",photoUri);
-          
+          const photoUri = `file://` + photoMetaData?.path;
+          console.log('HJGFSDF', photoUri);
+
           let params = {
             file: {...photoMetaData, uri: photoUri},
             fileType: fileType,
           };
           console.log('PARAMS', params);
           setPreviewPhoto(photoUri);
-          
+
           fileUpload(params, token);
           clearPhoto();
           setCameraVisible(false);
@@ -300,15 +300,28 @@ const MyImagePicker = props => {
         </TouchableOpacity>
         {docVerificationCompleted(item?.fileType) !== undefined &&
           (docVerificationCompleted(item?.fileType) ? (
-            <TouchableOpacity
-              onPress={() => Toast.show('Verification Pending!', Toast.SHORT)}>
-              <FontAwesome
-                name="exclamation-circle"
-                size={18}
-                style={{marginLeft: 10}}
-                color="#D4A340"
-              />
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={() =>
+                  Toast.show('Verification Pending!', Toast.SHORT)
+                }>
+                <FontAwesome
+                  name="exclamation-circle"
+                  size={18}
+                  style={{marginLeft: 10}}
+                  color="#D4A340"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  Alert.alert(
+                    'Document Uploaded Successfully.'
+                  )
+                }
+                style={{marginLeft: 10}}>
+                <Icon name="check-circle" size={18} color="green" />
+              </TouchableOpacity>
+            </>
           ) : (
             <TouchableOpacity
               onPress={() => Toast.show('Document Verified', Toast.SHORT)}>
@@ -321,17 +334,16 @@ const MyImagePicker = props => {
             </TouchableOpacity>
           ))}
       </View>
-      <View
+    { img && (  <View
         style={{
-          width: '16%',
+          width: '12%',
         }}>
-          {console.log("IMG",img)}
         {img && <Image source={{uri: img}} style={styles.image} />}
-      </View>
+      </View> )}
 
       <View>
         {item?.type === 'attachment' ? (
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row',marginLeft:50}}>
             {docVerificationCompleted(item?.fileType) === false || undefined ? (
               <FileIcons item={item} />
             ) : (
@@ -340,12 +352,11 @@ const MyImagePicker = props => {
                   <View>
                     {!isReUploadVisible && (
                       <View>
-                        {console.log("DSDD",previewPhoto)}
-                      <TouchableOpacity onPress={handleReUploadClick}>
-                        <Text style={{color: 'black', fontSize: 15}}>
-                          Re-Upload
-                        </Text>
-                      </TouchableOpacity>
+                        <TouchableOpacity onPress={handleReUploadClick}>
+                          <Text style={{color: 'black', fontSize: 15}}>
+                            Re-Upload
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     )}
                     {isReUploadVisible && OnReUpload()}
