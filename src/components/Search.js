@@ -22,7 +22,7 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
       if (inputText.length >= 1) {
         try {
           const response = await axios.get(
-            `http://159.65.145.3:8085/api/amc/search?amcname=${inputText}`
+            `https://sipfund.com/api/amc/search?amcname=${inputText}`
           );
           if (response?.data?.results && response?.data?.results?.length > 10) {
             setShowSuggestions(true);

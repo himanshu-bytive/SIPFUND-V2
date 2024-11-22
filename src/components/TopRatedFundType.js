@@ -144,7 +144,7 @@ const TopRatedFundType = props => {
                 <View style={{marginTop:-20}}>
                   <DatePicker
                     items={dates}
-                    sip_period_day={item?.sip_period_day ? item?.sip_period_day : 5}
+                    sip_period_day={item?.sip_period_day ? item?.sip_period_day : 1}
                     showIcon={true}
                     value={
                       item?.sip_period_day

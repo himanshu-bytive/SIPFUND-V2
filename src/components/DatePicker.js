@@ -12,6 +12,7 @@ const DatePicker = ({items, value, k, onChange,sip_period_day,showIcon}) => {
       <Picker
         ref={focusInput}
         selectedValue={value}
+        dropdownIconColor="white" 
         onValueChange={(val, itemIndex) => onChange(val)}>
         {items?.map(item => (
           <Picker.Item label={item?.label} value={item?.value} />

@@ -333,7 +333,7 @@ function FundsHomeScreen(props) {
         rightComponent={
           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
             }}
           />
         }

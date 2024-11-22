@@ -63,8 +63,8 @@ function FundDetailScreen(props) {
     amcCode: "",
     amcName: "",
     imagePath: "",
-    minimumSIPAmount: 0,
-    minimumLumpsumAmount: 0,
+    minimumSIPAmount: 1000,
+    minimumLumpsumAmount: 5000,
     dates: [],
   });
   const [item, setItem] = useState({});
@@ -417,7 +417,7 @@ function FundDetailScreen(props) {
                       keyboardType={"numeric"}
                       value={numberWithCommas(price)}
                       onChangeText={(amount) => removeSpecialChars(amount)}
-                      placeholder="₹0"
+                      placeholder="₹1000"
                       style={styles.amount_tex2}
                     />
                   </View>
@@ -490,7 +490,7 @@ function FundDetailScreen(props) {
                       keyboardType={"numeric"}
                       value={numberWithCommas(price)}
                       onChangeText={(amount) => removeSpecialChars(amount)}
-                      placeholder="₹0"
+                      placeholder="₹1000"
                       style={styles.amount_tex2}
                     />
                   </View>
