@@ -30,6 +30,7 @@ import PushNotification from "react-native-push-notification";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeActions } from "../../store/HomeRedux";
+import FileViewer from 'react-native-file-viewer'; 
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
@@ -176,26 +177,41 @@ function VerifyScreen(props) {
         return false;
       }
     };
-  function checkAllPermissions() {
-    // Request notification permissions
-    PushNotification.configure({
-      onRegister: function (registration) {
-        console.log("TOKEN:", registration.token);
-        setToken(registration.token);
-      },
-      onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
-      },
-      // Request permissions (iOS)
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
-  }
+    function checkAllPermissions() {
+      // Request notification permissions
+      PushNotification.configure({
+        onRegister: function (registration) {
+          console.log("TOKEN:", registration.token);
+          setToken(registration.token); // Store the token if needed
+        },
+        onNotification: function (notification) {
+          console.log("NOTIFICATION:", notification);
+          
+          // Check if the notification has a filePath
+          if (notification?.data?.filePath) {
+            const filePath = notification.data.filePath;
+            console.log("FILEPATH",filePath);
+            
+            // Open the PDF file using a file viewer
+            FileViewer.open(filePath)
+              .then(() => {
+                console.log("PDF opened successfully");
+              })
+              .catch((error) => {
+                console.error("Error opening PDF file", error);
+              });
+          }
+        },
+        // Request permissions (iOS)
+        permissions: {
+          alert: true,
+          badge: true,
+          sound: true,
+        },
+        popInitialNotification: true,
+        requestPermissions: true,  // Automatically request permissions
+      });
+    }
 
   function openNotificationChannel () {
     PushNotification.createChannel(

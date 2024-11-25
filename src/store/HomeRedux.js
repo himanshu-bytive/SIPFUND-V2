@@ -72,8 +72,8 @@ export const HomeActions = {
     // let data = await SiteAPI.apiPostCall("/user/userPan", params, tokan);
   },
   checkPANNumber: async (dispatch, params, tokan) => {
+    dispatch({ type: types.FETCH_UPDATE_PAN_PENDING });
     let data1 = await SiteAPI.apiGetCall(`/user/getIINonPAN?pan=${params.pan}`);
-
     if (data1?.validflag) {
       const newParams = {
         iin: data1?.data[0]?.CUSTOMER_ID,
