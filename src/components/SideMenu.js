@@ -573,7 +573,7 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('You', {screen: 'Reports'})}
+          onPress={() => props.navigation.navigate('OtherStackYou', {screen: 'Reports'})}
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <AntDesign name={'profile'} size={30} color={Colors.GRAY_LIGHT_4} />

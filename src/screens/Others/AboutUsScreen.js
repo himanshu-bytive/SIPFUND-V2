@@ -84,7 +84,7 @@ function AboutUsScreen(props) {
 
         <View style={{ marginTop: 50 }}>
           <Text style={styles.get_otp}>
-            Copyrights © 2023 All Rights Reserved by SIP Fund.{" "}
+            Copyrights © 2024 All Rights Reserved by SIP Fund.{" "}
           </Text>
         </View>
       </View>

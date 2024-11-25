@@ -100,7 +100,9 @@ function TopRatedSubmitScreen(props) {
         {cart.map((item) => (
           <View style={styles.sbi_sec}>
             {console.log("Item",item)}
-            <Image source={{ uri: item?.image_path }} style={styles.Hybrid} />
+            <Image  source={{
+              uri: `https://sipfund.sfo2.digitaloceanspaces.com/product-AMC-images/${item?.image_path}`,
+            }} style={styles.Hybrid} />
             <Text style={styles.sbi_text}>{item?.product_name}</Text>
             <Text style={styles.price}>₹ {item?.amount}</Text>
           </View>
@@ -215,6 +217,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     resizeMode: "contain",
+    marginTop:10
   },
   sbi_text: {
     marginLeft: 10,
