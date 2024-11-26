@@ -169,7 +169,7 @@ function DashboardScreen(props) {
             <View style={styles.Profit}>
               {DashboardData ? (
                 <Text style={styles.rupees}>
-                  ₹ {DashboardData.netTotalInvestment.toFixed(2)}
+                  ₹ {DashboardData.totalInvestment.toFixed(2)}
                 </Text>
               ) : (
                 <ActivityIndicator size="large" color={Colors.RED} />
