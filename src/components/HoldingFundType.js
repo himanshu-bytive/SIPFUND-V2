@@ -89,6 +89,7 @@ export default function HoldingFundType(props) {
                   <Text
                     style={{
                       fontSize: 14,
+                      color:"black"
                     }}
                   >
                     {"Cur.NAV/Value"}
@@ -96,6 +97,7 @@ export default function HoldingFundType(props) {
                   <Text
                     style={{
                       fontSize: 14,
+                      color:"black"
                     }}
                   >
                     {`₹ ${item?.navValue.toFixed(
@@ -121,15 +123,15 @@ export default function HoldingFundType(props) {
                   key={key}
                 >
                   <View style={{ justifyContent: "space-between" }}>
-                    <Text>
+                    <Text style={{color:"black"}}>
                       {moment(new Date(trxn?.navDate)).format("DD-MM-YYYY")} (
                       {trxn?.type})
                     </Text>
-                    <Text>₹{trxn?.amount}</Text>
+                    <Text style={{color:"black"}}>₹{trxn?.amount}</Text>
                   </View>
                   <View style={{ justifyContent: "space-between" }}>
-                    <Text>Nav: ₹{trxn?.purPrice}</Text>
-                    <Text>Units: {trxn?.units}</Text>
+                    <Text style={{color:"black"}}>Nav: ₹{trxn?.purPrice}</Text>
+                    <Text style={{color:"black"}}>Units: {trxn?.units}</Text>
                   </View>
                 </View>
               ))}
@@ -252,17 +254,20 @@ const styles = StyleSheet.create({
     //marginLeft: 10,
     paddingTop: 10,
     fontSize: 14,
+    color:"black"
   },
   SBIEquity_rate: {
     paddingTop: 10,
     paddingRight: 10,
     fontSize: 15,
     fontWeight: "bold",
+    color:"black"
   },
   transHeader: {
     fontSize: 20,
     textAlign: "center",
     marginBottom: 5,
+    color:"black"
   },
   transactionContainer: {
     marginHorizontal: 10,

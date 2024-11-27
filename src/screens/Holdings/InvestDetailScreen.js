@@ -73,7 +73,7 @@ function InvestDetailScreen(props) {
         onPress={() => props.navigation.navigate("Home")}
         style={styles.botton_box}
       >
-        <Text style={styles.get_otp}>SET OTHER INVESTMENTS</Text>
+        <Text style={styles.get_otp}>SEE OTHER INVESTMENTS</Text>
       </TouchableOpacity>
     </View>
   );
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   text_goals: {
     fontSize: 20,
     marginVertical: 15,
+    color:"black"
   },
   education_plan: {
     flexDirection: "row",
