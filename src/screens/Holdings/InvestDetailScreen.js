@@ -14,12 +14,7 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { HoldingFundType, MyImage } from "../../components";
@@ -78,7 +73,7 @@ function InvestDetailScreen(props) {
         onPress={() => props.navigation.navigate("Home")}
         style={styles.botton_box}
       >
-        <Text style={styles.get_otp}>SET OTHER GOALS</Text>
+        <Text style={styles.get_otp}>SET OTHER INVESTMENTS</Text>
       </TouchableOpacity>
     </View>
   );

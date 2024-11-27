@@ -103,7 +103,7 @@ function GoalsSummaryScreen(props) {
   };
 
   const investplanData = () => {
-    props.navigation.navigate("InvestmentList");
+    props.navigation.navigate("Hold",{screen : "InvestmentList"});
   };
 
   useEffect(() => {
