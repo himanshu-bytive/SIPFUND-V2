@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "900972534168",
-    "project_id": "sipfund-1dee8",
-    "storage_bucket": "sipfund-1dee8.firebasestorage.app"
+    "project_number": "385439720964",
+    "project_id": "sipfund-e48c8",
+    "storage_bucket": "sipfund-e48c8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:900972534168:android:ab7e61156f5563103373ed",
+        "mobilesdk_app_id": "1:385439720964:android:acdf9ecd87fbd5ce0fb751",
         "android_client_info": {
-          "package_name": "com.sipfund"
+          "package_name": "com.octrax.sipfund"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA7FI5nSu7IVpydrlWd4_R18DpEMPfs9y8"
+          "current_key": "AIzaSyC9Zt6J66sRF5201a0AATk8DxAcPHBsJGI"
         }
       ],
       "services": {

@@ -1,4 +1,4 @@
-package com.sipfund
+package com.octrax.sipfund
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
