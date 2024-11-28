@@ -670,6 +670,7 @@ const styles = StyleSheet.create({
   },
   profileNameText:{
   flexWrap: 'wrap', 
+  color:"white",
   fontSize: 16,
   },
   profile_sec: {
