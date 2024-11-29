@@ -84,8 +84,11 @@ android {
         applicationId "com.octrax.sipfund"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 78
+        versionCode 79
         versionName "1.0.57"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
     }
    signingConfigs {
         debug {
