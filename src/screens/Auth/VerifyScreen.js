@@ -121,7 +121,7 @@ function VerifyScreen(props) {
   useEffect(() => {
     async function initialize() {
       checkAllPermissions(); // Ensure all permissions are requested first
-      await requestSmsPermission(); // SMS permission can be requested after
+      // await requestSmsPermission(); // SMS permission can be requested after
       await GetCurrentLocation(); // Fetch location after permissions
       await requestCameraPermission();
       openNotificationChannel(); // Configure push notifications
@@ -134,27 +134,7 @@ function VerifyScreen(props) {
     initialize();
   }, []);
 
-    const requestSmsPermission = async () => {
-      try {
-        // Request READ_SMS permission (you can also request SEND_SMS if needed)
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_SMS,
-          {
-            title: 'SMS Permission',
-            message: 'This app needs access to your SMS messages.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          }
-        );
-    
-        // Return whether permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    };
+   
 
     const requestCameraPermission = async () => {
       try {
