@@ -31,12 +31,14 @@ import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeActions } from "../../store/HomeRedux";
 import FileViewer from 'react-native-file-viewer'; 
+import RNPickerSelect from 'react-native-picker-select';
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
   const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp,resetData,pan } = props;
+  const [selectedValue, setSelectedValue] = useState('+91');
 
   // const reduxState = useSelector((state) => state); // renaming to `reduxState`
 
@@ -351,7 +353,7 @@ function VerifyScreen(props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View>
+      <View style={styles.sloganView}>
         <Text style={styles.slogan}>
           Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
         </Text>
@@ -359,11 +361,11 @@ function VerifyScreen(props) {
       <View style={styles.mainbox}>
         <View style={{ alignItems: "center" }}>
           <Image
-            source={require("../../../assets/logo.png")}
+            source={require("../../../assets/SIPFUND-NEW-LOGIN.png")}
             style={styles.logoimg}
           />
         </View>
-        <View style={{ width: width - 50, marginLeft: 100 }}>
+        <View style={{ width: width - 50, marginLeft: 100, marginTop: 25 }}>
           {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
           {phones.map((item, key) => (
             <TouchableOpacity
@@ -379,25 +381,36 @@ function VerifyScreen(props) {
         <View style={styles.or}>
           {phones.length > 0 && <Text style={styles.code}>OR</Text>}
           <Text style={[styles.code, { marginTop: 0 }]}>
-            Enter Your Mobile number
+            Enter your mobile number
           </Text>
         </View>
-        <View style={styles.text_box}>
-          
-          <MaterialIcons name="call" size={20} color="#838280" />
-          <TextInput
-            ref={phoneInput}
-            style={styles.inputsec}
-            placeholder={"Phone"}
-            placeholderTextColor="grey"
-            keyboardType="numeric"
-            maxLength={10}
-            onChangeText={(phone) => {
-              setError({ ...errors, phone: null });
-              setState({ ...state, phone });
-            }}
-            value={state.phone}
-          />
+        <View style={styles.number_box}>
+          <View style={styles.country_code_box}>
+            <RNPickerSelect
+              onValueChange={(value) => setSelectedValue(value)}
+              items={[
+                { label: '🇮🇳 +91', value: '+91' },
+                { label: '🇺🇸 +1', value: '+1' },
+                { label: '🇬🇧 +44', value: '+44' },
+              ]}
+              style={{
+                inputAndroid: styles.pickerInput, // Android styling
+                inputIOS: styles.pickerInput, // iOS styling
+              }}
+              placeholder={{}} // No placeholder
+              value={selectedValue} // Controlled by state
+            />
+          </View>
+
+          {/* Phone Number Input */}
+          <View style={styles.text_box}>
+            <TextInput
+              style={styles.inputsec}
+              placeholder={""}
+              keyboardType="numeric"
+              maxLength={10}
+            />
+          </View>
         </View>
         {errors.phone && (
           <View style={styles.text_box}>
@@ -415,14 +428,14 @@ function VerifyScreen(props) {
               onPress={() => onAction()}
               style={styles.botton_box}
             >
-              <Text style={styles.get_otp}>ENTER</Text>
+              <Text style={styles.get_otp}>Enter</Text>
             </TouchableOpacity>
           )}
         </View>
         <View style={styles.otp}>
-          <Text style={{ color: "grey" }}>
+          {/* <Text style={{ color: "grey" }}>
             OTP will be sent to this Mobile Number
-          </Text>
+          </Text> */}
         </View>
       </View>
       <View>
@@ -439,15 +452,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+  },
+  sloganView: {
+    marginTop: 95,
   },
   slogan: {
     fontSize: 30,
     color: Colors.BLACK,
     marginBottom: 30,
+    fontWeight: 'bold',
+    fontFamily: 'Inter',
   },
   sloganRed: {
-    color: Colors.RED,
+    //color: Colors.RED,
+    color: Colors.NEW_RED,
   },
   mainbox: {
     borderRadius: 25,
@@ -455,21 +474,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoimg: {
-    marginTop: 30,
+    marginTop: 20,
+    width: 180,
+    height: 180,
   },
   continue: {
     fontSize: 20,
     marginTop: 20,
     marginBottom: 10,
     //paddingLeft: 70,
-  },
-  inputsec: {
-    borderBottomWidth: 1,
-    marginLeft: 5,
-    marginTop: -3,
-    borderColor: "#828282",
-    width: "50%",
-    color:"black"
   },
   phone_number: {
     flexDirection: "row",
@@ -484,39 +497,37 @@ const styles = StyleSheet.create({
   code: {
     marginTop: 10,
     marginBottom: 5,
-    fontSize: 19,
-    color: "#7E7E7E",
+    fontSize: 18,
+    color: "#000000",
+    fontFamily:'Jomolhari',
+    fontWeight:25,
     //textAlign: "center",
     //paddingLeft: 70,
-  },
-  text_box: {
-    flexDirection: "row",
-    marginTop: 10,
-    alignSelf: "flex-start",
-    paddingLeft: 50,
-    justifyContent:"center",
-    alignItems:"center"
   },
   button: {
     alignItems: "center",
   },
   botton_box: {
-    backgroundColor: Colors.RED,
-    paddingHorizontal: 50,
-    paddingVertical: 10,
+    //backgroundColor: Colors.RED,
+    paddingHorizontal: 60,
+    paddingVertical: 5,
     marginTop: 20,
-    borderRadius: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FFB2AA'
   },
   get_otp: {
-    color: Colors.WHITE,
-    fontSize: 15,
+    color: Colors.BLACK,
+    fontSize: 20,
   },
   error: {
     color: Colors.RED,
     fontSize: 13,
   },
   nseimg: {
-    marginTop: 30,
+    marginTop: 110,
     width: Dimensions.get("window").width * 0.8,
     resizeMode: "contain",
   },
@@ -526,7 +537,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.GREY_1,
     alignItems: "center",
+  },  
+  number_box: {
+    flexDirection: 'row', // Arrange items horizontally
+    alignItems: 'center', // Align vertically
+    height: 50, // Adjust height
+    marginHorizontal: 20, // Add spacing from the screen edges
+    backgroundColor: Colors.WHITE,
   },
+  country_code_box: {
+    width: 80, // Fixed width for the dropdown
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    borderRadius: 1, // Rounded corners
+    backgroundColor: Colors.WHITE,
+    justifyContent: 'center', // Center the picker vertically
+    marginRight: 10, // Spacing between dropdown and text box
+    height: '80%',
+  },
+  pickerInput: {
+    fontSize: 14, // Text size
+    color: 'black', // Text color
+    textAlign: 'center', // Center align the text
+    paddingHorizontal: 5, // Add padding
+  },
+  text_box: {
+    flex: 1, // Take remaining space
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    borderRadius: 1,
+    backgroundColor: Colors.WHITE,
+    height: '80%', // Match height with the dropdown
+  },
+  inputsec: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    height: '100%',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 5,
+    color: 'black',
+  },
+    
 });
 
 const mapStateToProps = (state) => ({

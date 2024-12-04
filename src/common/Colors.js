@@ -93,4 +93,7 @@ export default {
     medium: "#0cab03",
     bright: "#72C146"
   },
+
+  //new color added for New-Onbording
+  NEW_RED: '#C0392B',
 }
