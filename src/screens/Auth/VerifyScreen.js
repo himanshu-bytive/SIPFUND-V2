@@ -31,6 +31,8 @@ import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeActions } from "../../store/HomeRedux";
 import FileViewer from 'react-native-file-viewer'; 
+import Button from "../../components/Atom/Button/Button";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
@@ -405,19 +407,17 @@ function VerifyScreen(props) {
           </View>
         )}
         <View style={styles.button}>
-          {console.log("Loading  state",isLoading)}
-          {isLoading  ? (
-            <View style={styles.botton_box}>
-              <ActivityIndicator size={30} color={Colors.WHITE} />
-            </View>
-          ) : (
-            <TouchableOpacity
-              onPress={() => onAction()}
-              style={styles.botton_box}
-            >
-              <Text style={styles.get_otp}>ENTER</Text>
-            </TouchableOpacity>
-          )}
+           <View style={{marginTop:20}}>
+             <Button isLoading={isLoading} 
+              fontSize={responsiveFontSize(2.2)}
+              textColor={"white"} 
+              onPress={() => onAction()} 
+              backgroundColor={Colors.RED} 
+              text="ENTER" 
+              width={responsiveWidth(50)} 
+              height={responsiveHeight(6)}  
+            />
+           </View>
         </View>
         <View style={styles.otp}>
           <Text style={{ color: "grey" }}>
@@ -506,6 +506,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 20,
     borderRadius: 10,
+  },
+  buttonStyle:{
+    width : responsiveWidth(50),
+    height : responsiveHeight(6), 
+    backgroundColor:Colors.RED
   },
   get_otp: {
     color: Colors.WHITE,

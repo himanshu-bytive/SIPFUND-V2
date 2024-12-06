@@ -5,10 +5,10 @@ export const ButtonStyles = StyleSheet.create({
   touchableOpacity: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 5,
   },
   text: {
-    fontSize: responsiveFontSize(1.8),
+    fontSize: responsiveFontSize(2),
     fontWeight: 'bold',
   },
   disabled: {
