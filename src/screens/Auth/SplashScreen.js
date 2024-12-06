@@ -98,41 +98,8 @@ function SplashScreen(props) {
     if (updateAvailable) {
       Toast.show("Please update the app!", Toast.LONG);
       return;
-    }
-
-    // logout();
-    // resetData();
-    // props.navigation.navigate("Home");
-
-    if (Platform.OS === "android") {
-      check(
-        Platform.Version >= 30
-          ? PERMISSIONS.ANDROID.READ_PHONE_NUMBERS
-          : PERMISSIONS.READ_PHONE_STATE
-      ).then((result) => {
-        if (result === RESULTS.DENIED) {
-          request(
-            Platform.Version >= 30
-              ? PERMISSIONS.ANDROID.READ_PHONE_NUMBERS
-              : PERMISSIONS.READ_PHONE_STATE
-          ).then(() => {
-            //getPhoneNumber();
-            console.log("Helo");
-            
-            props.navigation.navigate("verify");
-          });
-        } else {
-          //getPhoneNumber();
-          console.log("jh");
-          
-          props.navigation.navigate("verify");
-        }
-      });
-    } else {
-      console.log("jkg");
-      
+    } 
       props.navigation.navigate("verify");
-    }
   }, [updateAvailable]);
 
   return (

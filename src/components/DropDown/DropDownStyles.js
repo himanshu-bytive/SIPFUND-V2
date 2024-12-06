@@ -1,0 +1,60 @@
+import { StyleSheet } from 'react-native';
+
+export const DropdownStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dropdownSelector: {
+    borderWidth: 1,
+    borderColor: '#c1d7ff',
+    backgroundColor: '#fff',
+    color: '#35373c',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 15,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '60%',
+    maxHeight: 500,
+    borderRadius: 10,
+    backgroundColor: '#FFF',
+    elevation: 5,
+    alignItems: 'center',
+    paddingTop: 20,
+    position: 'absolute',
+    top: '50%',
+    transform: [{ translateY: -150 }],
+  },
+  searchInput: {
+    width: '90%',
+    height: 50,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    borderColor: '#8e8e8e',
+    paddingLeft: 15,
+    color: '#000',
+  },
+  item: {
+    width: '100%',
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: '#8e8e8e',
+    justifyContent: 'center',
+    paddingLeft: 15,
+    color: '#000',
+  },
+  list: {
+    width: '100%',
+    maxHeight: 250,
+  },
+});
