@@ -620,6 +620,7 @@ function CompleteDetailsScreen(props) {
             mode="date"
             date={new Date()}
             maximumDate={new Date()}
+            minimumDate={new Date(1900, 0, 1)}
             onConfirm={(dob) => {
               setIsDatePickerVisible(false);
               setErrors({ ...errors, dob: null });
