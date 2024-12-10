@@ -16,6 +16,7 @@ import appsFlyer from "react-native-appsflyer";
 // import NotificationService from "./NotificationService";
 // import { requestNotifications } from "react-native-permissions";
 import 'react-native-devsettings/withAsyncStorage';
+import { NotifyServices, requestUserPermission } from "./src/screens/Auth/PushNotify";
 let store = null;
 const middleware = [thunk];
 store = compose(applyMiddleware(...middleware))(createStore)(reducers);
@@ -29,6 +30,8 @@ export default function App() {
   useEffect(() => {
     // requestNotifications(["alert", "sound"]).then(({ status, settings }) => {});
     // new NotificationService(onRegister);
+    requestUserPermission();
+    NotifyServices();
   }, []);
 
   useEffect(() => {
