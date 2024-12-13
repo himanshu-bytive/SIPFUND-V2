@@ -39,6 +39,7 @@ function CompleteDetailsBankScreen(props, route) {
     createRegister,
     user,
     fatcaDetails,
+    profile,
     nseDetails,
     userDetails,
     accountTypes,
@@ -51,6 +52,7 @@ function CompleteDetailsBankScreen(props, route) {
     FatcaKYC,
     getAccountType,
     bankTypeDetails,
+    getProfile,
     getProofOfAccount,
     proofOfAccount,
   } = props;
@@ -91,6 +93,10 @@ function CompleteDetailsBankScreen(props, route) {
       setVisible(true);
     }
   }, [isInn]);
+
+  useEffect(() => {
+    getProfile({service_request: {iin: userDetails?.IIN}}, token);
+  }, [userDetails]);
 
   useEffect(() => {
     getAccountType();
@@ -488,15 +494,24 @@ function CompleteDetailsBankScreen(props, route) {
     return;
   };
 
+  // const onComplete = () => {
+  //   setVisible(false);
+  //   if (isInn && isExit) {
+  //     props.navigation.navigate("Existing");
+  //   } else {
+  //     props.navigation.navigate("UploadDocument");
+  //   }
+  // };
+  
   const onComplete = () => {
     setVisible(false);
-    if (isInn && isExit) {
-      props.navigation.navigate("Existing");
+    console.log("PROFILE DATA",profile);
+    if (profile?.KYC_STATUS === 'Y') {
+      props.navigation.navigate("Reg",{screen : "UploadDocument"});
     } else {
-      props.navigation.navigate("UploadDocument");
+      props.navigation.navigate('Reset', {screen: 'EKYC'});
     }
   };
-
   const onActionNewBank = async () => {
     console.log(
       "🚀 ~ onActionNewBank ~ bankDetails:",
@@ -1171,17 +1186,22 @@ const mapStateToProps = (state) => ({
   isInn: state.registration.isInn,
   bankTypeDetails: state.registration.bankTypeDetails,
   proofOfAccount: state.registration.proofOfAccount,
+  profile: state.auth.profile,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   const { dispatch } = dispatchProps;
   const { RegistrationActions } = require("../../store/RegistrationRedux");
   const { HomeActions } = require("../../store/HomeRedux");
+  const {AuthActions} = require('../../store/AuthRedux');
   return {
     ...stateProps,
     ...ownProps,
     getBankDetails: (code, token) => {
       RegistrationActions.getBankDetails(dispatch, code, token);
+    },
+    getProfile: (params, token) => {
+      AuthActions.getProfile(dispatch, params, token);
     },
     getAccountType: (code, token) => {
       RegistrationActions.getAccountType(dispatch, code, token);

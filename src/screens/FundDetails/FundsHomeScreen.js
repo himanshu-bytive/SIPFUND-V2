@@ -313,9 +313,7 @@ function FundsHomeScreen(props) {
         leftComponent={
           <TouchableOpacity
             onPress={() =>
-              props.navigation.navigate(
-                props.route.params?.fromScreen
-              )
+              props.navigation.goBack()
             }
             style={{ marginTop: 20 }}
           >

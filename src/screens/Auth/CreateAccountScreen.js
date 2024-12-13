@@ -364,6 +364,9 @@ const styles = StyleSheet.create({
   containerScroll: {
     width: "100%",
   },
+  button:{
+   marginBottom:50
+  },
   header: {
     borderBottomColor: Colors.BLACK,
     borderBottomWidth: 1,

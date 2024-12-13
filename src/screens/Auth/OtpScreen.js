@@ -173,7 +173,6 @@ function OtpScreen(props) {
             {"Enter OTP to verify\nyour mobile number"}
           </Text>
           <View style={styles.otpsec}>
-            {!isFetching && (
               <View>
                 <OTPInputView
                   style={{
@@ -193,20 +192,19 @@ function OtpScreen(props) {
                   onCodeFilled={() => onAction(verificationCode)}
                 />
               </View>
-            )}
             {isFetching ? (
               <View style={styles.botton_box}>
                 <ActivityIndicator size={30} color={Colors.RED} />
               </View>
             ) : (
+              <>
               <TouchableOpacity
                 style={styles.proceedButtonContainer}
                 onPress={() => onAction(verificationCode)}
               >
                 <Text style={styles.proceedButtonText}>PROCEED</Text>
               </TouchableOpacity>
-            )}
-            {!isFetching && (
+           
               <View style={styles.button}>
                 <TouchableOpacity
                   onPress={() => reSendAction()}
@@ -214,12 +212,13 @@ function OtpScreen(props) {
                 >
                   <Text style={styles.get_otp}>RESEND OTP</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <TouchableOpacity onPress={() => props.navigation.navigate("verify")}>
                   <Text style={[styles.get_otp, { marginTop: 10 }]}>
                     Back to Login
                   </Text>
                 </TouchableOpacity>
               </View>
+            </>
             )}
           </View>
         </View>

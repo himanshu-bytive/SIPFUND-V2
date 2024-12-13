@@ -116,7 +116,7 @@ function TopRatedFundsScreen(props) {
                       </View>
 
                       <View style={styles.Investment_value}>
-                        <Text style={styles.rate_2}>₹ {item.profitloss}</Text>
+                        <Text style={styles.rate_2}>₹ {(Number(item?.currentValue) - Number(item?.amount)).toFixed(2)}</Text>
                         <Text style={styles.Current_Value}>Profit/Loss</Text>
                       </View>
 
@@ -141,17 +141,17 @@ function TopRatedFundsScreen(props) {
                         key={key}
                       >
                         <View>
-                          <Text>
+                          <Text style={{color:"black"}}>
                             {moment(new Date(trxn?.navDate)).format(
                               "DD-MM-YYYY"
                             )}{" "}
                             ({trxn?.type})
                           </Text>
-                          <Text>₹{trxn?.amount}</Text>
+                          <Text style={{color:"black"}}>₹{trxn?.amount}</Text>
                         </View>
                         <View>
-                          <Text>Nav: {trxn?.currentNavValue}</Text>
-                          <Text>Units: {trxn?.units}</Text>
+                          <Text style={{color:"black"}}>Nav: {trxn?.currentNavValue}</Text>
+                          <Text style={{color:"black"}}>Units: {trxn?.units}</Text>
                         </View>
                       </View>
                     ))}
@@ -354,6 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: 10,
+    color:"black"
   },
   transactionContainer: {
     marginHorizontal: 10,

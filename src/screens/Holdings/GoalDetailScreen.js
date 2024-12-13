@@ -14,12 +14,7 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, CheckBox } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { HoldingFundType, MyImage } from "../../components";
@@ -132,6 +127,7 @@ const styles = StyleSheet.create({
   text_goals: {
     //marginTop: -20,
     fontSize: 18,
+    color:"black"
   },
   education_plan: {
     flexDirection: "row",
@@ -149,10 +145,17 @@ const styles = StyleSheet.create({
   price: {
     alignItems: "center",
   },
+  Target_Set:{
+    color:"black"
+  },
+  year:{
+    color:"black"
+  },
   rate: {
     fontSize: 14,
     fontWeight: "bold",
     paddingLeft: 5,
+    color:"black"
   },
   plan_2: {
     alignItems: "center",

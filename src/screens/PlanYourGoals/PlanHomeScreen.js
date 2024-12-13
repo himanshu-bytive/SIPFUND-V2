@@ -318,6 +318,7 @@ function PlanHomeScreen(props) {
           </View>
         )}
         <View style={[styles.vijay_sec, styles.vijay]}>
+          {console.log("DONE",additionalInfo?.currentcostlabel)}
           <Text style={styles.child2}>{additionalInfo?.currentcostlabel}</Text>
           <View
             style={{

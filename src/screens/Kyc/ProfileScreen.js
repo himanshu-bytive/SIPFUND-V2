@@ -126,6 +126,7 @@ function ProfileScreen(props) {
                 color: "#fff",
               }}
             >
+              {console.log("PROFILE",profile)}
               {profile?.INVESTOR_NAME
                 ? profile?.INVESTOR_NAME.split(" ").length > 1
                   ? `${profile?.INVESTOR_NAME[0]}${profile?.INVESTOR_NAME.split(" ").pop()[0]}`

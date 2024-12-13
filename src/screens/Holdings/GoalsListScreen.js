@@ -15,12 +15,7 @@ import {
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
 import { MyImage } from "../../components";
-import {
-  Ionicons,
-  AntDesign,
-  Entypo,
-  FontAwesome5,
-} from "react-native-vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header, CheckBox } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
 
@@ -146,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 15,
     fontWeight: "bold",
+    color:"black"
   },
   education: {
     flexDirection: "row",
@@ -175,12 +171,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#7E7E7E",
     //marginVertical: 5,
+    
   },
   child: {
     fontSize: 15,
     //maxWidth: "90%",
     paddingLeft: 20,
     fontWeight: "bold",
+    color:"black"
   },
   child_text: {
     fontSize: 12,
@@ -202,6 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     paddingLeft: 5,
+    color:"black"
   },
   clock_icon: {
     height: 15,
