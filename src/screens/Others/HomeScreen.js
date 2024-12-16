@@ -39,6 +39,7 @@ function HomeScreen(props) {
     logOut,
     users,
     profile,
+    userDetails,
     pan,
     isFetching,
     error,
@@ -66,6 +67,7 @@ function HomeScreen(props) {
     summaryRetrieve,
     goalSummary,
     goalSummaryRetrieve,
+    getUserData,
     fundDetails,
     setdocumentStatus,
   } = props;
@@ -81,10 +83,13 @@ function HomeScreen(props) {
     setWebViewActive(false);
     console.log('STEPS COUNT', steps);
     console.log('MY USER', users);
-    console.log('PAN', pan);
-    setdocumentStatus();
+    setdocumentStatus(); 
     logCurrentStack();
-  }, []);
+  }, []); 
+
+  // useEffect(()=>{
+  //   console.log('USERDATA99', userDetails?.ekycIsDone);
+  // },[userDetails]);
 
   const navigation = useNavigation();
 
@@ -374,7 +379,7 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                               onPress={() => {
-                                if (profile?.KYC_STATUS === 'N') { 
+                                if (userDetails?.ekycIsDone === false) { 
                                     props.navigation.navigate("Reset", { screen: "EKYC" });
                                 }
                                 else if (users?.pan || pan || username) {
@@ -1511,6 +1516,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   token: state.auth.token,
   users: state.auth.user,
+  userDetails: state.registration.userDetails,
   profile: state.auth.profile,
   isFetching: state.home.isFetching,
   pan: state.home.pan,

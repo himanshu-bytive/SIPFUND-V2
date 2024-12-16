@@ -129,7 +129,7 @@ function SideMenu(props) {
   useEffect(() => {
     if (kycDetails && pageActiveKyc.current) {
       pageActiveKyc.current = false;
-      Linking.openURL(kycDetails);
+      props.navigation.navigate('Reset', { screen: 'KycScreen', params: { url: kycDetails } });
     }
   }, [kycDetails]);
 

@@ -52,7 +52,6 @@ function CompleteDetailsBankScreen(props, route) {
     FatcaKYC,
     getAccountType,
     bankTypeDetails,
-    getProfile,
     getProofOfAccount,
     proofOfAccount,
   } = props;
@@ -93,10 +92,6 @@ function CompleteDetailsBankScreen(props, route) {
       setVisible(true);
     }
   }, [isInn]);
-
-  useEffect(() => {
-    getProfile({service_request: {iin: userDetails?.IIN}}, token);
-  }, [userDetails]);
 
   useEffect(() => {
     getAccountType();
@@ -505,8 +500,8 @@ function CompleteDetailsBankScreen(props, route) {
   
   const onComplete = () => {
     setVisible(false);
-    console.log("PROFILE DATA",profile);
-    if (profile?.KYC_STATUS === 'Y') {
+    console.log("USER DATA",userDetails);
+    if (userDetails?.ekycIsDone === 'true') {
       props.navigation.navigate("Reg",{screen : "UploadDocument"});
     } else {
       props.navigation.navigate('Reset', {screen: 'EKYC'});
@@ -1192,16 +1187,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   const { dispatch } = dispatchProps;
   const { RegistrationActions } = require("../../store/RegistrationRedux");
-  const { HomeActions } = require("../../store/HomeRedux");
-  const {AuthActions} = require('../../store/AuthRedux');
   return {
     ...stateProps,
     ...ownProps,
     getBankDetails: (code, token) => {
       RegistrationActions.getBankDetails(dispatch, code, token);
-    },
-    getProfile: (params, token) => {
-      AuthActions.getProfile(dispatch, params, token);
     },
     getAccountType: (code, token) => {
       RegistrationActions.getAccountType(dispatch, code, token);

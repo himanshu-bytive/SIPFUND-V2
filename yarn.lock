@@ -6159,10 +6159,10 @@
     "postcss-value-parser" "^4.2.0"
     "styleq" "^0.1.3"
 
-"react-native-webview@^13.12.3", "react-native-webview@>=13":
-  "integrity" "sha512-Y1I5YyDYyE7NC96RHLhd2nxh7ymLYOYLTefgx5ixxw2OToQK0ow3OJ+o77QcI1Tuevj5PCxwqC/14ceS/7yPJQ=="
-  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-13.12.3.tgz"
-  "version" "13.12.3"
+"react-native-webview@^13.12.5", "react-native-webview@>=13":
+  "integrity" "sha512-INOKPom4dFyzkbxbkuQNfeRG9/iYnyRDzrDkJeyvSWgJAW2IDdJkWFJBS2v0RxIL4gqLgHkiIZDOfiLaNnw83Q=="
+  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-13.12.5.tgz"
+  "version" "13.12.5"
   dependencies:
     "escape-string-regexp" "^4.0.0"
     "invariant" "2.2.4"
