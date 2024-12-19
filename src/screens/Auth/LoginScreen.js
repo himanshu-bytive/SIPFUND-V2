@@ -21,6 +21,8 @@ import { Image, Header } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotificationService from "../../../NotificationService";
 import Toast from "react-native-simple-toast";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import Button from "../../components/Atom/Button/Button";
 
 function LoginScreen(props) {
   const pageActive = useRef(false);
@@ -39,6 +41,7 @@ function LoginScreen(props) {
   const [visible, setVisible] = useState(false);
   const [appToken, setAppToken] = useState("-");
   const [loginStatus, setLoginStatus] = useState(null);
+  const [isLoading,setIsLoading] = useState(false);
   const intervalRef = useRef(null); 
   /* Retrieve password if saved */
   console.log("ENTER");
@@ -132,6 +135,7 @@ function LoginScreen(props) {
   });
 
   const onAction = async () => {
+    setIsLoading(true);
     if (!state.password) {
       passwordInput.current.focus();
       setError({ ...errors, password: "Please enter Password" });
@@ -149,6 +153,7 @@ function LoginScreen(props) {
     
     login(params, Config.loginToken);
     setState({ ...state, password: "", term: false });
+    setIsLoading(false);
   };
 
   return (
@@ -157,27 +162,32 @@ function LoginScreen(props) {
         leftComponent={
           <TouchableOpacity
             onPress={() => props.navigation.navigate("Reset",{screen  : "verify"})}
-            style={{ marginTop: 20 }}
           >
-            <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
+            <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
           </TouchableOpacity>
         }
-        backgroundColor={Colors.LIGHT_WHITE}
+        backgroundColor={Colors.WHITE}
         containerStyle={styles.header}
-        centerComponent={
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={styles.logimg}
-          />
-        }
+        // centerComponent={
+        //   <Image
+        //     source={require("../../../assets/icon.png")}
+        //     style={styles.logimg}
+        //   />
+        // }
       />
       <ScrollView style={styles.containerScroll}>
+        <View style={styles.sloganView}>
+                <Text style={styles.slogan}>
+                  Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
+                </Text>
+              </View>
         <View style={styles.mainBox}>
-          <Image
-            source={require("../../../assets/luck.png")}
-            style={styles.passwordimg2}
-          />
-
+          <View style={{ alignItems: "center" }}>
+            <Image
+              source={require("../../../assets/SIPFUND-NEW-LOGIN.png")}
+              style={styles.logoimg}
+            />
+          </View>
           <View style={styles.phone_number}>
             <MaterialIcons name="call" size={30} color="#838280" />
             <Text style={[styles.number, { fontSize: 25 }]}>{phone}</Text>
@@ -205,7 +215,7 @@ function LoginScreen(props) {
               style={{
                 position: "absolute",
                 right: 10,
-                top: 20,
+                top: 15,
               }}
               name={visible ? "eye-slash" : "eye"}
               size={20}
@@ -227,12 +237,26 @@ function LoginScreen(props) {
                 <ActivityIndicator size={30} color={Colors.WHITE} />
               </View>
             ) : (
-              <TouchableOpacity
-                onPress={() => onAction()}
-                style={styles.botton_box}
-              >
-                <Text style={styles.get_otp}>PROCEED</Text>
-              </TouchableOpacity>
+              <View style={styles.button}>
+                <View style={{marginTop:20}}>
+                  <Button isLoading={isLoading} 
+                    fontSize={responsiveFontSize(2.2)}
+                    textColor={"white"} 
+                    onPress={() => onAction()} 
+                    backgroundColor={Colors.RED} 
+                    text="Proceed" 
+                    width={responsiveWidth(50)} 
+                    height={responsiveHeight(6)}  
+                  />
+                </View>
+              </View>
+              // <TouchableOpacity
+              //   onPress={() => onAction()}
+              //   style={styles.botton_box}
+              // >
+              //   <Text style={styles.get_otp}>PROCEED</Text>
+              // </TouchableOpacity>
+              // <Button/>
             )}
           </View>
         </View>
@@ -247,9 +271,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    borderBottomColor: Colors.GRAY_LIGHT,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
+    backgroundColor: Colors.WHITE,
   },
   containerScroll: {
     width: "100%",
@@ -259,10 +281,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 30,
   },
-  logimg: {
-    height: 65,
-    width: 203,
-    marginTop: 10,
+  logoimg: {
+    marginTop: 0,
+    width : responsiveWidth(45),
+    height : responsiveHeight(20), 
+  },
+  button: {
+    alignItems: "center",
+  },
+  sloganView: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+   slogan: {
+    fontSize: 30,
+    color: Colors.BLACK,
+    marginBottom: 30,
+    fontWeight: 'bold',
+    fontFamily: 'Inter',
+  },
+  sloganRed: {
+    //color: Colors.RED,
+    color: Colors.NEW_RED,
   },
   passwordimg2: {
     marginTop: 20,
@@ -283,20 +323,20 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 18,
     marginLeft: 5,
-    color:"black"
+    color:"black",
+    fontFamily:"Kanit",
   },
   inputsec: {
     borderWidth: 2,
-    borderColor: Colors.GRAY_LIGHT,
+    borderColor: '#FFB2AA',
     width: "100%",
-    height: 50,
-    fontSize: 20,
+    height: 40,
+    fontSize: 17,
     marginTop: 5,
-    marginBottom: 20,
-    borderRadius: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: Colors.LITTLE_WHITE,
-    color:"black"
+    backgroundColor: Colors.WHITE,
+    color:Colors.BLACK,
   },
   refreshcode: {
     textAlign: "center",
@@ -311,6 +351,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
     justifyContent: "center",
+    width:responsiveWidth(50), 
+    height:responsiveHeight(6), 
   },
   get_otp: {
     color: Colors.WHITE,

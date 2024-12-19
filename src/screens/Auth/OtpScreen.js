@@ -21,6 +21,8 @@ import OTPInputView from "@twotalltotems/react-native-otp-input";
 import NotificationService from "../../../NotificationService";
 import Geolocation from "@react-native-community/geolocation";
 import RNOtpVerify from "react-native-otp-verify";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 function OtpScreen(props) {
   const pageActive = useRef(false);
   const {
@@ -160,18 +162,21 @@ function OtpScreen(props) {
 
   return (
     <ScrollView style={styles.containerScroll}>
+      <TouchableOpacity onPress={() =>props.navigation.goBack()} style={{margin:15}}>
+        <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+      </TouchableOpacity>
       <View style={styles.containBox}>
         <Text style={styles.slogan}>
-          Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
+          Enter OTP
         </Text>
         <View style={styles.mainbox}>
-          <Image
+          {/* <Image
             source={require("../../../assets/logo.png")}
             style={styles.logimg}
           />
           <Text style={styles.number}>
             {"Enter OTP to verify\nyour mobile number"}
-          </Text>
+          </Text> */}
           <View style={styles.otpsec}>
             {!isFetching && (
               <View>
@@ -183,9 +188,14 @@ function OtpScreen(props) {
                   }}
                   codeInputFieldStyle={{
                     color: "black",
-                    borderWidth: 0,
+                    borderWidth: 2,
+                    borderRadius: 10,
                     borderBottomColor: "darkgrey",
                     borderBottomWidth: 1,
+                    width:responsiveWidth(13),
+                    height:responsiveHeight(8),
+                    borderColor: '#FFB2AA',
+                    padding: 20
                   }}
                   pinCount={4}
                   code={verificationCode}
@@ -214,11 +224,11 @@ function OtpScreen(props) {
                 >
                   <Text style={styles.get_otp}>RESEND OTP</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                {/* <TouchableOpacity onPress={() => props.navigation.goBack()}>
                   <Text style={[styles.get_otp, { marginTop: 10 }]}>
                     Back to Login
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             )}
           </View>
@@ -244,8 +254,8 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: 30,
     color: Colors.BLACK,
-    marginTop: 100,
-    marginBottom: 20,
+    marginTop: 40,
+    marginBottom: 10,
   },
   sloganRed: {
     color: Colors.RED,
@@ -255,7 +265,6 @@ const styles = StyleSheet.create({
   },
   mainbox: {
     padding: 20,
-    borderWidth: 2,
     borderRadius: 20,
     borderStyle: "solid",
     alignItems: "center",
@@ -296,6 +305,7 @@ const styles = StyleSheet.create({
   },
   containerScroll: {
     width: "100%",
+    backgroundColor: Colors.WHITE,
   },
   proceedButtonContainer: {
     backgroundColor: Colors.LIGHT_RED,
