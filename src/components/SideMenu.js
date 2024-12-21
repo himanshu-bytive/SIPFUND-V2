@@ -26,7 +26,7 @@ import {AuthActions} from '../store/AuthRedux';
 import {Overlay, Header, CheckBox} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { HomeActions } from '../store/HomeRedux';
+import {HomeActions} from '../store/HomeRedux';
 
 function SideMenu(props) {
   const pageActiveKyc = useRef(false);
@@ -37,6 +37,7 @@ function SideMenu(props) {
     isFetchingEmandate,
     nseDetails,
     userDetails,
+    userDetailsKYC,
     steps,
     docs,
     getList,
@@ -129,7 +130,10 @@ function SideMenu(props) {
   useEffect(() => {
     if (kycDetails && pageActiveKyc.current) {
       pageActiveKyc.current = false;
-      props.navigation.navigate('Reset', { screen: 'KycScreen', params: { url: kycDetails } });
+      props.navigation.navigate('Reset', {
+        screen: 'KycScreen',
+        params: {url: kycDetails},
+      });
     }
   }, [kycDetails]);
 
@@ -504,34 +508,45 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() => {
-            if (userDetails?.signUpSteps < 4) {
+            console.log('Yours STEPS', userDetails?.signUpSteps);
+            console.log("EKYC",userDetailsKYC);
+            
+            // Check if the user hasn't completed the signup steps
+            if (!userDetails?.signUpSteps || userDetails.signUpSteps < 4) {
               Alert.alert('Your IIN is not created. Please click on register.');
               return;
             }
 
-            if (userDetails?.IIN && profile?.KYC_STATUS === 'Y') {
+            // If IIN exists and eKYC is done
+            if (userDetails?.IIN && userDetailsKYC?.ekycIsDone) {
               if (profile?.ACTIVATION_STATUS === 'YES') {
                 Toast.show(
-                  'Your KYC is already registered and your account is active. You can start your investment journey now',
+                  'Your KYC is already registered and your account is active. You can start your investment journey now.',
                   Toast.LONG,
                 );
               } else {
                 Toast.show(
-                  'Your KYC is already registered. Please upload the documents in the documents section to proceed with your account activation',
+                  'Your KYC is already registered. Please upload the documents in the documents section to proceed with your account activation.',
                   Toast.LONG,
                 );
               }
-            } else if (userDetails?.IIN) {
+              return;
+            }
+
+            // If IIN exists but eKYC is not done
+            if (userDetails?.IIN && !userDetailsKYC.ekycIsDone) {
               getList(token);
               pageActiveKyc.current = true;
-            } else {
-              Alert.alert('Your IIN is not created. Please click on register.');
+              return;
             }
+
+            // Default fallback
+            Alert.alert('Your IIN is not created. Please click on register.');
           }}
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <MaterialCommunityIcons
-              name={'account-search'}
+              name="account-search"
               size={30}
               color={Colors.GRAY_LIGHT_4}
             />
@@ -561,7 +576,9 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('OtherStackYou', {screen: 'Notifications'})
+            props.navigation.navigate('OtherStackYou', {
+              screen: 'Notifications',
+            })
           }
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
@@ -573,7 +590,9 @@ function SideMenu(props) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('OtherStackYou', {screen: 'Reports'})}
+          onPress={() =>
+            props.navigation.navigate('OtherStackYou', {screen: 'Reports'})
+          }
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
             <AntDesign name={'profile'} size={30} color={Colors.GRAY_LIGHT_4} />
@@ -645,7 +664,7 @@ function SideMenu(props) {
                   // resetApp();
                   // resetData();
                   logout();
-                  props.navigation.navigate("Reset",{screen  : "verify"});
+                  props.navigation.navigate('Reset', {screen: 'verify'});
                 },
               },
             ]);
@@ -666,12 +685,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
-    marginTop:40
+    marginTop: 40,
   },
-  profileNameText:{
-  flexWrap: 'wrap', 
-  color:"white",
-  fontSize: 16,
+  profileNameText: {
+    flexWrap: 'wrap',
+    color: 'white',
+    fontSize: 16,
   },
   profile_sec: {
     flexDirection: 'row',
@@ -769,6 +788,7 @@ const mapStateToProps = state => ({
   steps: state.home.steps,
   docs: state.registration.documents,
   nseDetails: state.registration.nseDetails,
+  userDetailsKYC: state.registration.userDetails,
   userDetails: state.auth.user,
   isFetchingEkyc: state.ekyc.isFetching,
   kycLists: state.ekyc.kycLists,
@@ -817,11 +837,11 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getrm: token => {
       SideMenuActions.getrm(dispatch, token);
     },
-    resetApp : () => dispatch(AuthActions.resetApp()),
+    resetApp: () => dispatch(AuthActions.resetApp()),
     resetData: () => dispatch(HomeActions.resetData()),
-    logout : () => {
+    logout: () => {
       AuthActions.logout();
-    }
+    },
   };
 };
 export default connect(

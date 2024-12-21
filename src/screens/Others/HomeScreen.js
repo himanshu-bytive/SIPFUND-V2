@@ -82,7 +82,7 @@ function HomeScreen(props) {
   useEffect(() => {
     setWebViewActive(false);
     console.log('STEPS COUNT', steps);
-    console.log('MY USER', users);
+    console.log('MY USER', userDetails);
     setdocumentStatus(); 
     logCurrentStack();
   }, []); 
@@ -246,6 +246,17 @@ function HomeScreen(props) {
     }
   }, [summaryRetrieve]);
 
+  function JustNavigate(){
+    console.log("UER",userDetails);  
+    if(!username){
+      props.navigation.navigate("Reg",{screen : "RegisterDetails"});
+    }else if(userDetails?.ekycIsDone === false && username){
+      props.navigation.navigate("Reset", { screen: "EKYC" });
+    }else if(userDetails?.ekycIsDone === true && username){
+      props.navigation.navigate("Reg",{screen : "UploadDocument"});
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Header
@@ -379,16 +390,9 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                               onPress={() => {
-                                if (userDetails?.ekycIsDone === false) { 
-                                    props.navigation.navigate("Reset", { screen: "EKYC" });
-                                }
-                                else if (users?.pan || pan || username) {
-                                  props.navigation.navigate('Reg', {
-                                    screen: !username
-                                      ? 'RegisterDetails'
-                                      : 'UploadDocument',
-                                  });
-                                } else {
+                                if (users?.pan || pan || username) {
+                                  JustNavigate();
+                                }else {
                                   props.navigation.navigate('HomeScreen', {
                                     screen: 'Pan',
                                   });

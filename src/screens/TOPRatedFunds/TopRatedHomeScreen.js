@@ -688,7 +688,7 @@ function TopRatedHomeScreen(props) {
         <Header
           leftComponent={
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('Home')}
+              onPress={() => props.navigation.navigate("Explore",{screen : 'Home'})}
               style={{marginTop: 20}}>
               <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
             </TouchableOpacity>

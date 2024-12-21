@@ -5054,6 +5054,11 @@
   dependencies:
     "js-tokens" "^3.0.0 || ^4.0.0"
 
+"lottie-react-native@^7.1.0":
+  "integrity" "sha512-73jtQySxRZ8KTTSKf6CtcpCt8tpOCw4NRiCST4HTYgXlycxIihIp89jRcK8rS/QiBKl5bzyixMzpVmd4mYVH5Q=="
+  "resolved" "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-7.1.0.tgz"
+  "version" "7.1.0"
+
 "lower-case@^2.0.2":
   "integrity" "sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg=="
   "resolved" "https://registry.npmjs.org/lower-case/-/lower-case-2.0.2.tgz"
@@ -6167,7 +6172,7 @@
     "escape-string-regexp" "^4.0.0"
     "invariant" "2.2.4"
 
-"react-native@*", "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.50.0", "react-native@>= 0.61.5", "react-native@>=0.33", "react-native@>=0.44.1", "react-native@>=0.47", "react-native@>=0.57.0", "react-native@>=0.58.4", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.63.0", "react-native@>=0.65.0", "react-native@>=0.70.0", "react-native@>=0.71.0", "react-native@0.75.4":
+"react-native@*", "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.50.0", "react-native@>= 0.61.5", "react-native@>=0.33", "react-native@>=0.44.1", "react-native@>=0.46", "react-native@>=0.47", "react-native@>=0.57.0", "react-native@>=0.58.4", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.63.0", "react-native@>=0.65.0", "react-native@>=0.70.0", "react-native@>=0.71.0", "react-native@0.75.4":
   "version" "0.75.4"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"

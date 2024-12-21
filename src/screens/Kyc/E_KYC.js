@@ -93,29 +93,33 @@ const E_KYC = props => {
         leftComponent={
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate('Home');
+              props.navigation.navigate("Explore",{screen : 'Home'});
             }}
             style={{marginTop: 30}}>
             <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         rightComponent={
-          <View
-            style={{
-              marginTop: 25,
-              borderWidth: 1,
-              backgroundColor: Colors.WHITE,
-              borderColor: Colors.RED,
-              padding: 5,
-              borderRadius: 7,
-            }}>
-            <Text style={styles.textkn}>
-              {users?.name
-                ? `${users?.name[0]}${users?.name.split(' ').pop()[0]}`
-                : ''}
-            </Text>
-          </View>
+          users?.name ? (
+            <View
+              style={{
+                marginTop: 25,
+                borderWidth: 1,
+                backgroundColor: Colors.WHITE,
+                borderColor: Colors.RED,
+                padding: 5,
+                borderRadius: 7,
+              }}
+            >
+              <Text style={styles.textkn}>
+                {users?.name
+                  ? `${users.name.charAt(0)}${users.name.split(' ').pop()?.charAt(0) || ''}`
+                  : ''}
+              </Text>
+            </View>
+          ) : null
         }
+        
         backgroundColor={Colors.LIGHT_WHITE}
         containerStyle={styles.header}
         centerComponent={
