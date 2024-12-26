@@ -61,7 +61,7 @@ function CompleteDetailsAddressScreen(props) {
 
   useEffect(() => {
     if (fatcaDetails || nseDetails || userDetails) {
-      // console.log(fatcaDetails, nseDetails, userDetails)
+      // console.log(fatcaDetails, nseDetails, userDetails) to fetch detail
       setState({
         address: nseDetails.addr1,
         pincode: nseDetails.pincode,
