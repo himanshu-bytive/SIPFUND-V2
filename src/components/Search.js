@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   TextInput,
@@ -12,10 +12,18 @@ import {
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const SuggestionInput = ({ navigate, fundDetails }) => {
+const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) => {
   const [inputText, setInputText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    console.log("got",showSearch);
+    
+    if (showSearch) {
+      inputRef.current?.focus(); // Automatically focus the input field
+    }
+  }, [showSearch]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -57,7 +65,7 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
   },
 });
 
-
+    setShowSearch(false);
     setInputText("");
   };
 
@@ -71,6 +79,7 @@ const SuggestionInput = ({ navigate, fundDetails }) => {
   return (
     <View style={styles.container}>
       <TextInput
+        ref={inputRef}
         style={[
           styles.input,
           {

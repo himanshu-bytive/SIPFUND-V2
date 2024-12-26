@@ -33,6 +33,8 @@ import SIPLOGO from '../../../assets/SVG-ICONS/SipLogo.svg';
 import BELL from '../../../assets/SVG-ICONS/Bell-Icon.svg';
 import CART from '../../../assets/SVG-ICONS/Cart.svg';
 import MENU from '../../../assets/SVG-ICONS/Menu.svg';
+import LeftIconCard from '../../components/Molecule/LeftIconCard/LeftIconCard';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -84,6 +86,7 @@ function HomeScreen(props) {
   const [showMorePlans, setShowMorePlans] = useState(false);
   const [username, setUsername] = useState('');
   const [isUsernameFetched, setIsUsernameFetched] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   useEffect(() => {
     setWebViewActive(false);
     console.log('STEPS COUNT', steps);
@@ -91,7 +94,10 @@ function HomeScreen(props) {
     setdocumentStatus();
     logCurrentStack();
   }, []);
-
+  
+  const handleSearch = () => {
+    setShowSearch(true);
+  }
   // useEffect(()=>{
   //   console.log('USERDATA99', userDetails?.ekycIsDone);
   // },[userDetails]);
@@ -282,7 +288,11 @@ function HomeScreen(props) {
               gap: 15,
               marginRight: 12,
             }}>
-            <SEARCH width={25} height={25} />
+           <TouchableOpacity onPress={() => {
+              handleSearch();
+            }}>
+              <SEARCH width={25} height={25} />
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 props.navigation.navigate('OtherStackYou', {
@@ -318,10 +328,12 @@ function HomeScreen(props) {
             <ActivityIndicator color={Colors.BLACK} size="large" />
           </View>
         ))}
-      <SuggestionInput
+     {showSearch && <SuggestionInput
         navigate={props.navigation.navigate}
         fundDetails={fundDetails}
-      />
+        setShowSearch={setShowSearch}
+        showSearch={showSearch}
+      />}
       <ScrollView style={styles.containerScroll}>
         {/* <Text>
           {users?.hasOwnProperty("users") ? 1 : 0}
@@ -489,34 +501,20 @@ function HomeScreen(props) {
           </>
         )}
         */}
-
-        <Text style={[styles.Plan, {marginTop: 15, marginBottom: -15}]}>
-          Top Rated Funds
-        </Text>
-        <TouchableOpacity
-          onPress={() =>
-            props.navigation.navigate('TopRatedFunds', {screen: 'TopRatedHome'})
-          }>
-          <View
-            style={[
-              styles.education,
-              styles.education_roted,
-              {marginBottom: 0},
-            ]}>
-            <View style={styles.child_sec}>
-              <FastImage
-                source={require('../../../assets/term7.png')}
-                style={styles.fund_img}
-              />
-            </View>
-            <View style={styles.education_sec}>
-              <Text style={styles.child}>Get Top Rated Funds</Text>
-              <Text style={styles.child_text}>
-                At SIPFund.com we help you in choosing the best for you!
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginBottom:20 }}>
+          <Text style={{fontWeight:"bold",color:"black",fontSize: responsiveFontSize(1.5)}}>
+            At SIPFund.com we help you in choosing the best for you!
+          </Text>
+        </View>
+        <View style={{justifyContent:"center",alignItems:"center",alignSelf:"center"}}>
+          <LeftIconCard
+            imageSource={require('../../../assets/term7.png')} 
+            heading ="Get Top Rated Fund"
+            description = "At Sipfund.com we help you in choosing the best for you!"
+            buttonText = "Click here"
+            onButtonPress={()=>{props.navigation.navigate('TopRatedFunds', {screen: 'TopRatedHome'})}}
+          />
+        </View>
 
         <View style={styles.border}></View>
 
