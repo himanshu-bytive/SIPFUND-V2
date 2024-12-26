@@ -12,7 +12,7 @@ import {Header, Image} from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Colors from '../../common/Colors';
 import {useNavigation} from '@react-navigation/native';
-import Typography from '../../components/Atom/Typography/Typography';
+
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -20,9 +20,20 @@ import {
 } from 'react-native-responsive-dimensions';
 import Button from '../../components/Atom/Button/Button';
 import {connect} from 'react-redux';
+import Typography from '../../components/Atom/Typography/Typography';
+import {ScrollView} from 'react-native';
 
 const E_KYC = props => {
-  const {token, getList, kycLists, userDetails, isFetchingEkyc,kycDetails,postRequest} = props;
+  const {
+    token,
+    getList,
+    users,
+    kycLists,
+    userDetails,
+    isFetchingEkyc,
+    kycDetails,
+    postRequest,
+  } = props;
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const pageActiveKyc = useRef(false);
@@ -32,9 +43,9 @@ const E_KYC = props => {
       getList(token);
     }
   }, [token, getList]);
-  
+
   const handleKyc = value => {
-    setShowModal(false);
+   
     pageActiveKyc.current = true;
     let params = {
       service_request: {
@@ -46,15 +57,19 @@ const E_KYC = props => {
         return_flag: 'Y',
       },
     };
-    console.log("Params",params);
-    
+    console.log('Params', params);
+
     postRequest(params, token);
   };
 
   useEffect(() => {
     if (kycDetails && pageActiveKyc.current) {
+      setShowModal(false);
       pageActiveKyc.current = false;
-      Linking.openURL(kycDetails);
+      props.navigation.navigate('Reset', {
+        screen: 'KycScreen',
+        params: {url: kycDetails},
+      });
     }
   }, [kycDetails]);
 
@@ -78,11 +93,34 @@ const E_KYC = props => {
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() => navigation.navigate('Explore', {screen: 'Home'})}
-            style={{marginTop: 20}}>
+            onPress={() => {
+              props.navigation.navigate("Explore",{screen : 'Home'});
+            }}
+            style={{marginTop: 30}}>
             <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
+        rightComponent={
+          users?.name ? (
+            <View
+              style={{
+                marginTop: 25,
+                borderWidth: 1,
+                backgroundColor: Colors.WHITE,
+                borderColor: Colors.RED,
+                padding: 5,
+                borderRadius: 7,
+              }}
+            >
+              <Text style={styles.textkn}>
+                {users?.name
+                  ? `${users.name.charAt(0)}${users.name.split(' ').pop()?.charAt(0) || ''}`
+                  : ''}
+              </Text>
+            </View>
+          ) : null
+        }
+        
         backgroundColor={Colors.LIGHT_WHITE}
         containerStyle={styles.header}
         centerComponent={
@@ -92,58 +130,98 @@ const E_KYC = props => {
           />
         }
       />
-      <View style={{alignItems: 'center', marginTop: 20}}>
-        <Typography fontSize={responsiveFontSize(2.5)} color={'black'}>
-          Please Select An Option
-        </Typography>
-      </View>
-      <View style={{paddingHorizontal: 20, gap: 30, marginTop: 50}}>
-        <Button
-          text={'Upload Document'}
-          backgroundColor={Colors.RED}
-          textColor={'white'}
-          height={responsiveHeight(6)}
-          width={'auto'}
-          onPress={() => {
-            navigation.navigate('Reg', {screen: 'UploadDocument'});
-          }}
-        />
-        <Button
-          text={'E-KYC'}
-          backgroundColor={Colors.RED}
-          textColor={'white'}
-          height={responsiveHeight(6)}
-          width={'auto'}
-          onPress={() => {
-            setShowModal(true);
-          }}
-        />
-      </View>
-      {showModal && (
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={showModal}
-          onRequestClose={() => setShowModal(false)}>
-          <View style={styles.modalOverlay}>
-            <View style={styles.popup}>
-              <View style={styles.emaMainbox}>
-                <Text style={styles.emaAmc}>Choose AMC Option:</Text>
-                {kycLists.map((item, key) => (
-                  <TouchableOpacity key={key} onPress={() => handleKyc(item)}>
-                    <Text style={styles.emaMutual_fund}>{item.amc_name}</Text>
+      <ScrollView style={{flex: 1}}>
+        <View style={{alignItems: 'center', marginTop: 20, paddingHorizontal: 20}}>
+          <Text
+            style={{
+              fontSize: responsiveFontSize(2.5),
+              color: 'black',
+              lineHeight: 22,
+              fontSize: 14,
+            }}>
+            Dear Investor,{'\n'}
+            Your Mutual Fund{' '}
+            <Text style={{fontWeight: 'bold', fontSize: 16}}>
+              KYC is not registered
+            </Text>
+            , please click on the <Text style={{fontWeight: 'bold'}}>E-KYC</Text>{' '}
+            button to complete your KYC online.{'\n\n'}
+            You will be redirected to the NSE website for eKYC. Please keep the
+            following documents ready:{'\n'}
+            {'\u2022'} PAN Card{'\n'}
+            {'\u2022'} Aadhaar Card{'\n'}
+            {'\u2022'} Cancelled Cheque
+          </Text>
+        </View>
+        <View style={{paddingHorizontal: 20, gap: 30, marginTop: 50}}>
+          <Button
+            text={'E-KYC'}
+            backgroundColor={Colors.RED}
+            textColor={'white'}
+            height={responsiveHeight(6)}
+            width={'auto'}
+            onPress={() => {
+              setShowModal(true);
+            }}
+          />
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: 'black',
+              alignSelf: 'center',
+              fontSize: 20,
+            }}>
+            OR
+          </Text>
+          <Text
+            style={{
+              fontSize: responsiveFontSize(2.5),
+              color: 'black',
+              lineHeight: 22,
+              fontSize: 14,
+            }}>
+            Please upload the required documents in the below documents section so
+            that we shall complete your KYC at our end and activate your
+            Investment Account.
+          </Text>
+          <Button
+            text={'Upload Document'}
+            backgroundColor={Colors.RED}
+            textColor={'white'}
+            height={responsiveHeight(6)}
+            width={'auto'}
+            onPress={() => {
+              navigation.navigate('Reg', {screen: 'UploadDocument'});
+            }}
+            style={{marginBottom: 100}}
+          />
+        </View>
+        {showModal && (
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={showModal}
+            onRequestClose={() => setShowModal(false)}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.popup}>
+                <View style={styles.emaMainbox}>
+                  <Text style={styles.emaAmc}>Choose AMC Option:</Text>
+                  {kycLists.map((item, key) => (
+                    <TouchableOpacity key={key} onPress={() => handleKyc(item)}>
+                      <Text style={styles.emaMutual_fund}>{item.amc_name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  <TouchableOpacity onPress={() => setShowModal(false)}>
+                    <Text style={styles.emaCancel}>Cancel</Text>
                   </TouchableOpacity>
-                ))}
-                <TouchableOpacity onPress={() => setShowModal(false)}>
-                  <Text style={styles.emaCancel}>Cancel</Text>
-                </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-      )}
+          </Modal>
+        )}
+      </ScrollView>
     </View>
-  );
+  );  
 };
 
 const styles = StyleSheet.create({
@@ -151,6 +229,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.GRAY_LIGHT,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
+  },
+  logimg: {
+    height: 65,
+    width: 203,
+    marginTop: 10,
+  },
+  textkn: {
+    fontSize: 22,
+    color: Colors.RED,
+    fontWeight: 'bold',
   },
   loaderContainer: {
     flex: 1,
@@ -203,6 +291,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   token: state.auth.token,
   steps: state.home.steps,
+  users: state.auth.user,
   docs: state.registration.documents,
   nseDetails: state.registration.nseDetails,
   userDetails: state.auth.user,
