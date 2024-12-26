@@ -509,14 +509,13 @@ function SideMenu(props) {
         <TouchableOpacity
           onPress={() => {
             console.log('Yours STEPS', userDetails?.signUpSteps);
-            console.log("EKYC",userDetailsKYC);
-            
+            console.log("EKYC",userDetailsKYC?.ekycIsDone);
             // Check if the user hasn't completed the signup steps
-            if (!userDetails?.signUpSteps || userDetails.signUpSteps < 4) {
+            if (userDetails.signUpSteps < 4) {
               Alert.alert('Your IIN is not created. Please click on register.');
               return;
             }
-
+    
             // If IIN exists and eKYC is done
             if (userDetails?.IIN && userDetailsKYC?.ekycIsDone) {
               if (profile?.ACTIVATION_STATUS === 'YES') {

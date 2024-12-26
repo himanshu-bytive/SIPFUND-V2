@@ -501,7 +501,7 @@ function CompleteDetailsBankScreen(props, route) {
   const onComplete = () => {
     setVisible(false);
     console.log("USER DATA",userDetails);
-    if (userDetails?.ekycIsDone === 'true') {
+    if (userDetails?.ekycIsDone) {
       props.navigation.navigate("Reg",{screen : "UploadDocument"});
     } else {
       props.navigation.navigate('Reset', {screen: 'EKYC'});
