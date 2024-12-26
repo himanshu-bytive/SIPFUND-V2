@@ -83,18 +83,23 @@ export const AuthActions = {
       if (data.message) Alert.alert(data.message);
       dispatch({ type: types.FETCH_OTP_FAILURE, error: data.message });
     } else {
-      Alert.alert("SIP Fund", data.responseString, [
-        {
-          text: "OK",
-          onPress: () => {
-            dispatch({
-              type: types.FETCH_OTP_SUCCESS,
-              signUpSteps: data.signUpSteps,
-              validFlag: data.validFlag,
-            });
-          },
-        },
-      ]);
+      dispatch({
+        type: types.FETCH_OTP_SUCCESS,
+        signUpSteps: data.signUpSteps,
+        validFlag: data.validFlag,
+      });
+      // Alert.alert("SIP Fund", data.responseString, [
+      //   {
+      //     text: "OK",
+      //     onPress: () => {
+      //       dispatch({
+      //         type: types.FETCH_OTP_SUCCESS,
+      //         signUpSteps: data.signUpSteps,
+      //         validFlag: data.validFlag,
+      //       });
+      //     },
+      //   },
+      // ]);
     }
   },
   resendOtp: async (dispatch, params) => {

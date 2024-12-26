@@ -21,6 +21,7 @@ import OTPInputView from "@twotalltotems/react-native-otp-input";
 import NotificationService from "../../../NotificationService";
 import Geolocation from "@react-native-community/geolocation";
 import RNOtpVerify from "react-native-otp-verify";
+import LottieView from 'lottie-react-native';
 function OtpScreen(props) {
   const pageActive = useRef(false);
   const {
@@ -33,7 +34,7 @@ function OtpScreen(props) {
   } = props;
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const [appToken, setAppToken] = useState("-");
-
+  const [onSuccess,setOnSuccess] = useState(false);
   useEffect(() => {
     new NotificationService(onRegister);
     const backAction = () => {
@@ -91,7 +92,7 @@ function OtpScreen(props) {
   useEffect(() => {
     if (signUpSteps == 1 && pageActive.current) {
       pageActive.current = false;
-      props.navigation.navigate("createAccount");
+      setOnSuccess(true);
     }
   }, [signUpSteps]);
 
@@ -159,7 +160,30 @@ function OtpScreen(props) {
   };
 
   return (
-    <ScrollView style={styles.containerScroll}>
+    <>
+  {onSuccess ? <View style={{ backgroundColor: "white", flex: 1 }}>
+  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <LottieView 
+      style={{ height: 200, width: 200 }} 
+      source={require('../../../assets/Lottie/Success.json')} 
+      autoPlay 
+      loop={false} 
+      onAnimationFinish={() => {
+        props.navigation.navigate("createAccount");
+        setOnSuccess(false);
+      }} 
+    />
+    <Text style={{ color: "black", fontSize: 18,fontWeight:"500", marginTop: -20, textAlign: "center", lineHeight: 25 }}>
+      Mobile Number {"\n"}Verification successful
+    </Text>
+  </View>
+  <Image 
+    source={require("../../../assets/TrustedBy.png")} 
+    style={{ width: 250, height: 80, alignSelf: "center", marginBottom: 50 }} 
+    resizeMode="contain" 
+  />
+</View> :
+    <ScrollView style={styles.containerScroll}> 
       <View style={styles.containBox}>
         <Text style={styles.slogan}>
           Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
@@ -173,7 +197,6 @@ function OtpScreen(props) {
             {"Enter OTP to verify\nyour mobile number"}
           </Text>
           <View style={styles.otpsec}>
-            {!isFetching && (
               <View>
                 <OTPInputView
                   style={{
@@ -193,20 +216,19 @@ function OtpScreen(props) {
                   onCodeFilled={() => onAction(verificationCode)}
                 />
               </View>
-            )}
             {isFetching ? (
               <View style={styles.botton_box}>
                 <ActivityIndicator size={30} color={Colors.RED} />
               </View>
             ) : (
+              <>
               <TouchableOpacity
                 style={styles.proceedButtonContainer}
                 onPress={() => onAction(verificationCode)}
               >
                 <Text style={styles.proceedButtonText}>PROCEED</Text>
               </TouchableOpacity>
-            )}
-            {!isFetching && (
+           
               <View style={styles.button}>
                 <TouchableOpacity
                   onPress={() => reSendAction()}
@@ -214,12 +236,13 @@ function OtpScreen(props) {
                 >
                   <Text style={styles.get_otp}>RESEND OTP</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <TouchableOpacity onPress={() => props.navigation.navigate("verify")}>
                   <Text style={[styles.get_otp, { marginTop: 10 }]}>
                     Back to Login
                   </Text>
                 </TouchableOpacity>
               </View>
+            </>
             )}
           </View>
         </View>
@@ -230,7 +253,8 @@ function OtpScreen(props) {
           style={styles.nseimg}
         />
       </View>
-    </ScrollView>
+    </ScrollView>}
+</>
   );
 }
 
