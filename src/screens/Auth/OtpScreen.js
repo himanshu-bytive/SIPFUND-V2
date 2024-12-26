@@ -35,6 +35,32 @@ function OtpScreen(props) {
   } = props;
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const [appToken, setAppToken] = useState("-");
+  const [isDisabled, setIsDisabled] = useState(true); // Button starts disabled
+  const [timer, setTimer] = useState(30); // Initial timer value (30 seconds)
+
+  useEffect(() => {
+    let interval;
+    if (isDisabled) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer > 1) {
+            return prevTimer - 1; // Decrease timer by 1 second
+          } else {
+            clearInterval(interval); // Clear the timer
+            setIsDisabled(false); // Enable the button
+            return 0;
+          }
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval); // Cleanup interval
+  }, [isDisabled]);
+
+  const handleResend = () => {
+    reSendAction(); // Call your resend function
+    setIsDisabled(true); // Disable the button again
+    setTimer(30); // Reset the timer to 30 seconds
+  };  
 
   useEffect(() => {
     new NotificationService(onRegister);
@@ -93,7 +119,8 @@ function OtpScreen(props) {
   useEffect(() => {
     if (signUpSteps == 1 && pageActive.current) {
       pageActive.current = false;
-      props.navigation.navigate("createAccount");
+      //props.navigation.navigate("createAccount");
+      props.navigation.navigate("newScreens",{screen : "PersonalDetails"});
     }
   }, [signUpSteps]);
 
@@ -162,7 +189,8 @@ function OtpScreen(props) {
 
   return (
     <ScrollView style={styles.containerScroll}>
-      <TouchableOpacity onPress={() =>props.navigation.goBack()} style={{margin:15}}>
+      <TouchableOpacity onPress={() => props.navigation.navigate("Reset",{screen  : "verify"})}
+      style={{ marginTop: 30, marginLeft: 15, margin:15}}>
         <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
       </TouchableOpacity>
       <View style={styles.containBox}>
@@ -213,18 +241,23 @@ function OtpScreen(props) {
                 style={styles.proceedButtonContainer}
                 onPress={() => onAction(verificationCode)}
               >
-                <Text style={styles.proceedButtonText}>PROCEED</Text>
+                <Text style={styles.proceedButtonText}>Enter</Text>
               </TouchableOpacity>
             )}
             {!isFetching && (
               <View style={styles.button}>
-                <TouchableOpacity
+                <TouchableOpacity onPress={handleResend} style={styles.botton_box} disabled={isDisabled}>
+                  <Text style={[isDisabled ? { color: "gray" } : styles.get_otp,]}>
+                    {isDisabled ? `Resend OTP in ${timer} seconds` : "Resend OTP"}
+                  </Text>
+                </TouchableOpacity>
+                {/*<TouchableOpacity
                   onPress={() => reSendAction()}
                   style={styles.botton_box}
                 >
                   <Text style={styles.get_otp}>RESEND OTP</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                </TouchableOpacity> in30seconds
+                 <TouchableOpacity onPress={() => props.navigation.goBack()}>
                   <Text style={[styles.get_otp, { marginTop: 10 }]}>
                     Back to Login
                   </Text>
@@ -236,7 +269,7 @@ function OtpScreen(props) {
       </View>
       <View style={{ alignItems: "center" }}>
         <Image
-          source={require("../../../assets/pan_footer_img.png")}
+          source={require("../../../assets/nse.png")}
           style={styles.nseimg}
         />
       </View>
@@ -256,6 +289,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
     marginTop: 40,
     marginBottom: 10,
+    fontFamily: 'Jomolhari',
   },
   sloganRed: {
     color: Colors.RED,
@@ -295,6 +329,9 @@ const styles = StyleSheet.create({
   },
   nseimg: {
     //marginVertical: 50,
+    marginTop: '70%',
+    width: Dimensions.get("window").width * 0.8,
+    resizeMode: "contain",
   },
   number: {
     fontSize: 18,
@@ -308,15 +345,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   proceedButtonContainer: {
-    backgroundColor: Colors.LIGHT_RED,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    backgroundColor: Colors.WHITE,
+    paddingVertical: 4,
+    paddingHorizontal: 30,
     borderRadius: 5,
     marginBottom: 10,
+    borderColor: '#FFB2AA',
+    borderWidth: 2
   },
   proceedButtonText: {
     fontSize: 20,
-    color: Colors.WHITE,
+    fontFamily: 'Jomolhari',
+    color: Colors.NEW_RED,
   },
 });
 

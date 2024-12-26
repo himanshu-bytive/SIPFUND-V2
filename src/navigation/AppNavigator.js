@@ -2,7 +2,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Initialpage, LoginFlowStack, RootNavigator } from "./MainNavigator";
+import { Initialpage, LoginFlowStack, NewScreens, RootNavigator } from "./MainNavigator";
 import { Linking } from "react-native";
 import dynamicLinks from "@react-native-firebase/dynamic-links";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +16,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Auth" component={LoginFlowStack} />
         <Stack.Screen name="Root" component={RootNavigator} />
         <Stack.Screen name="Reset" component={Initialpage} />
+        <Stack.Screen name="newScreens" component={NewScreens} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -74,6 +74,7 @@ import DashBoardImg from "../../assets/dash.svg";
 import PlansImg from "../../assets/plan.svg";
 import YouImg from "../../assets/you.svg";
 import { Image } from 'react-native';
+import PersonalDetails from '../screens/New Screens/PersonalDetails';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,6 +96,13 @@ export const Initialpage = () =>(
   <Stack.Navigator initialRouteName="verify"
   screenOptions={{headerShown: false}}  >
     <Stack.Screen name="verify" component={VerifyScreen} />
+  </Stack.Navigator>
+)
+
+export const NewScreens = () =>(
+  <Stack.Navigator initialRouteName="PersonalDetails"
+  screenOptions={{headerShown: false}}  >
+    <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
   </Stack.Navigator>
 )
 
