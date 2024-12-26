@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { colorCode } from '../../../Utils/ColorValueAndCodeMapper';
+import { colorCode } from '../../../utils/ColorCombination/ColorCode';
 
 const Typography = ({
   color,

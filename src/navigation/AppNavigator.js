@@ -3,7 +3,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Initialpage, LoginFlowStack, RootNavigator } from "./MainNavigator";
-import { Linking } from "react-native";
+import { Linking, StatusBar } from "react-native";
 import dynamicLinks from "@react-native-firebase/dynamic-links";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -11,6 +11,8 @@ const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
+    <>
+    <StatusBar backgroundColor="white" barStyle="dark-content" />
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Auth" component={LoginFlowStack} />
@@ -18,6 +20,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Reset" component={Initialpage} />
       </Stack.Navigator>
     </NavigationContainer>
+    </>
   );
 };
 

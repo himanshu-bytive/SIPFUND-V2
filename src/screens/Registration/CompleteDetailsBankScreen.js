@@ -39,6 +39,7 @@ function CompleteDetailsBankScreen(props, route) {
     createRegister,
     user,
     fatcaDetails,
+    profile,
     nseDetails,
     userDetails,
     accountTypes,
@@ -488,15 +489,24 @@ function CompleteDetailsBankScreen(props, route) {
     return;
   };
 
+  // const onComplete = () => {
+  //   setVisible(false);
+  //   if (isInn && isExit) {
+  //     props.navigation.navigate("Existing");
+  //   } else {
+  //     props.navigation.navigate("UploadDocument");
+  //   }
+  // };
+  
   const onComplete = () => {
     setVisible(false);
-    if (isInn && isExit) {
-      props.navigation.navigate("Existing");
+    console.log("USER DATA",userDetails);
+    if (userDetails?.ekycIsDone) {
+      props.navigation.navigate("Reg",{screen : "UploadDocument"});
     } else {
-      props.navigation.navigate("UploadDocument");
+      props.navigation.navigate('Reset', {screen: 'EKYC'});
     }
   };
-
   const onActionNewBank = async () => {
     console.log(
       "🚀 ~ onActionNewBank ~ bankDetails:",
@@ -1171,12 +1181,12 @@ const mapStateToProps = (state) => ({
   isInn: state.registration.isInn,
   bankTypeDetails: state.registration.bankTypeDetails,
   proofOfAccount: state.registration.proofOfAccount,
+  profile: state.auth.profile,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   const { dispatch } = dispatchProps;
   const { RegistrationActions } = require("../../store/RegistrationRedux");
-  const { HomeActions } = require("../../store/HomeRedux");
   return {
     ...stateProps,
     ...ownProps,

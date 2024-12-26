@@ -27,7 +27,12 @@ import SuggestionInput from '../../components/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RegistrationActions} from '../../store/RegistrationRedux';
 import {useNavigation} from '@react-navigation/native';
-
+import User from '../../../assets/SVG-ICONS/UserIcon.svg';
+import SEARCH from '../../../assets/SVG-ICONS/Search.svg';
+import SIPLOGO from '../../../assets/SVG-ICONS/SipLogo.svg';
+import BELL from '../../../assets/SVG-ICONS/Bell-Icon.svg';
+import CART from '../../../assets/SVG-ICONS/Cart.svg';
+import MENU from '../../../assets/SVG-ICONS/Menu.svg';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -38,6 +43,8 @@ function HomeScreen(props) {
     token,
     logOut,
     users,
+    profile,
+    userDetails,
     pan,
     isFetching,
     error,
@@ -57,6 +64,7 @@ function HomeScreen(props) {
     investment,
     emandateLink,
     emandateFetching,
+    getProfile,
     clearEmandateLink,
     investmentFetching,
     planFetching,
@@ -64,6 +72,7 @@ function HomeScreen(props) {
     summaryRetrieve,
     goalSummary,
     goalSummaryRetrieve,
+    getUserData,
     fundDetails,
     setdocumentStatus,
   } = props;
@@ -79,10 +88,13 @@ function HomeScreen(props) {
     setWebViewActive(false);
     console.log('STEPS COUNT', steps);
     console.log('MY USER', users);
-    console.log('PAN', pan);
     setdocumentStatus();
     logCurrentStack();
   }, []);
+
+  // useEffect(()=>{
+  //   console.log('USERDATA99', userDetails?.ekycIsDone);
+  // },[userDetails]);
 
   const navigation = useNavigation();
 
@@ -130,6 +142,21 @@ function HomeScreen(props) {
       loadUrl(emandateLink);
     }
   }, [emandateLink]);
+
+  useEffect(() => {
+    const fetchProfileAndNavigate = async () => {
+      try {
+        await getProfile({service_request: {iin: users?.IIN}}, token);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        // Handle error if needed
+      }
+    };
+
+    if (users?.IIN) {
+      fetchProfileAndNavigate();
+    }
+  }, [users]);
 
   useEffect(() => {
     if (token) {
@@ -227,30 +254,63 @@ function HomeScreen(props) {
     <View style={styles.container}>
       <Header
         leftComponent={
-          <TouchableOpacity
-            onPress={() => props.navigation.toggleDrawer()}
-            style={{marginTop: 20}}>
-            <Entypo name={'menu'} size={30} color={Colors.RED} />
-          </TouchableOpacity>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 5,
+              marginLeft:5
+            }}>
+            <TouchableOpacity
+              onPress={() => props.navigation.toggleDrawer()}
+              style={{marginRight: 10}} // Add spacing between the menu and the logo
+            >
+              {/* <Entypo name={'menu'} size={30} color={Colors.RED} /> */}
+              <MENU width={25} height={25}   />
+            </TouchableOpacity>
+            <SIPLOGO width={95} height={25} />
+          </View>
         }
         rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate('TopRatedFunds', {
-                screen: 'TopRatedList',
-                params: {fromScreen: 'Home'},
-              });
-            }}
-          />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 5,
+              gap: 15,
+              marginRight: 12,
+            }}>
+            <SEARCH width={25} height={25} />
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('OtherStackYou', {
+                  screen: 'Notifications',
+                });
+              }}>
+              <BELL width={25} height={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('TopRatedFunds', {
+                  screen: 'TopRatedList',
+                  params: {fromScreen: 'Home'},
+                });
+              }}>
+              <CART width={25} height={25} />
+            </TouchableOpacity>
+          </View>
         }
-        backgroundColor={Colors.LIGHT_WHITE}
-        containerStyle={Styles.header}
-        centerComponent={
-          <FastImage
-            source={require('../../../assets/icon.png')}
-            style={styles.logimg}
-          />
-        }
+        backgroundColor={"white"}
+        
+        // containerStyle={Styles.header}
+        // centerComponent={
+        //   <FastImage
+        //     source={require('../../../assets/icon.png')}
+        //     style={styles.logimg}
+        //   />
+        // }
       />
       {planFetching ||
         (investmentFetching && (
@@ -356,7 +416,11 @@ function HomeScreen(props) {
                           ) : (
                             <TouchableOpacity
                               onPress={() => {
-                                if (users?.pan || pan || username) {
+                                if (userDetails?.ekycIsDone === false) {
+                                  props.navigation.navigate('Reset', {
+                                    screen: 'EKYC',
+                                  });
+                                } else if (users?.pan || pan || username) {
                                   props.navigation.navigate('Reg', {
                                     screen: !username
                                       ? 'RegisterDetails'
@@ -756,6 +820,7 @@ function HomeScreen(props) {
               resizeMode="contain" // Ensure the entire image is visible
             />
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() =>
               loadUrl(
@@ -1489,6 +1554,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   token: state.auth.token,
   users: state.auth.user,
+  userDetails: state.registration.userDetails,
+  profile: state.auth.profile,
   isFetching: state.home.isFetching,
   pan: state.home.pan,
   error: state.home.error,
@@ -1525,6 +1592,9 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
     getHomeData: (params, token) => {
       HomeActions.getHomeData(dispatch, params, token);
+    },
+    getProfile: (params, token) => {
+      AuthActions.getProfile(dispatch, params, token);
     },
     cartDetails: token => {
       CartActions.cartDetails(dispatch, token);

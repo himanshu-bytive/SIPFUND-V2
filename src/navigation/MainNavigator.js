@@ -74,6 +74,7 @@ import DashBoardImg from "../../assets/dash.svg";
 import PlansImg from "../../assets/plan.svg";
 import YouImg from "../../assets/you.svg";
 import { Image } from 'react-native';
+import E_KYC from '../screens/Kyc/E_KYC';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,9 +93,9 @@ export const LoginFlowStack = () => (
 );
 
 export const Initialpage = () =>(
-  <Stack.Navigator initialRouteName="verify"
-  screenOptions={{headerShown: false}}  >
+  <Stack.Navigator initialRouteName="verify" screenOptions={{headerShown: false}}  >
     <Stack.Screen name="verify" component={VerifyScreen} />
+    <Stack.Screen name="EKYC" component={E_KYC} />
   </Stack.Navigator>
 )
 

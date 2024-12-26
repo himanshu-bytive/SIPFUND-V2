@@ -20,6 +20,8 @@ export const EkycActions = {
             if(data.message) Alert.alert(data.message)
             dispatch({ type: types.FETCH_GETLIST_FAILURE, error: data.message });
         } else {
+            console.log("Got response",data.response);
+            
             dispatch({ type: types.FETCH_GETLIST_SUCCESS, kycLists: data.response });
         }
     },
