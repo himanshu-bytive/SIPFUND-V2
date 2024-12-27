@@ -474,6 +474,7 @@ function CompleteDetailsScreen(props) {
     params.nseDetails.nominee1_guard_pan = nominate1guard_pan.toUpperCase();
     params.nseDetails.nominee1_type = nominateMinor ? "Y" : "N";
     params.nseDetails.nominee1_guard_relation = minor_gaurdian_relationship;
+    params.userDetails.pan = pan;
     updateRegister(params, token);
     pageActive.current = true;
   };

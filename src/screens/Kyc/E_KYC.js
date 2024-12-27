@@ -33,6 +33,7 @@ const E_KYC = props => {
     isFetchingEkyc,
     kycDetails,
     postRequest,
+    nseDetails
   } = props;
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
@@ -53,7 +54,7 @@ const E_KYC = props => {
         client_callback_url: 'sipfund.com',
         investor_email: userDetails.email,
         investor_mobile_no: userDetails.mobileNo,
-        pan: userDetails.pan,
+        pan: nseDetails.pan,
         return_flag: 'Y',
       },
     };
