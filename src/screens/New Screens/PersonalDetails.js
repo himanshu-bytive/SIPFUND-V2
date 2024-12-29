@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text_box: {
-    marginTop: responsiveHeight(2),
     flexDirection: "column",
     width: "100%",
   },

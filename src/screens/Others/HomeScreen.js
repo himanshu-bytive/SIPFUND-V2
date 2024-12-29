@@ -357,15 +357,17 @@ function HomeScreen(props) {
                             <TouchableOpacity
                               onPress={() => {
                                 if (users?.pan || pan || username) {
-                                  props.navigation.navigate('Reg', {
-                                    screen: !username
-                                      ? 'RegisterDetails'
-                                      : 'UploadDocument',
-                                  });
+                                  props.navigation.navigate("newScreens",{screen : "OccupationAnnualIncome"});
+                                  // props.navigation.navigate('Reg', {
+                                  //   screen: !username
+                                  //     ? 'RegisterDetails'
+                                  //     : 'UploadDocument',
+                                  // });
                                 } else {
-                                  props.navigation.navigate('HomeScreen', {
-                                    screen: 'Pan',
-                                  });
+                                  props.navigation.navigate("newScreens",{screen : "OccupationAnnualIncome"});
+                                  // props.navigation.navigate('HomeScreen', {
+                                  //   screen: 'Pan',
+                                  // });
                                 }
                               }}
                               style={styles.botton_box}>

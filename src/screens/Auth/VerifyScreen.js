@@ -423,15 +423,13 @@ function VerifyScreen(props) {
           </View>
         )}
         <View style={styles.button}>
-           <View style={{marginTop:20}}>
+           <View>
              <Button isLoading={isLoading} 
-              fontSize={responsiveFontSize(2.2)}
-              textColor={"white"} 
+              fontSize={responsiveFontSize(2.6)}
+              textColor={"#000000"} 
               onPress={() => onAction()} 
-              backgroundColor={Colors.RED} 
-              text="ENTER" 
-              width={responsiveWidth(50)} 
-              height={responsiveHeight(6)}  
+              backgroundColor={Colors.WHITE} 
+              text="Enter"
             />
            </View>
         </View>
@@ -538,6 +536,16 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    width: "45%",
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    paddingVertical: responsiveHeight(0.7),
+    alignItems: "center",
+    marginTop: 15,
+    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+    fontWeight: 'normal',
   },
   botton_box: {
     backgroundColor: Colors.RED,

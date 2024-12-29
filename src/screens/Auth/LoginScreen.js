@@ -139,6 +139,7 @@ function LoginScreen(props) {
     if (!state.password) {
       passwordInput.current.focus();
       setError({ ...errors, password: "Please enter Password" });
+      setIsLoading(false);
       return;
     }
     pageActive.current = true;
@@ -190,11 +191,11 @@ function LoginScreen(props) {
           </View>
           <View style={styles.phone_number}>
             <MaterialIcons name="call" size={30} color="#838280" />
-            <Text style={[styles.number, { fontSize: 25 }]}>{phone}</Text>
+            <Text style={[styles.number, { fontSize: 20 }]}>{phone}</Text>
           </View>
 
           <Text style={styles.number}>Enter Password</Text>
-          <View style={{ width: "90%" }}>
+          <View style={{ width: "80%" }}>
             <TextInput
               ref={passwordInput}
               style={styles.inputsec}
@@ -238,15 +239,13 @@ function LoginScreen(props) {
               </View>
             ) : (
               <View style={styles.button}>
-                <View style={{marginTop:20}}>
+                <View>
                   <Button isLoading={isLoading} 
-                    fontSize={responsiveFontSize(2.2)}
-                    textColor={"white"} 
+                    fontSize={responsiveFontSize(2.6)}
+                    textColor={"#000000"} 
                     onPress={() => onAction()} 
-                    backgroundColor={Colors.RED} 
+                    backgroundColor={Colors.WHITE} 
                     text="Proceed" 
-                    width={responsiveWidth(50)} 
-                    height={responsiveHeight(6)}  
                   />
                 </View>
               </View>
@@ -288,6 +287,16 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    paddingVertical: responsiveHeight(0.7),
+    alignItems: "center",
+    marginTop: 15,
+    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+    fontWeight: 'normal',
   },
   sloganView: {
     marginTop: 40,

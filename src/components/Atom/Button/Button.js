@@ -15,7 +15,7 @@ const Button = ({
   svgIcon: SvgIcon, // Add svgIcon prop
   svgIconLeft: SvgIconLeft, // Add svgIconLeft prop
   isLoading = false, // Default value for isLoading is false
-  loaderColor = 'white', // Default color for ActivityIndicator
+  loaderColor = 'black', // Default color for ActivityIndicator
 }) => {
   return (
     <TouchableOpacity

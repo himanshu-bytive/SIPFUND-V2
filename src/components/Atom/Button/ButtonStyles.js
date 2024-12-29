@@ -9,7 +9,7 @@ export const ButtonStyles = StyleSheet.create({
   },
   text: {
     fontSize: responsiveFontSize(2),
-    fontWeight: 'bold',
+    //fontWeight: 'bold',
   },
   disabled: {
     opacity: 0.5, // Reduce opacity for disabled state
