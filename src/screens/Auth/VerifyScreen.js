@@ -33,19 +33,20 @@ import { HomeActions } from "../../store/HomeRedux";
 import FileViewer from 'react-native-file-viewer'; 
 import Button from "../../components/Atom/Button/Button";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import RNPickerSelect from 'react-native-picker-select';
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
   const [isLoading,setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp,resetData,pan } = props;
-
-  // const reduxState = useSelector((state) => state); // renaming to `reduxState`
+  const [selectedValue, setSelectedValue] = useState('+91');
+  // const reduxState = useSelector((state) => state); // renaming to reduxState
 
   // useEffect(() => {
   //   // Log the complete Redux state when the page loads
   //   console.log('Redux state on page load:', reduxState);
-  // }, [reduxState]); // re-run if `reduxState` changes
+  // }, [reduxState]); // re-run if reduxState changes
   // useEffect(() => {
   //   const getPhoneNumber = async () => {
   //     await DeviceInfo.getPhoneNumber().then((phone) => {
@@ -59,7 +60,7 @@ function VerifyScreen(props) {
   //       ) { 
   //         Alert.alert(
   //           "Phone Number",
-  //           `Do you want to use ${phone} to register?`,
+  //           Do you want to use ${phone} to register?,
   //           [
   //             {
   //               text: "Cancel",
@@ -87,7 +88,7 @@ function VerifyScreen(props) {
   //       if (keys.length > 0) {
   //         const data = await AsyncStorage.multiGet(keys);
   //         data.forEach(([key, value]) => {
-  //           console.log(`Key: ${key}, Value: ${value}`);
+  //           console.log(Key: ${key}, Value: ${value});
   //         });
   //       } else {
   //         console.log('No data found in AsyncStorageeeee');
@@ -353,7 +354,7 @@ function VerifyScreen(props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View>
+      <View style={styles.sloganView}>
         <Text style={styles.slogan}>
           Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
         </Text>
@@ -361,11 +362,11 @@ function VerifyScreen(props) {
       <View style={styles.mainbox}>
         <View style={{ alignItems: "center" }}>
           <Image
-            source={require("../../../assets/logo.png")}
+            source={require("../../../assets/SIPFUND-NEW-LOGIN.png")}
             style={styles.logoimg}
           />
         </View>
-        <View style={{ width: width - 50, marginLeft: 100 }}>
+        <View style={{ width: width - 50, marginTop: 10}}>
           {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
           {phones.map((item, key) => (
             <TouchableOpacity
@@ -384,41 +385,57 @@ function VerifyScreen(props) {
             Enter Your Mobile number
           </Text>
         </View>
-        <View style={styles.text_box}>
-          
-          <MaterialIcons name="call" size={20} color="#838280" />
-          <TextInput
-            ref={phoneInput}
-            style={styles.inputsec}
-            placeholder={"Phone"}
-            placeholderTextColor="grey"
-            keyboardType="numeric"
-            maxLength={10}
-            onChangeText={(phone) => {
-              setError({ ...errors, phone: null });
-              setState({ ...state, phone });
-            }}
-            value={state.phone}
-          />
+        <View style={styles.number_box}>
+          <View style={styles.country_code_box}>
+            <RNPickerSelect
+              onValueChange={(value) => setSelectedValue(value)} // Update state
+              items={[
+                { label: '🇮🇳 +91', value: '+91' }, // Indian Flag
+                { label: '🇺🇸 +1', value: '+1' },   // US Flag
+                { label: '🇬🇧 +44', value: '+44' }, // UK Flag
+              ]}
+              value={selectedValue} // Controlled component
+              style={pickerSelectStyles} // Custom styles
+              placeholder={{}} // Empty placeholder
+              useNativeAndroidPickerStyle={false} // For consistent behavior across platforms
+            />
+        </View>
+          {/* Phone Number Input */}
+          <View style={styles.text_box}>
+            <TextInput
+              ref={phoneInput}
+              style={styles.inputsec}
+              placeholder={"Phone"}
+              placeholderTextColor="grey"
+              keyboardType="numeric"
+              maxLength={10}
+              onChangeText={(phone) => {
+                setError({ ...errors, phone: null });
+                setState({ ...state, phone });
+              }}
+              value={state.phone}
+            />
+          </View>
         </View>
         {errors.phone && (
           <View style={styles.text_box}>
             <Text style={styles.error}>{errors.phone}</Text>
           </View>
         )}
-        <View style={styles.button}>
            <View style={{marginTop:20}}>
              <Button isLoading={isLoading} 
-              fontSize={responsiveFontSize(2.2)}
-              textColor={"white"} 
+              fontSize={responsiveFontSize(2.6)}
+              textColor={"#000000"} 
               onPress={() => onAction()} 
-              backgroundColor={Colors.RED} 
-              text="ENTER" 
-              width={responsiveWidth(50)} 
-              height={responsiveHeight(6)}  
+              backgroundColor={Colors.WHITE} 
+              text="Enter"
+              borderColor={"#FFB2AA"}
+              borderWidth={1.5}
+              height={responsiveHeight(4)}
+              width={responsiveWidth(45)}
+              loaderColor="black"  
             />
            </View>
-        </View>
         <View style={styles.otp}>
           <Text style={{ color: "grey" }}>
             OTP will be sent to this Mobile Number
@@ -435,19 +452,45 @@ function VerifyScreen(props) {
   );
 }
 
+const pickerSelectStyles = {
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    color: '#000',
+    paddingRight: 30, // Ensure text isn't cut off
+  },
+  inputAndroid: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    color: '#000',
+  },
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
   },
-  slogan: {
+  sloganView: {
+    marginTop: 95,
+  },
+   slogan: {
     fontSize: 30,
     color: Colors.BLACK,
     marginBottom: 30,
+    fontWeight: 'bold',
+    fontFamily: 'Inter',
   },
   sloganRed: {
-    color: Colors.RED,
+    //color: Colors.RED,
+    color: Colors.NEW_RED,
   },
   mainbox: {
     borderRadius: 25,
@@ -455,7 +498,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoimg: {
-    marginTop: 30,
+    marginTop: 20,
+    width : responsiveWidth(45),
+    height : responsiveHeight(20), 
   },
   continue: {
     fontSize: 20,
@@ -463,30 +508,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     //paddingLeft: 70,
   },
-  inputsec: {
-    borderBottomWidth: 1,
-    marginLeft: 5,
-    marginTop: -3,
-    borderColor: "#828282",
-    width: "50%",
-    color:"black"
-  },
   phone_number: {
     flexDirection: "row",
+      justifyContent: 'center',
     //paddingLeft: 70,
   },
   number: {
     fontSize: 18,
     marginTop: -3,
     marginLeft: 5,
-    color:"black"
+    color: "black",
+    paddingHorizontal: 5,
+    marginHorizontal: 10,
   },
   code: {
     marginTop: 10,
     marginBottom: 5,
     fontSize: 19,
-    color: "#7E7E7E",
-    //textAlign: "center",
+    color: "#000000",
+    textAlign: "center",
     //paddingLeft: 70,
   },
   text_box: {
@@ -499,6 +539,16 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
+    width: "45%",
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    paddingVertical: responsiveHeight(0.7),
+    alignItems: "center",
+    marginTop: 15,
+    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+    fontWeight: 'normal',
   },
   botton_box: {
     backgroundColor: Colors.RED,
@@ -519,9 +569,10 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.RED,
     fontSize: 13,
+    height : responsiveHeight(6),
   },
   nseimg: {
-    marginTop: 30,
+    marginTop: 35,
     width: Dimensions.get("window").width * 0.8,
     resizeMode: "contain",
   },
@@ -532,6 +583,49 @@ const styles = StyleSheet.create({
     color: Colors.GREY_1,
     alignItems: "center",
   },
+  number_box: {
+    flexDirection: 'row', // Arrange items horizontally
+    alignItems: 'center', // Align vertically
+    height: 50, // Adjust height
+    marginHorizontal: 35, // Add spacing from the screen edges
+    backgroundColor: Colors.WHITE,
+  },
+  country_code_box: {
+    width: 80, // Fixed width for the dropdown
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    borderRadius: 1, // Rounded corners
+    backgroundColor: Colors.WHITE,
+    justifyContent: 'center', // Center the picker vertically
+    marginRight: 10, // Spacing between dropdown and text box
+    height: '80%',
+  },
+  pickerInput: {
+    fontSize: 14, // Text size
+    color: 'black', // Text color
+    textAlign: 'center', // Center align the text
+    paddingHorizontal: 5, // Add padding
+  },
+  text_box: {
+    flex: 1, // Take remaining space
+    borderWidth: 1,
+    borderColor: '#FFB2AA',
+    borderRadius: 1,
+    backgroundColor: Colors.WHITE,
+    height: '80%', // Match height with the dropdown
+    fontSize: 16,
+  },
+  inputsec: {
+    fontSize: 17,
+    paddingHorizontal: 10,
+    height: '100%',
+    borderWidth:2,
+    borderColor: '#f9f9f9',
+    color: 'black',
+    marginBottom: 0,
+    backgroundColor: Colors.WHITE,
+  },
+    
 });
 
 const mapStateToProps = (state) => ({

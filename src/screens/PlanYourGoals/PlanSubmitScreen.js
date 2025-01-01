@@ -76,11 +76,13 @@ function PlanSubmitScreen(props) {
           />
         }
         rightComponent={
-          <Cart
+          <View style={{marginTop:30}}>
+         <Cart
             nav={() => {
               props.navigation.navigate("Dashboard",{screen : "TopRatedList"});
             }}
           />
+        </View>
         }
       />
       <ScrollView>

@@ -8,6 +8,8 @@ const Button = ({
   height,
   width,
   backgroundColor,
+  borderWidth,
+  borderColor,
   textColor,
   fontSize,
   style,
@@ -15,8 +17,10 @@ const Button = ({
   svgIcon: SvgIcon, // Add svgIcon prop
   svgIconLeft: SvgIconLeft, // Add svgIconLeft prop
   isLoading = false, // Default value for isLoading is false
-  loaderColor = 'white', // Default color for ActivityIndicator
+  loaderColor = 'black', // Default color for ActivityIndicator
 }) => {
+  console.log("ISLOADING",isLoading);
+  
   return (
     <TouchableOpacity
       onPress={onPress} // onPress event handler
@@ -25,8 +29,10 @@ const Button = ({
         { 
           height, 
           width, 
+          borderWidth,
+          borderColor,
           backgroundColor, 
-          borderRadius: 25,
+          borderRadius: 10,
           opacity: isLoading || disabled ? 0.8 : 1, // Conditionally reduce opacity based on loading or disabled
         }, // Customized styles for height, width, and backgroundColor
         style, // Additional custom styles passed from parent component

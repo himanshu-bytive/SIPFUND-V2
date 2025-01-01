@@ -245,6 +245,7 @@ function PlanHomeScreen(props) {
           />
         }
         rightComponent={
+          <View style={{marginTop:30}}>
           <Cart
             nav={() => {
               props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList",params : {
@@ -252,6 +253,7 @@ function PlanHomeScreen(props) {
               }});
             }}
           />
+        </View>
         }
       />
       <ScrollView ref={scrollViewRef} style={Styles.containerScroll}>

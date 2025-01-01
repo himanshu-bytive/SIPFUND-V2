@@ -57,6 +57,7 @@ function InvestmentDetailScreens(props) {
           />
         }
         rightComponent={
+          <View style={{marginTop:30}}>
           <Cart
             nav={() => {
               props.navigation.navigate("TopRatedList", {
@@ -64,6 +65,7 @@ function InvestmentDetailScreens(props) {
               });
             }}
           />
+        </View>
         }
       />
       {/* {isFetching && (<View style={Styles.loading}>

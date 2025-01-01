@@ -92,11 +92,13 @@ function OwnChoiceHoldings(props) {
             />
           }
           rightComponent={
-            <Cart
-              nav={() => {
-                props.navigation.navigate("TopRatedList");
-              }}
-            />
+            <View style={{marginTop:30}}>
+           <Cart
+            nav={() => {
+              props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+            }}
+          />
+         </View>
           }
         />
         <Image

@@ -531,11 +531,13 @@ function CompleteDetailsScreen(props) {
           />
         }
         rightComponent={
+          <View style={{marginTop:30}}>
           <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedList");
-            }}
-          />
+           nav={() => {
+             props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+           }}
+         />
+        </View>
         }
       />
       {showLoader && (

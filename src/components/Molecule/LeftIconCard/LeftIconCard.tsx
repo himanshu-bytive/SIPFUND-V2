@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Platform } from 'react-native';
 import { LeftIconCardStyles } from './LeftIconCardStyles';
 import {
   responsiveHeight,
@@ -7,24 +7,36 @@ import {
 } from 'react-native-responsive-dimensions';
 import Button from '../../Atom/Button/Button';
 import Colors from '../../../common/Colors';
+import MyImage from '../../MyImage';
 
 // Define the LeftIconCard component using React (in JavaScript)
 const LeftIconCard = ({
+  SvgIcon,
   imageSource, // Accept the PNG image source
   heading,
   description,
   buttonText,
   onButtonPress,
+  svgWidth = 35,  // Default width for SvgIcon if not provided
+  svgHeight = 35, // Default height for SvgIcon if not provided
 }: any) => {
   return (
     <View style={LeftIconCardStyles.container}>
       {/* Container for the PNG image */}
       <View style={LeftIconCardStyles.imageContainer}>
-        <Image
+        {SvgIcon ? (
+        <MyImage
+         width={responsiveWidth(svgWidth)}
+         height={responsiveHeight(svgHeight)}
+         // svg={Platform.OS == "android" ? false : true}
+         svg={true}
+         url={SvgIcon}
+       />
+        ) : imageSource ? (<Image
           source={imageSource} // Pass the image source here
           style={LeftIconCardStyles.image} // Apply styles for proper sizing
           resizeMode="contain" // Ensures the image scales properly
-        />
+        />) : null}
       </View>
 
       {/* Container for the text and button */}

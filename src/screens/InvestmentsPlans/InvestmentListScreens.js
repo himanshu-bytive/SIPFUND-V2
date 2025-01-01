@@ -346,13 +346,15 @@ function InvestmentListScreens(props) {
           />
         }
         rightComponent={
-          <Cart
+          <View style={{marginTop:30}}>
+           <Cart
             nav={() => {
               props.navigation.navigate("TopRatedList", {
                 fromScreen: "InvestmentList",
               });
             }}
           />
+        </View>
         }
       />
       <ScrollView>

@@ -7,6 +7,7 @@ export const LeftIconCardStyles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     borderWidth: 1,
+    marginRight:10,
     borderColor: "#FFB2AA",
     borderRadius: 20,
     backgroundColor: '#fff',

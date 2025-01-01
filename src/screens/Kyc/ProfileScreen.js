@@ -43,21 +43,21 @@ function ProfileScreen(props) {
     navigation,
     iinBank,
   } = props;
- 
+
   const [showLoader, setShowLoader] = useState(false);
   useEffect(() => {
     setShowLoader(true); // Show loader immediately on mount
-  
+
     const hideTimer = setTimeout(() => {
       setShowLoader(false); // Hide loader after 5 seconds
     }, 1000); // 5 seconds for hiding the loader
-  
+
     // Cleanup for the hide timer
     return () => clearTimeout(hideTimer);
   }, []); // Only runs on mount
-  const showDetails = iinBank?.length > 0 ;
+  const showDetails = iinBank?.length > 0;
   console.log(showDetails);
-  
+
   useEffect(() => {
     getProfile({ service_request: { iin: user.IIN } }, token);
   }, []);
@@ -80,10 +80,11 @@ function ProfileScreen(props) {
       <Header
         leftComponent={
           <TouchableOpacity
-            onPress={() => props.navigation.toggleDrawer()}
-            style={{ marginTop: 20 }}
-          >
-            <Entypo name={"menu"} size={30} color={Colors.RED} />
+            onPress={() => {
+              props.navigation.navigate("Explore", { screen: 'Home' });
+            }}
+            style={{ marginTop: 30 }}>
+            <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         containerStyle={styles.header}
@@ -95,11 +96,13 @@ function ProfileScreen(props) {
           />
         }
         rightComponent={
-          <Cart
+         <View style={{marginTop:30}}>
+           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
+              props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
             }}
           />
+         </View>
         }
       />
       {showLoader && (
@@ -179,7 +182,7 @@ function ProfileScreen(props) {
           <View
             style={iinBank?.length > 0 ? styles.icon_bg_act : styles.icon_bg}
           >
-           <FontAwesome5 name="dot-circle" size={25} color={Colors.WHITE} />
+            <FontAwesome5 name="dot-circle" size={25} color={Colors.WHITE} />
           </View>
         </View>
 
@@ -215,7 +218,7 @@ function ProfileScreen(props) {
           <Text style={styles.bottom_text}>IIN Activated</Text>
           <Text style={styles.bottom_text}>Investment</Text>
         </View>
-        { showDetails ? (
+        {showDetails ? (
           <>
             <View style={styles.mutual_sec}>
               <Text style={styles.mutual_text}>Mutual Funds</Text>
@@ -251,7 +254,7 @@ function ProfileScreen(props) {
             {iinBank?.length > 0 ? (
               <>
                 {iinBank?.map((item, index) => (
-                  <View key={item?.BANK_NAME + index}> 
+                  <View key={item?.BANK_NAME + index}>
                     {item?.DEFAULT_BANK == "Y" && (
                       <View
                         style={{
@@ -458,13 +461,13 @@ const styles = StyleSheet.create({
     width: "23%",
     textAlign: "center",
     fontSize: 8,
-    color:"black"
+    color: "black"
   },
   bottom_text: {
     width: "20%",
     textAlign: "center",
     fontSize: 8,
-    color:'black'
+    color: 'black'
   },
   border1: {
     width: "75%",
@@ -501,7 +504,7 @@ const styles = StyleSheet.create({
   customer: {
     fontSize: 15,
     height: 20,
-    color:"black"
+    color: "black"
   },
   AddBankButton: {
     width: "90%",

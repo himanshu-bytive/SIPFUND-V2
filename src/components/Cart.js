@@ -1,18 +1,15 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import { connect } from "react-redux";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import { Colors } from "../common";
 
 const Cart = (props) => {
   const { cart, nav, token, getCartDetails } = props;
   const [cartItemCount, setCartItemCount] = useState(0);
-
   useEffect(() => {
     if (cart?.cartDetails) {
-      //console.log(cart?.cartDetails);
       setCartItemCount(cart?.cartDetails.length);
     } else {
       setCartItemCount(0);
@@ -20,9 +17,13 @@ const Cart = (props) => {
   }, [cart]);
 
   return (
-    <TouchableOpacity onPress={() => nav()} style={{ marginTop: 20 }}>
+    <TouchableOpacity onPress={nav} style={{ marginTop: 0 }}>
       <View style={styles.container}>
-        <AntDesign name={"shoppingcart"} size={35} color={Colors.RED} />
+        {/* Use Image component to display PNG images */}
+        <Image
+          source={require("../../assets/Icons/Cart.png")} // Switch PNG based on isActive state
+          style={{ width: 25, height: 25 }}
+        />
         <View>
           <View style={styles.cartNum}>
             <Text
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 0,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.GRAY_2,
+    backgroundColor: Colors.RED,
     padding: 2.5,
     marginLeft: -10,
     marginTop: -5,

@@ -68,6 +68,7 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^15.8.0",
     "react-native-svg-transformer": "^1.5.0",
+    "react-native-svg-uri": "^1.2.3",
     "react-native-vector-icons": "^10.2.0",
     "react-native-vision-camera": "4.5.2",
     "react-native-web": "^0.19.12",

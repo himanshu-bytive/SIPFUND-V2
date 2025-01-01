@@ -140,11 +140,13 @@ function ReferEarnScreen(props) {
           />
         }
         rightComponent={
-          <Cart
+          <View style={{marginTop:30}}>
+           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
             }}
           />
+         </View>
         }
       />
     );
@@ -170,11 +172,13 @@ function ReferEarnScreen(props) {
           />
         }
         rightComponent={
+          <View style={{marginTop:30}}>
           <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedList");
-            }}
-          />
+           nav={() => {
+             props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+           }}
+         />
+        </View>
         }
       />
     );

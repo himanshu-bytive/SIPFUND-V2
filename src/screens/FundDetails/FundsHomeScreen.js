@@ -93,7 +93,7 @@ function FundsHomeScreen(props) {
     fundChartList(
       {
         ISIN:
-            props.route.params?.fromScreen == "TopRatedList"
+          props.route.params?.fromScreen == "TopRatedList"
             ? fundDetail?.productISIN
             : fundDetail?.isin,
         from: moment(firstDay).format("YYYY-MM-DD"),
@@ -120,7 +120,7 @@ function FundsHomeScreen(props) {
       fundChartList(
         {
           ISIN:
-          props.route.params?.fromScreen == "TopRatedList"
+            props.route.params?.fromScreen == "TopRatedList"
               ? fundDetail?.productISIN
               : fundDetail?.isin,
           from: moment(firstDay).format("YYYY-MM-DD"),
@@ -136,7 +136,7 @@ function FundsHomeScreen(props) {
       fundDetailsList(
         {
           ISIN:
-          props.route.params?.fromScreen == "TopRatedList"
+            props.route.params?.fromScreen == "TopRatedList"
               ? fundDetail?.productISIN
               : fundDetail?.isin,
         },
@@ -275,9 +275,8 @@ function FundsHomeScreen(props) {
         label?.[label.length - 1] &&
         detailsMap.length &&
         label?.[label.length - 1] !==
-          `${
-            detailsMap?.[detailsMap.length - 1]?.d.split("-")[1]
-          }/${detailsMap?.[detailsMap.length - 1]?.d.split("-")[0].slice(2)}`
+        `${detailsMap?.[detailsMap.length - 1]?.d.split("-")[1]
+        }/${detailsMap?.[detailsMap.length - 1]?.d.split("-")[0].slice(2)}`
       ) {
         label.push(
           `${detailsMap[detailsMap.length - 1].d.split("-")[1]}/${detailsMap[
@@ -331,11 +330,13 @@ function FundsHomeScreen(props) {
           />
         }
         rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedFunds",{screen : "TopRatedList"});
-            }}
-          />
+          <View style={{ marginTop: 30 }}>
+            <Cart
+              nav={() => {
+                props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+              }}
+            />
+          </View>
         }
       />
       <ScrollView style={styles.containerScroll}>
@@ -507,7 +508,7 @@ const styles = StyleSheet.create({
 
   axis_asset: {
     fontSize: 16,
-    color:"black"
+    color: "black"
   },
   midcap: {
     fontSize: 13,
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
 
   fund: {
     fontSize: 15,
-    color:"black"
+    color: "black"
   },
   number: {
     fontSize: 15,
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
   },
   since: {
     fontSize: 12,
-    color:"black"
+    color: "black"
   },
   linechartimg: {
     height: 179,
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
   },
   min: {
     fontSize: 15,
-    color:"black"
+    color: "black"
   },
   private_sector: {
     flexDirection: "row",
@@ -606,7 +607,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   rupees_sec: { alignItems: "center" },
-  rupees_text: { fontSize: 12,color:"black" },
+  rupees_text: { fontSize: 12, color: "black" },
 });
 
 const mapStateToProps = (state) => ({

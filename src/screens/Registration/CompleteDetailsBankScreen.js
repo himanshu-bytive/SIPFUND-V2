@@ -603,11 +603,13 @@ function CompleteDetailsBankScreen(props, route) {
           />
         }
         rightComponent={
-          <Cart
+          <View style={{marginTop:30}}>
+           <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedList");
+              props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
             }}
           />
+         </View>
         }
       />
       {isFetching && (

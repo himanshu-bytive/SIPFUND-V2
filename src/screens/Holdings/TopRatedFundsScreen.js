@@ -58,11 +58,13 @@ function TopRatedFundsScreen(props) {
             />
           }
           rightComponent={
-            <Cart
-              nav={() => {
-                props.navigation.navigate("TopRatedList");
-              }}
-            />
+            <View style={{ marginTop: 30 }}>
+              <Cart
+                nav={() => {
+                  props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+                }}
+              />
+            </View>
           }
         />
         <Image
@@ -190,14 +192,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginVertical: 15,
     fontWeight: "bold",
-    color:"black"
+    color: "black"
   },
   Investments: {
     fontSize: 22,
     fontWeight: "bold",
     marginLeft: 30,
     marginVertical: 10,
-    color:"black"
+    color: "black"
   },
   mainbox: {
     alignItems: "center",

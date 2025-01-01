@@ -76,6 +76,9 @@ import YouImg from "../../assets/you.svg";
 import { Image } from 'react-native';
 import E_KYC from '../screens/Kyc/E_KYC';
 import KycScreen from '../screens/Kyc/KycScreen';
+import PersonalDetails from '../screens/OnBoarding/ProfileDetails';
+import BirthRelation from '../screens/OnBoarding/BirthRelation';
+import OccupationAndIncome from '../screens/OnBoarding/OccupationAndIncome';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -101,6 +104,14 @@ export const Initialpage = () =>(
     <Stack.Screen name="KycScreen" component={KycScreen} />
   </Stack.Navigator>
 )
+
+export const OnBoardingPages = () =>{
+  <Stack.Navigator>
+     <Stack.Screen name='ProfileDetails' component={PersonalDetails}/>
+     <Stack.Screen name='BirthRelation' component={BirthRelation}/>
+     <Stack.Screen name='OccupationAndIncome' component={OccupationAndIncome} />
+  </Stack.Navigator>
+}
 
 export const HamburgMenuStack = () => (
   <Stack.Navigator

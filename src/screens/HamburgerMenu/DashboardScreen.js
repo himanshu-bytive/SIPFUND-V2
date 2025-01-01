@@ -1,6 +1,6 @@
 /** @format */
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,12 +13,12 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import {connect} from 'react-redux';
-import {Header} from 'react-native-elements';
+import { connect } from 'react-redux';
+import { Header } from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Cart from '../../components/Cart';
 import moment from 'moment';
-import {Colors} from '../../common';
+import { Colors } from '../../common';
 import SiteApis from '../../services/SiteApis';
 
 const width = Dimensions.get('window').width;
@@ -41,7 +41,7 @@ function DashboardScreen(props) {
     // Check if token exists before making API calls
     if (token) {
       // Define the phoneNumber based on the user's mobile number
-      const data = {phoneNumber: users?.mobileNo};
+      const data = { phoneNumber: users?.mobileNo };
 
       // Asynchronous function to call APIs
       const fetchData = async () => {
@@ -126,18 +126,23 @@ function DashboardScreen(props) {
         leftComponent={
           <TouchableOpacity
             onPress={() => props.navigation.toggleDrawer()}
-            style={{marginTop: 20}}>
+            style={{ marginTop: 20 }}>
             <Entypo name={'menu'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
         rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedFunds",{screen : 'TopRatedList',params : {
-                fromScreen: 'dashboard',
-              }});
-            }}
-          />
+
+          <View style={{ marginTop: 30 }}>
+            <Cart
+              nav={() => {
+                props.navigation.navigate("TopRatedFunds", {
+                  screen: 'TopRatedList', params: {
+                    fromScreen: 'dashboard',
+                  }
+                });
+              }}
+            />
+          </View>
         }
         backgroundColor={Colors.LIGHT_WHITE}
         containerStyle={styles.header}
@@ -150,7 +155,7 @@ function DashboardScreen(props) {
       />
       <ScrollView style={styles.containerScroll}>
         <View style={styles.education1}>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Text style={styles.child5}>Summary</Text>
             <Text style={styles.value}>
               Value as of {moment(new Date()).format('DD-MM-YYYY')}
@@ -199,7 +204,7 @@ function DashboardScreen(props) {
             onPress={() => {
               if (steps > 5) {
                 // If steps are greater than 5, navigate to Goals
-                props.navigation.navigate('Hold', {screen: 'Goals'});
+                props.navigation.navigate('Hold', { screen: 'Goals' });
               } else {
                 // If steps are 4 or less
                 if (steps < 4) {
@@ -457,7 +462,7 @@ function DashboardScreen(props) {
         <View style={styles.history_sec2}>
           <TouchableOpacity
             onPress={() =>
-              props.navigation.navigate('Hold', {screen: 'Owner'})
+              props.navigation.navigate('Hold', { screen: 'Owner' })
             }>
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
@@ -476,7 +481,7 @@ function DashboardScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   logimg: {
     height: 65,
     width: 203,
@@ -583,8 +588,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-  const {AuthActions} = require('../../store/AuthRedux');
-  const {GoalsActions} = require('../../store/GoalsRedux');
+  const { AuthActions } = require('../../store/AuthRedux');
+  const { GoalsActions } = require('../../store/GoalsRedux');
 
   return {
     logOut: () => {

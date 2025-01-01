@@ -544,6 +544,7 @@ function OwnerChoice(props) {
           }
           rightComponent={
             cart && (
+              <View style={{marginTop:30}}>
               <Cart
                 nav={() => {
                   props.navigation.navigate("TopRatedList", {
@@ -551,6 +552,7 @@ function OwnerChoice(props) {
                   });                  
                 }}
               />
+            </View>
             )
           }
         />

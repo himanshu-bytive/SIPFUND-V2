@@ -21,7 +21,10 @@ import OTPInputView from "@twotalltotems/react-native-otp-input";
 import NotificationService from "../../../NotificationService";
 import Geolocation from "@react-native-community/geolocation";
 import RNOtpVerify from "react-native-otp-verify";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import LottieView from 'lottie-react-native';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import Button from "../../components/Atom/Button/Button";
 function OtpScreen(props) {
   const pageActive = useRef(false);
   const {
@@ -34,7 +37,33 @@ function OtpScreen(props) {
   } = props;
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const [appToken, setAppToken] = useState("-");
+  const [isDisabled, setIsDisabled] = useState(true); // Button starts disabled
+  const [timer, setTimer] = useState(30); // Initial timer value (30 seconds)
   const [onSuccess,setOnSuccess] = useState(false);
+  useEffect(() => {
+    let interval;
+    if (isDisabled) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer > 1) {
+            return prevTimer - 1; // Decrease timer by 1 second
+          } else {
+            clearInterval(interval); // Clear the timer
+            setIsDisabled(false); // Enable the button
+            return 0;
+          }
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval); // Cleanup interval
+  }, [isDisabled]);
+
+  const handleResend = () => {
+    reSendAction(); // Call your resend function
+    setIsDisabled(true); // Disable the button again
+    setTimer(30); // Reset the timer to 30 seconds
+  };  
+
   useEffect(() => {
     new NotificationService(onRegister);
     const backAction = () => {
@@ -93,6 +122,8 @@ function OtpScreen(props) {
     if (signUpSteps == 1 && pageActive.current) {
       pageActive.current = false;
       setOnSuccess(true);
+      //props.navigation.navigate("createAccount");
+      // props.navigation.navigate("newScreens",{screen : "PersonalDetails"});
     }
   }, [signUpSteps]);
 
@@ -149,7 +180,7 @@ function OtpScreen(props) {
       pageActive.current = true;
 
       otp(params);
-      setVerificationCode("");
+      // setVerificationCode("");
     }
   };
 
@@ -161,41 +192,39 @@ function OtpScreen(props) {
 
   return (
     <>
-  {onSuccess ? <View style={{ backgroundColor: "white", flex: 1 }}>
-  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <LottieView 
-      style={{ height: 200, width: 200 }} 
-      source={require('../../../assets/Lottie/Success.json')} 
-      autoPlay 
-      loop={false} 
-      onAnimationFinish={() => {
-        props.navigation.navigate("createAccount");
-        setOnSuccess(false);
-      }} 
-    />
-    <Text style={{ color: "black", fontSize: 18,fontWeight:"500", marginTop: -20, textAlign: "center", lineHeight: 25 }}>
-      Mobile Number {"\n"}Verification successful
-    </Text>
-  </View>
-  <Image 
-    source={require("../../../assets/TrustedBy.png")} 
-    style={{ width: 250, height: 80, alignSelf: "center", marginBottom: 50 }} 
-    resizeMode="contain" 
-  />
-</View> :
-    <ScrollView style={styles.containerScroll}> 
+     {onSuccess ? (
+        <View style={{ backgroundColor: "white", flex: 1 }}>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <LottieView 
+              style={{ height: 200, width: 200 }} 
+              source={require('../../../assets/Lottie/Success.json')} 
+              autoPlay 
+              loop={false} 
+              onAnimationFinish={() => {
+                props.navigation.navigate("createAccount");
+                setOnSuccess(false);
+              }} 
+            />
+            <Text style={{ color: "black", fontSize: 18, fontWeight: "500", marginTop: -20, textAlign: "center", lineHeight: 25 }}>
+              Mobile Number {"\n"}Verification successful
+            </Text>
+          </View>
+          <Image 
+            source={require("../../../assets/TrustedBy.png")} 
+            style={{ width: 250, height: 80, alignSelf: "center", marginBottom: 50 }} 
+            resizeMode="contain" 
+          />
+        </View>) : (
+    <ScrollView style={styles.containerScroll}>
+      <TouchableOpacity onPress={() => props.navigation.navigate("Reset",{screen  : "verify"})}
+      style={{ marginTop: 30, marginLeft: 15, margin:15}}>
+        <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+      </TouchableOpacity>
       <View style={styles.containBox}>
         <Text style={styles.slogan}>
-          Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
+          Enter OTP
         </Text>
         <View style={styles.mainbox}>
-          <Image
-            source={require("../../../assets/logo.png")}
-            style={styles.logimg}
-          />
-          <Text style={styles.number}>
-            {"Enter OTP to verify\nyour mobile number"}
-          </Text>
           <View style={styles.otpsec}>
               <View>
                 <OTPInputView
@@ -206,9 +235,14 @@ function OtpScreen(props) {
                   }}
                   codeInputFieldStyle={{
                     color: "black",
-                    borderWidth: 0,
+                    borderWidth: 2,
+                    borderRadius: 10,
                     borderBottomColor: "darkgrey",
                     borderBottomWidth: 1,
+                    width:responsiveWidth(13),
+                    height:responsiveHeight(8),
+                    borderColor: '#FFB2AA',
+                    padding: 20
                   }}
                   pinCount={4}
                   code={verificationCode}
@@ -216,45 +250,42 @@ function OtpScreen(props) {
                   onCodeFilled={() => onAction(verificationCode)}
                 />
               </View>
-            {isFetching ? (
-              <View style={styles.botton_box}>
-                <ActivityIndicator size={30} color={Colors.RED} />
+              <View>
+                <Button
+                  borderColor={"#FFB2AA"}
+                  borderWidth={1}
+                  height={responsiveHeight(5)}
+                  width={responsiveWidth(45)}
+                  backgroundColor={Colors.WHITE}
+                  fontSize={responsiveFontSize(2)}
+                  textColor={"black"}
+                  isLoading={isFetching}
+                  loaderColor="black" 
+                  text={"Proceed"}   
+                  onPress={() => onAction(verificationCode)}
+                />
               </View>
-            ) : (
-              <>
-              <TouchableOpacity
-                style={styles.proceedButtonContainer}
-                onPress={() => onAction(verificationCode)}
-              >
-                <Text style={styles.proceedButtonText}>PROCEED</Text>
-              </TouchableOpacity>
-           
-              <View style={styles.button}>
-                <TouchableOpacity
-                  onPress={() => reSendAction()}
-                  style={styles.botton_box}
-                >
-                  <Text style={styles.get_otp}>RESEND OTP</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.navigate("verify")}>
-                  <Text style={[styles.get_otp, { marginTop: 10 }]}>
-                    Back to Login
+            
+            {!isFetching && (
+              <View style={{marginTop:20}}>
+                <TouchableOpacity onPress={handleResend} style={styles.botton_box} disabled={isDisabled}>
+                  <Text style={[isDisabled ? { color: "gray" } : styles.get_otp,]}>
+                    {isDisabled ? `Resend OTP in ${timer} seconds` : "Resend OTP"}
                   </Text>
                 </TouchableOpacity>
               </View>
-            </>
             )}
           </View>
         </View>
       </View>
       <View style={{ alignItems: "center" }}>
         <Image
-          source={require("../../../assets/pan_footer_img.png")}
+          source={require("../../../assets/nse.png")}
           style={styles.nseimg}
         />
       </View>
-    </ScrollView>}
-</>
+    </ScrollView>)}
+    </>
   );
 }
 
@@ -268,8 +299,9 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: 30,
     color: Colors.BLACK,
-    marginTop: 100,
-    marginBottom: 20,
+    marginTop: 40,
+    marginBottom: 10,
+    fontFamily: 'Jomolhari',
   },
   sloganRed: {
     color: Colors.RED,
@@ -279,7 +311,6 @@ const styles = StyleSheet.create({
   },
   mainbox: {
     padding: 20,
-    borderWidth: 2,
     borderRadius: 20,
     borderStyle: "solid",
     alignItems: "center",
@@ -310,6 +341,9 @@ const styles = StyleSheet.create({
   },
   nseimg: {
     //marginVertical: 50,
+    marginTop: '70%',
+    width: Dimensions.get("window").width * 0.8,
+    resizeMode: "contain",
   },
   number: {
     fontSize: 18,
@@ -320,17 +354,21 @@ const styles = StyleSheet.create({
   },
   containerScroll: {
     width: "100%",
+    backgroundColor: Colors.WHITE,
   },
   proceedButtonContainer: {
-    backgroundColor: Colors.LIGHT_RED,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    backgroundColor: Colors.WHITE,
+    paddingVertical: 4,
+    paddingHorizontal: 30,
     borderRadius: 5,
     marginBottom: 10,
+    borderColor: '#FFB2AA',
+    borderWidth: 2
   },
   proceedButtonText: {
     fontSize: 20,
-    color: Colors.WHITE,
+    fontFamily: 'Jomolhari',
+    color: Colors.NEW_RED,
   },
 });
 

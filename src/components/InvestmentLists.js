@@ -29,7 +29,7 @@ export default function InvestmentLists(props) {
   ];
   const { data, counts, onPress } = props;
   const { width } = Dimensions.get('window');
-const boxSize = width * 0.23; // 23% of the screen width
+const boxSize = width * 0.30; // 23% of the screen width
   if (counts) {
     return (
       <View style={styles.investment_sec}>
@@ -77,8 +77,8 @@ const boxSize = width * 0.23; // 23% of the screen width
                     resizeMode: "contain",
                     alignSelf: "center",
                     //aspectRatio: 1,
-                    width: 50,
-                    height: 50,
+                    width: 100,
+                    height: 90,
                   }}
                 />
               ) : (
@@ -87,8 +87,8 @@ const boxSize = width * 0.23; // 23% of the screen width
                     {optimizeImages[key]} {data?.length}
                   </Text> */}
                   <MyImage
-                    width={50}
-                    height={50}
+                    width={100}
+                    height={90}
                     svg={true}
                     // url={
                     //   // optimizeImages[key]
@@ -96,7 +96,7 @@ const boxSize = width * 0.23; // 23% of the screen width
                     //   //   :
                     //   optimizeImages[key]
                     // }
-                    style={{ height: 50, width: 60, marginLeft: 10 }}
+                    style={{ height: 100, width: 90, marginLeft: 10 }}
                     url={
                       Platform.OS == "ios"
                         ? item?.iosplanImagePath
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   investment: {
     //borderRadius: 10,
     backgroundColor: Colors.WHITE,
-    width: "23%",
+    width: "30%",
     alignItems: "center",
     margin: "1%",
     shadowColor: "#000",
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   term: {
     width: "100%",
     height: 113,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   long: {
     textAlign: "center",
