@@ -18,6 +18,7 @@ import { MySelectPicker, MyTextInput } from "../../components";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 function CompleteDetailsAddressScreen(props) {
   const pageActive = useRef(false);
@@ -178,26 +179,16 @@ function CompleteDetailsAddressScreen(props) {
     <KeyboardAvoidingView behavior={"height"} enabled style={styles.container}>
       <Header
         leftComponent={
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={{ marginTop: 20 }}
-          >
-            <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
+            <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
           </TouchableOpacity>
         }
+        backgroundColor={Colors.WHITE}
         containerStyle={styles.header}
-        backgroundColor={Colors.LIGHT_WHITE}
-        centerComponent={
+        rightComponent={
           <Image
             source={require("../../../assets/icon.png")}
             style={styles.logimg}
-          />
-        }
-        rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedList");
-            }}
           />
         }
       />
@@ -212,76 +203,98 @@ function CompleteDetailsAddressScreen(props) {
           <Text style={styles.occupation}>
             Address1 (As per address proof) <Text style={styles.error}>*</Text>
           </Text>
-          <MyTextInput
-            placeholder={"Add Address"}
-            value={state.address}
-            error={errors.address}
-            onChangeText={(address) => {
-              setErrors({ ...errors, address: null });
-              setState({ ...state, address });
-            }}
-          />
+          <View style={styles.textBox}>
+            <MyTextInput
+              style={styles.inputsec}
+              placeholder={"Add Address"}
+              value={state.address}
+              error={errors.address}
+              onChangeText={(address) => {
+                setErrors({ ...errors, address: null });
+                setState({ ...state, address });
+              }}
+            />
+          </View>
 
           {/* DOB/DOI_sec */}
           <Text style={styles.occupation}>
             Pincode <Text style={styles.error}>*</Text>
           </Text>
-          <MyTextInput
-            placeholder={"Pincode"}
-            maxLength={6}
-            keyboardType="numeric"
-            value={state.pincode}
-            error={errors.pincode}
-            onChangeText={(pincode) => {
-              setErrors({ ...errors, pincode: null });
-              setState({ ...state, pincode:pincode,states:null, city: "" });
-              getStateCitys(pincode);
-              // setErrors({ ...errors, states: null });
-                  // setState({ ...state, states:null, city: "" });
-            }}
-          />
+          <View style={styles.textBox}>
+            <MyTextInput
+              style={styles.inputsec}
+              placeholder={"Pincode"}
+              maxLength={6}
+              keyboardType="numeric"
+              value={state.pincode}
+              error={errors.pincode}
+              onChangeText={(pincode) => {
+                setErrors({ ...errors, pincode: null });
+                setState({ ...state, pincode:pincode,states:null, city: "" });
+                getStateCitys(pincode);
+                // setErrors({ ...errors, states: null });
+                    // setState({ ...state, states:null, city: "" });
+              }}
+            />
+          </View>
+          <View style={[styles.example, { flexDirection: "row" }]}>
+            {/* State Section */}
+            {state.pincode != "" && state.pincode.length > 5 && (
+              <View style={{ flex: 1, marginRight: 5 }}>
+                <Text style={styles.occupation}>
+                  State <Text style={styles.error}>*</Text>
+                </Text>
+                <View style={styles.textBox}>
+                  <MySelectPicker
+                    style={styles.inputsec}
+                    values={stateList}
+                    defultValue={state.states}
+                    error={errors.states}
+                    onChange={(states) => {
+                      setErrors({ ...errors, states: null });
+                      setState({ ...state, states, city: "" });
+                      getCitys(states, token);
+                    }}
+                  />
+                </View>
+              </View>
+            )}
 
-          {/* TITLE_sec */}
-          {state.pincode != "" && state.pincode.length > 5 && (
-            <View>
-              <Text style={styles.occupation}>
-                State <Text style={styles.error}>*</Text>
-              </Text>
-              <MySelectPicker
-                values={stateList}
-                defultValue={state.states}
-                error={errors.states}
-                onChange={(states) => {
-                  setErrors({ ...errors, states: null });
-                  setState({ ...state, states, city: "" });
-                  getCitys(states, token);
-                }}
-              />
-            </View>
-          )}
+            {/* City Section */}
+            {state.pincode != "" && state.pincode.length > 5 && (
+              <View style={{ flex: 1, marginLeft: 5 }}>
+                <Text style={styles.occupation}>
+                  City <Text style={styles.error}>*</Text>
+                </Text>
+                <View style={styles.textBox}>
+                  <MySelectPicker
+                    style={styles.inputsec}
+                    values={cityList}
+                    defultValue={state.city}
+                    error={errors.city}
+                    onChange={(city) => {
+                      setErrors({ ...errors, city: null });
+                      setState({ ...state, city });
+                    }}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
 
-          {/* Investor Name_sec */}
-          {state.pincode != "" && state.pincode.length > 5  && (
-            <View>
-              <Text style={styles.occupation}>
-                {/* {state.city} */}
-                City <Text style={styles.error}>*</Text>
-              </Text>
-              <MySelectPicker
-                values={cityList}
-                defultValue={state.city}
-                error={errors.city}
-                onChange={(city) => {
-                  setErrors({ ...errors, city: null });
-                  setState({ ...state, city });
-                }}
-              />
-            </View>
-          )}
         </View>
       </ScrollView>
       {/* click_box */}
-      <View
+      {/* Footer Section */}
+      <View style={styles.bottomButtonContainer}>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={onAction}
+        >
+          <Text style={styles.buttonText}> Next </Text>
+        </TouchableOpacity>
+      </View>
+      {/* <View
         style={[
           styles.footer,
           {
@@ -302,7 +315,7 @@ function CompleteDetailsAddressScreen(props) {
             <Text style={styles.get_otp}>Next</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
     </KeyboardAvoidingView>
   );
 }
@@ -313,18 +326,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    borderBottomColor: Colors.BLACK,
-    borderBottomWidth: 1,
+    flexDirection: "row", // Arrange items in a row
+    justifyContent: "space-between", // Space out items evenly
+    alignItems: "center", // Center items vertically
+    paddingHorizontal: 10, // Add spacing from edges
+    height: 80, // Set a consistent height for the header
+    backgroundColor: Colors.WHITE, // Ensure background matches
+  },
+  logimg: {
+    height: 35,
+    width: 153,
   },
   container_sec: {
     flex: 1,
     padding: 10,
     backgroundColor: "#fff",
   },
-  logimg: {
-    height: 65,
-    width: 203,
-    marginTop: 10,
+  textBox: {
+    borderWidth: 2,
+    borderColor: '#FFB2AA',
+    borderRadius: 4,
+    backgroundColor: Colors.WHITE,
+    fontSize: 16,
+    marginTop:10,
+  },
+  inputsec: {
+    fontSize: 17,
+    paddingHorizontal: 10,
+    color: 'black',
+    marginBottom: 0,
+    backgroundColor: Colors.WHITE,
   },
   error: {
     color: "#ff0000",
@@ -336,9 +367,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
   },
+  bottomButtonContainer: {
+    position: "absolute",
+    bottom: responsiveHeight(1),
+    width: "100%",
+    padding: responsiveWidth(4),
+    backgroundColor: Colors.WHITE,
+    alignItems: "center",
+  },
+  bottomButton: {
+    width: "90%",
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    paddingVertical: responsiveHeight(1),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+  },
+  buttonText: {
+    color: Colors.BLACK,
+    fontSize: responsiveFontSize(2),
+  },
   example: {
     fontSize: 15,
     marginTop: 10,
+    flexDirection: "row", // Arrange items in a row
+    justifyContent: "space-between", // Space out items evenly
+    alignItems: "center", // Center items vertically
   },
   private_sector: {
     flexDirection: "row",

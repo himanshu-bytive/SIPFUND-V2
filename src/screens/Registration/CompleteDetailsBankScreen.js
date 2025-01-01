@@ -26,6 +26,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { Button } from "react-native-paper";
 import RNFetchBlob from "rn-fetch-blob";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 function CompleteDetailsBankScreen(props, route) {
   const pageActive = useRef(false);
@@ -577,26 +578,16 @@ function CompleteDetailsBankScreen(props, route) {
     <>
       <Header
         leftComponent={
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={{ marginTop: 20 }}
-          >
-            <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
+            <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
           </TouchableOpacity>
         }
+        backgroundColor={Colors.WHITE}
         containerStyle={styles.header}
-        backgroundColor={Colors.LIGHT_WHITE}
-        centerComponent={
+        rightComponent={
           <Image
             source={require("../../../assets/icon.png")}
             style={styles.logimg}
-          />
-        }
-        rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedList");
-            }}
           />
         }
       />
@@ -626,44 +617,51 @@ function CompleteDetailsBankScreen(props, route) {
             <Text style={styles.occupation}>
               Account Type <Text style={styles.error}>*</Text>
             </Text>
-            <MySelectPicker
-              values={accountTypeList}
-              defultValue={state.accountType}
-              error={errors.accountType}
-              placeholder={"Select A/C type"}
-              onChange={(accountType) => {
-                setErrors({ ...errors, accountType: null });
-                setState({ ...state, accountType });
-              }}
-            />
+            <View style={styles.textBox}>
+              <MySelectPicker
+                values={accountTypeList}
+                defultValue={state.accountType}
+                error={errors.accountType}
+                placeholder={"Select A/C type"}
+                onChange={(accountType) => {
+                  setErrors({ ...errors, accountType: null });
+                  setState({ ...state, accountType });
+                }}
+              />
+            </View>
 
             <Text style={styles.occupation}>
               Account No. <Text style={styles.error}>*</Text>
             </Text>
-            <MyTextInput
-              keyboardType="numeric"
-              maxLength={16}
-              value={state.accountNumber}
-              error={errors.accountNumber}
-              onChangeText={(accountNumber) => {
-                setErrors({ ...errors, accountNumber: null });
-                setState({ ...state, accountNumber });
-              }}
-            />
-
+            <View style={styles.textBox}>
+              <MyTextInput
+                style={styles.inputsec}
+                keyboardType="numeric"
+                maxLength={16}
+                value={state.accountNumber}
+                error={errors.accountNumber}
+                onChangeText={(accountNumber) => {
+                  setErrors({ ...errors, accountNumber: null });
+                  setState({ ...state, accountNumber });
+                }}
+              />
+            </View>
             <Text style={styles.occupation}>
               IFSC Code <Text style={styles.error}>*</Text>
             </Text>
-            <MyTextInput
-              value={state.ifsc}
-              error={errors.ifsc}
-              autoCapitalize={"characters"}
-              maxLength={11}
-              onChangeText={(ifsc) => {
-                setErrors({ ...errors, ifsc: null });
-                setState({ ...state, ifsc });
-              }}
-            />
+            <View style={styles.textBox}>
+              <MyTextInput
+                style={styles.inputsec}
+                value={state.ifsc}
+                error={errors.ifsc}
+                autoCapitalize={"characters"}
+                maxLength={11}
+                onChangeText={(ifsc) => {
+                  setErrors({ ...errors, ifsc: null });
+                  setState({ ...state, ifsc });
+                }}
+              />
+            </View>
 
             <View style={{ alignItems: "center" }}>
               {isFetching ? (
@@ -785,45 +783,62 @@ function CompleteDetailsBankScreen(props, route) {
               <Text style={styles.occupation}>
                 Bank Name <Text style={styles.error}>*</Text>
               </Text>
-              <MySelectPicker
-                values={bankList}
-                defultValue={state.bank}
-                error={errors.bank}
-                onChange={(bank) => {
-                  setErrors({ ...errors, bank: null });
-                  setState({ ...state, bank });
-                }}
-              />
-
+              
+              <View style={styles.textBox}>
+                <MySelectPicker
+                  style={styles.inputsec}
+                  values={bankList}
+                  defultValue={state.bank}
+                  error={errors.bank}
+                  onChange={(bank) => {
+                    setErrors({ ...errors, bank: null });
+                    setState({ ...state, bank });
+                  }}
+                />
+              </View>
               <Text style={styles.occupation}>
                 Branch Name <Text style={styles.error}>*</Text>
               </Text>
-              <MyTextInput
-                value={state.branchName}
-                error={errors.branchName}
-                onChangeText={(branchName) => {
-                  setErrors({ ...errors, branchName: null });
-                  setState({ ...state, branchName });
-                }}
-              />
-
+              <View style={styles.textBox}>
+                <MyTextInput
+                  style={styles.inputsec}
+                  value={state.branchName}
+                  error={errors.branchName}
+                  onChangeText={(branchName) => {
+                    setErrors({ ...errors, branchName: null });
+                    setState({ ...state, branchName });
+                  }}
+                />
+              </View>
               <Text style={styles.occupation}>
                 Branch Address <Text style={styles.error}>*</Text>
               </Text>
-              <MyTextInput
-                value={state.branchAddress}
-                error={errors.branchAddress}
-                onChangeText={(branchAddress) => {
-                  setErrors({ ...errors, branchAddress: null });
-                  setState({ ...state, branchAddress });
-                }}
-              />
+              <View style={styles.textBox}>
+                <MyTextInput
+                  style={styles.inputsec}
+                  value={state.branchAddress}
+                  error={errors.branchAddress}
+                  onChangeText={(branchAddress) => {
+                    setErrors({ ...errors, branchAddress: null });
+                    setState({ ...state, branchAddress });
+                  }}
+                />
+              </View>
             </View>
           )}
-
+        </ScrollView>
+        <>
           {/* click_box */}
           {!props?.route?.params?.newBankAccount ? (
-            <View style={styles.footer}>
+            <View style={styles.bottomButtonContainer}>
+              <TouchableOpacity
+                style={styles.bottomButton}
+                onPress={onAction}
+              >
+                <Text style={styles.buttonText}> Next </Text>
+              </TouchableOpacity>
+            </View>
+            /*<View style={styles.footer}>
               <View style={styles.click_box}>
                 <TouchableOpacity
                   onPress={() => props.navigation.goBack()}
@@ -844,7 +859,7 @@ function CompleteDetailsBankScreen(props, route) {
                   </TouchableOpacity>
                 )}
               </View>
-            </View>
+            </View>*/
           ) : (
             <>
               {/* <TouchableOpacity
@@ -1047,7 +1062,7 @@ function CompleteDetailsBankScreen(props, route) {
               </View>
             </>
           )}
-        </ScrollView>
+        </>
       </KeyboardAvoidingView>
       <Overlay
         isVisible={visible}
@@ -1086,22 +1101,61 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   header: {
-    borderBottomColor: Colors.BLACK,
-    borderBottomWidth: 1,
-    backgroundColor: "#fff",
     zIndex: 100,
+    flexDirection: "row", // Arrange items in a row
+    justifyContent: "space-between", // Space out items evenly
+    alignItems: "center", // Center items vertically
+    paddingHorizontal: 10, // Add spacing from edges
+    height: 80, // Set a consistent height for the header
+    backgroundColor: Colors.WHITE, // Ensure background matches
   },
   container_sec: {
     padding: 10,
   },
+  textBox: {
+    borderWidth: 2,
+    borderColor: '#FFB2AA',
+    borderRadius: 4,
+    backgroundColor: Colors.WHITE,
+    fontSize: 16,
+    marginTop:10,
+  },
+  inputsec: {
+    fontSize: 17,
+    paddingHorizontal: 5,
+    color: 'black',
+    marginBottom: 0,
+    backgroundColor: Colors.WHITE,
+  },
   error: {
     color: "#ff0000",
     padding: 5,
+  },  
+  bottomButtonContainer: {
+    position: "absolute",
+    bottom: responsiveHeight(1),
+    width: "100%",
+    padding: responsiveWidth(4),
+    backgroundColor: Colors.WHITE,
+    alignItems: "center",
+  },
+  bottomButton: {
+    width: "95%",
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    paddingVertical: responsiveHeight(1),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.WHITE,
+  },
+  buttonText: {
+    color: Colors.BLACK,
+    fontSize: responsiveFontSize(2),
   },
   logimg: {
-    height: 65,
-    width: 203,
-    marginTop: 10,
+    height: 35,
+    width: 153,
   },
   heading_sec: {
     padding: 12,

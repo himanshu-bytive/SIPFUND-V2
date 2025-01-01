@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -10,14 +10,103 @@ import {
   StyleSheet
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import DateTimePickerModal from "react-native-modal-datetime-picker"; // Import DateTimePickerModal
+import DateTimePickerModal from "react-native-modal-datetime-picker"; 
 import { Colors } from "../../common";
 import { Image } from "react-native-elements";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { connect } from "react-redux";
 
 const PersonalDetails = (props) => {
-  const [placeOfBirth, setPlaceOfBirth] = useState("");
+
+  const {
+    token,
+    users,
+    steps,
+    fatcaDetails,
+    nseDetails,
+    userDetails,
+    pan,
+    updateRegister,
+    settings,
+    occupations,
+    incomes,
+    updateSuccess,
+    isFetching,
+    fetchTheNomineeRelationshipList,
+    relationList,
+    minor_gaurdian_relationship_list,
+    fetchMinorGaurdianRelationshipList,
+  } = props;
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const stateList = [
+    { value: "AN", label: "Andaman and Nicobar Islands" },
+    { value: "AP", label: "Andhra Pradesh" },
+    { value: "AR", label: "Arunachal Pradesh" },
+    { value: "AS", label: "Assam" },
+    { value: "BH", label: "Bihar" },
+    { value: "CH", label: "Chandigarh" },
+    { value: "CG", label: "Chhattisgarh" },
+    { value: "DD", label: "Daman and Diu" },
+    { value: "DN", label: "Dadra and Nagar Haveli" },
+    { value: "GO", label: "Goa" },
+    { value: "GU", label: "Gujarat" },
+    { value: "HA", label: "Haryana" },
+    { value: "HP", label: "Himachal Pradesh" },
+    { value: "JD", label: "Jharkhand" },
+    { value: "KR", label: "Jammu and Kashmir" },
+    { value: "KA", label: "Karnataka" },
+    { value: "KE", label: "Kerala" },
+    { value: "LD", label: "Ladakh" },
+    { value: "LP", label: "Lakshadweep" },
+    { value: "MA", label: "Maharashtra" },
+    { value: "MN", label: "Manipur" },
+    { value: "ME", label: "Meghalaya" },
+    { value: "MI", label: "Mizoram" },
+    { value: "NA", label: "Nagaland" },
+    { value: "ND", label: "New Delhi" },
+    { value: "OD", label: "ODISHA" },
+    { value: "OT", label: "Others" },
+    { value: "PU", label: "Punjab" },
+    { value: "RA", label: "Rajasthan" },
+    { value: "SI", label: "Sikkim" },
+    { value: "TE", label: "Telangana" },
+    { value: "TN", label: "Tamil Nadu" },
+    { value: "TR", label: "Tripura" },
+    { value: "UP", label: "Uttar Pradesh" },
+    { value: "UR", label: "Uttarakhand" },
+    { value: "WB", label: "West Bengal" }
+  ];
+
+  const mobileEmailRelation = [
+    { value: "SE", label: "Self" },
+    { value: "SP", label: "Spouse" },
+    { value: "DC", label: "Dependent Children" },
+    { value: "DS", label: "Dependent Siblings" },
+    { value: "DP", label: "Dependent Parents" },
+    { value: "GD", label: "Guardian" },
+    { value: "PM", label: "PMS" },
+    { value: "CD", label: "Custodian" },
+    { value: "PO", label: "POA" },
+  ];
+
+  const [state, setState] = useState({
+    place_birth: "",
+    dob: "",
+    mobile_relation: "",
+    email_relation: "",
+  });
+
+  const [errors, setErrors] = useState({
+    place_birth: null,
+    dob: null,
+    mobile_relation: null,
+    email_relation: null,
+  });
+
+  const [placeOfBirth, setPlaceOfBirth] = useState({ STATE_CODE: "", STATE_NAME: "" });
   const [mobileNumberBelongsTo, setMobileNumberBelongsTo] = useState("");
   const [emailBelongsTo, setEmailBelongsTo] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
@@ -36,15 +125,78 @@ const PersonalDetails = (props) => {
     hideDatePicker();
   };
 
+  const onAction = () => {
+    if (currentStep === 1) {
+      if (!placeOfBirth.STATE_CODE) {
+        setErrors((prevErrors) => ({ ...prevErrors, place_birth: "Please select a place of birth." }));
+        return;
+      }
+      if (!dateOfBirth) {
+        setErrors((prevErrors) => ({ ...prevErrors, dob: "Please select a date of birth." }));
+        return;
+      }
+
+      setCurrentStep(2);
+      setErrors({});
+    } else if (currentStep === 2) {
+      if (!mobileNumberBelongsTo) {
+        setErrors((prevErrors) => ({ ...prevErrors, mobile_relation: "Please select the mobile number relation." }));
+        return;
+      }
+      if (!emailBelongsTo) {
+        setErrors((prevErrors) => ({ ...prevErrors, email_relation: "Please select the email ID relation." }));
+        return;
+      }
+
+      const params = {
+        nseDetails: {
+          ...nseDetails,
+          place_birth: placeOfBirth,
+          dob: dateOfBirth,
+          mobile_relation: mobileNumberBelongsTo,
+          email_relation: emailBelongsTo,
+        },
+        fatcaDetails: {
+          ...fatcaDetails,
+          place_birth: placeOfBirth,
+        },
+        userDetails,
+      };
+      updateRegister(params, token);
+      props.navigation.navigate("newScreens", { screen: "OccupationAnnualIncomePEP" });
+    }
+  };
+
+   useEffect(() => {
+      if (fatcaDetails || nseDetails || userDetails) {
+        setPlaceOfBirth({
+          STATE_CODE: fatcaDetails?.place_birth?.STATE_CODE || "",
+          STATE_NAME: fatcaDetails?.place_birth?.STATE_NAME || "",
+        });
+        setDateOfBirth(nseDetails?.dob ? new Date(nseDetails.dob) : null);
+        setMobileNumberBelongsTo(
+          nseDetails?.Mobile_relation || nseDetails?.mobile_relation || "SE"
+        );
+        setEmailBelongsTo(
+          nseDetails?.Email_relation || nseDetails?.email_relation || "SE"
+        );
+      }
+    }, [fatcaDetails, nseDetails, userDetails]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <ScrollView style={styles.containerScroll} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.headerRow}>
           <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
+             onPress={() => {
+              if (currentStep === 2) {
+                setCurrentStep(1);
+              } else {
+                props.navigation.navigate("newScreens",{screen : "OccupationAnnualIncomePEP"});
+              }
+            }}
             style={styles.arrowButton}
           >
             <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
@@ -54,23 +206,31 @@ const PersonalDetails = (props) => {
             style={styles.logimg}
           />
         </View>
-
+      <ScrollView style={styles.containerScroll} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.containBox}>
-          {false ? (
+          {currentStep === 1 ? (
             <>
               <View style={styles.text_box}>
                 <Text style={styles.sub_slogan}>Place of Birth</Text>
                 <View style={styles.inputsecWrapper}>
                   <Picker
-                    selectedValue={placeOfBirth}
-                    onValueChange={(itemValue) => setPlaceOfBirth(itemValue)}
+                    selectedValue={placeOfBirth.STATE_CODE}
+                    onValueChange={(itemValue) => {
+                      const selectedState = stateList.find((state) => state.value === itemValue);
+                      setPlaceOfBirth({
+                        STATE_CODE: selectedState?.value || "",
+                        STATE_NAME: selectedState?.label || "",
+                      });
+                    }}
                     style={styles.inputsec}
                   >
                     <Picker.Item label="Select Place of Birth" value="" />
-                    <Picker.Item label="Father" value="Father" />
-                    <Picker.Item label="Mother" value="Mother" />
+                    {stateList.map((state) => (
+                      <Picker.Item key={state.value} label={state.label} value={state.value} />
+                    ))}
                   </Picker>
                 </View>
+                {errors.place_birth && <Text style={styles.errorText}>{errors.place_birth}</Text>}
               </View>
 
               <View style={styles.text_box}>
@@ -96,7 +256,7 @@ const PersonalDetails = (props) => {
                 />
               )}
             </>
-          ) : (
+          ) : currentStep === 2 ? (
             <>
               <View style={styles.text_box}>
                 <Text style={styles.sub_slogan}>Mobile Number belongs to</Text>
@@ -106,11 +266,13 @@ const PersonalDetails = (props) => {
                     onValueChange={(itemValue) => setMobileNumberBelongsTo(itemValue)}
                     style={styles.inputsec}
                   >
-                    <Picker.Item label="Select Mobile Owner" value="" />
-                    <Picker.Item label="Father" value="Father" />
-                    <Picker.Item label="Mother" value="Mother" />
+                    <Picker.Item label="Select Relation" value="" />
+                    {mobileEmailRelation.map((relation) => (
+                      <Picker.Item key={relation.value} label={relation.label} value={relation.value} />
+                    ))}
                   </Picker>
                 </View>
+                {errors.mobile_relation && <Text style={styles.errorText}>{errors.mobile_relation}</Text>}
               </View>
 
               <View style={styles.text_box}>
@@ -121,19 +283,20 @@ const PersonalDetails = (props) => {
                     onValueChange={(itemValue) => setEmailBelongsTo(itemValue)}
                     style={styles.inputsec}
                   >
-                    <Picker.Item label="Select Email Owner" value="" />
-                    <Picker.Item label="Father" value="Father" />
-                    <Picker.Item label="Mother" value="Mother" />
+                    <Picker.Item label="Select Relation" value="" />
+                    {mobileEmailRelation.map((relation) => (
+                      <Picker.Item key={relation.value} label={relation.label} value={relation.value} />
+                    ))}
                   </Picker>
                 </View>
+                {errors.email_relation && <Text style={styles.errorText}>{errors.email_relation}</Text>}
               </View>
             </>
-          )}
+          ) : null}
         </View>
       </ScrollView>
-
       <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity style={styles.bottomButton}>
+        <TouchableOpacity style={styles.bottomButton} onPress={onAction}>
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
@@ -153,24 +316,31 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between", // Space between arrow and logo
     alignItems: "center",
+    width: "100%",
     paddingHorizontal: responsiveWidth(4),
-    marginTop: responsiveHeight(2),
+    paddingVertical: responsiveHeight(2), // Add some spacing for better appearance
+    backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
   },
   arrowButton: {
     marginLeft: responsiveWidth(2),
   },
   logimg: {
-    width: responsiveWidth(35), // Adjusted width
-    height: responsiveHeight(7), // Adjusted height
-    resizeMode: "contain", // Ensure the image fits within the bounds
+    width: responsiveWidth(35),
+    height: responsiveHeight(7),
+    resizeMode: "contain",
   },
   sub_slogan: {
     fontSize: responsiveFontSize(2.5),
     color: Colors.BLACK,
     marginBottom: responsiveHeight(1),
   },
+  errorText: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: responsiveHeight(0.5),
+  },  
   containerScroll: {
     width: "100%",
     backgroundColor: Colors.WHITE,
@@ -218,4 +388,45 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PersonalDetails;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  users: state.auth.user,
+  nseDetails: state.registration.nseDetails,
+  fatcaDetails: state.registration.fatcaDetails,
+  userDetails: state.registration.userDetails,
+  pan: state.home.pan,
+  isFetching: state.registration.isFetching,
+  occupations: state.registration.occupations,
+  incomes: state.registration.incomes,
+  updateSuccess: state.registration.updateSuccess,
+  relationList: state.registration.nomineeRelationship,
+  minor_gaurdian_relationship_list:
+    state.registration.minorGaurdianRelationship,
+});
+
+const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
+  const { dispatch } = dispatchProps;
+  const { RegistrationActions } = require("../../store/RegistrationRedux");
+  return {
+    ...stateProps,
+    ...ownProps,
+    settings: (token) => {
+      RegistrationActions.settings(dispatch, token);
+    },
+    updateRegister: (params, token) => {
+      RegistrationActions.updateRegister(dispatch, params, token);
+    },
+
+    fetchTheNomineeRelationshipList: () => {
+      RegistrationActions.fetchNomineeRelationship(dispatch);
+    },
+    fetchMinorGaurdianRelationshipList: () => {
+      RegistrationActions.fetchMinorGaurdianRelationship(dispatch);
+    },
+  };
+};
+export default connect(
+  mapStateToProps,
+  undefined,
+  mapDispatchToProps
+)(PersonalDetails);

@@ -75,7 +75,8 @@ import PlansImg from "../../assets/plan.svg";
 import YouImg from "../../assets/you.svg";
 import { Image } from 'react-native';
 import PersonalDetails from '../screens/New Screens/PersonalDetails';
-import OccupationAnnualIncome from '../screens/New Screens/OccupationAnnualIncome';
+import OccupationAnnualIncomePEP from '../screens/New Screens/OccupationAnnualIncomePEP';
+import BirthRelation from '../screens/New Screens/BirthRelation';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,7 +104,8 @@ export const Initialpage = () =>(
 export const NewScreens = () =>(
   <Stack.Navigator initialRouteName="NewScreens" screenOptions={{headerShown: false}} >
     <Stack.Screen name="PersonalDetails" component={PersonalDetails}/>
-    <Stack.Screen name="OccupationAnnualIncome" component={OccupationAnnualIncome}/>
+    <Stack.Screen name="OccupationAnnualIncomePEP" component={OccupationAnnualIncomePEP}/>
+    <Stack.Screen name="BirthRelation" component={BirthRelation}/>
   </Stack.Navigator>
 )
 
