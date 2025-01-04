@@ -56,6 +56,7 @@ function SideMenu(props) {
     rmDetails,
     getrm,
     users,
+    pan,
     resetApp,
     logout,
     resetData,
@@ -112,6 +113,7 @@ function SideMenu(props) {
   }, [kycLists]);
 
   const handleKyc = value => {
+     
     setVisibleKyc(false);
     pageActiveKyc.current = true;
     let params = {
@@ -120,7 +122,7 @@ function SideMenu(props) {
         client_callback_url: 'sipfund.com',
         investor_email: userDetails.email,
         investor_mobile_no: userDetails.mobileNo,
-        pan: userDetails.pan,
+        pan: profile?.FH_PAN_NO,
         return_flag: 'Y',
       },
     };
@@ -160,7 +162,7 @@ function SideMenu(props) {
           branch_name: profile?.BRANCH_NAME,
           channel_type: visibleEmandateValue.channel_type,
           ifsc_code: profile?.IFSC_CODE,
-          iin: userDetails.IIN,
+          iin: profile?.CUSTOMER_ID,
           micr_no: '',
           return_flag: 'Y',
           //return_flag: visibleEmandateValue.return_flag,
@@ -508,16 +510,16 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() => {
-            console.log('Yours STEPS', userDetails?.signUpSteps);
-            console.log("EKYC",userDetailsKYC?.ekycIsDone);
             // Check if the user hasn't completed the signup steps
-            if (userDetails.signUpSteps < 4) {
+            console.log("kkk",profile?.FH_PAN_NO);
+            
+            if (steps < 4) {
               Alert.alert('Your IIN is not created. Please click on register.');
               return;
             }
     
             // If IIN exists and eKYC is done
-            if (userDetails?.IIN && userDetailsKYC?.ekycIsDone) {
+            if (profile?.CUSTOMER_ID && userDetailsKYC?.ekycIsDone) {
               if (profile?.ACTIVATION_STATUS === 'YES') {
                 Toast.show(
                   'Your KYC is already registered and your account is active. You can start your investment journey now.',
@@ -533,7 +535,7 @@ function SideMenu(props) {
             }
 
             // If IIN exists but eKYC is not done
-            if (userDetails?.IIN && !userDetailsKYC.ekycIsDone) {
+            if (profile?.CUSTOMER_ID && !userDetailsKYC.ekycIsDone) {
               getList(token);
               pageActiveKyc.current = true;
               return;
@@ -557,7 +559,7 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() => {
-            if (userDetails && userDetails?.signUpSteps >= 6) {
+            if (userDetails && steps >= 6) {
               emandateOptions(token);
               pageActiveEmandate.current = true;
             } else {
@@ -788,6 +790,7 @@ const mapStateToProps = state => ({
   docs: state.registration.documents,
   nseDetails: state.registration.nseDetails,
   userDetailsKYC: state.registration.userDetails,
+  pan: state.home.pan,
   userDetails: state.auth.user,
   isFetchingEkyc: state.ekyc.isFetching,
   kycLists: state.ekyc.kycLists,

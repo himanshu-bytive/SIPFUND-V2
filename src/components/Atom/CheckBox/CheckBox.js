@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-// import CheckMark from "../../../assets/Icons/checkmark.svg";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const CheckboxCircle = ({ value, onValueChange }) => {
+const CheckboxSquare = ({ value, onValueChange }) => {
+  // Use local state if no external state is passed
+  const [internalValue, setInternalValue] = useState(false);
+  const isChecked = value !== undefined ? value : internalValue;
+
+  const handlePress = () => {
+    if (onValueChange) {
+      onValueChange(!isChecked);
+    } else {
+      setInternalValue(!isChecked);
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={onValueChange} style={styles.container}>
-      <View style={[styles.checkbox, value ? styles.selected : styles.unselected]}>
-        {/* {value && <CheckMark width={16} height={16} />} */}
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
+      <View style={[styles.checkbox, isChecked ? styles.selected : styles.unselected]}>
+        {isChecked && <Icon name="check" size={16} color="#fff" />}
       </View>
     </TouchableOpacity>
   );
@@ -20,14 +32,13 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
   },
   selected: {
-    borderColor: '#0743a1',
-    backgroundColor: '#0743a1',
+    borderColor: '#4dff88',
+    backgroundColor: '#4dff88',
   },
   unselected: {
     borderColor: '#757780',
@@ -35,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckboxCircle;
+export default CheckboxSquare;

@@ -268,6 +268,17 @@ function HomeScreen(props) {
     }
   }, [summaryRetrieve]);
 
+  function JustNavigate(){
+    console.log("UER",userDetails);  
+    if(!username){ 
+      props.navigation.navigate("OnBoard",{screen : "ProfileDetailsForm"});
+    }else if(userDetails?.ekycIsDone === false && username){
+      props.navigation.navigate("Reset", { screen: "EKYC" });
+    }else if(userDetails?.ekycIsDone === true && username){
+      props.navigation.navigate("Reg",{screen : "UploadDocument"});
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Header
@@ -434,30 +445,22 @@ function HomeScreen(props) {
                             </Text>
                           ) : (
                             <TouchableOpacity
-                              onPress={() => {
-                                if (userDetails?.ekycIsDone === false) {
-                                  props.navigation.navigate('Reset', {
-                                    screen: 'EKYC',
-                                  });
-                                } else if (users?.pan || pan || username) {
-                                  props.navigation.navigate('Reg', {
-                                    screen: !username
-                                      ? 'RegisterDetails'
-                                      : 'UploadDocument',
-                                  });
-                                } else {
-                                  props.navigation.navigate('HomeScreen', {
-                                    screen: 'Pan',
-                                  });
-                                }
-                              }}
-                              style={styles.botton_box}>
-                              <Text style={styles.get_otp}>
-                                {users?.pan || pan || username
-                                  ? 'COMPLETE ACCOUNT SETUP'
-                                  : 'Create Account'}
-                              </Text>
-                            </TouchableOpacity>
+                            onPress={() => {
+                              if (users?.pan || pan || username) {
+                                JustNavigate();
+                              }else {
+                                props.navigation.navigate('HomeScreen', {
+                                  screen: 'Pan',
+                                });
+                              }
+                            }}
+                            style={styles.botton_box}>
+                            <Text style={styles.get_otp}>
+                              {users?.pan || pan || username
+                                ? 'COMPLETE ACCOUNT SETUP'
+                                : 'Create Account'}
+                            </Text>
+                          </TouchableOpacity>
                           )}
                         </View>
                       </View>
@@ -513,7 +516,7 @@ function HomeScreen(props) {
             At SIPFund.com we help you in choosing the best for you!
           </Text>
         </View>
-        <View style={{ justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
+        <View style={{ justifyContent: "center", alignItems: "center", alignSelf: "center",marginLeft:10 }}>
           <LeftIconCard
             imageSource={require('../../../assets/term7.png')}
             heading="Get Top Rated Fund"
@@ -642,31 +645,31 @@ function HomeScreen(props) {
         <ScrollView horizontal={true}>
           <View style={styles.roted_bottom}>
             <CardWithLabel
-              style={{ height: responsiveHeight(12), width: responsiveWidth(45) }}
+              style={{ height: responsiveHeight(15), width: responsiveWidth(45),paddingTop:15 }}
               label='Minimun Investment'
               SvgIcon={MININVESTMENT}
               onPress={() => toggleOverlay('MINIMUM_AMOUNT')}
             />
             <CardWithLabel
-              style={{ height: responsiveHeight(12), width: responsiveWidth(45) }}
+              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
               label='Lock-In'
               SvgIcon={LOCKIN}
               onPress={() => toggleOverlay('LOCK_INS')}
             />
             <CardWithLabel
-              style={{ height: responsiveHeight(12), width: responsiveWidth(45) }}
+              style={{ height: responsiveHeight(15), width: responsiveWidth(45)}}
               label='Flexibility'
               SvgIcon={FLEX}
               onPress={() => toggleOverlay('FLEXIBILITY')}
             />
             <CardWithLabel
-              style={{ height: responsiveHeight(12), width: responsiveWidth(45) }}
+              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
               label='Easy Withdrawal'
               imageSource={require('../../../assets/term12.png')}
               onPress={() => toggleOverlay('PAYMENT_METHODS')}
             />
             <CardWithLabel
-              style={{ height: responsiveHeight(12), width: responsiveWidth(45) }}
+              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
               label='Payment Methods'
               imageSource={require('../../../assets/term13.png')}
               onPress={() => toggleOverlay('EASY_WITHDRAWAL')}
@@ -686,7 +689,7 @@ function HomeScreen(props) {
             />
           </View>
           <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text>
+            <Text style={{color:"black"}}>
               Why should you invest in ELSS{"\n"}funds during income tax season?
             </Text>
           </View>
@@ -700,7 +703,7 @@ function HomeScreen(props) {
             />
           </View>
           <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text>
+            <Text style={{color:"black"}}>
               Why should you invest in ELSS{"\n"}funds during income tax season?
             </Text>
           </View>
@@ -714,7 +717,7 @@ function HomeScreen(props) {
             />
           </View>
           <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text>
+            <Text style={{color:"black"}}>
               Why should you invest in ELSS{"\n"}funds during income tax season?
             </Text>
           </View>
@@ -722,10 +725,6 @@ function HomeScreen(props) {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Button textColor={"black"} borderColor={"#FFB2AA"} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(90)} text={"Knowledge Center>>>"} />
         </View>
-
-
-
-
         {/* Faq screen */}
         <View style={styles.mainbox}>
           <Text style={styles.faqs}>FAQ’s</Text>

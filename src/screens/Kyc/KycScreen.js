@@ -16,9 +16,9 @@ import Button from '../../components/Atom/Button/Button';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 const KycScreen = props => {
-  const { users } = props;
+  const { users,profile } = props;
   const { url } = props.route.params;
-  console.log('URL', url);
+  console.log('haapy', profile);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
   const [errorDesc, SetErrorDesc] = useState('');
@@ -68,8 +68,8 @@ const KycScreen = props => {
             }}
           >
             <Text style={styles.textkn}>
-              {users?.name
-                ? `${users?.name[0]}${users?.name.split(' ').pop()[0]}`
+              {profile?.INVESTOR_NAME
+                ? `${profile?.INVESTOR_NAME[0]}${profile?.INVESTOR_NAME.split(' ').pop()[0]}`
                 : ''}
             </Text>
           </View>

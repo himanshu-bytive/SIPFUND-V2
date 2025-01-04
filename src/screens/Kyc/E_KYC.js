@@ -33,6 +33,7 @@ const E_KYC = props => {
     isFetchingEkyc,
     kycDetails,
     postRequest,
+    profile
   } = props;
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
@@ -45,7 +46,8 @@ const E_KYC = props => {
   }, [token, getList]);
 
   const handleKyc = value => {
-   
+    
+    setShowModal(false);
     pageActiveKyc.current = true;
     let params = {
       service_request: {
@@ -53,7 +55,7 @@ const E_KYC = props => {
         client_callback_url: 'sipfund.com',
         investor_email: userDetails.email,
         investor_mobile_no: userDetails.mobileNo,
-        pan: userDetails.pan,
+        pan: profile?.FH_PAN_NO,
         return_flag: 'Y',
       },
     };
@@ -64,7 +66,6 @@ const E_KYC = props => {
 
   useEffect(() => {
     if (kycDetails && pageActiveKyc.current) {
-      setShowModal(false);
       pageActiveKyc.current = false;
       props.navigation.navigate('Reset', {
         screen: 'KycScreen',
@@ -101,7 +102,7 @@ const E_KYC = props => {
           </TouchableOpacity>
         }
         rightComponent={
-          users?.name ? (
+          profile?.INVESTOR_NAME ? (
             <View
               style={{
                 marginTop: 25,
@@ -113,8 +114,8 @@ const E_KYC = props => {
               }}
             >
               <Text style={styles.textkn}>
-                {users?.name
-                  ? `${users.name.charAt(0)}${users.name.split(' ').pop()?.charAt(0) || ''}`
+                {profile?.INVESTOR_NAME
+                  ? `${profile?.INVESTOR_NAME.charAt(0)}${profile?.INVESTOR_NAME.split(' ').pop()?.charAt(0) || ''}`
                   : ''}
               </Text>
             </View>
@@ -293,11 +294,12 @@ const mapStateToProps = state => ({
   steps: state.home.steps,
   users: state.auth.user,
   docs: state.registration.documents,
-  nseDetails: state.registration.nseDetails,
   userDetails: state.auth.user,
   isFetchingEkyc: state.ekyc.isFetching,
   kycLists: state.ekyc.kycLists,
   kycDetails: state.ekyc.kycDetails,
+  pan: state.home.pan,
+  profile: state.auth.profile,
 });
 
 const mapDispatchToProps = dispatch => {

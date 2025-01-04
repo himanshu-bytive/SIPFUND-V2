@@ -142,6 +142,8 @@ export const RegistrationActions = {
         token
       );
       if (pincodes.data) {
+        console.log("GOT",pincodes.data);
+        
         dispatch({
           type: types.FETCH_PINCODE_INFO_SUCCESS,
           pincodeInfo: pincodes.data,
@@ -350,19 +352,12 @@ export const RegistrationActions = {
         error: data.message,
       });
     } else {
-      Alert.alert("SIP Fund", data.responseString, [
-        {
-          text: "OK",
-          onPress: () => {
-            dispatch({
-              type: types.FETCH_UPDATE_REGISTER_SUCCESS,
-              fatcaDetails: data.data.fatcaDetails,
-              nseDetails: { ...params.nseDetails, ...data.data.nseDetails },
-              userDetails: data.data.userDetails,
-            });
-          },
-        },
-      ]);
+      dispatch({
+        type: types.FETCH_UPDATE_REGISTER_SUCCESS,
+        fatcaDetails: data.data.fatcaDetails,
+        nseDetails: { ...params.nseDetails, ...data.data.nseDetails },
+        userDetails: data.data.userDetails,
+      });
     }
   },
   fileUpload: async (dispatch, params, token) => {

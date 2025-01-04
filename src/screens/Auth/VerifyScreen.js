@@ -30,16 +30,16 @@ import PushNotification from "react-native-push-notification";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeActions } from "../../store/HomeRedux";
-import FileViewer from 'react-native-file-viewer'; 
+import FileViewer from 'react-native-file-viewer';
 import Button from "../../components/Atom/Button/Button";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import RNPickerSelect from 'react-native-picker-select';
 function VerifyScreen(props) {
   const pageActive = useRef(false);
   const phoneInput = useRef(null);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
-  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery,resetApp,resetData,pan } = props;
+  const { verify, isFetching, signUpSteps, phones, setToken, clearSummery, resetApp, resetData, pan } = props;
   const [selectedValue, setSelectedValue] = useState('+91');
   // const reduxState = useSelector((state) => state); // renaming to reduxState
 
@@ -83,7 +83,7 @@ function VerifyScreen(props) {
   //     try {
   //       // Retrieve all keys
   //       const keys = await AsyncStorage.getAllKeys();
-        
+
   //       // Retrieve all values based on the keys
   //       if (keys.length > 0) {
   //         const data = await AsyncStorage.multiGet(keys);
@@ -133,70 +133,70 @@ function VerifyScreen(props) {
       resetData(); // Reset data state
       console.log("PAN VERIFY SCREEN", pan); // Log pan for debugging
     }
-  
+
     initialize();
   }, []);
 
-   
 
-    const requestCameraPermission = async () => {
-      try {
-        // Request CAMERA permission
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'This app needs access to your camera.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          }
-        );
-    
-        // Return whether permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    };
-    function checkAllPermissions() {
-      // Request notification permissions
-      PushNotification.configure({
-        onRegister: function (registration) {
-          console.log("TOKEN:", registration.token);
-          setToken(registration.token); // Store the token if needed
-        },
-        onNotification: function (notification) {
-          console.log("NOTIFICATION:", notification);
-          
-          // Check if the notification has a filePath
-          if (notification?.data?.filePath) {
-            const filePath = notification.data.filePath;
-            console.log("FILEPATH",filePath);
-            
-            // Open the PDF file using a file viewer
-            FileViewer.open(filePath)
-              .then(() => {
-                console.log("PDF opened successfully");
-              })
-              .catch((error) => {
-                console.error("Error opening PDF file", error);
-              });
-          }
-        },
-        // Request permissions (iOS)
-        permissions: {
-          alert: true,
-          badge: true,
-          sound: true,
-        },
-        popInitialNotification: true,
-        requestPermissions: true,  // Automatically request permissions
-      });
+
+  const requestCameraPermission = async () => {
+    try {
+      // Request CAMERA permission
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'This app needs access to your camera.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        }
+      );
+
+      // Return whether permission is granted
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
     }
+  };
+  function checkAllPermissions() {
+    // Request notification permissions
+    PushNotification.configure({
+      onRegister: function (registration) {
+        console.log("TOKEN:", registration.token);
+        setToken(registration.token); // Store the token if needed
+      },
+      onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);
 
-  function openNotificationChannel () {
+        // Check if the notification has a filePath
+        if (notification?.data?.filePath) {
+          const filePath = notification.data.filePath;
+          console.log("FILEPATH", filePath);
+
+          // Open the PDF file using a file viewer
+          FileViewer.open(filePath)
+            .then(() => {
+              console.log("PDF opened successfully");
+            })
+            .catch((error) => {
+              console.error("Error opening PDF file", error);
+            });
+        }
+      },
+      // Request permissions (iOS)
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true,  // Automatically request permissions
+    });
+  }
+
+  function openNotificationChannel() {
     PushNotification.createChannel(
       {
         channelId: "download-channel", // Unique ID for the channel
@@ -209,7 +209,7 @@ function VerifyScreen(props) {
       (created) => console.log(`createChannel returned '${created}'`) // Will log 'true' once the channel is created
     );
   }
-  
+
   const requestLocationPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -236,10 +236,10 @@ function VerifyScreen(props) {
       return;
     }
     console.log("Permission granted");
-    
-    Geolocation.getCurrentPosition( async (position) =>{
+
+    Geolocation.getCurrentPosition(async (position) => {
       console.log("Getting the locations");
-      
+
       const { latitude, longitude } = position.coords;
       console.log(position);
       console.log(latitude);
@@ -250,22 +250,22 @@ function VerifyScreen(props) {
       const response = await axios.get(url);
       // console.log("GOT RESPONSE",response);
       if (response.data.status === 'OK') {
-       const addressComponents = response.data.results[0].address_components;
-       const address = response.data.results[0].formatted_address;
-       console.log(address);
-       const city = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
-       const state = addressComponents.find(component => component.types.includes("administrative_area_level_1"))?.long_name || "";
-       const pincode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
-       console.log(city + " " + state + " " + pincode);
-       setDisplayCurrentAddress({
-        latitude : latitude,
-        longitude : longitude,
-        address : address,
-        city : city,
-        state : state,
-        pincode : pincode,
-       });
-      }else {
+        const addressComponents = response.data.results[0].address_components;
+        const address = response.data.results[0].formatted_address;
+        console.log(address);
+        const city = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
+        const state = addressComponents.find(component => component.types.includes("administrative_area_level_1"))?.long_name || "";
+        const pincode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
+        console.log(city + " " + state + " " + pincode);
+        setDisplayCurrentAddress({
+          latitude: latitude,
+          longitude: longitude,
+          address: address,
+          city: city,
+          state: state,
+          pincode: pincode,
+        });
+      } else {
         console.error("Geocoding API error:", response.data.status);
         Alert.alert("Error", "Unable to fetch address details");
       }
@@ -282,7 +282,7 @@ function VerifyScreen(props) {
 
   const onAction = async (ph) => {
     setIsLoading(true); // Show loader when ENTER is clicked
-  
+
     let phone = ph ? ph : state.phone;
     if (phone === "") {
       phoneInput.current.focus();
@@ -290,12 +290,12 @@ function VerifyScreen(props) {
       setIsLoading(false); // Hide loader immediately if there's an error
       return;
     }
-  
+
     clearSummery({}, "");
-  
+
     if (FormValidate.isPhone(phone)) {
       pageActive.current = true;
-      
+
       let params = {
         minorFlag: false,
         mobileNo: Number(phone),
@@ -306,9 +306,9 @@ function VerifyScreen(props) {
           pincode: displayCurrentAddress?.pincode,
         },
       };
-  
+
       verify(params);
-      
+
       // Set a timer to hide the loader after 5 seconds
       setTimeout(() => {
         setIsLoading(false); // Hide the loader after 5 seconds
@@ -319,7 +319,7 @@ function VerifyScreen(props) {
       setIsLoading(false); // Hide loader immediately if there's an error
     }
   };
-  
+
 
   const backAction = () => {
     Alert.alert("Hold on!", "Are you sure you want to go back?", [
@@ -366,7 +366,7 @@ function VerifyScreen(props) {
             style={styles.logoimg}
           />
         </View>
-        <View style={{ width: width - 50, marginTop: 10}}>
+        <View style={{ width: width - 50, marginTop: 10 }}>
           {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
           {phones.map((item, key) => (
             <TouchableOpacity
@@ -399,7 +399,7 @@ function VerifyScreen(props) {
               placeholder={{}} // Empty placeholder
               useNativeAndroidPickerStyle={false} // For consistent behavior across platforms
             />
-        </View>
+          </View>
           {/* Phone Number Input */}
           <View style={styles.text_box}>
             <TextInput
@@ -422,20 +422,20 @@ function VerifyScreen(props) {
             <Text style={styles.error}>{errors.phone}</Text>
           </View>
         )}
-           <View style={{marginTop:20}}>
-             <Button isLoading={isLoading} 
-              fontSize={responsiveFontSize(2.6)}
-              textColor={"#000000"} 
-              onPress={() => onAction()} 
-              backgroundColor={Colors.WHITE} 
-              text="Enter"
-              borderColor={"#FFB2AA"}
-              borderWidth={1.5}
-              height={responsiveHeight(4)}
-              width={responsiveWidth(45)}
-              loaderColor="black"  
-            />
-           </View>
+        <View style={{ marginTop: 20 }}>
+          <Button isLoading={isLoading}
+            fontSize={responsiveFontSize(2.6)}
+            textColor={"#000000"}
+            onPress={() => onAction()}
+            backgroundColor={Colors.WHITE}
+            text="Enter"
+            borderColor={"#FFB2AA"}
+            borderWidth={1.5}
+            height={responsiveHeight(5)}
+            width={responsiveWidth(45)}
+            loaderColor="black"
+          />
+        </View>
         <View style={styles.otp}>
           <Text style={{ color: "grey" }}>
             OTP will be sent to this Mobile Number
@@ -479,9 +479,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   sloganView: {
-    marginTop: 95,
+    marginTop: 40,
   },
-   slogan: {
+  slogan: {
     fontSize: 30,
     color: Colors.BLACK,
     marginBottom: 30,
@@ -496,11 +496,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: width - 50,
     alignItems: "center",
+    marginBottom:-20
   },
   logoimg: {
     marginTop: 20,
-    width : responsiveWidth(45),
-    height : responsiveHeight(20), 
+    width: responsiveWidth(45),
+    height: responsiveHeight(20),
   },
   continue: {
     fontSize: 20,
@@ -510,7 +511,7 @@ const styles = StyleSheet.create({
   },
   phone_number: {
     flexDirection: "row",
-      justifyContent: 'center',
+    justifyContent: 'center',
     //paddingLeft: 70,
   },
   number: {
@@ -534,8 +535,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: "flex-start",
     paddingLeft: 50,
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     alignItems: "center",
@@ -557,10 +558,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
   },
-  buttonStyle:{
-    width : responsiveWidth(50),
-    height : responsiveHeight(6), 
-    backgroundColor:Colors.RED
+  buttonStyle: {
+    width: responsiveWidth(50),
+    height: responsiveHeight(6),
+    backgroundColor: Colors.RED
   },
   get_otp: {
     color: Colors.WHITE,
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.RED,
     fontSize: 13,
-    height : responsiveHeight(6),
+    height: responsiveHeight(6),
   },
   nseimg: {
     marginTop: 35,
@@ -619,13 +620,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingHorizontal: 10,
     height: '100%',
-    borderWidth:2,
+    borderWidth: 2,
     borderColor: '#f9f9f9',
     color: 'black',
     marginBottom: 0,
     backgroundColor: Colors.WHITE,
   },
-    
+
 });
 
 const mapStateToProps = (state) => ({
@@ -633,7 +634,7 @@ const mapStateToProps = (state) => ({
   isFetching: state.auth.isFetching,
   signUpSteps: state.auth.signUpSteps,
   phones: state.auth.phones,
-  pan : state.home.pan,
+  pan: state.home.pan,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
@@ -655,7 +656,7 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     clearSummery: (params, token) => {
       GoalsActions.clearSummery(dispatch, params, token);
     },
-    resetApp : () => dispatch(AuthActions.resetApp()),
+    resetApp: () => dispatch(AuthActions.resetApp()),
     resetData: () => dispatch(HomeActions.resetData())
   };
 };
