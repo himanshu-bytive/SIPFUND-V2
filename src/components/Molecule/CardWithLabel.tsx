@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
     height: responsiveHeight(15),
-    width: responsiveWidth(40),
+    width: responsiveWidth(45),
     padding: 10,
   },
   imageContainer: {

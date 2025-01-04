@@ -16,6 +16,7 @@ import {
   BackHandler,
   ToastAndroid,
   PermissionsAndroid,
+  ScrollView,
 } from "react-native";
 import { connect, useSelector } from "react-redux";
 import { Colors, FormValidate } from "../../common";
@@ -354,6 +355,7 @@ function VerifyScreen(props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <ScrollView>
       <View style={styles.sloganView}>
         <Text style={styles.slogan}>
           Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
@@ -366,7 +368,7 @@ function VerifyScreen(props) {
             style={styles.logoimg}
           />
         </View>
-        <View style={{ width: width - 50, marginTop: 10 }}>
+        <View style={{ width: width - 50, marginTop: 30 }}>
           {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
           {phones.map((item, key) => (
             <TouchableOpacity
@@ -430,7 +432,7 @@ function VerifyScreen(props) {
             backgroundColor={Colors.WHITE}
             text="Enter"
             borderColor={"#FFB2AA"}
-            borderWidth={1.5}
+            borderWidth={2}
             height={responsiveHeight(5)}
             width={responsiveWidth(45)}
             loaderColor="black"
@@ -442,12 +444,13 @@ function VerifyScreen(props) {
           </Text>
         </View>
       </View>
-      <View>
+      <View style={{marginTop:20,justifyContent:"center",alignItems:'center'}}>
         <Image
           source={require("../../../assets/nse.png")}
           style={styles.nseimg}
         />
       </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -455,10 +458,8 @@ function VerifyScreen(props) {
 const pickerSelectStyles = {
   inputIOS: {
     fontSize: 16,
-    paddingVertical: 12,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#FFB2AA',
     color: '#000',
     paddingRight: 30, // Ensure text isn't cut off
   },
@@ -466,8 +467,6 @@ const pickerSelectStyles = {
     fontSize: 18,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: '#FFB2AA',
     color: '#000',
   },
 }
@@ -530,14 +529,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     //paddingLeft: 70,
   },
-  text_box: {
-    flexDirection: "row",
-    marginTop: 10,
-    alignSelf: "flex-start",
-    paddingLeft: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   button: {
     alignItems: "center",
     width: "45%",
@@ -588,18 +579,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Arrange items horizontally
     alignItems: 'center', // Align vertically
     height: 50, // Adjust height
-    marginHorizontal: 35, // Add spacing from the screen edges
+    marginHorizontal: 8, // Add spacing from the screen edges
     backgroundColor: Colors.WHITE,
   },
   country_code_box: {
-    width: 80, // Fixed width for the dropdown
+    width: "auto", // Fixed width for the dropdown
     borderWidth: 1,
     borderColor: '#FFB2AA',
     borderRadius: 1, // Rounded corners
     backgroundColor: Colors.WHITE,
     justifyContent: 'center', // Center the picker vertically
     marginRight: 10, // Spacing between dropdown and text box
-    height: '80%',
+   justifyContent:"center",
+   alignItems:"center"
   },
   pickerInput: {
     fontSize: 14, // Text size
@@ -608,22 +600,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5, // Add padding
   },
   text_box: {
-    flex: 1, // Take remaining space
     borderWidth: 1,
     borderColor: '#FFB2AA',
     borderRadius: 1,
     backgroundColor: Colors.WHITE,
     height: '80%', // Match height with the dropdown
     fontSize: 16,
+    width:responsiveWidth(40),
+    height:responsiveHeight(6)
   },
   inputsec: {
-    fontSize: 17,
+    fontSize: 15,
     paddingHorizontal: 10,
     height: '100%',
     borderWidth: 2,
     borderColor: '#f9f9f9',
     color: 'black',
-    marginBottom: 0,
     backgroundColor: Colors.WHITE,
   },
 

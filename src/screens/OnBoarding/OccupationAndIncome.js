@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: responsiveHeight(2),
     backgroundColor: Colors.WHITE,  // Maintain background consistency
-    marginTop:25
+    marginTop:20
   },
   arrowButton: {
     marginLeft: responsiveWidth(2),
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
   
   bottomButton: {
     width: responsiveWidth(90),
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#FFB2AA",
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),

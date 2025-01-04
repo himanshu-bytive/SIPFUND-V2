@@ -5,14 +5,14 @@ import { colorCode } from '../../../utils/ColorCombination/ColorCode';
 export const LeftIconCardStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 15,
     borderWidth: 1,
     marginRight:10,
     borderColor: "#FFB2AA",
     borderRadius: 20,
     backgroundColor: '#fff',
     width: responsiveWidth(92),
-    height:responsiveHeight(18),
+    height:responsiveHeight(22),
     ...Platform.select({
       ios: {
         shadowColor: '#000',

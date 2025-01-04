@@ -236,7 +236,7 @@ function LoginScreen(props) {
               text="Proceed"
               borderColor={"#FFB2AA"}
               borderWidth={2}
-              height={responsiveHeight(4)}
+              height={responsiveHeight(5)}
               width={responsiveWidth(45)}
               isLoading={isFetching}
               loaderColor="black"     
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     fontFamily: "Kanit",
   },
   inputsec: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#FFB2AA',
     width: "100%",
     height: 40,

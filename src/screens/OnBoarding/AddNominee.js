@@ -114,6 +114,62 @@ const AddNominee = (props) => {
   
   
   const onAction = () => {
+    // Validate fields
+    let hasErrors = false;
+  
+    // Check each required field and update errors state if empty
+    if (!state.nominee1_name) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_name: "Please enter Nominee Name.",
+      }));
+      hasErrors = true;
+    }
+  
+    if (!NomineeIsYours) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_relation: "Please select Nominee Relation.",
+      }));
+      hasErrors = true;
+    }
+  
+    if (!state.nominee1_dob) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_dob: "Please select Nominee's Date of Birth.",
+      }));
+      hasErrors = true;
+    }
+  
+    if (!isChecked) {
+      if (!state.nominee1_pincode) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          nominee1_pincode: "Please enter Pincode.",
+        }));
+        hasErrors = true;
+      }
+      if (!state.nominee1_state) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          nominee1_state: "Please enter State.",
+        }));
+        hasErrors = true;
+      }
+      if (!state.nominee1_addr1) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          nominee1_addr1: "Please enter Address.",
+        }));
+        hasErrors = true;
+      }
+    }
+  
+    // If there are errors, do not proceed
+    if (hasErrors) return;
+  
+    // Proceed if no errors
     const params = {
       nseDetails: {
         ...nseDetails,
@@ -128,15 +184,16 @@ const AddNominee = (props) => {
       fatcaDetails,
       userDetails,
     };
-    console.log("passing paramss", state?.nominee1_dob);
-    if(isLessThan18(state.nominee1_dob)){
+  
+    if (isLessThan18(state.nominee1_dob)) {
       updateRegister(params, token);
       navigation.navigate("UnderAgeNominee");
-    }else{
+    } else {
       updateRegister(params, token);
-      navigation.navigate("Reg", { screen: "RegisterAddress" }); 
+      navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
-  }
+  };
+  
   const NomineeIdList = [
     { value: "Ad", label: "Aadhaar Card" },
     { value: "Pan", label: "Pan Card" },
@@ -187,7 +244,7 @@ const AddNominee = (props) => {
             <View style={styles.button}>
               <Button
                 borderColor={"#FFB2AA"}
-                borderWidth={1}
+                borderWidth={2}
                 text={"No, Skip for now"}
                 height={responsiveHeight(5)}
                 width={responsiveWidth(70)}
@@ -216,6 +273,7 @@ const AddNominee = (props) => {
                 value={state.nominee1_name ? state.nominee1_name : ""}
                 onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
               />
+              {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
               <Typography style={styles.title}>Nominee is your*</Typography>
               <View style={[styles.inputsec]}>
                 <Picker
@@ -232,11 +290,11 @@ const AddNominee = (props) => {
                   ))}
                 </Picker>
               </View>
+              {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
               <Typography style={styles.title}>Nominee’s date of birth*</Typography>
               <View style={styles.inputsecWrapper}>
                 <View
                   style={{
-                    flex: 1,
                     flexDirection: "row",
                     justifyContent: "space-between",
                     
@@ -274,10 +332,8 @@ const AddNominee = (props) => {
                       placeholderTextColor={"grey"}
                       maxLength={10}
                     />
-                    <Text style={{ ...styles.error, marginLeft: 5 }}>
-                      {errors?.dob}
-                    </Text>
                   </TouchableOpacity>
+                  {errors.nominee1_dob && <Text style={styles.errorText}>{errors.nominee1_dob}</Text>}
                 </View>
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
@@ -331,7 +387,8 @@ const AddNominee = (props) => {
               {!isChecked && (
                 <>
                   <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
-                    <TextInput
+                   <View style={{flexDirection:"column", width:"50%"}}>
+                   <TextInput
                       style={[styles.inputsec, { flex: 1, marginRight: 10 }]}  // Use flex: 1 for 50% width
                       editable={true}
                       placeholder="PINCODE"
@@ -340,7 +397,10 @@ const AddNominee = (props) => {
                       value={state.nominee1_pincode ? state.nominee1_pincode : ""}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_pincode: text }))}
                     />
-                    <TextInput
+                    {errors.nominee1_pincode && <Text style={styles.errorText}>{errors.nominee1_pincode}</Text>}
+                   </View>
+                   <View style={{flexDirection:"column",width:"50%"}}>
+                   <TextInput
                       style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
                       editable={true}
                       placeholder="STATE"
@@ -349,8 +409,10 @@ const AddNominee = (props) => {
                       value={state.nominee1_state ? state.nominee1_state : ""}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_state: text }))}
                     />
+                    {errors.nominee1_state && <Text style={styles.errorText}>{errors.nominee1_state}</Text>}
+                   </View>
                   </View>
-                  <View style={{ flexDirection: "row", width: "100%", marginTop: 10 }}>
+                  <View style={{ flexDirection: "column", width: "100%", marginTop: 10 }}>
                     <TextInput
                       style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
                       editable={true}
@@ -359,6 +421,7 @@ const AddNominee = (props) => {
                       value={state.nominee1_addr1 ? state.nominee1_addr1 : ""}
                       onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_addr1: text }))}
                     />
+                    {errors.nominee1_addr1 && <Text style={styles.errorText}>{errors.nominee1_addr1}</Text>}
                   </View>
                 </>
               )}
@@ -374,7 +437,7 @@ const AddNominee = (props) => {
               <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
                 <Button
                   borderColor={"#FFB2AA"}
-                  borderWidth={1}
+                  borderWidth={2}
                   fontSize={responsiveFontSize(2)}
                   height={responsiveHeight(5)}
                   width={responsiveWidth(80)}
@@ -395,6 +458,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffff',
+  },
+  errorText: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: responsiveHeight(0.5),
   },
   picker: {
     height: 50,
@@ -432,15 +500,15 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(1),
   },
   inputsecWrapper: {
-    borderWidth: 1,
-    borderColor: "#FFB2AA",
-    borderRadius: 12,
-    alignItems: "flex-end",
-    height: responsiveHeight(10),
-    paddingHorizontal: 10,
-    backgroundColor: Colors.WHITE,
-    overflow: 'hidden', // To ensure the border applies to the dropdown correctly
-  },
+     borderWidth: 1,
+     borderColor: "#FFB2AA",
+     borderRadius: 8,
+     marginTop: 10,
+     backgroundColor: Colors.WHITE,
+     paddingHorizontal: 10,
+     overflow: 'hidden', // To ensure the border applies to the dropdown correctly
+     paddingBottom:10,
+   },
   inputsec: {
     height: responsiveHeight(6),
     fontSize: responsiveFontSize(2),
@@ -454,6 +522,7 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"flex-start"
   },
+  
   headerContainer: {
     backgroundColor: 'white',
     height: responsiveHeight(8),

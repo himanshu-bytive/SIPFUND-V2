@@ -27,13 +27,13 @@ const UnderAgeNominee = (props) => {
     const [NomineeIsYours, setNomineeIsYours] = useState("");
     const navigation = useNavigation();
     const [state, setState] = useState({
-        nominee1_guard_name : "",
+        nominee1_guard_name: "",
         nominee1_guard_pan: "",
         nominee1_guard_relation: "",
     });
 
     const [errors, setErrors] = useState({
-        nominee1_guard_name : null,
+        nominee1_guard_name: null,
         nominee1_guard_pan: null,
         nominee1_guard_relation: null,
     });
@@ -55,29 +55,83 @@ const UnderAgeNominee = (props) => {
         console.log("NomineeDetails", nseDetails);
         if (fatcaDetails || nseDetails || userDetails) {
             setState({
-                nominee1_guard_name : state.nominee1_guard_name,
+                nominee1_guard_name: state.nominee1_guard_name,
                 nominee1_guard_pan: state?.nominee1_guard_pan,
                 nominee1_guard_relation: NomineeIsYours,
             });
         }
     }, [fatcaDetails, nseDetails, userDetails]);
     const onAction = () => {
-        console.log("hgf");
+        // Initialize a flag to track errors
+        let hasErrors = false;
 
+        // Validate Guardian Name
+        if (!state.nominee1_guard_name.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_name: "Please enter the guardian's name.",
+            }));
+            hasErrors = true;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_name: null,
+            }));
+        }
+
+        // Validate Guardian Relation
+        if (!NomineeIsYours) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_relation: "Please select the guardian's relation.",
+            }));
+            hasErrors = true;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_relation: null,
+            }));
+        }
+
+        // Validate Guardian PAN
+        if (!state.nominee1_guard_pan.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_pan: "Please enter the guardian's PAN.",
+            }));
+            hasErrors = true;
+        } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee1_guard_pan.trim())) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+            }));
+            hasErrors = true;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                nominee1_guard_pan: null,
+            }));
+        }
+
+        // Prevent navigation if there are errors
+        if (hasErrors) return;
+
+        // Proceed with valid data
         const params = {
             nseDetails: {
                 ...nseDetails,
-                nominee1_guard_name : state?.nominee1_guard_name,
-                nominee1_guard_pan: state?.nominee1_guard_pan,
+                nominee1_guard_name: state.nominee1_guard_name.trim(),
+                nominee1_guard_pan: state.nominee1_guard_pan.trim(),
                 nominee1_guard_relation: NomineeIsYours,
             },
             fatcaDetails,
             userDetails,
         };
-        console.log("passing paramss", params);
+        console.log("passing params", params);
         updateRegister(params, token);
-        navigation.navigate("Reg", { screen: "RegisterAddress" }); 
-    }
+        navigation.navigate("Reg", { screen: "RegisterAddress" });
+    };
+
 
     const mobileEmailRelation = [
         { value: "SE", label: "Self" },
@@ -113,13 +167,13 @@ const UnderAgeNominee = (props) => {
             <View style={styles.container}>
                 <ScrollView>
                     <View style={styles.stepContainer}>
-                        <View style={{marginBottom:20}}>
-                        <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
-                            Add guardian for your nominee
-                        </Typography>
-                        <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
-                            As your nominees age is below 18 years, kindly add nominee’s guardian.
-                        </Typography>
+                        <View style={{ marginBottom: 20 }}>
+                            <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
+                                Add guardian for your nominee
+                            </Typography>
+                            <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
+                                As your nominees age is below 18 years, kindly add nominee’s guardian.
+                            </Typography>
                         </View>
                         <Typography style={styles.title}>Guardian name*</Typography>
                         <TextInput
@@ -127,18 +181,28 @@ const UnderAgeNominee = (props) => {
                             editable={true}
                             placeholder="Enter Name"
                             placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_name ? state.nominee1_guard_name : ""}
-                            onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_guard_name: text }))}
+                            value={state.nominee1_guard_name || ""}
+                            onChangeText={(text) => {
+                                setState((prevState) => ({ ...prevState, nominee1_guard_name: text }));
+                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_name: null })); // Clear error on input
+                            }}
                         />
+                        {errors.nominee1_guard_name && (
+                            <Text style={styles.error}>{errors.nominee1_guard_name}</Text>
+                        )}
+
                         <Typography style={styles.title}>Guardian Relation*</Typography>
                         <View style={[styles.inputsec]}>
                             <Picker
-                                selectedValue={NomineeIsYours ? NomineeIsYours : ""}
-                                onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
+                                selectedValue={NomineeIsYours || ""}
+                                onValueChange={(itemValue) => {
+                                    setNomineeIsYours(itemValue);
+                                    setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_relation: null })); // Clear error on selection
+                                }}
                                 style={[
                                     styles.picker,
                                     NomineeIsYours === "" && { color: "grey" }, // Placeholder color
-                                  ]}
+                                ]}
                             >
                                 <Picker.Item label="Select" value="" />
                                 {mobileEmailRelation.map((state) => (
@@ -146,22 +210,33 @@ const UnderAgeNominee = (props) => {
                                 ))}
                             </Picker>
                         </View>
+                        {errors.nominee1_guard_relation && (
+                            <Text style={styles.error}>{errors.nominee1_guard_relation}</Text>
+                        )}
+
                         <Typography style={styles.title}>Guardian PAN*</Typography>
                         <TextInput
                             style={styles.inputsec}
                             editable={true}
-                            placeholder="Enter Name"
+                            placeholder="Enter PAN"
                             placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_pan ? state.nominee1_guard_pan : ""}
-                            onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }))}
+                            value={state.nominee1_guard_pan || ""}
+                            onChangeText={(text) => {
+                                setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }));
+                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_pan: null })); // Clear error on input
+                            }}
                         />
+                        {errors.nominee1_guard_pan && (
+                            <Text style={styles.error}>{errors.nominee1_guard_pan}</Text>
+                        )}
+
                         <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
                             <Button
-                                borderColor={"red"}
-                                borderWidth={1}
+                                borderColor={"#FFB2AA"}
+                                borderWidth={2}
                                 fontSize={responsiveFontSize(2)}
                                 height={responsiveHeight(5)}
-                                width={responsiveWidth(80)}
+                                width={responsiveWidth(90)}
                                 text={"Next"}
                                 textColor={"black"}
                                 onPress={onAction}
@@ -179,11 +254,17 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffff',
     },
+    error: {
+        color: "#FF0000",
+        fontSize: responsiveFontSize(1.5),
+        marginBottom: 10,
+    },
+    
     picker: {
         height: 50,
         width: 200,
         color: "black", // Default color for selected values
-      },
+    },
     error: {
         color: "#ff0000",
         padding: 5,
@@ -234,7 +315,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         paddingHorizontal: 10,
         marginBottom: 10,
-        justifyContent:"center"
+        justifyContent: "center"
     },
     headerContainer: {
         backgroundColor: 'white',

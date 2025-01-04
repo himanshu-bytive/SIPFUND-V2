@@ -46,7 +46,9 @@ const LeftIconCard = ({
         {/* Description text */}
         <Text style={LeftIconCardStyles.description}>{description}</Text>
         {/* Button component with styles and props */}
-        <Button
+        <Button 
+          borderColor={"#FFB2AA"}
+          borderWidth={1}
           style={LeftIconCardStyles.buttonStyle}
           text={buttonText}
           textColor="#FFB2AA"

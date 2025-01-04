@@ -245,7 +245,6 @@ const BirthRelations = (props) => {
               <View style={styles.inputsecWrapper}>
                 <View
                   style={{
-                    flex: 1,
                     flexDirection: "row",
                     justifyContent: "space-between",
                   }}
@@ -412,7 +411,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     paddingHorizontal: 10,
     overflow: 'hidden', // To ensure the border applies to the dropdown correctly
-    paddingBottom:10
+    paddingBottom:10,
   },
   inputsec: {
     height: responsiveHeight(6),
@@ -442,7 +441,7 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     width: "90%",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#FFB2AA",
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),

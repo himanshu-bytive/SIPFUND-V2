@@ -526,7 +526,6 @@ function HomeScreen(props) {
           />
         </View>
 
-        {/* investment section */}
         <Text style={{
           fontSize: 16,
           color: Colors.DEEP_GRAY,
@@ -562,7 +561,7 @@ function HomeScreen(props) {
 
         {/* Top roted fund section */}
         <Text style={styles.Plan}>Plan Your Goals</Text>
-        <ScrollView horizontal={true} style={{ marginHorizontal: 16, paddingBottom: 20 }}>
+        <ScrollView horizontal={true} style={{ marginHorizontal: 5, paddingBottom: 20 }}>
           {goals.map((item, key) => (
             <LeftIconCard
               key={key}
