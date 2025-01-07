@@ -81,6 +81,9 @@ import OccupationAndIncome from '../screens/OnBoarding/OccupationAndIncome';
 import ProfileDetails from '../screens/OnBoarding/ProfileDetails';
 import AddNominee from '../screens/OnBoarding/AddNominee';
 import UnderAgeNominee from '../screens/OnBoarding/UnderAgeNominee';
+import AddSecondNominee from '../screens/OnBoarding/AddSecondNominee';
+import CeaseSIP from '../screens/HamburgerMenu/CeaseSIP';
+import PauseSIP from '../screens/HamburgerMenu/PauseSIP';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -113,6 +116,7 @@ export const OnBoardingPages = () =>(
      <Stack.Screen name="BirthRelation" component={BirthRelation}/>
      <Stack.Screen name="OccupationAndIncome" component={OccupationAndIncome} />
      <Stack.Screen name='AddNominee' component={AddNominee} />
+     <Stack.Screen name='AddSecondNominee' component={AddSecondNominee} />
      <Stack.Screen name='UnderAgeNominee' component={UnderAgeNominee}/>
   </Stack.Navigator>
 )
@@ -188,6 +192,8 @@ export const HoldingsSummaryStack = () => (
     screenOptions={{headerShown: false}}>
     <Stack.Screen name="Goals" component={GoalsSummaryScreen} />
     <Stack.Screen name="NoGoals" component={NoGoalsScreen} />
+    <Stack.Screen name='CeaseSIP' component={CeaseSIP} />
+    <Stack.Screen name='PauseSIP' component={PauseSIP} />
     <Stack.Screen name="GoalsList" component={GoalsListScreen} />
     <Stack.Screen name="GoalDetail" component={GoalDetailScreen} />
     <Stack.Screen name="InvestmentList" component={InvestmentListScreen} />

@@ -15,7 +15,7 @@ import CheckboxSquare from '../../components/Atom/CheckBox/CheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { getDateInHuman } from '../../utils/getDateInFormat';
-const AddNominee = (props) => {
+const AddSecondNominee = (props) => {
   const {
     nseDetails,
     fatcaDetails,
@@ -32,23 +32,23 @@ const AddNominee = (props) => {
   const navigation = useNavigation();
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [state, setState] = useState({
-    nominee1_name: "",
-    nominee1_relation: "",
-    nominee1_dob: null,
-    nominee1_addr1: "",
-    nominee1_city: "",
-    nominee1_state: "",
-    nominee1_pincode: "",
+    nominee2_name: "",
+    nominee2_relation: "",
+    nominee2_dob: null,
+    nominee2_addr1: "",
+    nominee2_city: "",
+    nominee2_state: "",
+    nominee2_pincode: "",
   });
 
   const [errors, setErrors] = useState({
-    nominee1_name: null,
-    nominee1_relation: null,
-    nominee1_dob: null,
-    nominee1_addr1: null,
-    nominee1_city: null,
-    nominee1_state: null,
-    nominee1_pincode: null,
+    nominee2_name: null,
+    nominee2_relation: null,
+    nominee2_dob: null,
+    nominee2_addr1: null,
+    nominee2_city: null,
+    nominee2_state: null,
+    nominee2_pincode: null,
   });
 
   useEffect(() => {
@@ -71,16 +71,16 @@ const AddNominee = (props) => {
     console.log("NomineeDetails", nseDetails);
     if (fatcaDetails || nseDetails || userDetails) {
       setState({
-        nominee1_name: nseDetails?.nominee1_name,
-        nominee1_relation: nseDetails?.nominee1_relation,
-        nominee1_dob: nseDetails?.nominee1_dob,
-        nominee1_addr1: nseDetails?.nominee1_addr1,
-        nominee1_city: nseDetails?.nominee1_city,
-        nominee1_state: nseDetails?.nominee1_state,
-        nominee1_pincode: nseDetails?.nominee1_pincode,
+        nominee2_name: nseDetails?.nominee1_name,
+        nominee2_relation: nseDetails?.nominee1_relation,
+        nominee2_dob: nseDetails?.nominee1_dob,
+        nominee2_addr1: nseDetails?.nominee1_addr1,
+        nominee2_city: nseDetails?.nominee1_city,
+        nominee2_state: nseDetails?.nominee1_state,
+        nominee2_pincode: nseDetails?.nominee1_pincode,
       });
-      setDateOfBirth(nseDetails?.nominee1_dob ? getDateInHuman(nseDetails.nominee1_dob) : null);
-      setNomineeIsYours(nseDetails?.nominee1_relation);
+      setDateOfBirth(nseDetails?.nominee2_dob ? getDateInHuman(nseDetails.nominee2_dob) : null);
+      setNomineeIsYours(nseDetails?.nominee2_relation);
     }
   }, [fatcaDetails, nseDetails, userDetails]);
 
@@ -118,10 +118,10 @@ const AddNominee = (props) => {
     let hasErrors = false;
   
     // Check each required field and update errors state if empty
-    if (!state.nominee1_name) {
+    if (!state.nominee2_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee1_name: "Please enter Nominee Name.",
+        nomine2_name: "Please enter Nominee Name.",
       }));
       hasErrors = true;
     }
@@ -129,38 +129,38 @@ const AddNominee = (props) => {
     if (!NomineeIsYours) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee1_relation: "Please select Nominee Relation.",
+        nominee2_relation: "Please select Nominee Relation.",
       }));
       hasErrors = true;
     }
   
-    if (!state.nominee1_dob) {
+    if (!state.nominee2_dob) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee1_dob: "Please select Nominee's Date of Birth.",
+        nominee2_dob: "Please select Nominee's Date of Birth.",
       }));
       hasErrors = true;
     }
   
     if (!isChecked) {
-      if (!state.nominee1_pincode) {
+      if (!state.nominee2_pincode) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          nominee1_pincode: "Please enter Pincode.",
+          nominee2_pincode: "Please enter Pincode.",
         }));
         hasErrors = true;
       }
-      if (!state.nominee1_state) {
+      if (!state.nominee2_state) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          nominee1_state: "Please enter State.",
+          nominee2_state: "Please enter State.",
         }));
         hasErrors = true;
       }
-      if (!state.nominee1_addr1) {
+      if (!state.nominee2_addr1) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          nominee1_addr1: "Please enter Address.",
+          nominee2_addr1: "Please enter Address.",
         }));
         hasErrors = true;
       }
@@ -173,19 +173,19 @@ const AddNominee = (props) => {
     const params = {
       nseDetails: {
         ...nseDetails,
-        nominee1_name: state?.nominee1_name,
-        nominee1_relation: NomineeIsYours,
-        nominee1_dob: state?.nominee1_dob,
-        nominee1_addr1: state?.nominee1_addr1,
-        nominee1_city: state?.nominee1_city,
-        nominee1_state: state?.nominee1_state,
-        nominee1_pincode: state?.nominee1_pincode,
+        nominee2_name: state?.nominee2_name,
+        nominee2_relation: NomineeIsYours,
+        nominee2_dob: state?.nominee2_dob,
+        nominee2_addr1: state?.nominee2_addr1,
+        nominee2_city: state?.nominee2_city,
+        nominee2_state: state?.nominee2_state,
+        nominee2_pincode: state?.nominee2_pincode,
       },
       fatcaDetails,
       userDetails,
     };
   
-    if (isLessThan18(state.nominee1_dob)) {
+    if (isLessThan18(state.nominee2_dob)) {
       updateRegister(params, token);
       navigation.navigate("UnderAgeNominee");
     } else {
@@ -193,10 +193,6 @@ const AddNominee = (props) => {
       navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
   };
-
-  const AddSecondNominee = () =>{
-    props.navigation.navigate("OnBoard",{screen : "AddSecondNominee"});
-  }
   
   const NomineeIdList = [
     { value: "Ad", label: "Aadhaar Card" },
@@ -268,17 +264,17 @@ const AddNominee = (props) => {
         ) : (
           <ScrollView>
             <View style={styles.stepContainer}>
-              <Typography style={styles.title}>Nominee name*</Typography>
+              <Typography style={styles.title}>2nd Nominee name*</Typography>
               <TextInput
                 style={styles.inputsec}
                 editable={true}
                 placeholderTextColor={"grey"}
                 placeholder="Enter Name"
-                value={state.nominee1_name ? state.nominee1_name : ""}
-                onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
+                value={state.nominee2_name ? state.nominee2_name : ""}
+                onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_name: text }))}
               />
-              {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
-              <Typography style={styles.title}>Nominee is your*</Typography>
+              {errors.nominee2_name && <Text style={styles.errorText}>{errors.nominee2_name}</Text>}
+              <Typography style={styles.title}>2nd Nominee is your*</Typography>
               <View style={[styles.inputsec]}>
                 <Picker
                   selectedValue={NomineeIsYours ? NomineeIsYours : ""}
@@ -294,8 +290,8 @@ const AddNominee = (props) => {
                   ))}
                 </Picker>
               </View>
-              {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
-              <Typography style={styles.title}>Nominee’s date of birth*</Typography>
+              {errors.nominee2_relation && <Text style={styles.errorText}>{errors.nominee2_relation}</Text>}
+              <Typography style={styles.title}>2nd Nominee’s date of birth*</Typography>
               <View style={styles.inputsecWrapper}>
                 <View
                   style={{
@@ -337,7 +333,7 @@ const AddNominee = (props) => {
                       maxLength={10}
                     />
                   </TouchableOpacity>
-                  {errors.nominee1_dob && <Text style={styles.errorText}>{errors.nominee1_dob}</Text>}
+                  {errors.nominee2_dob && <Text style={styles.errorText}>{errors.nominee2_dob}</Text>}
                 </View>
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
@@ -355,14 +351,14 @@ const AddNominee = (props) => {
 
                     // Update the states
                     setDateOfBirth(dob); // Original Date object if needed
-                    setErrors({ ...errors, nominee1_dob: null });
-                    setState({ ...state, nominee1_dob: dateAsNumber }); // Save date as number
+                    setErrors({ ...errors, nominee2_dob: null });
+                    setState({ ...state, nominee2_dob: dateAsNumber }); // Save date as number
                   }}
                   onCancel={() => setIsDatePickerVisible(false)}
                 />
               </View>
               <View style={{ marginTop: 10 }}>
-                <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
+                <Typography style={styles.title}>2nd Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
                   <Picker
                     selectedValue={NomineeId ? NomineeId : ""}
@@ -398,10 +394,10 @@ const AddNominee = (props) => {
                       placeholder="PINCODE"
                       placeholderTextColor={"grey"}
                       inputMode='numeric'
-                      value={state.nominee1_pincode ? state.nominee1_pincode : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_pincode: text }))}
+                      value={state.nominee2_pincode ? state.nominee2_pincode : ""}
+                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_pincode: text }))}
                     />
-                    {errors.nominee1_pincode && <Text style={styles.errorText}>{errors.nominee1_pincode}</Text>}
+                    {errors.nominee2_pincode && <Text style={styles.errorText}>{errors.nominee2_pincode}</Text>}
                    </View>
                    <View style={{flexDirection:"column",width:"50%"}}>
                    <TextInput
@@ -410,10 +406,10 @@ const AddNominee = (props) => {
                       placeholder="STATE"
 
                       placeholderTextColor={"grey"}
-                      value={state.nominee1_state ? state.nominee1_state : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_state: text }))}
+                      value={state.nominee2_state ? state.nominee2_state : ""}
+                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_state: text }))}
                     />
-                    {errors.nominee1_state && <Text style={styles.errorText}>{errors.nominee1_state}</Text>}
+                    {errors.nominee2_state && <Text style={styles.errorText}>{errors.nominee2_state}</Text>}
                    </View>
                   </View>
                   <View style={{ flexDirection: "column", width: "100%", marginTop: 10 }}>
@@ -422,14 +418,14 @@ const AddNominee = (props) => {
                       editable={true}
                       placeholder="ADDRESS"
                       placeholderTextColor={"grey"}
-                      value={state.nominee1_addr1 ? state.nominee1_addr1 : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_addr1: text }))}
+                      value={state.nominee2_addr1 ? state.nominee2_addr1 : ""}
+                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_addr1: text }))}
                     />
-                    {errors.nominee1_addr1 && <Text style={styles.errorText}>{errors.nominee1_addr1}</Text>}
+                    {errors.nominee2_addr1 && <Text style={styles.errorText}>{errors.nominee2_addr1}</Text>}
                   </View>
                 </>
               )}
-              <TouchableOpacity onPress={() => { AddSecondNominee }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
+              <TouchableOpacity onPress={() => { console.log("Hello") }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
                 <View style={styles.circleIcon}>
                   <Icon name="plus" size={14} color="white" />
                 </View>
@@ -596,4 +592,4 @@ export default connect(
   mapStateToProps,
   undefined,
   mapDispatchToProps
-)(AddNominee);
+)(AddSecondNominee);

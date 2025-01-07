@@ -712,7 +712,7 @@ const styles = StyleSheet.create({
     marginVertical: 3,
   },
   account_inactive: {
-    color: '#FF6347',
+    color: 'white',
     fontSize: 15,
     marginVertical: 3,
   },
