@@ -180,17 +180,18 @@ export const AuthActions = {
       ]);
     }
   },
-  login: async (dispatch, params, token) => {
+  login: async (dispatch, params, token,setIsLogin) => {
     dispatch({ type: types.FETCH_LOGIN_PENDING });
     let data = await SiteAPI.apiPostCall("/token", params, token);
     console.log("====================================");
     console.log(JSON.stringify(data));
     console.log("====================================");
     if (data.error) {
-      if (data.message) Alert.alert(data.message);
+      if (data.message) setIsLogin(false);
       dispatch({ type: types.FETCH_LOGIN_FAILURE, error: data.message });
       await AsyncStorage.setItem('LOGIN', 'FAIL');
     } else {
+      setIsLogin(true);
       /* Save the password to storage */
       storeData(toString(params.username), params.password);
       await AsyncStorage.setItem('LOGIN', 'SUCCESS');

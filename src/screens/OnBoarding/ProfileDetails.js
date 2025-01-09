@@ -28,6 +28,7 @@ const PersonalDetails = (props) => {
     fatcaDetails,
     userDetails,
     users,
+    user,
     updateRegister,
     token
   } = props;
@@ -65,7 +66,7 @@ const PersonalDetails = (props) => {
     } else if (!FormValidate.validateName(investor)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        investor: "Please Add a Valid Name",
+        investor: "Please Enter a Valid Name",
       }));
       isValid = false;
     }
@@ -80,26 +81,26 @@ const PersonalDetails = (props) => {
     if (!FormValidate.isString(fatherName)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        fatherName: "Please Add Father's Name",
+        fatherName: "Please Enter Father's Name",
       }));
       isValid = false;
     } else if (!FormValidate.validateName(fatherName)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        fatherName: "Please Add a Valid Father's Name",
+        fatherName: "Please Enter a Valid Father's Name",
       }));
       isValid = false;
     }
     if (!FormValidate.isString(motherName)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        motherName: "Please Add Mother's Name",
+        motherName: "Please Enter Mother's Name",
       }));
       isValid = false;
     } else if (!FormValidate.validateName(motherName)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        motherName: "Please Add a Valid Mother's Name",
+        motherName: "Please Enter a Valid Mother's Name",
       }));
       isValid = false;
     }
@@ -122,6 +123,8 @@ const PersonalDetails = (props) => {
             inv_name: state.investor,
             father_name: state.fatherName,
             mother_name: state.motherName,
+            pan:user.pan,
+            email:user.email
           },
           fatcaDetails,
           userDetails,
@@ -205,6 +208,7 @@ const PersonalDetails = (props) => {
                 </TouchableOpacity>
               ))}
             </View>
+              {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
             <View style={styles.text_box}>
               <Text style={styles.sub_slogan}>Name</Text>
               <TextInput
@@ -221,6 +225,7 @@ const PersonalDetails = (props) => {
                 }}
               />
             </View>
+            {errors.investor && <Text style={styles.errorText}>{errors.investor}</Text>}
           </View>
         )}
   
@@ -243,6 +248,7 @@ const PersonalDetails = (props) => {
                 }}
               />
             </View>
+            {errors.fatherName && <Text style={styles.errorText}>{errors.fatherName}</Text>}
             <View style={styles.text_box}>
               <Text style={styles.sub_slogan}>Mother's Name</Text>
               <TextInput
@@ -259,6 +265,7 @@ const PersonalDetails = (props) => {
                 }}
               />
             </View>
+            {errors.motherName && <Text style={styles.errorText}>{errors.motherName}</Text>}
           </View>
         )}
       </ScrollView>
@@ -278,6 +285,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.WHITE,
   },
+  errorText: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: responsiveHeight(0.5),
+  },
   containBox: {
     paddingHorizontal: 20,
     width: "100%"
@@ -288,7 +300,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(2), // Add some spacing for better appearance
+    paddingVertical: responsiveHeight(2), // Enter some spacing for better appearance
     backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
     marginTop:20
   },
@@ -428,6 +440,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   users: state.auth.user,
+  user: state.auth.user,
   nseDetails: state.registration.nseDetails,
   fatcaDetails: state.registration.fatcaDetails,
   userDetails: state.registration.userDetails,

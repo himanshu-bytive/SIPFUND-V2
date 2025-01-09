@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   StyleSheet,
-  Button,
   ScrollView,
   View,
   ImageBackground,
@@ -18,6 +17,7 @@ import { Colors, FormValidate } from "../../common";
 import { Image, Header } from "react-native-elements";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import Button from "../../components/Atom/Button/Button";
 
 function ForgotPasswordScreen(props) {
   const pageActive = useRef(false);
@@ -104,28 +104,9 @@ function ForgotPasswordScreen(props) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <>
-        {isFetching ? (
-          <View style={styles.botton_box}>
-            <ActivityIndicator size={30} color={Colors.WHITE} />
-          </View>
-        ) : (
-          <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={onAction}
-            >
-              <Text style={styles.buttonText}> Send My Password </Text>
-            </TouchableOpacity>
-          </View>
-          /*<TouchableOpacity
-            onPress={() => onAction()}
-            style={styles.botton_box}
-          >
-            <Text style={styles.get_otp}>Send My Password</Text>
-          </TouchableOpacity>*/
-        )}
-      </>
+      <View style={{justifyContent:"center",alignItems:"center",alignSelf:"center",flex:1,backgroundColor:"white"}}>
+       <Button backgroundColor={"white"} borderColor={"#FFB2AA"} borderWidth={2} fontSize={responsiveFontSize(2)} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={onAction} text={"Send My Password"} textColor={"black"} isLoading={isFetching}/>
+      </View>
     </KeyboardAvoidingView>
   );
 }

@@ -8,6 +8,8 @@ import {
   KeyboardAvoidingView,
   Text,
   ActivityIndicator,
+  Alert,
+  Modal,
 } from "react-native";
 import { Styles, Colors, FormValidate } from "../../common";
 import { Image, Header, CheckBox } from "react-native-elements";
@@ -18,6 +20,7 @@ import {
   responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { connect } from "react-redux";
+import Button from "../../components/Atom/Button/Button";
 
 const pepList = [
   { value: "N", label: "No" },
@@ -42,27 +45,29 @@ const OccupationAndIncome = (props) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [occupationsList, setOccupationsList] = useState([]);
   const [incomesList, setIncomesList] = useState([]);
-
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     settings(token);
-  },[]);
+  }, []);
 
   useEffect(() => {
     const occupationsList = occupations
       ? occupations.map((item) => ({
-          value: item.OCCUPATION_CODE,
-          label: String(item.OCCUPATION_DESC),
-        }))
+        value: item.OCCUPATION_CODE,
+        label: String(item.OCCUPATION_DESC),
+      }))
       : [];
     setOccupationsList(occupationsList);
 
     const incomesList = incomes
       ? incomes.map((item) => ({
-          value: item.APP_INCOME_CODE,
-          label: String(item.APP_INCOME_DESC),
-        }))
-      : []; 
+        value: item.APP_INCOME_CODE,
+        label: String(item.APP_INCOME_DESC),
+      }))
+      : [];
     setIncomesList(incomesList);
+    console.log("INCOMELIST",incomesList);
+    
   }, [occupations, incomes]);
 
   const [state, setState] = useState({
@@ -80,47 +85,68 @@ const OccupationAndIncome = (props) => {
   const validateStepOne = () => {
     const { occupation } = state;
     let isValid = true;
-
-    if (!occupation) {
+  
+    if (!occupation || !occupation.OCCUPATION_CODE) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         occupation: "Please Select Occupation",
       }));
+      setShowModal(true); // Show the modal when there’s an error
       isValid = false;
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        occupation: null, // Clear the error if the validation passes
+      }));
+      setShowModal(false); // Hide the modal when validation passes
     }
-
+  
     return isValid;
   };
+  
 
   const validateStepTwo = () => {
     const { income } = state;
     let isValid = true;
-
-    if (!income) {
+  
+    if (!income || !income.APP_INCOME_CODE) {  // Checking for the income's code
       setErrors((prevErrors) => ({
         ...prevErrors,
-        income: "Please Select Annual Income",
+        income: "Please Select Annual Income",  // Displaying error message
       }));
       isValid = false;
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        income: null, // Clear the error message if income is selected
+      }));
     }
-
+  
     return isValid;
   };
+  
 
   const validateStepThree = () => {
     const { pep } = state;
     let isValid = true;
   
-    if (!pep) {
+    // Ensure that pep has a value before allowing progression
+    if (!pep || !pep.code) {  // Check if pep is not selected or the code is not set
       setErrors((prevErrors) => ({
         ...prevErrors,
-        pep: "Please Select if You are a PEP",
+        pep: "Please Select if You are a PEP", // Set the error message if PEP is not selected
       }));
       isValid = false;
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        pep: null, // Clear any error message if PEP is selected
+      }));
     }
   
     return isValid;
-  };  
+  };
+  
 
   const onAction = () => {
     if (currentStep === 1) {
@@ -146,11 +172,11 @@ const OccupationAndIncome = (props) => {
             pep: state.pep,
           },
           userDetails,
-        }; 
+        };
         console.log("paasing params", params);
         updateRegister(params, token);
         //Add navigation to next screen for DOB, mob-Email relation details.
-        props.navigation.navigate("OnBoard",{screen : "BirthRelation"})
+        props.navigation.navigate("OnBoard", { screen: "BirthRelation" })
       }
     }
   };
@@ -212,7 +238,7 @@ const OccupationAndIncome = (props) => {
                         style={[
                           styles.optionButton,
                           state.occupation.OCCUPATION_CODE === option.value &&
-                            styles.optionButtonSelected,
+                          styles.optionButtonSelected,
                         ]}
                         onPress={() =>
                           setState({
@@ -232,8 +258,27 @@ const OccupationAndIncome = (props) => {
                       </TouchableOpacity>
                     ))}
                   </View>
-                  {errors.occupation && <Text style={styles.errorText}>{errors.occupation}</Text>}
                 </View>
+                <Modal
+                    visible={showModal}
+                    transparent={true}
+                    animationType="none"
+                    onRequestClose={() => setShowModal(false)}
+                  >
+                    <View style={styles.modalContainer}>
+                      <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>Please Select Occupation Before Proceeding.</Text>
+                        <Button
+                          text="OK"
+                          onPress={() => setShowModal(false)}
+                          backgroundColor={Colors.RED}
+                          textColor={Colors.WHITE}
+                          height={40}
+                          width={100}
+                        />
+                      </View>
+                    </View>
+                  </Modal>
               </>
             ) : currentStep === 2 ? (
               <>
@@ -247,7 +292,7 @@ const OccupationAndIncome = (props) => {
                         style={[
                           styles.optionButton,
                           state.income.APP_INCOME_CODE === option.value &&
-                            styles.optionButtonSelected,
+                          styles.optionButtonSelected,
                         ]}
                         onPress={() =>
                           setState({
@@ -316,7 +361,7 @@ const OccupationAndIncome = (props) => {
       </View>
     </KeyboardAvoidingView>
   );
-  
+
 };
 
 const styles = StyleSheet.create({
@@ -324,6 +369,30 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: Colors.WHITE,
+  },
+  errorText: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: responsiveHeight(0.5),
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
   },
   containBox: {
     paddingHorizontal: 12,
@@ -347,7 +416,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: responsiveHeight(2),
     backgroundColor: Colors.WHITE,  // Maintain background consistency
-    marginTop:20
+    marginTop: 20
   },
   arrowButton: {
     marginLeft: responsiveWidth(2),
@@ -363,7 +432,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    width:"auto",
+    width: "auto",
   },
   optionButton: {
     width: "48%",
@@ -409,7 +478,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: Colors.WHITE,
   },
-  
+
   text_box: {
     flexDirection: "column",
     width: "100%",
@@ -420,7 +489,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: responsiveHeight(2), // Add a little margin for spacing
   },
-  
+
   bottomButton: {
     width: responsiveWidth(90),
     borderWidth: 2,
@@ -473,4 +542,4 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
   };
 };
-export default connect( mapStateToProps, undefined, mapDispatchToProps )(OccupationAndIncome);
+export default connect(mapStateToProps, undefined, mapDispatchToProps)(OccupationAndIncome);

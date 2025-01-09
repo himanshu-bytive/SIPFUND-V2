@@ -202,7 +202,7 @@ const BirthRelations = (props) => {
             if (currentStep === 2) {
               setCurrentStep(1);
             } else {
-              props.navigation.navigate("newScreens", { screen: "OccupationAnnualIncomePEP" });
+              props.navigation.navigate("OnBoard", { screen: "OccupationAndIncome" });
             }
           }}
           style={styles.arrowButton}

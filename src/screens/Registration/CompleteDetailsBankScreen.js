@@ -26,7 +26,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import { Button } from "react-native-paper";
 import RNFetchBlob from "rn-fetch-blob";
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { getDateInHuman } from "../../utils/getDateInFormat";
 
 function CompleteDetailsBankScreen(props, route) {
   const pageActive = useRef(false);
@@ -40,6 +40,7 @@ function CompleteDetailsBankScreen(props, route) {
     createRegister,
     user,
     fatcaDetails,
+    profile,
     nseDetails,
     userDetails,
     accountTypes,
@@ -222,6 +223,8 @@ function CompleteDetailsBankScreen(props, route) {
   }, [accountTypes, banks, bankDetails, bankTypeDetails]);
 
   const onAction = async () => {
+    console.log("USERRR",user);
+    
     const {
       accountType,
       accountNumber,
@@ -300,11 +303,9 @@ function CompleteDetailsBankScreen(props, route) {
         branch_pincode: params.nseDetails.branch_pincode,
         city: params.nseDetails.city.CITY,
         country: params.nseDetails.country.COUNTRY_CODE,
-        dob: params.nseDetails.dob
-          ? moment(params.nseDetails.dob).format("DD-MMM-YYYY")
-          : "",
+        dob: getDateInHuman(params.nseDetails.dob),
         dp_id: params.nseDetails.dp_id,
-        email: params.nseDetails.email,
+        email: user.email,
         exempt_category: params.nseDetails.exempt_category,
         exempt_ref_no: params.nseDetails.exempt_ref_no,
         exemption: params.nseDetails.exemption,
@@ -355,9 +356,7 @@ function CompleteDetailsBankScreen(props, route) {
         nominee1_addr2: params.nseDetails.nominee1_addr2,
         nominee1_addr3: params.nseDetails.nominee1_addr3,
         nominee1_city: params.nseDetails.nominee1_city,
-        nominee1_dob: params.nseDetails.nominee1_dob
-          ? moment(params.nseDetails.nominee1_dob).format("DD-MMM-YYYY")
-          : "",
+        nominee1_dob: getDateInHuman(params.nseDetails.nominee1_dob),
         nominee1_guard_name: params.nseDetails.nominee1_guard_name,
         nominee1_guard_pan: params.nseDetails.nominee1_guard_pan,
         nominee1_name: params.nseDetails.nominee1_name,
@@ -394,7 +393,7 @@ function CompleteDetailsBankScreen(props, route) {
         occupation: params.nseDetails.occupation.OCCUPATION_CODE,
         off_fax: params.nseDetails.off_fax,
         off_phone: params.nseDetails.off_phone,
-        pan: params.nseDetails.pan,
+        pan: user.pan,
         pincode: params.nseDetails.pincode,
         res_fax: params.nseDetails.res_fax,
         res_phone: "",
@@ -434,9 +433,7 @@ function CompleteDetailsBankScreen(props, route) {
           aadhaar_rp: "",
         },
         Fatca: {
-          dob: params.nseDetails.dob
-            ? moment(params.nseDetails.dob).format("DD-MMM-YYYY")
-            : "",
+          dob: getDateInHuman(params.nseDetails.dob),
           addr_type: params?.fatcaDetails?.addr_type?.code,
           data_src: "E",
           log_name: params.nseDetails.email,
@@ -489,15 +486,24 @@ function CompleteDetailsBankScreen(props, route) {
     return;
   };
 
+  // const onComplete = () => {
+  //   setVisible(false);
+  //   if (isInn && isExit) {
+  //     props.navigation.navigate("Existing");
+  //   } else {
+  //     props.navigation.navigate("UploadDocument");
+  //   }
+  // };
+  
   const onComplete = () => {
     setVisible(false);
-    if (isInn && isExit) {
-      props.navigation.navigate("Existing");
+    console.log("USER DATA",userDetails);
+    if (userDetails?.ekycIsDone) {
+      props.navigation.navigate("Reg",{screen : "UploadDocument"});
     } else {
-      props.navigation.navigate("UploadDocument");
+      props.navigation.navigate('Reset', {screen: 'EKYC'});
     }
   };
-
   const onActionNewBank = async () => {
     console.log(
       "🚀 ~ onActionNewBank ~ bankDetails:",
@@ -578,16 +584,26 @@ function CompleteDetailsBankScreen(props, route) {
     <>
       <Header
         leftComponent={
-          <TouchableOpacity onPress={() => props.navigation.goBack()}>
-            <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+          <TouchableOpacity
+            onPress={() => props.navigation.goBack()}
+            style={{ marginTop: 20 }}
+          >
+            <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
           </TouchableOpacity>
         }
-        backgroundColor={Colors.WHITE}
         containerStyle={styles.header}
-        rightComponent={
+        backgroundColor={Colors.LIGHT_WHITE}
+        centerComponent={
           <Image
             source={require("../../../assets/icon.png")}
             style={styles.logimg}
+          />
+        }
+        rightComponent={
+          <Cart
+            nav={() => {
+              props.navigation.navigate("TopRatedList");
+            }}
           />
         }
       />
@@ -617,51 +633,44 @@ function CompleteDetailsBankScreen(props, route) {
             <Text style={styles.occupation}>
               Account Type <Text style={styles.error}>*</Text>
             </Text>
-            <View style={styles.textBox}>
-              <MySelectPicker
-                values={accountTypeList}
-                defultValue={state.accountType}
-                error={errors.accountType}
-                placeholder={"Select A/C type"}
-                onChange={(accountType) => {
-                  setErrors({ ...errors, accountType: null });
-                  setState({ ...state, accountType });
-                }}
-              />
-            </View>
+            <MySelectPicker
+              values={accountTypeList}
+              defultValue={state.accountType}
+              error={errors.accountType}
+              placeholder={"Select A/C type"}
+              onChange={(accountType) => {
+                setErrors({ ...errors, accountType: null });
+                setState({ ...state, accountType });
+              }}
+            />
 
             <Text style={styles.occupation}>
               Account No. <Text style={styles.error}>*</Text>
             </Text>
-            <View style={styles.textBox}>
-              <MyTextInput
-                style={styles.inputsec}
-                keyboardType="numeric"
-                maxLength={16}
-                value={state.accountNumber}
-                error={errors.accountNumber}
-                onChangeText={(accountNumber) => {
-                  setErrors({ ...errors, accountNumber: null });
-                  setState({ ...state, accountNumber });
-                }}
-              />
-            </View>
+            <MyTextInput
+              keyboardType="numeric"
+              maxLength={16}
+              value={state.accountNumber}
+              error={errors.accountNumber}
+              onChangeText={(accountNumber) => {
+                setErrors({ ...errors, accountNumber: null });
+                setState({ ...state, accountNumber });
+              }}
+            />
+
             <Text style={styles.occupation}>
               IFSC Code <Text style={styles.error}>*</Text>
             </Text>
-            <View style={styles.textBox}>
-              <MyTextInput
-                style={styles.inputsec}
-                value={state.ifsc}
-                error={errors.ifsc}
-                autoCapitalize={"characters"}
-                maxLength={11}
-                onChangeText={(ifsc) => {
-                  setErrors({ ...errors, ifsc: null });
-                  setState({ ...state, ifsc });
-                }}
-              />
-            </View>
+            <MyTextInput
+              value={state.ifsc}
+              error={errors.ifsc}
+              autoCapitalize={"characters"}
+              maxLength={11}
+              onChangeText={(ifsc) => {
+                setErrors({ ...errors, ifsc: null });
+                setState({ ...state, ifsc });
+              }}
+            />
 
             <View style={{ alignItems: "center" }}>
               {isFetching ? (
@@ -783,62 +792,45 @@ function CompleteDetailsBankScreen(props, route) {
               <Text style={styles.occupation}>
                 Bank Name <Text style={styles.error}>*</Text>
               </Text>
-              
-              <View style={styles.textBox}>
-                <MySelectPicker
-                  style={styles.inputsec}
-                  values={bankList}
-                  defultValue={state.bank}
-                  error={errors.bank}
-                  onChange={(bank) => {
-                    setErrors({ ...errors, bank: null });
-                    setState({ ...state, bank });
-                  }}
-                />
-              </View>
+              <MySelectPicker
+                values={bankList}
+                defultValue={state.bank}
+                error={errors.bank}
+                onChange={(bank) => {
+                  setErrors({ ...errors, bank: null });
+                  setState({ ...state, bank });
+                }}
+              />
+
               <Text style={styles.occupation}>
                 Branch Name <Text style={styles.error}>*</Text>
               </Text>
-              <View style={styles.textBox}>
-                <MyTextInput
-                  style={styles.inputsec}
-                  value={state.branchName}
-                  error={errors.branchName}
-                  onChangeText={(branchName) => {
-                    setErrors({ ...errors, branchName: null });
-                    setState({ ...state, branchName });
-                  }}
-                />
-              </View>
+              <MyTextInput
+                value={state.branchName}
+                error={errors.branchName}
+                onChangeText={(branchName) => {
+                  setErrors({ ...errors, branchName: null });
+                  setState({ ...state, branchName });
+                }}
+              />
+
               <Text style={styles.occupation}>
                 Branch Address <Text style={styles.error}>*</Text>
               </Text>
-              <View style={styles.textBox}>
-                <MyTextInput
-                  style={styles.inputsec}
-                  value={state.branchAddress}
-                  error={errors.branchAddress}
-                  onChangeText={(branchAddress) => {
-                    setErrors({ ...errors, branchAddress: null });
-                    setState({ ...state, branchAddress });
-                  }}
-                />
-              </View>
+              <MyTextInput
+                value={state.branchAddress}
+                error={errors.branchAddress}
+                onChangeText={(branchAddress) => {
+                  setErrors({ ...errors, branchAddress: null });
+                  setState({ ...state, branchAddress });
+                }}
+              />
             </View>
           )}
-        </ScrollView>
-        <>
+
           {/* click_box */}
           {!props?.route?.params?.newBankAccount ? (
-            <View style={styles.bottomButtonContainer}>
-              <TouchableOpacity
-                style={styles.bottomButton}
-                onPress={onAction}
-              >
-                <Text style={styles.buttonText}> Next </Text>
-              </TouchableOpacity>
-            </View>
-            /*<View style={styles.footer}>
+            <View style={styles.footer}>
               <View style={styles.click_box}>
                 <TouchableOpacity
                   onPress={() => props.navigation.goBack()}
@@ -859,7 +851,7 @@ function CompleteDetailsBankScreen(props, route) {
                   </TouchableOpacity>
                 )}
               </View>
-            </View>*/
+            </View>
           ) : (
             <>
               {/* <TouchableOpacity
@@ -1062,7 +1054,7 @@ function CompleteDetailsBankScreen(props, route) {
               </View>
             </>
           )}
-        </>
+        </ScrollView>
       </KeyboardAvoidingView>
       <Overlay
         isVisible={visible}
@@ -1101,64 +1093,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   header: {
+    borderBottomColor: Colors.BLACK,
+    borderBottomWidth: 1,
+    backgroundColor: "#fff",
     zIndex: 100,
-    flexDirection: "row", // Arrange items in a row
-    justifyContent: "space-between", // Space out items evenly
-    alignItems: "center", // Center items vertically
-    paddingHorizontal: 10, // Add spacing from edges
-    height: 80, // Set a consistent height for the header
-    backgroundColor: Colors.WHITE, // Ensure background matches
   },
   container_sec: {
     padding: 10,
-    marginBottom:-30,
-    zIndex:999
-  },
-  textBox: {
-    borderWidth: 2,
-    borderColor: '#FFB2AA',
-    borderRadius: 4,
-    backgroundColor: Colors.WHITE,
-    fontSize: 16,
-    marginTop:10,
-    height:responsiveHeight(6)
-  },
-  inputsec: {
-    fontSize: 17,
-    paddingHorizontal: 5,
-    color: 'black',
-    marginBottom: 0,
-    backgroundColor: Colors.WHITE,
   },
   error: {
     color: "#ff0000",
     padding: 5,
-  },  
-  bottomButtonContainer: {
-    position: "absolute",
-    bottom: responsiveHeight(1),
-    width: "100%",
-    padding: responsiveWidth(4),
-    backgroundColor: Colors.WHITE,
-    alignItems: "center",
-  },
-  bottomButton: {
-    width: "95%",
-    borderWidth: 1,
-    borderColor: "#FFB2AA",
-    borderRadius: 8,
-    paddingVertical: responsiveHeight(1),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.WHITE,
-  },
-  buttonText: {
-    color: Colors.BLACK,
-    fontSize: responsiveFontSize(2),
   },
   logimg: {
-    height: 35,
-    width: 153,
+    height: 65,
+    width: 203,
+    marginTop: 10,
   },
   heading_sec: {
     padding: 12,
@@ -1228,12 +1178,12 @@ const mapStateToProps = (state) => ({
   isInn: state.registration.isInn,
   bankTypeDetails: state.registration.bankTypeDetails,
   proofOfAccount: state.registration.proofOfAccount,
+  profile: state.auth.profile,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   const { dispatch } = dispatchProps;
   const { RegistrationActions } = require("../../store/RegistrationRedux");
-  const { HomeActions } = require("../../store/HomeRedux");
   return {
     ...stateProps,
     ...ownProps,

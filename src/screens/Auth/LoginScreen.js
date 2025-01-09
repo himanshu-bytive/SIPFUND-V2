@@ -11,6 +11,7 @@ import {
   TextInput,
   ActivityIndicator,
   ToastAndroid,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import { Colors, Config } from "../../common";
@@ -41,6 +42,8 @@ function LoginScreen(props) {
   const [visible, setVisible] = useState(false);
   const [appToken, setAppToken] = useState("-");
   const [loginStatus, setLoginStatus] = useState(null);
+  const [isLogin,setIsLogin] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const intervalRef = useRef(null);
   /* Retrieve password if saved */
 
@@ -112,6 +115,14 @@ function LoginScreen(props) {
     setLoginStatus(status);
   };
 
+  useEffect(() => {
+    if (isLogin === false) {
+      setShowModal(true); // Show modal on failed login
+    } else {
+      setShowModal(false); // Hide modal otherwise
+    }
+  }, [isLogin]);
+
   // useEffect to fetch user details and navigate based on loginStatus
   useEffect(() => {
     if (loginStatus === 'SUCCESS' && pageActive.current) {
@@ -149,7 +160,8 @@ function LoginScreen(props) {
     };
     console.log("password page", params);
 
-    login(params, Config.loginToken);
+    login(params, Config.loginToken,setIsLogin);
+   
   };
 
   return (
@@ -244,6 +256,26 @@ function LoginScreen(props) {
           </View>
         </View>
       </ScrollView>
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => setShowModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Incorrect Password. Please try again.</Text>
+            <Button
+              text="Close"
+              onPress={() => setShowModal(false)}
+              backgroundColor={Colors.RED}
+              textColor={Colors.WHITE}
+              height={40}
+              width={100}
+            />
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -365,6 +397,25 @@ const styles = StyleSheet.create({
   conform: {
     width: "90%",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 });
 
 const mapStateToProps = (state) => ({
@@ -386,8 +437,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...stateProps,
     ...ownProps,
-    login: (params, token) => {
-      AuthActions.login(dispatch, params, token);
+    login: (params, token,setIsLogin) => {
+      AuthActions.login(dispatch, params, token,setIsLogin);
     },
     getUserDetails: (params, token) => {
       RegistrationActions.getUserDetails(dispatch, params, token);

@@ -63,7 +63,7 @@ const AddNominee = (props) => {
     if (stepCount === 2) {
       setStepCount(stepCount - 1);
     } else {
-      navigation.navigate("Home");
+      navigation.navigate("BirthRelation");
     }
   };
 

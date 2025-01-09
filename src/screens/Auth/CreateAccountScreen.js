@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
+  Button,
   ScrollView,
   View,
   Linking,
@@ -23,8 +24,6 @@ import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Geolocation from "@react-native-community/geolocation";
-import Button from "../../components/Atom/Button/Button";
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 function CreateAccountScreen(props) {
   const {
@@ -329,24 +328,27 @@ function CreateAccountScreen(props) {
             }}
           />
           {errors.term && <Text style={styles.error}>{errors.term}</Text>}
-              <View>
-                <Button 
-                 onPress={() => {
+          <View style={styles.button}>
+            {isFetching ? (
+              <View style={styles.botton_box}>
+                <ActivityIndicator size={30} color={Colors.WHITE} />
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
                   if (validatePass(state.password).length > 0) {
                     alert("Enter a valid Password!");
                     return;
                   }
                   onAction();
                 }}
-                borderColor={"red"}
-                borderWidth={1}
-                height={responsiveHeight(6)}
-                text={"Confirm"}
-                textColor={"black"}
-                width={responsiveWidth(80)}
-                isLoading={isFetching}
-                />
-              </View>
+                style={styles.botton_box}
+              >
+                <Text style={styles.get_otp}>CONFIRM</Text>
+                <AntDesign name={"right"} size={26} color={Colors.WHITE} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -361,6 +363,9 @@ const styles = StyleSheet.create({
   },
   containerScroll: {
     width: "100%",
+  },
+  button:{
+   marginBottom:50
   },
   header: {
     borderBottomColor: Colors.BLACK,

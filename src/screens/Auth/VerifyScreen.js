@@ -393,8 +393,6 @@ function VerifyScreen(props) {
               onValueChange={(value) => setSelectedValue(value)} // Update state
               items={[
                 { label: '🇮🇳 +91', value: '+91' }, // Indian Flag
-                { label: '🇺🇸 +1', value: '+1' },   // US Flag
-                { label: '🇬🇧 +44', value: '+44' }, // UK Flag
               ]}
               value={selectedValue} // Controlled component
               style={pickerSelectStyles} // Custom styles

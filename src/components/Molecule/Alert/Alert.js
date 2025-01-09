@@ -1,28 +1,28 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Modal from 'react-native-modal';
-import { colorCode } from '../../../Utils/ColorValueAndCodeMapper';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { colorCode } from '../../../utils/ColorCombination/ColorValueAndCodeMapper';
 
 const getTypeStyles = (type) => {
   switch (type) {
     case 'success':
       return {
-        icon: require('../../../assets/Icons/SuccessIcon.png'),
+        icon: require('../../../../assets/Icons/SuccessIcon.png'),
         textColor: 'green',
         buttonBackground: 'green',
         buttonBorder: 'green',
       };
     case 'warning':
       return {
-        icon: require('../../../assets/Icons/WarningIcon.png'),
+        icon: require('../../../../assets/Icons/WarningIcon.png'),
         textColor: '#E4B456',
         buttonBackground: '#E4B456',
         buttonBorder: '#E4B456',
       };
     case 'error':
       return {
-        icon: require('../../../assets/Icons/ErrorIcon.png'),
+        icon: require('../../../../assets/Icons/ErrorIcon.png'),
         textColor: colorCode.Red,
         buttonBackground: colorCode.Red,
         buttonBorder: colorCode.Red,
