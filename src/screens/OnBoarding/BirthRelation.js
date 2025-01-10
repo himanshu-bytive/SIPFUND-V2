@@ -119,28 +119,47 @@ const BirthRelations = (props) => {
   }, [])
 
   const onAction = () => {
+    console.log("DOB state:", dateOfBirth);
+  
     if (currentStep === 1) {
+      // Step 1 validation
+      let hasError = false;
+      const newErrors = {};
+  
       if (!placeOfBirth.STATE_CODE) {
-        setErrors((prevErrors) => ({ ...prevErrors, place_birth: "Please select a place of birth." }));
-        return;
+        newErrors.place_birth = "Please select a place of birth.";
+        hasError = true;
       }
       if (!dateOfBirth) {
-        setErrors((prevErrors) => ({ ...prevErrors, dob: "Please select a date of birth." }));
-        return;
+        newErrors.dob = "Please select a date of birth.";
+        hasError = true;
       }
-
+  
+      setErrors(newErrors);
+  
+      if (hasError) return;
+  
+      // If no errors, proceed to Step 2
       setCurrentStep(2);
-      setErrors({});
     } else if (currentStep === 2) {
+      // Step 2 validation
+      let hasError = false;
+      const newErrors = {};
+  
       if (!mobileNumberBelongsTo) {
-        setErrors((prevErrors) => ({ ...prevErrors, mobile_relation: "Please select the mobile number relation." }));
-        return;
+        newErrors.mobile_relation = "Please select the mobile number relation.";
+        hasError = true;
       }
       if (!emailBelongsTo) {
-        setErrors((prevErrors) => ({ ...prevErrors, email_relation: "Please select the email ID relation." }));
-        return;
+        newErrors.email_relation = "Please select the email ID relation.";
+        hasError = true;
       }
-
+  
+      setErrors(newErrors);
+  
+      if (hasError) return;
+  
+      // If no errors, proceed with submission
       const params = {
         nseDetails: {
           ...nseDetails,
@@ -155,12 +174,13 @@ const BirthRelations = (props) => {
         userDetails,
       };
       console.log("passing params", params);
-
+  
       updateRegister(params, token);
       props.navigation.navigate("OnBoard", { screen: "AddNominee" });
     }
   };
-
+  
+  
   useEffect(() => {
     console.log("DOB", nseDetails.dob);
     console.log("DOB", nseDetails);
@@ -246,12 +266,14 @@ const BirthRelations = (props) => {
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
+                    marginTop: 10,
+                    width:"auto"
                   }}
                 >
                   <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
                     <AntDesign
-                      style={{ marginTop: 20 }}
+                      style={{ marginTop: 0 }}
                       name="calendar"
                       color={"#EE4248"}
                       size={25}
@@ -267,11 +289,10 @@ const BirthRelations = (props) => {
                     <TextInput
                       keyboardType="numeric"
                       style={{
-                        flex: 1,
                         marginLeft: 10,
-                        marginTop: 5,
+                        marginTop: -2,
                         fontSize: 18,
-                        borderBottomWidth: 1,
+                        width:"auto",
                         color: "black",
                       }}
                       editable={false}
@@ -279,13 +300,11 @@ const BirthRelations = (props) => {
                       value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
                       placeholder={"DD-MM-YYYY"}
                       placeholderTextColor={"grey"}
-                      maxLength={10}
+                      maxLength={11}
                     />
-                    <Text style={{ ...styles.error, marginLeft: 5 }}>
-                      {errors?.dob}
-                    </Text>
                   </TouchableOpacity>
                 </View>
+                
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
@@ -294,20 +313,31 @@ const BirthRelations = (props) => {
                   minimumDate={new Date(1900, 0, 1)}
                   onConfirm={(dob) => {
                     setIsDatePickerVisible(false);
-
-                    // Format the date as DD-MM-YYYY
-                    const formattedDate = `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`;
-                    const dateAsNumber = parseInt(formattedDate, 10); // Convert to number
-                    console.log("Date as Number:", dateAsNumber);
-
-                    // Update the states
-                    setDateOfBirth(dob); // Original Date object if needed
+                     console.log("hgh",dob);
+                     
+                     const formattedDate = dob.toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
+                  
+                    console.log("Formatted Date:", formattedDate); // For verification
+                  
+                    const dateAsNumber = parseInt(
+                      `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                      10
+                    ); // Convert to number if needed
+                  
+                    setDateOfBirth(dateAsNumber); // Save original Date object
+                    
+                    
                     setErrors({ ...errors, dob: null });
-                    setState({ ...state, dob: dateAsNumber }); // Save date as number
+                    setState({ ...state, dob: dateAsNumber }); // Save formatted date
                   }}
                   onCancel={() => setIsDatePickerVisible(false)}
                 />
               </View>
+              {errors.dob && <Text style={styles.errorText}>{errors.dob}</Text>}
             </>
           ) : currentStep === 2 ? (
             <>
@@ -379,7 +409,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: responsiveHeight(2), // Add some spacing for better appearance
     backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
-    marginTop:25
+    marginTop: 25
   },
   arrowButton: {
     marginLeft: responsiveWidth(2),
@@ -397,7 +427,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: responsiveFontSize(1.5),
-    marginTop: responsiveHeight(0.5),
+    marginTop: -15,
+    marginBottom:10
   },
   containerScroll: {
     width: "100%",
@@ -407,11 +438,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#FFB2AA",
     borderRadius: 8,
-    marginTop: 10,
     backgroundColor: Colors.WHITE,
     paddingHorizontal: 10,
     overflow: 'hidden', // To ensure the border applies to the dropdown correctly
-    paddingBottom:10,
+    height: 50,
+    justifyContent: "center",
+    marginBottom: 20,
+    width:"auto"
   },
   inputsec: {
     height: responsiveHeight(6),
@@ -429,7 +462,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: "100%",
     height: "auto",
-    marginTop: 20
+    marginTop: 10
   },
   bottomButtonContainer: {
     position: "absolute",

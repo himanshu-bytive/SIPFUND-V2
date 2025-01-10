@@ -86,37 +86,37 @@ const AddNominee = (props) => {
 
   const isLessThan18 = (date) => {
     let dateStr = date.toString();
-  
+
     // Add leading zero if the input is a 7-digit number (e.g., 3122009 -> 03122009)
     if (dateStr.length === 7) {
       dateStr = `0${dateStr}`; // Add leading zero
     }
-  
+
     // Ensure the dateStr now has 8 digits
     if (dateStr.length !== 8) {
       throw new Error("Invalid date format.");
     }
-  
+
     // Extract day, month, and year from the 8-digit date string
     const day = dateStr.slice(0, 2);
     const month = dateStr.slice(2, 4);
     const year = dateStr.slice(4, 8);
-  
+
     // Get the current year
     const currentYear = new Date().getFullYear();
-  
+
     // Calculate the age
     const age = currentYear - parseInt(year, 10);
-  
+
     // Check if age is less than 18
     return age < 18;
   };
-  
-  
+
+
   const onAction = () => {
     // Validate fields
     let hasErrors = false;
-  
+
     // Check each required field and update errors state if empty
     if (!state.nominee1_name) {
       setErrors((prevErrors) => ({
@@ -125,7 +125,7 @@ const AddNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
+
     if (!NomineeIsYours) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -133,7 +133,7 @@ const AddNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
+
     if (!state.nominee1_dob) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -141,7 +141,7 @@ const AddNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
+
     if (!isChecked) {
       if (!state.nominee1_pincode) {
         setErrors((prevErrors) => ({
@@ -165,10 +165,10 @@ const AddNominee = (props) => {
         hasErrors = true;
       }
     }
-  
+
     // If there are errors, do not proceed
     if (hasErrors) return;
-  
+
     // Proceed if no errors
     const params = {
       nseDetails: {
@@ -184,7 +184,7 @@ const AddNominee = (props) => {
       fatcaDetails,
       userDetails,
     };
-  
+
     if (isLessThan18(state.nominee1_dob)) {
       updateRegister(params, token);
       navigation.navigate("UnderAgeNominee");
@@ -194,10 +194,12 @@ const AddNominee = (props) => {
     }
   };
 
-  const AddSecondNominee = () =>{
-    props.navigation.navigate("OnBoard",{screen : "AddSecondNominee"});
+  const AddSecondNominee = () => {
+    console.log("jfhhd");
+    
+    props.navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
   }
-  
+
   const NomineeIdList = [
     { value: "Ad", label: "Aadhaar Card" },
     { value: "Pan", label: "Pan Card" },
@@ -253,7 +255,7 @@ const AddNominee = (props) => {
                 height={responsiveHeight(5)}
                 width={responsiveWidth(70)}
                 textColor={"black"}
-                onPress={()=>{ navigation.navigate("Reg", { screen: "RegisterAddress" }); }}  
+                onPress={() => { navigation.navigate("Reg", { screen: "RegisterAddress" }); }}
               />
               <Button
                 onPress={handleNextStep}
@@ -290,7 +292,7 @@ const AddNominee = (props) => {
                 >
                   <Picker.Item label="Select" value="" />
                   {mobileEmailRelation.map((state) => (
-                    <Picker.Item  key={state.value} label={state.label} value={state.value} />
+                    <Picker.Item key={state.value} label={state.label} value={state.value} />
                   ))}
                 </Picker>
               </View>
@@ -300,13 +302,14 @@ const AddNominee = (props) => {
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: "space-between",
-                    
+                    justifyContent: "center",
+                    marginTop: 10,
+                    width: "auto"
                   }}
                 >
                   <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
                     <AntDesign
-                      style={{ marginTop: 30 }}
+                      style={{ marginTop: 0 }}
                       name="calendar"
                       color={"#EE4248"}
                       size={25}
@@ -322,11 +325,10 @@ const AddNominee = (props) => {
                     <TextInput
                       keyboardType="numeric"
                       style={{
-                        flex: 1,
                         marginLeft: 10,
-                        marginTop: 0,
+                        marginTop: -2,
                         fontSize: 18,
-                        borderBottomWidth: 1,
+                        width: "auto",
                         color: "black",
                       }}
                       editable={false}
@@ -334,11 +336,11 @@ const AddNominee = (props) => {
                       value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
                       placeholder={"DD-MM-YYYY"}
                       placeholderTextColor={"grey"}
-                      maxLength={10}
+                      maxLength={11}
                     />
                   </TouchableOpacity>
-                  {errors.nominee1_dob && <Text style={styles.errorText}>{errors.nominee1_dob}</Text>}
                 </View>
+
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
@@ -347,20 +349,29 @@ const AddNominee = (props) => {
                   minimumDate={new Date(1900, 0, 1)}
                   onConfirm={(dob) => {
                     setIsDatePickerVisible(false);
+                    console.log("hgh", dob);
 
-                    // Format the date as DD-MM-YYYY
-                    const formattedDate = `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`;
-                    const dateAsNumber = parseInt(formattedDate, 10); // Convert to number
-                    console.log("Date as Number:", dateAsNumber);
+                    const formattedDate = dob.toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
 
-                    // Update the states
-                    setDateOfBirth(dob); // Original Date object if needed
-                    setErrors({ ...errors, nominee1_dob: null });
-                    setState({ ...state, nominee1_dob: dateAsNumber }); // Save date as number
+                    console.log("Formatted Date:", formattedDate); // For verification
+
+                    const dateAsNumber = parseInt(
+                      `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                      10
+                    ); // Convert to number if needed
+
+                    setDateOfBirth(dateAsNumber); // Save original Date object
+                    setErrors({ ...errors, dob: null });
+                    setState({ ...state, dob: dateAsNumber }); // Save formatted date
                   }}
                   onCancel={() => setIsDatePickerVisible(false)}
                 />
               </View>
+                {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
               <View style={{ marginTop: 10 }}>
                 <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
@@ -379,7 +390,7 @@ const AddNominee = (props) => {
                   </Picker>
                 </View>
               </View>
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
+              {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
                 <CheckboxSquare
                   value={isChecked}
                   onValueChange={(newValue) => setIsChecked(newValue)}
@@ -387,34 +398,34 @@ const AddNominee = (props) => {
                 <Text style={[styles.checkboxText]}>
                   Nominee address is same as my address
                 </Text>
-              </View>
-              {!isChecked && (
+              </View> */}
+              {/* {!isChecked && (
                 <>
                   <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
-                   <View style={{flexDirection:"column", width:"50%"}}>
-                   <TextInput
-                      style={[styles.inputsec, { flex: 1, marginRight: 10 }]}  // Use flex: 1 for 50% width
-                      editable={true}
-                      placeholder="PINCODE"
-                      placeholderTextColor={"grey"}
-                      inputMode='numeric'
-                      value={state.nominee1_pincode ? state.nominee1_pincode : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_pincode: text }))}
-                    />
-                    {errors.nominee1_pincode && <Text style={styles.errorText}>{errors.nominee1_pincode}</Text>}
-                   </View>
-                   <View style={{flexDirection:"column",width:"50%"}}>
-                   <TextInput
-                      style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
-                      editable={true}
-                      placeholder="STATE"
+                    <View style={{ flexDirection: "column", width: "50%" }}>
+                      <TextInput
+                        style={[styles.inputsec, { flex: 1, marginRight: 10 }]}  // Use flex: 1 for 50% width
+                        editable={true}
+                        placeholder="PINCODE"
+                        placeholderTextColor={"grey"}
+                        inputMode='numeric'
+                        value={state.nominee1_pincode ? state.nominee1_pincode : ""}
+                        onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_pincode: text }))}
+                      />
+                      {errors.nominee1_pincode && <Text style={styles.errorText}>{errors.nominee1_pincode}</Text>}
+                    </View>
+                    <View style={{ flexDirection: "column", width: "50%" }}>
+                      <TextInput
+                        style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
+                        editable={true}
+                        placeholder="STATE"
 
-                      placeholderTextColor={"grey"}
-                      value={state.nominee1_state ? state.nominee1_state : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_state: text }))}
-                    />
-                    {errors.nominee1_state && <Text style={styles.errorText}>{errors.nominee1_state}</Text>}
-                   </View>
+                        placeholderTextColor={"grey"}
+                        value={state.nominee1_state ? state.nominee1_state : ""}
+                        onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_state: text }))}
+                      />
+                      {errors.nominee1_state && <Text style={styles.errorText}>{errors.nominee1_state}</Text>}
+                    </View>
                   </View>
                   <View style={{ flexDirection: "column", width: "100%", marginTop: 10 }}>
                     <TextInput
@@ -428,8 +439,8 @@ const AddNominee = (props) => {
                     {errors.nominee1_addr1 && <Text style={styles.errorText}>{errors.nominee1_addr1}</Text>}
                   </View>
                 </>
-              )}
-              <TouchableOpacity onPress={() => { AddSecondNominee }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
+              )} */}
+              <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
                 <View style={styles.circleIcon}>
                   <Icon name="plus" size={14} color="white" />
                 </View>
@@ -466,7 +477,12 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: responsiveFontSize(1.5),
-    marginTop: responsiveHeight(0.5),
+    marginTop: -5,
+  },
+  errorText2: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: -10,
   },
   picker: {
     height: 50,
@@ -504,16 +520,18 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(1),
   },
   inputsecWrapper: {
-     borderWidth: 1,
-     borderColor: "#FFB2AA",
-     borderRadius: 8,
-     marginTop: 10,
-     backgroundColor: Colors.WHITE,
-     paddingHorizontal: 10,
-     overflow: 'hidden', // To ensure the border applies to the dropdown correctly
-     paddingBottom:10,
-   },
-   inputsec: {
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    backgroundColor: Colors.WHITE,
+    paddingHorizontal: 10,
+    overflow: 'hidden', // To ensure the border applies to the dropdown correctly
+    height: 50,
+    justifyContent: "center",
+    marginBottom: 20,
+    width: "auto"
+  },
+  inputsec: {
     height: responsiveHeight(6),
     fontSize: responsiveFontSize(2),
     color: "black",
@@ -523,8 +541,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 10,
     marginBottom: 10,
-   },  
-  
+    justifyContent:"center"
+  },
+
   headerContainer: {
     backgroundColor: 'white',
     height: responsiveHeight(8),

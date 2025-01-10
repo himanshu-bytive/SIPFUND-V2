@@ -138,6 +138,10 @@ function VerifyScreen(props) {
     initialize();
   }, []);
 
+  useEffect(()=>{
+    console.log("GOT LOCATION",displayCurrentAddress);
+  },[displayCurrentAddress])
+
 
 
   const requestCameraPermission = async () => {
@@ -266,6 +270,7 @@ function VerifyScreen(props) {
           state: state,
           pincode: pincode,
         });
+        
       } else {
         console.error("Geocoding API error:", response.data.status);
         Alert.alert("Error", "Unable to fetch address details");
@@ -305,6 +310,9 @@ function VerifyScreen(props) {
           longitude: displayCurrentAddress?.longitude,
           mobileNo: phone,
           pincode: displayCurrentAddress?.pincode,
+          address: displayCurrentAddress?.address,
+          state: displayCurrentAddress?.state,
+          city : displayCurrentAddress?.city
         },
       };
 
@@ -576,9 +584,9 @@ const styles = StyleSheet.create({
   number_box: {
     flexDirection: 'row', // Arrange items horizontally
     alignItems: 'center', // Align vertically
-    height: 50, // Adjust height
     marginHorizontal: 8, // Add spacing from the screen edges
     backgroundColor: Colors.WHITE,
+    
   },
   country_code_box: {
     width: "auto", // Fixed width for the dropdown
@@ -589,7 +597,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Center the picker vertically
     marginRight: 10, // Spacing between dropdown and text box
    justifyContent:"center",
-   alignItems:"center"
+   alignItems:"center",
+   height:responsiveHeight(6)
   },
   pickerInput: {
     fontSize: 14, // Text size
@@ -602,7 +611,6 @@ const styles = StyleSheet.create({
     borderColor: '#FFB2AA',
     borderRadius: 1,
     backgroundColor: Colors.WHITE,
-    height: '80%', // Match height with the dropdown
     fontSize: 16,
     width:responsiveWidth(40),
     height:responsiveHeight(6)
@@ -611,7 +619,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingHorizontal: 10,
     height: '100%',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#f9f9f9',
     color: 'black',
     backgroundColor: Colors.WHITE,

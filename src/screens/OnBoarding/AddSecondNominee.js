@@ -35,10 +35,6 @@ const AddSecondNominee = (props) => {
     nominee2_name: "",
     nominee2_relation: "",
     nominee2_dob: null,
-    nominee2_addr1: "",
-    nominee2_city: "",
-    nominee2_state: "",
-    nominee2_pincode: "",
   });
 
   const [errors, setErrors] = useState({
@@ -60,11 +56,7 @@ const AddSecondNominee = (props) => {
   };
 
   const handleBackPress = () => {
-    if (stepCount === 2) {
-      setStepCount(stepCount - 1);
-    } else {
-      navigation.navigate("Home");
-    }
+    navigation.navigate("AddNominee")
   };
 
   useEffect(() => {
@@ -74,10 +66,6 @@ const AddSecondNominee = (props) => {
         nominee2_name: nseDetails?.nominee1_name,
         nominee2_relation: nseDetails?.nominee1_relation,
         nominee2_dob: nseDetails?.nominee1_dob,
-        nominee2_addr1: nseDetails?.nominee1_addr1,
-        nominee2_city: nseDetails?.nominee1_city,
-        nominee2_state: nseDetails?.nominee1_state,
-        nominee2_pincode: nseDetails?.nominee1_pincode,
       });
       setDateOfBirth(nseDetails?.nominee2_dob ? getDateInHuman(nseDetails.nominee2_dob) : null);
       setNomineeIsYours(nseDetails?.nominee2_relation);
@@ -86,37 +74,37 @@ const AddSecondNominee = (props) => {
 
   const isLessThan18 = (date) => {
     let dateStr = date.toString();
-  
+
     // Add leading zero if the input is a 7-digit number (e.g., 3122009 -> 03122009)
     if (dateStr.length === 7) {
       dateStr = `0${dateStr}`; // Add leading zero
     }
-  
+
     // Ensure the dateStr now has 8 digits
     if (dateStr.length !== 8) {
       throw new Error("Invalid date format.");
     }
-  
+
     // Extract day, month, and year from the 8-digit date string
     const day = dateStr.slice(0, 2);
     const month = dateStr.slice(2, 4);
     const year = dateStr.slice(4, 8);
-  
+
     // Get the current year
     const currentYear = new Date().getFullYear();
-  
+
     // Calculate the age
     const age = currentYear - parseInt(year, 10);
-  
+
     // Check if age is less than 18
     return age < 18;
   };
-  
-  
+
+
   const onAction = () => {
     // Validate fields
     let hasErrors = false;
-  
+
     // Check each required field and update errors state if empty
     if (!state.nominee2_name) {
       setErrors((prevErrors) => ({
@@ -125,7 +113,7 @@ const AddSecondNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
+
     if (!NomineeIsYours) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -133,7 +121,7 @@ const AddSecondNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
+
     if (!state.nominee2_dob) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -141,34 +129,10 @@ const AddSecondNominee = (props) => {
       }));
       hasErrors = true;
     }
-  
-    if (!isChecked) {
-      if (!state.nominee2_pincode) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee2_pincode: "Please enter Pincode.",
-        }));
-        hasErrors = true;
-      }
-      if (!state.nominee2_state) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee2_state: "Please enter State.",
-        }));
-        hasErrors = true;
-      }
-      if (!state.nominee2_addr1) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee2_addr1: "Please enter Address.",
-        }));
-        hasErrors = true;
-      }
-    }
-  
+
     // If there are errors, do not proceed
     if (hasErrors) return;
-  
+
     // Proceed if no errors
     const params = {
       nseDetails: {
@@ -176,15 +140,11 @@ const AddSecondNominee = (props) => {
         nominee2_name: state?.nominee2_name,
         nominee2_relation: NomineeIsYours,
         nominee2_dob: state?.nominee2_dob,
-        nominee2_addr1: state?.nominee2_addr1,
-        nominee2_city: state?.nominee2_city,
-        nominee2_state: state?.nominee2_state,
-        nominee2_pincode: state?.nominee2_pincode,
       },
       fatcaDetails,
       userDetails,
     };
-  
+
     if (isLessThan18(state.nominee2_dob)) {
       updateRegister(params, token);
       navigation.navigate("UnderAgeNominee");
@@ -193,7 +153,7 @@ const AddSecondNominee = (props) => {
       navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
   };
-  
+
   const NomineeIdList = [
     { value: "Ad", label: "Aadhaar Card" },
     { value: "Pan", label: "Pan Card" },
@@ -232,223 +192,142 @@ const AddSecondNominee = (props) => {
       />
 
       <View style={styles.container}>
-        {/* Content */}
-        {stepCount === 1 ? (
+        <ScrollView>
           <View style={styles.stepContainer}>
-            <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
-              Would you like to add a Nominee?
-            </Typography>
-            <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
-              Nominee gets your investment in the event of any unforeseen circumstances. You can add them now or later in the profile section.
-            </Typography>
-            <View style={styles.button}>
-              <Button
-                borderColor={"#FFB2AA"}
-                borderWidth={2}
-                text={"No, Skip for now"}
-                height={responsiveHeight(5)}
-                width={responsiveWidth(70)}
-                textColor={"black"}
-                onPress={()=>{ navigation.navigate("Reg", { screen: "RegisterAddress" }); }}  
-              />
-              <Button
-                onPress={handleNextStep}
-                textColor={"white"}
-                text={"Yes, Proceed"}
-                backgroundColor={"red"}
-                height={responsiveHeight(5)}
-                width={responsiveWidth(70)}
+            <Typography style={styles.title}>2nd Nominee name*</Typography>
+            <TextInput
+              style={styles.inputsec}
+              editable={true}
+              placeholderTextColor={"grey"}
+              placeholder="Enter Name"
+              value={state.nominee2_name ? state.nominee2_name : ""}
+              onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_name: text }))}
+            />
+            {errors.nominee2_name && <Text style={styles.errorText}>{errors.nominee2_name}</Text>}
+            <Typography style={styles.title}>2nd Nominee is your*</Typography>
+            <View style={[styles.inputsec]}>
+              <Picker
+                selectedValue={NomineeIsYours ? NomineeIsYours : ""}
+                onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
+                style={[
+                  styles.picker,
+                  NomineeIsYours === "" && { color: "grey" }, // Placeholder color
+                ]}
+              >
+                <Picker.Item label="Select" value="" />
+                {mobileEmailRelation.map((state) => (
+                  <Picker.Item key={state.value} label={state.label} value={state.value} />
+                ))}
+              </Picker>
+            </View>
+            {errors.nominee2_relation && <Text style={styles.errorText}>{errors.nominee2_relation}</Text>}
+            <Typography style={styles.title}>2nd Nominee’s date of birth*</Typography>
+            <View style={styles.inputsecWrapper}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10,
+                  width: "auto"
+                }}
+              >
+                <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+                  <AntDesign
+                    style={{ marginTop: 0 }}
+                    name="calendar"
+                    color={"#EE4248"}
+                    size={25}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setIsDatePickerVisible(true)}
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  <TextInput
+                    keyboardType="numeric"
+                    style={{
+                      marginLeft: 10,
+                      marginTop: -2,
+                      fontSize: 18,
+                      width: "auto",
+                      color: "black",
+                    }}
+                    editable={false}
+                    selectTextOnFocus={false}
+                    value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
+                    placeholder={"DD-MM-YYYY"}
+                    placeholderTextColor={"grey"}
+                    maxLength={11}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                date={new Date()}
+                maximumDate={new Date()}
+                minimumDate={new Date(1900, 0, 1)}
+                onConfirm={(dob) => {
+                  setIsDatePickerVisible(false);
+                  console.log("hgh", dob);
+
+                  const formattedDate = dob.toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
+
+                  console.log("Formatted Date:", formattedDate); // For verification
+
+                  const dateAsNumber = parseInt(
+                    `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                    10
+                  ); // Convert to number if needed
+
+                  setDateOfBirth(dateAsNumber); // Save original Date object
+                  setErrors({ ...errors, dob: null });
+                  setState({ ...state, dob: dateAsNumber }); // Save formatted date
+                }}
+                onCancel={() => setIsDatePickerVisible(false)}
               />
             </View>
-          </View>
-        ) : (
-          <ScrollView>
-            <View style={styles.stepContainer}>
-              <Typography style={styles.title}>2nd Nominee name*</Typography>
-              <TextInput
-                style={styles.inputsec}
-                editable={true}
-                placeholderTextColor={"grey"}
-                placeholder="Enter Name"
-                value={state.nominee2_name ? state.nominee2_name : ""}
-                onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_name: text }))}
-              />
-              {errors.nominee2_name && <Text style={styles.errorText}>{errors.nominee2_name}</Text>}
-              <Typography style={styles.title}>2nd Nominee is your*</Typography>
-              <View style={[styles.inputsec]}>
+            {errors.nominee2_dob && <Text style={styles.errorText2}>{errors.nominee2_dob}</Text>}
+            <View style={{ marginTop: 10 }}>
+              <Typography style={styles.title}>2nd Nominee’s identity proof (optional)</Typography>
+              <View style={styles.inputsec}>
                 <Picker
-                  selectedValue={NomineeIsYours ? NomineeIsYours : ""}
-                  onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
+                  selectedValue={NomineeId ? NomineeId : ""}
+                  onValueChange={(itemValue) => setNomineeId(itemValue)}
                   style={[
                     styles.picker,
-                    NomineeIsYours === "" && { color: "grey" }, // Placeholder color
+                    NomineeId === "" && { color: "grey" }, // Placeholder color
                   ]}
                 >
                   <Picker.Item label="Select" value="" />
-                  {mobileEmailRelation.map((state) => (
-                    <Picker.Item  key={state.value} label={state.label} value={state.value} />
+                  {NomineeIdList.map((state) => (
+                    <Picker.Item key={state.value} label={state.label} value={state.value} />
                   ))}
                 </Picker>
               </View>
-              {errors.nominee2_relation && <Text style={styles.errorText}>{errors.nominee2_relation}</Text>}
-              <Typography style={styles.title}>2nd Nominee’s date of birth*</Typography>
-              <View style={styles.inputsecWrapper}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    
-                  }}
-                >
-                  <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
-                    <AntDesign
-                      style={{ marginTop: 30 }}
-                      name="calendar"
-                      color={"#EE4248"}
-                      size={25}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setIsDatePickerVisible(true)}
-                    style={{
-                      flex: 1,
-                    }}
-                  >
-                    <TextInput
-                      keyboardType="numeric"
-                      style={{
-                        flex: 1,
-                        marginLeft: 10,
-                        marginTop: 0,
-                        fontSize: 18,
-                        borderBottomWidth: 1,
-                        color: "black",
-                      }}
-                      editable={false}
-                      selectTextOnFocus={false}
-                      value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
-                      placeholder={"DD-MM-YYYY"}
-                      placeholderTextColor={"grey"}
-                      maxLength={10}
-                    />
-                  </TouchableOpacity>
-                  {errors.nominee2_dob && <Text style={styles.errorText}>{errors.nominee2_dob}</Text>}
-                </View>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  date={new Date()}
-                  maximumDate={new Date()}
-                  minimumDate={new Date(1900, 0, 1)}
-                  onConfirm={(dob) => {
-                    setIsDatePickerVisible(false);
-
-                    // Format the date as DD-MM-YYYY
-                    const formattedDate = `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`;
-                    const dateAsNumber = parseInt(formattedDate, 10); // Convert to number
-                    console.log("Date as Number:", dateAsNumber);
-
-                    // Update the states
-                    setDateOfBirth(dob); // Original Date object if needed
-                    setErrors({ ...errors, nominee2_dob: null });
-                    setState({ ...state, nominee2_dob: dateAsNumber }); // Save date as number
-                  }}
-                  onCancel={() => setIsDatePickerVisible(false)}
-                />
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <Typography style={styles.title}>2nd Nominee’s identity proof (optional)</Typography>
-                <View style={styles.inputsec}>
-                  <Picker
-                    selectedValue={NomineeId ? NomineeId : ""}
-                    onValueChange={(itemValue) => setNomineeId(itemValue)}
-                    style={[
-                      styles.picker,
-                      NomineeId === "" && { color: "grey" }, // Placeholder color
-                    ]}
-                  >
-                    <Picker.Item label="Select" value="" />
-                    {NomineeIdList.map((state) => (
-                      <Picker.Item key={state.value} label={state.label} value={state.value} />
-                    ))}
-                  </Picker>
-                </View>
-              </View>
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
-                <CheckboxSquare
-                  value={isChecked}
-                  onValueChange={(newValue) => setIsChecked(newValue)}
-                />
-                <Text style={[styles.checkboxText]}>
-                  Nominee address is same as my address
-                </Text>
-              </View>
-              {!isChecked && (
-                <>
-                  <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
-                   <View style={{flexDirection:"column", width:"50%"}}>
-                   <TextInput
-                      style={[styles.inputsec, { flex: 1, marginRight: 10 }]}  // Use flex: 1 for 50% width
-                      editable={true}
-                      placeholder="PINCODE"
-                      placeholderTextColor={"grey"}
-                      inputMode='numeric'
-                      value={state.nominee2_pincode ? state.nominee2_pincode : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_pincode: text }))}
-                    />
-                    {errors.nominee2_pincode && <Text style={styles.errorText}>{errors.nominee2_pincode}</Text>}
-                   </View>
-                   <View style={{flexDirection:"column",width:"50%"}}>
-                   <TextInput
-                      style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
-                      editable={true}
-                      placeholder="STATE"
-
-                      placeholderTextColor={"grey"}
-                      value={state.nominee2_state ? state.nominee2_state : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_state: text }))}
-                    />
-                    {errors.nominee2_state && <Text style={styles.errorText}>{errors.nominee2_state}</Text>}
-                   </View>
-                  </View>
-                  <View style={{ flexDirection: "column", width: "100%", marginTop: 10 }}>
-                    <TextInput
-                      style={[styles.inputsec, { flex: 1 }]}  // Use flex: 1 for 50% width
-                      editable={true}
-                      placeholder="ADDRESS"
-                      placeholderTextColor={"grey"}
-                      value={state.nominee2_addr1 ? state.nominee2_addr1 : ""}
-                      onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee2_addr1: text }))}
-                    />
-                    {errors.nominee2_addr1 && <Text style={styles.errorText}>{errors.nominee2_addr1}</Text>}
-                  </View>
-                </>
-              )}
-              <TouchableOpacity onPress={() => { console.log("Hello") }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
-                <View style={styles.circleIcon}>
-                  <Icon name="plus" size={14} color="white" />
-                </View>
-                <Text style={{
-                  fontSize: responsiveFontSize(1.5),
-                  color: Colors.BLACK,
-                }}>Add another nominee</Text>
-              </TouchableOpacity>
-              <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
-                <Button
-                  borderColor={"#FFB2AA"}
-                  borderWidth={2}
-                  fontSize={responsiveFontSize(2)}
-                  height={responsiveHeight(5)}
-                  width={responsiveWidth(80)}
-                  text={"Next"}
-                  textColor={"black"}
-                  onPress={onAction}
-                />
-              </View>
             </View>
-          </ScrollView>
-        )}
+            <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
+              <Button
+                borderColor={"#FFB2AA"}
+                borderWidth={2}
+                fontSize={responsiveFontSize(2)}
+                height={responsiveHeight(5)}
+                width={responsiveWidth(80)}
+                text={"Next"}
+                textColor={"black"}
+                onPress={onAction}
+              />
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </KeyboardAvoidingView>
   );
@@ -462,7 +341,12 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: responsiveFontSize(1.5),
-    marginTop: responsiveHeight(0.5),
+    marginTop: 5,
+  },
+  errorText2: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: -5,
   },
   picker: {
     height: 50,
@@ -500,16 +384,18 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(1),
   },
   inputsecWrapper: {
-     borderWidth: 1,
-     borderColor: "#FFB2AA",
-     borderRadius: 8,
-     marginTop: 10,
-     backgroundColor: Colors.WHITE,
-     paddingHorizontal: 10,
-     overflow: 'hidden', // To ensure the border applies to the dropdown correctly
-     paddingBottom:10,
-   },
-   inputsec: {
+    borderWidth: 1,
+    borderColor: "#FFB2AA",
+    borderRadius: 8,
+    backgroundColor: Colors.WHITE,
+    paddingHorizontal: 10,
+    overflow: 'hidden', // To ensure the border applies to the dropdown correctly
+    height: 50,
+    justifyContent: "center",
+    marginBottom: 20,
+    width: "auto"
+  },
+  inputsec: {
     height: responsiveHeight(6),
     fontSize: responsiveFontSize(2),
     color: "black",
@@ -519,8 +405,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 10,
     marginBottom: 10,
-   },  
-  
+    justifyContent: "center"
+  },
+
   headerContainer: {
     backgroundColor: 'white',
     height: responsiveHeight(8),

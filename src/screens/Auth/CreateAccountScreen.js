@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
-  Button,
   ScrollView,
   View,
   Linking,
@@ -24,6 +23,9 @@ import appsFlyer from "react-native-appsflyer";
 import NotificationService from "../../../NotificationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Geolocation from "@react-native-community/geolocation";
+import Button from "../../components/Atom/Button/Button";
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import LottieView from "lottie-react-native";
 
 function CreateAccountScreen(props) {
   const {
@@ -37,7 +39,7 @@ function CreateAccountScreen(props) {
     token,
     user,
   } = props;
-  
+
   const pageActive = useRef(false);
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
@@ -45,6 +47,7 @@ function CreateAccountScreen(props) {
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState([]);
   const [referral, setReferral] = useState(false);
   const [appToken, setAppToken] = useState("-");
+  const [isLogin, setIsLogin] = useState(null);
 
   const passwordValidationMessages = {
     length: "Must be between 8 to 16 characters",
@@ -120,14 +123,7 @@ function CreateAccountScreen(props) {
         scope: "user",
         deviceToken: appToken,
       };
-      login(params, Config.loginToken);
-      setState({
-        ...state,
-        email: "",
-        password: "",
-        referenceCode: "",
-        term: false,
-      });
+      login(params, Config.loginToken, setIsLogin);
     }
     if (error) {
       console.log(error);
@@ -136,10 +132,19 @@ function CreateAccountScreen(props) {
 
   useEffect(() => {
     if (token) {
+      console.log("getting raw data");
+
       getUserDetails({}, token);
     }
     if (user) {
-      props.navigation.navigate("Root",{screen : "Home"});
+      console.log("hitting root");
+      setState({
+        ...state,
+        email: "",
+        password: "",
+        referenceCode: "",
+        term: false,
+      });
     }
     getRef();
   }, [token, user]);
@@ -193,11 +198,13 @@ function CreateAccountScreen(props) {
       platform: Platform.OS == "ios" ? "IOS" : "ANDROID",
       referenceCode: state.referenceCode.toUpperCase(),
       referenceInfo: {
-        deviceId: "",
         latitude: displayCurrentAddress?.latitude,
         longitude: displayCurrentAddress?.longitude,
         mobileNo: phone,
         pincode: displayCurrentAddress?.pincode,
+        address: displayCurrentAddress?.address,
+        state: displayCurrentAddress?.state,
+        city: displayCurrentAddress?.city
       },
     };
 
@@ -217,141 +224,155 @@ function CreateAccountScreen(props) {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Header
-        backgroundColor={Colors.LIGHT_WHITE}
-        containerStyle={styles.header}
-        centerComponent={
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={styles.logimg}
-          />
-        }
-      />
-      <ScrollView style={styles.containerScroll}>
-        <View style={styles.mainBox}>
-          <Image
-            source={require("../../../assets/luck.png")}
-            style={styles.passwordimg2}
-          />
-          <Text style={styles.number}>Enter Email</Text>
-          <TextInput
-            ref={emailInput}
-            style={styles.inputsec}
-            placeholder={"Email"}
-            color="black"
-            placeholderTextColor={"grey"}
-            onChangeText={(email) => {
-              setError({ ...errors, email: null });
-              setState({ ...state, email });
+    <>
+      {isLogin ? (<View style={{ backgroundColor: "white", flex: 1 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <LottieView
+            style={{ height: 200, width: 200 }}
+            source={require('../../../assets/Lottie/Success.json')}
+            autoPlay
+            loop={false}
+            onAnimationFinish={() => {
+              props.navigation.navigate("Root", { screen: "Home" });
             }}
-            value={state.email}
           />
-          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-          <Text style={styles.number}>Enter Password</Text>
-          <TextInput
-            ref={passwordInput}
-            style={styles.inputsec}
-            placeholder={"Set Password"}
-            placeholderTextColor={"grey"}
-            color="black"
-            secureTextEntry={true}
-            onChangeText={(password) => {
-              setError({ ...errors, password: null });
-              setState({ ...state, password });
-            }}
-            value={state.password}
-          />
-          {errors.password && (
-            <Text style={styles.error}>{errors.password}</Text>
-          )}
-          <View style={styles.passwordValidationContainer}>
-            {validatePass(state.password).map((item, index) => (
-              <Text key={index} style={styles.passwordValidationText}>
-                {item}
-              </Text>
-            ))}
-          </View>
-          <TouchableOpacity
-            onPress={() => setReferral(!referral)}
-            style={{ alignSelf: "flex-end", marginVertical: 10 }}
-          >
-            <Text style={styles.refreshcode}>Have Referral Code?</Text>
-          </TouchableOpacity>
-          {referral && (
-            <View style={{ width: "100%" }}>
-              <Text
-                style={[styles.number, { marginTop: 0, textAlign: "center" }]}
-              >
-                Referral Code
-              </Text>
-              <TextInput
-                ref={referenceCodeInput}
-                placeholderTextColor={"grey"}
-                style={styles.inputsec}
-                autoCapitalize="characters"
-                placeholder={"Reference Code"}
-                onChangeText={(referenceCode) => {
-                  setError({ ...errors, referenceCode: null });
-                  setState({ ...state, referenceCode });
-                }}
-                value={state.referenceCode}
-              />
-              {errors.referenceCode && (
-                <Text style={styles.error}>{errors.referenceCode}</Text>
-              )}
-            </View>
-          )}
-          <Text style={styles.confrom_button}>
-            By tapping confirm button, you agreeing to the
+          <Text style={{ color: "black", fontSize: 18, fontWeight: "500", marginTop: -20, textAlign: "center", lineHeight: 26 }}>
+          Congrats! Your sign-up is successful.{"\n"}
+          Proceed further to setup your account.
           </Text>
-          <CheckBox
-            title={
-              <TouchableOpacity
-                onPress={() =>
-                  Linking.openURL(
-                    "https://sipfund.com/SipFund_Terms&Conditions.html"
-                  )
-                }
-              >
-                <Text style={{ color: Colors.RED }}>Terms & Conditions</Text>
-              </TouchableOpacity>
+        </View>
+       <View style={{justifyContent:"center",alignItems:"center",marginBottom: 50}}> 
+       <Image
+          source={require("../../../assets/TrustedBy.png")}
+          style={{ width: 250, height: 80, alignSelf: "center"}}
+          resizeMode="contain"
+        />
+       </View>
+      </View>) : (
+        <KeyboardAvoidingView style={styles.container}>
+          <Header
+            backgroundColor={Colors.LIGHT_WHITE}
+            containerStyle={styles.header}
+            centerComponent={
+              <Image
+                source={require("../../../assets/icon.png")}
+                style={styles.logimg}
+              />
             }
-            containerStyle={styles.checkbox_style}
-            textStyle={{ color: Colors.RED, fontSize: 14 }}
-            checked={state.term}
-            checkedColor={Colors.BLACK}
-            uncheckedColor={Colors.RED}
-            onPress={() => {
-              setError({ ...errors, term: null });
-              setState({ ...state, term: !state.term });
-            }}
           />
-          {errors.term && <Text style={styles.error}>{errors.term}</Text>}
-          <View style={styles.button}>
-            {isFetching ? (
-              <View style={styles.botton_box}>
-                <ActivityIndicator size={30} color={Colors.WHITE} />
+          <ScrollView style={styles.containerScroll}>
+            <View style={styles.mainBox}>
+              <Image
+                source={require("../../../assets/luck.png")}
+                style={styles.passwordimg2}
+              />
+              <Text style={styles.number}>Enter Email</Text>
+              <TextInput
+                ref={emailInput}
+                style={styles.inputsec}
+                placeholder={"Email"}
+                color="black"
+                placeholderTextColor={"grey"}
+                onChangeText={(email) => {
+                  setError({ ...errors, email: null });
+                  setState({ ...state, email });
+                }}
+                value={state.email}
+              />
+              {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+              <Text style={styles.number}>Enter Password</Text>
+              <TextInput
+                ref={passwordInput}
+                style={styles.inputsec}
+                placeholder={"Set Password"}
+                placeholderTextColor={"grey"}
+                color="black"
+                secureTextEntry={true}
+                onChangeText={(password) => {
+                  setError({ ...errors, password: null });
+                  setState({ ...state, password });
+                }}
+                value={state.password}
+              />
+              {errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <View style={styles.passwordValidationContainer}>
+                {validatePass(state.password).map((item, index) => (
+                  <Text key={index} style={styles.passwordValidationText}>
+                    {item}
+                  </Text>
+                ))}
               </View>
-            ) : (
               <TouchableOpacity
+                onPress={() => setReferral(!referral)}
+                style={{ alignSelf: "flex-end", marginVertical: 10 }}
+              >
+                <Text style={styles.refreshcode}>Have Referral Code?</Text>
+              </TouchableOpacity>
+              {referral && (
+                <View style={{ width: "100%" }}>
+                  <Text
+                    style={[styles.number, { marginTop: 0, textAlign: "center" }]}
+                  >
+                    Referral Code
+                  </Text>
+                  <TextInput
+                    ref={referenceCodeInput}
+                    placeholderTextColor={"grey"}
+                    style={styles.inputsec}
+                    autoCapitalize="characters"
+                    placeholder={"Reference Code"}
+                    onChangeText={(referenceCode) => {
+                      setError({ ...errors, referenceCode: null });
+                      setState({ ...state, referenceCode });
+                    }}
+                    value={state.referenceCode}
+                  />
+                  {errors.referenceCode && (
+                    <Text style={styles.error}>{errors.referenceCode}</Text>
+                  )}
+                </View>
+              )}
+              <Text style={styles.confrom_button}>
+                By tapping confirm button, you agreeing to the
+              </Text>
+              <CheckBox
+                title={
+                  <TouchableOpacity
+                    onPress={() =>
+                      Linking.openURL(
+                        "https://sipfund.com/SipFund_Terms&Conditions.html"
+                      )
+                    }
+                  >
+                    <Text style={{ color: Colors.RED }}>Terms & Conditions</Text>
+                  </TouchableOpacity>
+                }
+                containerStyle={styles.checkbox_style}
+                textStyle={{ color: Colors.RED, fontSize: 14 }}
+                checked={state.term}
+                checkedColor={Colors.BLACK}
+                uncheckedColor={Colors.RED}
                 onPress={() => {
+                  setError({ ...errors, term: null });
+                  setState({ ...state, term: !state.term });
+                }}
+              />
+              {errors.term && <Text style={styles.error}>{errors.term}</Text>}
+              <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                <Button backgroundColor={"white"} borderColor={"#FFB2AA"} borderWidth={2} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
                     alert("Enter a valid Password!");
                     return;
                   }
                   onAction();
-                }}
-                style={styles.botton_box}
-              >
-                <Text style={styles.get_otp}>CONFIRM</Text>
-                <AntDesign name={"right"} size={26} color={Colors.WHITE} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+                }} text={"CONFIRM"} isLoading={isFetching} textColor={"black"} />
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>)}
+    </>
   );
 }
 
@@ -364,8 +385,8 @@ const styles = StyleSheet.create({
   containerScroll: {
     width: "100%",
   },
-  button:{
-   marginBottom:50
+  button: {
+    marginBottom: 50
   },
   header: {
     borderBottomColor: Colors.BLACK,
@@ -386,10 +407,10 @@ const styles = StyleSheet.create({
     height: 136,
     width: 136,
   },
-  number: { fontSize: 22, marginTop: 20,color:"black" },
+  number: { fontSize: 22, marginTop: 20, color: "black" },
   inputsec: {
     borderWidth: 2,
-    borderColor: Colors.GRAY_LIGHT,
+    borderColor: "#FFB2AA",
     width: "100%",
     height: 50,
     fontSize: 20,
@@ -414,6 +435,7 @@ const styles = StyleSheet.create({
   checkbox_style: {
     backgroundColor: Colors.TRANSPARENT,
     borderColor: Colors.TRANSPARENT,
+    marginBottom: 10
   },
   botton_box: {
     flexDirection: "row",
@@ -458,8 +480,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     creatAccount: (params) => {
       AuthActions.creatAccount(dispatch, params);
     },
-    login: (params, token) => {
-      AuthActions.login(dispatch, params, token);
+    login: (params, token, setIsLogin) => {
+      AuthActions.login(dispatch, params, token, setIsLogin);
     },
     getUserDetails: (params, token) => {
       RegistrationActions.getUserDetails(dispatch, params, token);

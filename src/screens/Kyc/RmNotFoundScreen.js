@@ -28,7 +28,7 @@ const RmNotFoundScreen = (props) => {
           />
         }
         rightComponent={
-          <View style={{marginTop:30}}>
+          <View style={{marginTop:0}}>
            <Cart
             nav={() => {
               props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });

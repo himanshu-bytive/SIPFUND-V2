@@ -121,11 +121,11 @@ function HamburgerMenu9Screen(props) {
 
                     <View>
                         <Text style={styles.folio_no}>Folio No</Text>
-                        <TextInput style={styles.top_inpuut} placeholder="73741911" style={{ borderBottomWidth: 1, fontSize: 14, borderColor: Colors.DEEP_GRAY, }} />
+                        <TextInput style={styles.top_inpuut} placeholder="73741911" />
                     </View>
                     <View>
                         <Text style={styles.amount}>Amount INR</Text>
-                        <TextInput style={styles.top_inpuut} placeholder="12000" style={{ borderBottomWidth: 1, fontSize: 14, borderColor: Colors.RED,}} />
+                        <TextInput style={styles.top_inpuut} placeholder="12000" />
                     </View>
 
                     <TouchableOpacity style={styles.botton_box}>

@@ -253,7 +253,7 @@ function OtpScreen(props) {
                 <View>
                   <Button
                     borderColor={"#FFB2AA"}
-                    borderWidth={1}
+                    borderWidth={2}
                     height={responsiveHeight(5)}
                     width={responsiveWidth(45)}
                     backgroundColor={Colors.WHITE}

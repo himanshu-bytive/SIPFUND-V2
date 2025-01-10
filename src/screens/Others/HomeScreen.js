@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,40 +13,21 @@ import {
   Linking,
   Platform,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { Styles, Config, Colors, FormValidate } from '../../common';
-import { InvestmentLists, MyImage } from '../../components';
+import {connect} from 'react-redux';
+import {Styles, Config, Colors, FormValidate} from '../../common';
+import {InvestmentLists, MyImage} from '../../components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Header, Overlay, CheckBox, Input } from 'react-native-elements';
+import {Header, Overlay, CheckBox, Input} from 'react-native-elements';
 import Cart from '../../components/Cart';
 import WebView from 'react-native-webview';
 import appsFlyer from 'react-native-appsflyer';
 import FastImage from 'react-native-fast-image';
 import SuggestionInput from '../../components/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RegistrationActions } from '../../store/RegistrationRedux';
-import { useNavigation } from '@react-navigation/native';
-import User from '../../../assets/SVG-ICONS/UserIcon.svg';
-import SEARCH from '../../../assets/SVG-ICONS/Search.svg';
-import SIPLOGO from '../../../assets/SVG-ICONS/SipLogo.svg';
-import BELL from '../../../assets/SVG-ICONS/Bell-Icon.svg';
-import CART from '../../../assets/SVG-ICONS/Cart.svg';
-import MENU from '../../../assets/SVG-ICONS/Menu.svg';
-import LeftIconCard from '../../components/Molecule/LeftIconCard/LeftIconCard';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { CardWithLabel } from '../../components/Molecule/CardWithLabel';
-import REFER from "../../../assets/SVG-ICONS/Gift.svg";
-import HELPLINE from "../../../assets/SVG-ICONS/Helpline.svg";
-import OWNCHOICE from "../../../assets/SVG-ICONS/OwnPlans.svg";
-import MININVESTMENT from "../../../assets/SVG-ICONS/MinInvestment.svg";
-import LOCKIN from "../../../assets/SVG-ICONS/LockIn.svg";
-import FLEX from "../../../assets/SVG-ICONS/Flex.svg";
-import IMG1 from "../../../assets/SVG-IMG/IMG1.svg";
-import IMG2 from "../../../assets/SVG-IMG/IMG2.svg";
-import IMG3 from "../../../assets/SVG-IMG/IMG3.svg";
-import Banner1 from "../../../assets/IMG/Banner.png";
-import Button from '../../components/Atom/Button/Button';
+import {RegistrationActions} from '../../store/RegistrationRedux';
+import {useNavigation} from '@react-navigation/native';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -98,18 +79,14 @@ function HomeScreen(props) {
   const [showMorePlans, setShowMorePlans] = useState(false);
   const [username, setUsername] = useState('');
   const [isUsernameFetched, setIsUsernameFetched] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   useEffect(() => {
     setWebViewActive(false);
     console.log('STEPS COUNT', steps);
-    console.log('MY USER', users);
-    setdocumentStatus();
+    console.log('MY USER', userDetails);
+    setdocumentStatus(); 
     logCurrentStack();
-  }, []);
+  }, []); 
 
-  const handleSearch = () => {
-    setShowSearch(true);
-  }
   // useEffect(()=>{
   //   console.log('USERDATA99', userDetails?.ekycIsDone);
   // },[userDetails]);
@@ -164,17 +141,18 @@ function HomeScreen(props) {
   useEffect(() => {
     const fetchProfileAndNavigate = async () => {
       try {
-        await getProfile({ service_request: { iin: users?.IIN } }, token);
+         await getProfile({ service_request: { iin: users?.IIN } }, token);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error("Error fetching profile:", error);
         // Handle error if needed
       }
     };
-
+  
     if (users?.IIN) {
       fetchProfileAndNavigate();
     }
   }, [users]);
+  
 
   useEffect(() => {
     if (token) {
@@ -193,7 +171,7 @@ function HomeScreen(props) {
       pageActiveGoles.current = false;
       props.navigation.navigate('Plan', {
         screen: 'PlanHome',
-        params: { toggleLoading },
+        params: {toggleLoading},
       });
     }
   }, [goalDetail]);
@@ -203,7 +181,7 @@ function HomeScreen(props) {
       pageActiveInvest.current = false;
       props.navigation.navigate('Investment', {
         screen: 'InvestmentDetail',
-        params: { toggleLoading },
+        params: {toggleLoading},
       });
     }
   }, [investment]);
@@ -270,7 +248,7 @@ function HomeScreen(props) {
 
   function JustNavigate(){
     console.log("UER",userDetails);  
-    if(!username){ 
+    if(!username){
       props.navigation.navigate("OnBoard",{screen : "ProfileDetailsForm"});
     }else if(userDetails?.ekycIsDone === false && username){
       props.navigation.navigate("Reset", { screen: "EKYC" });
@@ -283,62 +261,30 @@ function HomeScreen(props) {
     <View style={styles.container}>
       <Header
         leftComponent={
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 5,
-              marginLeft: 5
-            }}>
-            <TouchableOpacity
-              onPress={() => props.navigation.toggleDrawer()}
-              style={{ marginRight: 10 }} // Add spacing between the menu and the logo
-            >
-              <MENU width={25} height={25} />
-            </TouchableOpacity>
-            <SIPLOGO width={95} height={25} />
-          </View>
+          <TouchableOpacity
+            onPress={() => props.navigation.toggleDrawer()}
+            style={{marginTop: 20}}>
+            <Entypo name={'menu'} size={30} color={Colors.RED} />
+          </TouchableOpacity>
         }
         rightComponent={
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 5,
-              gap: 15,
-              marginRight: 12,
-            }}>
-            <TouchableOpacity onPress={() => {
-              handleSearch();
-            }}>
-              <SEARCH width={25} height={25} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate('OtherStackYou', {
-                  screen: 'Notifications',
-                });
-              }}>
-              <BELL width={25} height={25} />
-            </TouchableOpacity>
-            <Cart
-              nav={() => {
-                props.navigation.navigate("TopRatedFunds", { screen: 'TopRatedList' });
-              }}
-            />
-          </View>
+          <Cart
+            nav={() => {
+              props.navigation.navigate('TopRatedFunds', {
+                screen: 'TopRatedList',
+                params: {fromScreen: 'Home'},
+              });
+            }}
+          />
         }
-        backgroundColor={"white"}
-
-      // containerStyle={Styles.header}
-      // centerComponent={
-      //   <FastImage
-      //     source={require('../../../assets/icon.png')}
-      //     style={styles.logimg}
-      //   />
-      // }
+        backgroundColor={Colors.LIGHT_WHITE}
+        containerStyle={Styles.header}
+        centerComponent={
+          <FastImage
+            source={require('../../../assets/icon.png')}
+            style={styles.logimg}
+          />
+        }
       />
       {planFetching ||
         (investmentFetching && (
@@ -346,12 +292,10 @@ function HomeScreen(props) {
             <ActivityIndicator color={Colors.BLACK} size="large" />
           </View>
         ))}
-      {showSearch && <SuggestionInput
+      <SuggestionInput
         navigate={props.navigation.navigate}
         fundDetails={fundDetails}
-        setShowSearch={setShowSearch}
-        showSearch={showSearch}
-      />}
+      />
       <ScrollView style={styles.containerScroll}>
         {/* <Text>
           {users?.hasOwnProperty("users") ? 1 : 0}
@@ -412,8 +356,8 @@ function HomeScreen(props) {
                                 {username && steps > 5
                                   ? 'Congratulations'
                                   : username
-                                    ? `Hello, ${username}`
-                                    : `Hello, Investor`}
+                                  ? `Hello, ${username}`
+                                  : `Hello, Investor`}
                               </Text>
                               <Text
                                 style={[
@@ -445,22 +389,22 @@ function HomeScreen(props) {
                             </Text>
                           ) : (
                             <TouchableOpacity
-                            onPress={() => {
-                              if (users?.pan || pan || username) {
-                                JustNavigate();
-                              }else {
-                                props.navigation.navigate('HomeScreen', {
-                                  screen: 'Pan',
-                                });
-                              }
-                            }}
-                            style={styles.botton_box}>
-                            <Text style={styles.get_otp}>
-                              {users?.pan || pan || username
-                                ? 'COMPLETE ACCOUNT SETUP'
-                                : 'Create Account'}
-                            </Text>
-                          </TouchableOpacity>
+                              onPress={() => {
+                                if (users?.pan || pan || username) {
+                                  JustNavigate();
+                                }else {
+                                  props.navigation.navigate('HomeScreen', {
+                                    screen: 'Pan',
+                                  });
+                                }
+                              }}
+                              style={styles.botton_box}>
+                              <Text style={styles.get_otp}>
+                                {users?.pan || pan || username
+                                  ? 'COMPLETE ACCOUNT SETUP'
+                                  : 'Create Account'}
+                              </Text>
+                            </TouchableOpacity>
                           )}
                         </View>
                       </View>
@@ -511,36 +455,47 @@ function HomeScreen(props) {
           </>
         )}
         */}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
-          <Text style={{ fontWeight: "bold", color: "black", fontSize: responsiveFontSize(1.5) }}>
-            At SIPFund.com we help you in choosing the best for you!
-          </Text>
-        </View>
-        <View style={{ justifyContent: "center", alignItems: "center", alignSelf: "center",marginLeft:10 }}>
-          <LeftIconCard
-            imageSource={require('../../../assets/term7.png')}
-            heading="Get Top Rated Fund"
-            description="At Sipfund.com we help you in choosing the best for you!"
-            buttonText="Click here"
-            onButtonPress={() => { props.navigation.navigate('TopRatedFunds', { screen: 'TopRatedHome' }) }}
-          />
-        </View>
 
-        <Text style={{
-          fontSize: 16,
-          color: Colors.DEEP_GRAY,
-          fontWeight: 'bold', marginVertical: 15, marginLeft: 15
-        }}>Investment Plans</Text>
-        <View style={{ alignSelf: "center", marginLeft: 5 }}>
-          <InvestmentLists
-            data={showMorePlans ? investments : investments.slice(0, 3)}
-            onPress={item => {
-              toggleLoading(true);
-              investmentPlans(item, token);
-              pageActiveInvest.current = true;
-            }}
-          />
-        </View>
+        <Text style={[styles.Plan, {marginTop: 15, marginBottom: -15}]}>
+          Top Rated Funds
+        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            props.navigation.navigate('TopRatedFunds', {screen: 'TopRatedHome'})
+          }>
+          <View
+            style={[
+              styles.education,
+              styles.education_roted,
+              {marginBottom: 0},
+            ]}>
+            <View style={styles.child_sec}>
+              <FastImage
+                source={require('../../../assets/term7.png')}
+                style={styles.fund_img}
+              />
+            </View>
+            <View style={styles.education_sec}>
+              <Text style={styles.child}>Get Top Rated Funds</Text>
+              <Text style={styles.child_text}>
+                At SIPFund.com we help you in choosing the best for you!
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.border}></View>
+
+        {/* investment section */}
+        <Text style={styles.Plan}>Investment Plans</Text>
+        <InvestmentLists
+          data={showMorePlans ? investments : investments.slice(0, 3)}
+          onPress={item => {
+            toggleLoading(true);
+            investmentPlans(item, token);
+            pageActiveInvest.current = true;
+          }}
+        />
         <TouchableOpacity
           style={styles.showMorePlansContainer}
           onPress={() => setShowMorePlans(!showMorePlans)}>
@@ -559,17 +514,15 @@ function HomeScreen(props) {
           </TouchableOpacity>
         </View>*/}
 
+        <View style={styles.border}></View>
+
         {/* Top roted fund section */}
         <Text style={styles.Plan}>Plan Your Goals</Text>
-        <ScrollView horizontal={true} style={{ marginHorizontal: 5, paddingBottom: 20 }}>
+        <ScrollView horizontal={true} style={{marginHorizontal: 16}}>
           {goals.map((item, key) => (
-            <LeftIconCard
+            <TouchableOpacity
               key={key}
-              SvgIcon={Platform.OS == 'ios' ? item.iosgoalImagePath : item.goalImagePath}
-              heading={item.goal}
-              description={item.description}
-              buttonText="Click here"
-              onButtonPress={() => {
+              onPress={() => {
                 const eventName = 'goals_clicked';
 
                 appsFlyer.logEvent(
@@ -585,49 +538,101 @@ function HomeScreen(props) {
                 toggleLoading(true);
                 singleDetails(item, token);
                 pageActiveGoles.current = true;
-              }}
-            />
+              }}>
+              {/* <Text>{JSON.stringify(item.iosgoalImagePath)}</Text> */}
+              <View style={styles.education}>
+                <View style={styles.child_sec}>
+                  <MyImage
+                    width="100%"
+                    height="130"
+                    // svg={Platform.OS == "android" ? false : true}
+                    svg={true}
+                    url={
+                      Platform.OS == 'ios'
+                        ? item.iosgoalImagePath
+                        : item.goalImagePath
+                    }
+                  />
+                </View>
+                <View style={styles.education_sec}>
+                  <Text style={styles.child}>{item.goal}</Text>
+                  <Text style={styles.child_text}>{item.description}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
-
-
+        <View style={styles.roted_border}></View>
+        <View style={styles.border}></View>
 
         {/* quick access section */}
 
         <View style={styles.quick_sec}>
           <Text style={styles.quick_text}>Quick Access</Text>
           <ScrollView horizontal={true}>
-
-            <CardWithLabel
-              label='Make Your Plan'
-              SvgIcon={OWNCHOICE}
-              onPress={() => props.navigation.navigate('Hold', { screen: 'Owner' })}
-            />
-            <CardWithLabel
-              label='Talk To Experts'
-              SvgIcon={HELPLINE}
-              svgHeight={13}
-              svgWidth={13}
-              onPress={() => props.navigation.navigate('Relationship')}
-            />
-            <CardWithLabel
-              label='Refer & Earn'
-              SvgIcon={REFER}
-              svgHeight={18}
-              svgWidth={18}
+            <TouchableOpacity
               onPress={() =>
                 props.navigation.navigate('OtherStackYou', {
                   screen: 'ReferEarn',
-                })}
-            />
+                })
+              }
+              style={[styles.education, styles.quick_access]}>
+              <View style={styles.child_sec}>
+                <FastImage
+                  source={require('../../../assets/term8.png')}
+                  style={styles.quick_img}
+                />
+              </View>
+              <View style={styles.education_sec}>
+                <Text style={styles.earn}>Refer & Earn</Text>
+                <Text style={styles.child_text}>Now earn upto Rs. 5,000/-</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate('Relationship')}
+              style={[styles.education, styles.quick_access]}>
+              <View style={styles.child_sec}>
+                <FastImage
+                  source={require('../../../assets/quick_img3.png')}
+                  style={styles.quick_img3}
+                />
+              </View>
+              <View style={styles.education_sec}>
+                <Text style={styles.earn}>Talk To Experts</Text>
+                <Text style={styles.child_text}>
+                  Get best advice while investing money
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate('Hold', {screen: 'Owner'})
+              }
+              style={[styles.education, styles.quick_access]}>
+              <View style={styles.child_sec}>
+                <AntDesign name={'search1'} size={80} color={Colors.RED} />
+
+                {/* <Image
+                    source={require("../../../assets/quick_img3.png")}
+                    style={styles.quick_img3}
+                  /> */}
+              </View>
+              <View style={styles.education_sec}>
+                <Text style={styles.earn}>Own Choice</Text>
+                <Text style={styles.child_text}>Make your plan</Text>
+              </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
 
         {/* top roted fund */}
+        <View style={styles.border}></View>
         <TouchableOpacity onPress={() => props.navigation.navigate('Goals')}>
           <Text style={styles.roted_text}>Any questions?</Text>
         </TouchableOpacity>
-        <Text style={{ marginLeft: 20, color: 'grey' }}>
+        <Text style={{marginLeft: 20, color: 'grey'}}>
           We would love to have your questions!
         </Text>
         <Text
@@ -643,87 +648,70 @@ function HomeScreen(props) {
         {/* top roted fund sec2 */}
         <ScrollView horizontal={true}>
           <View style={styles.roted_bottom}>
-            <CardWithLabel
-              style={{ height: responsiveHeight(15), width: responsiveWidth(45),paddingTop:15 }}
-              label='Minimun Investment'
-              SvgIcon={MININVESTMENT}
-              onPress={() => toggleOverlay('MINIMUM_AMOUNT')}
-            />
-            <CardWithLabel
-              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
-              label='Lock-In'
-              SvgIcon={LOCKIN}
-              onPress={() => toggleOverlay('LOCK_INS')}
-            />
-            <CardWithLabel
-              style={{ height: responsiveHeight(15), width: responsiveWidth(45)}}
-              label='Flexibility'
-              SvgIcon={FLEX}
-              onPress={() => toggleOverlay('FLEXIBILITY')}
-            />
-            <CardWithLabel
-              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
-              label='Easy Withdrawal'
-              imageSource={require('../../../assets/term12.png')}
-              onPress={() => toggleOverlay('PAYMENT_METHODS')}
-            />
-            <CardWithLabel
-              style={{ height: responsiveHeight(15), width: responsiveWidth(45) }}
-              label='Payment Methods'
-              imageSource={require('../../../assets/term13.png')}
-              onPress={() => toggleOverlay('EASY_WITHDRAWAL')}
-            />
+            <View style={styles.amount_sec}>
+              <TouchableOpacity
+                onPress={() => toggleOverlay('MINIMUM_AMOUNT')}
+                style={{alignItems: 'center'}}>
+                <FastImage
+                  source={require('../../../assets/term9.png')}
+                  style={styles.term9}
+                />
+                <Text style={styles.minimum}>Minimum Amount</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.amount_sec}>
+              <TouchableOpacity
+                onPress={() => toggleOverlay('LOCK_INS')}
+                style={{alignItems: 'center'}}>
+                <FastImage
+                  source={require('../../../assets/term10.png')}
+                  style={styles.term9}
+                />
+                <Text style={styles.minimum}>Lock-ins</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.amount_sec}>
+              <TouchableOpacity
+                onPress={() => toggleOverlay('FLEXIBILITY')}
+                style={{alignItems: 'center'}}>
+                <FastImage
+                  source={require('../../../assets/term11.png')}
+                  style={styles.Flexibility}
+                />
+                <Text style={styles.minimum}>Flexibility</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.amount_sec}>
+              <TouchableOpacity
+                onPress={() => toggleOverlay('PAYMENT_METHODS')}
+                style={{alignItems: 'center'}}>
+                <FastImage
+                  source={require('../../../assets/term12.png')}
+                  style={styles.Flexibility}
+                />
+                <Text style={styles.minimum}>Payment Methods</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.amount_sec}>
+              <TouchableOpacity
+                onPress={() => toggleOverlay('EASY_WITHDRAWAL')}
+                style={{alignItems: 'center'}}>
+                <FastImage
+                  source={require('../../../assets/term13.png')}
+                  style={styles.Flexibility}
+                />
+                <Text style={styles.minimum}>Easy Withdrawal</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
-        <View>
-          <Text style={styles.Plan}>Knowledge Centre</Text>
-        </View>
 
-        <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 10 }}>
-          <View style={{ width: '40%' }}>
-            <Image
-              source={require("../../../assets/IMG/Banner.png")}
-              style={{ width: '100%', height: undefined, aspectRatio: 200 / 150 }}
-              resizeMode="contain"
-            />
-          </View>
-          <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text style={{color:"black"}}>
-              Why should you invest in ELSS{"\n"}funds during income tax season?
-            </Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 10 }}>
-          <View style={{ width: '40%' }}>
-            <Image
-              source={require("../../../assets/IMG/Banner.png")}
-              style={{ width: '100%', height: undefined, aspectRatio: 200 / 150 }}
-              resizeMode="contain"
-            />
-          </View>
-          <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text style={{color:"black"}}>
-              Why should you invest in ELSS{"\n"}funds during income tax season?
-            </Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 10 }}>
-          <View style={{ width: '40%' }}>
-            <Image
-              source={require("../../../assets/IMG/Banner.png")}
-              style={{ width: '100%', height: undefined, aspectRatio: 200 / 150 }}
-              resizeMode="contain"
-            />
-          </View>
-          <View style={{ width: '60%', justifyContent: "center", alignItems: "center" }}>
-            <Text style={{color:"black"}}>
-              Why should you invest in ELSS{"\n"}funds during income tax season?
-            </Text>
-          </View>
-        </View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Button textColor={"black"} borderColor={"#FFB2AA"} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(90)} text={"Knowledge Center>>>"} />
-        </View>
+        <View style={styles.border}></View>
+
         {/* Faq screen */}
         <View style={styles.mainbox}>
           <Text style={styles.faqs}>FAQ’s</Text>
@@ -733,7 +721,7 @@ function HomeScreen(props) {
               style={styles.FAQimg}
             />
           </View>
-          <View style={{ alignItems: 'flex-start' }}>
+          <View style={{alignItems: 'flex-start'}}>
             <View style={styles.singletext}>
               <Entypo name="dot-single" size={40} color="#FFCE00" />
               <Text
@@ -770,6 +758,7 @@ function HomeScreen(props) {
             <Text style={styles.get_otp}>MORE FAQ’s</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.border}></View>
         <Text style={styles.knowledge}>Knowledge Centre</Text>
 
         {/* gallary */}
@@ -838,7 +827,7 @@ function HomeScreen(props) {
 
       <Overlay
         isVisible={visible && overlay === 'MINIMUM_AMOUNT'}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: '#fff' }}>
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
             backgroundColor: '#11370a',
@@ -847,15 +836,15 @@ function HomeScreen(props) {
           }}>
           <FastImage
             source={require('../../../assets/term9.png')}
-            style={{ width: 56, paddingVertical: 3 }}
+            style={{width: 56, paddingVertical: 3}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is the <Text style={styles.view}>minimal amount</Text> for
             investing in Mutual Funds?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15, color: 'black' }}>
+          <Text style={{paddingTop: 10, fontSize: 15, color: 'black'}}>
             The minimum amount required to invest in mutual funds is very low.
             You can start investing in Systematic Investment Plan(SIP) with an
             amount of ₹500 only.
@@ -876,7 +865,7 @@ function HomeScreen(props) {
 
       <Overlay
         isVisible={visible && overlay === 'LOCK_INS'}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: '#fff' }}>
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
             backgroundColor: '#12478D',
@@ -885,15 +874,15 @@ function HomeScreen(props) {
           }}>
           <FastImage
             source={require('../../../assets/term10.png')}
-            style={{ width: 56, height: 51 }}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is <Text style={styles.view}>lock-in</Text> period in Mutual
             Funds?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15, color: 'black' }}>
+          <Text style={{paddingTop: 10, fontSize: 15, color: 'black'}}>
             A lock-in period is a specific period during which an investor is
             not allowed to redeem the units of the mutual fund either partially
             or fully. In an ELSS fund, the lock-in period is 3 years
@@ -914,7 +903,7 @@ function HomeScreen(props) {
 
       <Overlay
         isVisible={visible && overlay === 'FLEXIBILITY'}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: '#fff' }}>
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
             backgroundColor: '#12478D',
@@ -923,15 +912,15 @@ function HomeScreen(props) {
           }}>
           <FastImage
             source={require('../../../assets/choice.png')}
-            style={{ width: 56, height: 51 }}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             What is the <Text style={styles.view}>flexibility</Text> that Mutual
             Funds offer?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15, color: 'black' }}>
+          <Text style={{paddingTop: 10, fontSize: 15, color: 'black'}}>
             Mutual Funds offer flexibility to investors by means of Systematic
             Investment Plan(SIP), Systematic Withdrawal Plan (SWP), Systematic
             Transfer Plan(STP), Growth Plan,Dividend Payout or Reinvestment
@@ -954,7 +943,7 @@ function HomeScreen(props) {
 
       <Overlay
         isVisible={visible && overlay === 'PAYMENT_METHODS'}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: '#fff' }}>
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
             backgroundColor: '#12478D',
@@ -963,44 +952,44 @@ function HomeScreen(props) {
           }}>
           <FastImage
             source={require('../../../assets/term12.png')}
-            style={{ width: 56, height: 51 }}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             what are the various{' '}
             <Text style={styles.view}>payment methods</Text>
             available for an investorfor making investments?
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15, color: 'black' }}>
+          <Text style={{paddingTop: 10, fontSize: 15, color: 'black'}}>
             Using SIPfund.com app/portal,an investor can make purchases under
             the following methods
           </Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5, color: 'black' }}>
+            <Text style={{flex: 1, paddingLeft: 5, color: 'black'}}>
               NET Banking
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5, color: 'black' }}>
+            <Text style={{flex: 1, paddingLeft: 5, color: 'black'}}>
               NEFT/RTGS
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5, color: 'black' }}>UPI</Text>
+            <Text style={{flex: 1, paddingLeft: 5, color: 'black'}}>UPI</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5, color: 'black' }}>
+            <Text style={{flex: 1, paddingLeft: 5, color: 'black'}}>
               Debit Mandate
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text>{'\u2022'}</Text>
-            <Text style={{ flex: 1, paddingLeft: 5, color: 'black' }}>
+            <Text style={{flex: 1, paddingLeft: 5, color: 'black'}}>
               Cheque
             </Text>
           </View>
@@ -1020,7 +1009,7 @@ function HomeScreen(props) {
 
       <Overlay
         isVisible={visible && overlay === 'EASY_WITHDRAWAL'}
-        overlayStyle={{ margin: 10, padding: 0, backgroundColor: '#fff' }}>
+        overlayStyle={{margin: 10, padding: 0, backgroundColor: '#fff'}}>
         <View
           style={{
             backgroundColor: '#12478D',
@@ -1029,15 +1018,15 @@ function HomeScreen(props) {
           }}>
           <FastImage
             so4rce={require('../../../assets/overlay_img.png')}
-            style={{ width: 56, height: 51 }}
+            style={{width: 56, height: 51}}
           />
         </View>
-        <View style={{ padding: 20 }}>
+        <View style={{padding: 20}}>
           <Text style={styles.mutual}>
             Do Mutual Funds allow{' '}
             <Text style={styles.view}>easy withdrawal of amount?</Text>
           </Text>
-          <Text style={{ paddingTop: 10, fontSize: 15, color: 'black' }}>
+          <Text style={{paddingTop: 10, fontSize: 15, color: 'black'}}>
             Both Equity and Debt Mutual Funds can be technically withdrawn as
             soon as fund is available for daily sale and repurchase. Of course
             liquidity is one of the biggest advantages of investing in Mutual
@@ -1074,18 +1063,18 @@ function HomeScreen(props) {
                   setWebViewActive(false);
                   // clearEmandateLink();
                 }}
-                style={{ marginTop: 20 }}>
+                style={{marginTop: 20}}>
                 <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
               </TouchableOpacity>
             }
             rightComponent={
-              <View style={{ marginTop: 30 }}>
-                <Cart
-                  nav={() => {
-                    props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
-                  }}
-                />
-              </View>
+              <Cart
+                nav={() => {
+                  props.navigation.navigate('TopRatedFunds', {
+                    screen: 'TopRatedList',
+                  });
+                }}
+              />
             }
             backgroundColor={Colors.LIGHT_WHITE}
             containerStyle={Styles.header}
@@ -1096,7 +1085,7 @@ function HomeScreen(props) {
               />
             }
           />
-          <WebView source={{ uri: webUrl }} javaScriptEnabled={true} />
+          <WebView source={{uri: webUrl}} javaScriptEnabled={true} />
         </View>
       )}
     </View>
@@ -1107,7 +1096,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.WHITE,
-    marginTop: 10
   },
   containerScroll: {
     width: '100%',
@@ -1153,7 +1141,10 @@ const styles = StyleSheet.create({
   Plan: {
     fontSize: 16,
     color: Colors.DEEP_GRAY,
-    fontWeight: 'bold', marginVertical: 15, marginLeft: 15
+    fontWeight: 'bold',
+    paddingHorizontal: 10,
+    //paddingVertical: 15,
+    marginTop: 15,
   },
   education_top: {
     paddingLeft: 20,
@@ -1193,7 +1184,7 @@ const styles = StyleSheet.create({
     //maxWidth: "70%",
   },
 
-  child_sec: { width: '30%', marginHorizontal: 10 },
+  child_sec: {width: '30%', marginHorizontal: 10},
   goals_2: {
     height: 145,
     width: 145,
@@ -1389,9 +1380,7 @@ const styles = StyleSheet.create({
   },
   botton_box: {
     alignItems: 'center',
-    backgroundColor: "white",
-    borderWidth: 2,
-    borderColor: "#FFB2AA",
+    backgroundColor: Colors.RED,
     width: width - 50,
     paddingVertical: 20,
     marginTop: 20,
@@ -1402,7 +1391,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   get_otp: {
-    color: "black",
+    color: Colors.WHITE,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -1552,14 +1541,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  const { AuthActions } = require('../../store/AuthRedux');
-  const { HomeActions } = require('../../store/HomeRedux');
-  const { CartActions } = require('../../store/CartActionsRedux');
-  const { GoalsActions } = require('../../store/GoalsRedux');
-  const { InvestmentPlanActions } = require('../../store/InvestmentPlanRedux');
-  const { EmandateActions } = require('../../store/EmandateRedux');
-  const { FundDetailActions } = require('../../store/FundDetailRedux');
+  const {dispatch} = dispatchProps;
+  const {AuthActions} = require('../../store/AuthRedux');
+  const {HomeActions} = require('../../store/HomeRedux');
+  const {CartActions} = require('../../store/CartActionsRedux');
+  const {GoalsActions} = require('../../store/GoalsRedux');
+  const {InvestmentPlanActions} = require('../../store/InvestmentPlanRedux');
+  const {EmandateActions} = require('../../store/EmandateRedux');
+  const {FundDetailActions} = require('../../store/FundDetailRedux');
   return {
     ...stateProps,
     ...ownProps,

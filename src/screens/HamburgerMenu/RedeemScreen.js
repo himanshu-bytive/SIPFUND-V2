@@ -139,7 +139,7 @@ function RedeemScreen(props) {
           </TouchableOpacity>
         }
         rightComponent={
-          <View style={{marginTop:30}}>
+          <View style={{marginTop:0}}>
           <Cart
             nav={() => {
               props.navigation.navigate("TopRatedList", {

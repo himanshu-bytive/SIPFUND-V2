@@ -27,7 +27,7 @@ function GoalsLongTermScreen(props) {
             <View style={Styles.Header_top}>
                 <Header
                     leftComponent={<TouchableOpacity onPress={() => props.navigation.goBack()} style={{ marginTop: 20 }}><AntDesign name={"arrowleft"} size={30} color={Colors.RED} /></TouchableOpacity>} backgroundColor={Colors.PEACH}
-                    backgroundColor={Colors.PEACH}
+                  
                     centerComponent={<Image
                         source={require('../../../assets/icon.png')}
                         style={styles.logimg}

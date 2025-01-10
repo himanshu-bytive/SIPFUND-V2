@@ -116,11 +116,10 @@ function HamburgerMenu8Screen(props) {
                             <Text style={styles.select2}>Select Sip Date</Text>
                             <AntDesign name="right" size={15} />
                         </View>
-
                     </View>
 
-                    <TextInput style={styles.top_inpuut} placeholder="Folio No" style={{ borderBottomWidth: 1, fontSize: 14, borderColor: Colors.GREY_1, marginTop: 40, }} />
-                    <TextInput style={styles.top_inpuut} placeholder="Amount INR" style={{ borderBottomWidth: 1, fontSize: 14, borderColor: Colors.GREY_1, marginTop: 40, }} />
+                    <TextInput style={styles.top_inpuut} placeholder="Folio No" />
+                    <TextInput style={styles.top_inpuut} placeholder="Amount INR" />
 
                     <TouchableOpacity style={styles.botton_box}>
                         <Text style={styles.proceed}>Add To My Holding</Text>

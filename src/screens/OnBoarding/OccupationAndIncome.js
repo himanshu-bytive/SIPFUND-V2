@@ -25,7 +25,6 @@ import Button from "../../components/Atom/Button/Button";
 const pepList = [
   { value: "N", label: "No" },
   { value: "Y", label: "Yes" },
-  { value: "R", label: "Related to PEP" },
 ];
 
 const OccupationAndIncome = (props) => {
