@@ -97,8 +97,7 @@ function CompleteDetailsAddressScreen(props) {
   }, [statess, citys]);
 
   useEffect(() => {
-    if (pincodeInfo && pincodeInfo?.stateCode) {
-      
+    if (pincodeInfo && pincodeInfo?.stateCode) {     
       // getCitys(pincodeInfo.stateCode, token);
       setState({
         ...state,
@@ -179,7 +178,7 @@ function CompleteDetailsAddressScreen(props) {
     <KeyboardAvoidingView behavior={"height"} enabled style={styles.container}>
       <Header
         leftComponent={
-          <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <TouchableOpacity onPress={() => props.navigation.navigate("OnBoard",{screen : "AddNominee"})}>
             <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
           </TouchableOpacity>
         }
@@ -354,8 +353,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingHorizontal: 10,
     color: 'black',
-    marginBottom: 0,
     backgroundColor: Colors.WHITE,
+    borderBottomWidth : 0
   },
   error: {
     color: "#ff0000",

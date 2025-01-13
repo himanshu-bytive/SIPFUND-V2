@@ -203,7 +203,7 @@ const OccupationAndIncome = (props) => {
             } else if (currentStep === 2) {
               setCurrentStep(1);
             } else {
-              props.navigation.goBack();
+              props.navigation.navigate("OnBoard",{screen : "ProfileDetailsForm"});
             }
           }}
           style={styles.arrowButton}

@@ -24,13 +24,16 @@ import Cart from "../../components/Cart";
 import * as ImagePicker from "react-native-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
-import { Button } from "react-native-paper";
+import { Button, shadow } from "react-native-paper";
 import RNFetchBlob from "rn-fetch-blob";
 import { getDateInHuman } from "../../utils/getDateInFormat";
+import LottieView from "lottie-react-native";
+import { responsiveWidth } from "react-native-responsive-dimensions";
 
 function CompleteDetailsBankScreen(props, route) {
   const pageActive = useRef(false);
   const [visible, setVisible] = useState(false);
+  const [ShowAMC, setShowAMC] = useState(false);
   const [img, setImg] = useState(null);
 
   const {
@@ -46,15 +49,19 @@ function CompleteDetailsBankScreen(props, route) {
     accountTypes,
     settings,
     banks,
+    getList,
     getBankDetails,
     bankDetails,
+    postRequest,
     isInn,
     isExit,
     FatcaKYC,
+    kycLists,
     getAccountType,
     bankTypeDetails,
     getProofOfAccount,
     proofOfAccount,
+    kycDetails
   } = props;
   console.log(
     "🚀 ~ CompleteDetailsBankScreen ~ proofOfAccount:",
@@ -65,7 +72,7 @@ function CompleteDetailsBankScreen(props, route) {
   const [bankList, setBankList] = useState([]);
   const camera = useRef(null);
   const device = useCameraDevice('back');
-
+  const pageActiveKyc = useRef(false);
   const [state, setState] = useState({
     showBank: false,
     accountType: "",
@@ -95,12 +102,14 @@ function CompleteDetailsBankScreen(props, route) {
   }, [isInn]);
 
   useEffect(() => {
+    getList();
     getAccountType();
     getProofOfAccount();
     if (banks.length <= 0) {
       settings(token);
     }
     requestCameraPermission();
+
   }, []);
 
   async function requestCameraPermission() {
@@ -135,6 +144,37 @@ function CompleteDetailsBankScreen(props, route) {
       setImg(base64);
     }
   };
+
+  const handleKyc = value => {
+    pageActiveKyc.current = true;
+    console.log("user", profile);
+
+    setShowAMC(false);
+    let params = {
+      service_request: {
+        amc_code: value.amc_code,
+        client_callback_url: 'sipfund.com',
+        investor_email: userDetails.email,
+        investor_mobile_no: userDetails.mobileNo,
+        pan: profile?.FH_PAN_NO,
+        return_flag: 'Y',
+      },
+    };
+    console.log('Params', params);
+
+    postRequest(params, token);
+  };
+
+  useEffect(() => {
+    if (kycDetails && pageActiveKyc.current) {
+      pageActiveKyc.current = false;
+      props.navigation.navigate('Reset', {
+        screen: 'KycScreen',
+        params: { url: kycDetails },
+      });
+    }
+  }, [kycDetails]);
+
 
   const cameraImage = async (image) => {
     let fileType;
@@ -184,27 +224,27 @@ function CompleteDetailsBankScreen(props, route) {
     if (bankTypeDetails) {
       const accountTypeList = bankTypeDetails
         ? bankTypeDetails.map((item) => ({
-            value: item.code,
-            label: String(item.description),
-          }))
+          value: item.code,
+          label: String(item.description),
+        }))
         : [];
       setAccountTypeList(accountTypeList);
     }
     if (proofOfAccount) {
       const proofOfAccountLocal = proofOfAccount
         ? proofOfAccount.map((item) => ({
-            value: item.code,
-            label: String(item.description),
-          }))
+          value: item.code,
+          label: String(item.description),
+        }))
         : [];
       setProof_of_account(proofOfAccountLocal);
     }
     if (banks) {
       const bankList = banks
         ? banks.map((item) => ({
-            value: item.BANK_CODE,
-            label: String(item.BANK_NAME),
-          }))
+          value: item.BANK_CODE,
+          label: String(item.BANK_NAME),
+        }))
         : [];
       setBankList(bankList);
     }
@@ -223,8 +263,8 @@ function CompleteDetailsBankScreen(props, route) {
   }, [accountTypes, banks, bankDetails, bankTypeDetails]);
 
   const onAction = async () => {
-    console.log("USERRR",user);
-    
+    console.log("USERRR", user);
+
     const {
       accountType,
       accountNumber,
@@ -494,14 +534,14 @@ function CompleteDetailsBankScreen(props, route) {
   //     props.navigation.navigate("UploadDocument");
   //   }
   // };
-  
+
   const onComplete = () => {
     setVisible(false);
-    console.log("USER DATA",userDetails);
+    console.log("USER DATA", userDetails);
     if (userDetails?.ekycIsDone) {
-      props.navigation.navigate("Reg",{screen : "UploadDocument"});
+      props.navigation.navigate("Reg", { screen: "UploadDocument" });
     } else {
-      props.navigation.navigate('Reset', {screen: 'EKYC'});
+      props.navigation.navigate('Reset', { screen: 'EKYC' });
     }
   };
   const onActionNewBank = async () => {
@@ -579,7 +619,15 @@ function CompleteDetailsBankScreen(props, route) {
     console.log("🚀 ~ onActionNewBank ~ obj:", obj);
     createRegister(obj, token);
   };
-
+  const MannualKYC = () => {
+    props.navigation.navigate('Reg', { screen: 'UploadDocument' })
+  }
+  const GoToHome = () =>{
+    props.navigation.navigate("Home")
+  }
+  const OnlineKYC = () => {
+    setShowAMC(true);
+  }
   return (
     <>
       <Header
@@ -885,13 +933,13 @@ function CompleteDetailsBankScreen(props, route) {
                   Alert.alert("SIP Fund", "Document", [
                     {
                       text: "Cancel",
-                      onPress: () => {},
+                      onPress: () => { },
                     },
                     {
                       text: "Camera",
                       onPress: () => {
                         console.log("setCamera");
-                        
+
                       },
                     },
                     {
@@ -926,51 +974,65 @@ function CompleteDetailsBankScreen(props, route) {
                 visible={camera}
                 onRequestClose={() => {
                   console.log("set camera close");
-                  
+
                 }}
               >
                 <SafeAreaView style={StyleSheet.absoluteFill}>
-                <Camera
-                  ref={camera}
-                  style={StyleSheet.absoluteFill}
-                  device={device}
-                  isActive={true}
-                  photo={true}
-                />
+                  <Camera
+                    ref={camera}
+                    style={StyleSheet.absoluteFill}
+                    device={device}
+                    isActive={true}
+                    photo={true}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: "transparent",
+                      justifyContent: "flex-end",
+                    }}
+                  >
                     <View
                       style={{
-                        flex: 1,
-                        backgroundColor: "transparent",
-                        justifyContent: "flex-end",
+                        backgroundColor: "black",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <View
-                        style={{
-                          backgroundColor: "black",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
+                      <Button
+                        icon="close"
+                        style={{ marginLeft: 12 }}
+                        mode="outlined"
+                        color="white"
+                        onPress={() => {
+                          setCamera(false);
                         }}
                       >
-                        <Button
-                          icon="close"
-                          style={{ marginLeft: 12 }}
-                          mode="outlined"
-                          color="white"
-                          onPress={() => {
-                            setCamera(false);
-                          }}
-                        >
-                          Close
-                        </Button>
-                        <TouchableOpacity
-                          onPress={async () => {
-                            if (camera) {
-                              let photo = await camera.current.takePhoto();
-                              // alert(JSON.stringify(photo));
-                              cameraImage(photo);
-                              // setImg(photo);
-                            }
+                        Close
+                      </Button>
+                      <TouchableOpacity
+                        onPress={async () => {
+                          if (camera) {
+                            let photo = await camera.current.takePhoto();
+                            // alert(JSON.stringify(photo));
+                            cameraImage(photo);
+                            // setImg(photo);
+                          }
+                        }}
+                      >
+                        <View
+                          style={{
+                            borderWidth: 2,
+                            borderRadius: 50,
+                            borderColor: "white",
+                            height: 50,
+                            width: 50,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginBottom: 16,
+                            marginTop: 16,
                           }}
                         >
                           <View
@@ -978,28 +1040,14 @@ function CompleteDetailsBankScreen(props, route) {
                               borderWidth: 2,
                               borderRadius: 50,
                               borderColor: "white",
-                              height: 50,
-                              width: 50,
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              marginBottom: 16,
-                              marginTop: 16,
+                              height: 40,
+                              width: 40,
+                              backgroundColor: "white",
                             }}
-                          >
-                            <View
-                              style={{
-                                borderWidth: 2,
-                                borderRadius: 50,
-                                borderColor: "white",
-                                height: 40,
-                                width: 40,
-                                backgroundColor: "white",
-                              }}
-                            ></View>
-                          </View>
-                        </TouchableOpacity>
-                        {/* <Button
+                          ></View>
+                        </View>
+                      </TouchableOpacity>
+                      {/* <Button
                           icon="axis-z-rotate-clockwise"
                           style={{ marginRight: 12 }}
                           mode="outlined"
@@ -1016,8 +1064,8 @@ function CompleteDetailsBankScreen(props, route) {
                             ? "Front"
                             : "Back "}
                         </Button> */}
-                      </View>
                     </View>
+                  </View>
                 </SafeAreaView>
               </Modal>
               {/* <Image
@@ -1058,30 +1106,122 @@ function CompleteDetailsBankScreen(props, route) {
       </KeyboardAvoidingView>
       <Overlay
         isVisible={visible}
-        overlayStyle={{ margin: 10, backgroundColor: "#fff" }}
+        overlayStyle={{
+          margin: 0, // Remove margin to take full screen width
+          padding: 0, // Remove padding if any
+          backgroundColor: "transparent", // Allow full control over the background
+        }}
+        fullScreen={true} // Ensures it takes full screen dimensions
       >
-        <View style={{ padding: 10 }}>
-          <Text
-            style={{ paddingVertical: 5, fontSize: 18, fontWeight: "bold",color:"black" }}
-          >
-            Thank you for creating your investor account!
-          </Text>
-          <Text
-            style={{
-              paddingVertical: 5,
-              fontSize: 15,
-              fontWeight: "bold",
-              color: "#7E7E7E",
-            }}
-          >
-            Please check your email and approve the link sent by NSE for your
-            account activation.
-          </Text>
-          <TouchableOpacity onPress={() => onComplete()}>
-            <Text style={{ color: "#ff0000", paddingTop: 20 }}>OK</Text>
-          </TouchableOpacity>
+        <View style={{ flex: 1, backgroundColor: "white" }}>
+          {/* Center content */}
+          <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center", marginTop: 100 }}>
+            <LottieView
+              style={{ height: 200, width: 200 }}
+              source={require("../../../assets/Lottie/Success.json")}
+              autoPlay
+              loop={false}
+            />
+            <Text
+              style={{
+                color: "black",
+                fontSize: 18,
+                fontWeight: "500",
+                marginTop: -20,
+                textAlign: "center",
+                lineHeight: 25,
+              }}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  fontSize: 18,
+                  fontWeight: "500",
+                  marginTop: -20,
+                  textAlign: "center",
+                  lineHeight: 25,
+                }}
+              >
+                {userDetails?.ekycIsDone
+                  ? `Your investor account is ready for activation now! Your IIN Number - 1234567890`
+                  : `Your investor account has been created.\n Your IIN Number - 1234567890`}
+              </Text>
+            </Text>
+            <Text
+              style={{
+                color: userDetails?.ekycIsDone ? "green" : "red", // Dynamic color based on condition
+                fontSize: 18,
+                fontWeight: "500",
+                marginTop: 20,
+                textAlign: "center",
+                lineHeight: 25,
+              }}
+            >
+              {userDetails?.ekycIsDone
+                ? `KYC Status = Validated`
+                : `KYC Status = Not Registered`}
+            </Text>
+            <Text
+              style={{
+                color: "black", // Dynamic color based on condition
+                fontSize: 18,
+                fontWeight: "500",
+                marginTop: 20,
+                textAlign: "center",
+                lineHeight: 25,
+                paddingHorizontal: 10
+              }}
+            >
+              {userDetails?.ekycIsDone
+                ? `Please check your email and approve the link sent by NSE for your account activation. Also please upload Your pan and bank proof in the document section for manual activation in case digital activation is not successful.d`
+                : `As Your KYC is not Registered, Kindly Proceed with online KYC or  Upload Documents for Manual KYC`}
+            </Text>
+            {userDetails?.ekycIsDone ? <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
+              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, color: "black", borderRadius: 10 }} onPress={OnlineKYC}>Online Kyc</Button>
+              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={MannualKYC}>Mannual Kyc</Button>
+            </View> : <View  style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
+            <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
+             </View> }
+          </View>
+
+          {/* Trusted By Image */}
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Image
+              source={require("../../../assets/TrustedBy.png")}
+              style={{
+                width: 250,
+                height: 80,
+                alignSelf: "center",
+                marginBottom: 50,
+              }}
+              resizeMode="contain"
+            />
+          </View>
         </View>
       </Overlay>
+      {ShowAMC && (
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={ShowAMC}
+          onRequestClose={() => setShowAMC(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.popup}>
+              <View style={styles.emaMainbox}>
+                <Text style={styles.emaAmc}>Choose AMC Option:</Text>
+                {kycLists.map((item, key) => (
+                  <TouchableOpacity key={key} onPress={() => handleKyc(item)}>
+                    <Text style={styles.emaMutual_fund}>{item.amc_name}</Text>
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity onPress={() => setShowAMC(false)}>
+                  <Text style={styles.emaCancel}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
     </>
   );
 }
@@ -1091,6 +1231,46 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "space-between",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popup: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 15,
+    width: responsiveWidth(80),
+    height: 'auto',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  emaMainbox: {
+    margin: 5,
+    padding: 5,
+  },
+  emaAmc: {
+    fontSize: 18,
+    //marginLeft: 15,
+    marginVertical: 10,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  emaMutual_fund: {
+    fontSize: 15,
+    marginVertical: 10,
+    color: 'black',
+  },
+  emaCancel: {
+    fontSize: 15,
+    marginTop: 15,
+    color: Colors.RED,
   },
   header: {
     borderBottomColor: Colors.BLACK,
@@ -1115,7 +1295,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 12,
-    color:"black"
+    color: "black"
   },
   occupation: {
     fontSize: 15,
@@ -1179,11 +1359,14 @@ const mapStateToProps = (state) => ({
   bankTypeDetails: state.registration.bankTypeDetails,
   proofOfAccount: state.registration.proofOfAccount,
   profile: state.auth.profile,
+  kycLists: state.ekyc.kycLists,
+  kycDetails: state.ekyc.kycDetails,
 });
 
 const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   const { dispatch } = dispatchProps;
   const { RegistrationActions } = require("../../store/RegistrationRedux");
+  const { EkycActions } = require('../../store/EkycRedux');
   return {
     ...stateProps,
     ...ownProps,
@@ -1207,6 +1390,12 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
     settings: (token) => {
       RegistrationActions.settings(dispatch, token);
+    },
+    postRequest: (params, token) => {
+      EkycActions.postRequest(dispatch, params, token);
+    },
+    getList: token => {
+      EkycActions.getList(dispatch, token);
     },
   };
 };

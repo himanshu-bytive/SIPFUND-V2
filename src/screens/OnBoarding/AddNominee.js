@@ -25,30 +25,19 @@ const AddNominee = (props) => {
   } = props
   const [stepCount, setStepCount] = useState(1);
   const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [show, setShow] = useState(false);
-  const [isChecked, setIsChecked] = useState(true);
   const [NomineeIsYours, setNomineeIsYours] = useState("");
-  const [NomineeId, setNomineeId] = useState("");
   const navigation = useNavigation();
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [state, setState] = useState({
     nominee1_name: "",
     nominee1_relation: "",
     nominee1_dob: null,
-    nominee1_addr1: "",
-    nominee1_city: "",
-    nominee1_state: "",
-    nominee1_pincode: "",
   });
 
   const [errors, setErrors] = useState({
     nominee1_name: null,
     nominee1_relation: null,
     nominee1_dob: null,
-    nominee1_addr1: null,
-    nominee1_city: null,
-    nominee1_state: null,
-    nominee1_pincode: null,
   });
 
   useEffect(() => {
@@ -74,10 +63,6 @@ const AddNominee = (props) => {
         nominee1_name: nseDetails?.nominee1_name,
         nominee1_relation: nseDetails?.nominee1_relation,
         nominee1_dob: nseDetails?.nominee1_dob,
-        nominee1_addr1: nseDetails?.nominee1_addr1,
-        nominee1_city: nseDetails?.nominee1_city,
-        nominee1_state: nseDetails?.nominee1_state,
-        nominee1_pincode: nseDetails?.nominee1_pincode,
       });
       setDateOfBirth(nseDetails?.nominee1_dob ? getDateInHuman(nseDetails.nominee1_dob) : null);
       setNomineeIsYours(nseDetails?.nominee1_relation);
@@ -117,6 +102,9 @@ const AddNominee = (props) => {
     // Validate fields
     let hasErrors = false;
 
+    console.log("Mystate",state);
+    
+
     // Check each required field and update errors state if empty
     if (!state.nominee1_name) {
       setErrors((prevErrors) => ({
@@ -142,30 +130,6 @@ const AddNominee = (props) => {
       hasErrors = true;
     }
 
-    if (!isChecked) {
-      if (!state.nominee1_pincode) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee1_pincode: "Please enter Pincode.",
-        }));
-        hasErrors = true;
-      }
-      if (!state.nominee1_state) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee1_state: "Please enter State.",
-        }));
-        hasErrors = true;
-      }
-      if (!state.nominee1_addr1) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          nominee1_addr1: "Please enter Address.",
-        }));
-        hasErrors = true;
-      }
-    }
-
     // If there are errors, do not proceed
     if (hasErrors) return;
 
@@ -176,10 +140,6 @@ const AddNominee = (props) => {
         nominee1_name: state?.nominee1_name,
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
-        nominee1_addr1: state?.nominee1_addr1,
-        nominee1_city: state?.nominee1_city,
-        nominee1_state: state?.nominee1_state,
-        nominee1_pincode: state?.nominee1_pincode,
       },
       fatcaDetails,
       userDetails,
@@ -199,12 +159,6 @@ const AddNominee = (props) => {
     
     props.navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
   }
-
-  const NomineeIdList = [
-    { value: "Ad", label: "Aadhaar Card" },
-    { value: "Pan", label: "Pan Card" },
-    { value: "DL", label: "Driving License" },
-  ]
 
   const mobileEmailRelation = [
     { value: "SE", label: "Self" },
@@ -365,14 +319,14 @@ const AddNominee = (props) => {
                     ); // Convert to number if needed
 
                     setDateOfBirth(dateAsNumber); // Save original Date object
-                    setErrors({ ...errors, dob: null });
-                    setState({ ...state, dob: dateAsNumber }); // Save formatted date
+                    setErrors({ ...errors, nominee1_dob: null });
+                    setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
                   }}
                   onCancel={() => setIsDatePickerVisible(false)}
                 />
               </View>
                 {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
-              <View style={{ marginTop: 10 }}>
+              {/* <View style={{ marginTop: 10 }}>
                 <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
                   <Picker
@@ -389,7 +343,7 @@ const AddNominee = (props) => {
                     ))}
                   </Picker>
                 </View>
-              </View>
+              </View> */}
               {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
                 <CheckboxSquare
                   value={isChecked}

@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     
     picker: {
         height: 50,
-        width: 200,
+        width: "auto",
         color: "black", // Default color for selected values
     },
     error: {
