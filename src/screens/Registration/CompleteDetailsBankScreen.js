@@ -400,7 +400,7 @@ function CompleteDetailsBankScreen(props, route) {
         nominee1_guard_name: params.nseDetails.nominee1_guard_name,
         nominee1_guard_pan: params.nseDetails.nominee1_guard_pan,
         nominee1_name: params.nseDetails.nominee1_name,
-        nominee1_percent: 100.0,
+        nominee1_percent: params.nseDetails.nominee1_percent,
         nominee1_pincode: params.nseDetails.nominee1_pincode,
         nominee1_relation: params.nseDetails.nominee1_relation,
         nominee1_state: params.nseDetails.nominee1_state,
@@ -1143,8 +1143,8 @@ function CompleteDetailsBankScreen(props, route) {
                 }}
               >
                 {userDetails?.ekycIsDone
-                  ? `Your investor account is ready for activation now! Your IIN Number - 1234567890`
-                  : `Your investor account has been created.\n Your IIN Number - 1234567890`}
+                  ? `Your investor account is ready for activation now! Your IIN Number - ${isInn}`
+                  : `Your investor account has been created.\n Your IIN Number - ${isInn}`}
               </Text>
             </Text>
             <Text

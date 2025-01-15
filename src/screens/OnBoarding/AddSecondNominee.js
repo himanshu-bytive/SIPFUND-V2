@@ -127,6 +127,12 @@ const AddNominee = (props) => {
         nominee2_name: state?.nominee2_name,
         nominee2_relation: NomineeIsYours,
         nominee2_dob: state?.nominee2_dob,
+        no_of_nominee : "2",
+        nominee1_percent : 50,
+        nominee2_percent : 50,
+        nominee2_name: NomineeIsYours,
+        nominee2_relation: state?.nominee2_relation,
+        nominee2_dob: state?.nominee2_dob,
       },
       fatcaDetails,
       userDetails,
@@ -140,17 +146,32 @@ const AddNominee = (props) => {
       navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
   };
+
   const mobileEmailRelation = [
-    { value: "SE", label: "Self" },
-    { value: "SP", label: "Spouse" },
-    { value: "DC", label: "Dependent Children" },
-    { value: "DS", label: "Dependent Siblings" },
-    { value: "DP", label: "Dependent Parents" },
-    { value: "GD", label: "Guardian" },
-    { value: "PM", label: "PMS" },
-    { value: "CD", label: "Custodian" },
-    { value: "PO", label: "POA" },
+    { value: "BROTHER-IN-LAW", label: "BROTHER-IN-LAW" },
+    { value: "FATHER-IN-LAW", label: "FATHER-IN-LAW" },
+    { value: "GRAND DAUGHTER", label: "GRAND DAUGHTER" },
+    { value: "SPOUSE", label: "SPOUSE" },
+    { value: "BROTHER", label: "BROTHER" },
+    { value: "DAUGHTER", label: "DAUGHTER" },
+    { value: "DAUGHTER-IN-LAW", label: "DAUGHTER-IN-LAW" },
+    { value: "GRAND FATHER", label: "GRAND FATHER" },
+    { value: "GRAND SON", label: "GRAND SON" },
+    { value: "NIECE", label: "NIECE" },
+    { value: "AUNT", label: "AUNT" },
+    { value: "FATHER", label: "FATHER" },
+    { value: "MOTHER-IN-LAW", label: "MOTHER-IN-LAW" },
+    { value: "MOTHER", label: "MOTHER" },
+    { value: "NEPHEW", label: "NEPHEW" },
+    { value: "SISTER", label: "SISTER" },
+    { value: "UNCLE", label: "UNCLE" },
+    { value: "OTHERS", label: "OTHERS" },
+    { value: "GRAND MOTHER", label: "GRAND MOTHER" },
+    { value: "SISTER-IN-LAW", label: "SISTER-IN-LAW" },
+    { value: "SON", label: "SON" },
+    { value: "SON-IN-LAW", label: "SON-IN-LAW" }
   ];
+  
   return (
     <KeyboardAvoidingView
       style={styles.container}
