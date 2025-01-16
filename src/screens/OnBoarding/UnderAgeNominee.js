@@ -8,13 +8,9 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Colors from '../../common/Colors';
 import SIPLOGO from '../../../assets/SVG-ICONS/SipLogo.svg';
 import { Picker } from '@react-native-picker/picker';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import CheckboxCircle from '../../components/Atom/CheckBox/CheckBox';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import CheckboxSquare from '../../components/Atom/CheckBox/CheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { getDateInHuman } from '../../utils/getDateInFormat';
+
 const UnderAgeNominee = (props) => {
     const {
         nseDetails,
@@ -132,18 +128,11 @@ const UnderAgeNominee = (props) => {
         navigation.navigate("Reg", { screen: "RegisterAddress" });
     };
 
-
     const mobileEmailRelation = [
-        { value: "SE", label: "Self" },
-        { value: "SP", label: "Spouse" },
-        { value: "DC", label: "Dependent Children" },
-        { value: "DS", label: "Dependent Siblings" },
-        { value: "DP", label: "Dependent Parents" },
-        { value: "GD", label: "Guardian" },
-        { value: "PM", label: "PMS" },
-        { value: "CD", label: "Custodian" },
-        { value: "PO", label: "POA" },
-    ];
+        { value: "M", label: "Mother" },
+        { value: "F", label: "Father" },
+        { value: "C", label: "Court Appointed Legal Guardian" },
+      ];
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -262,7 +251,7 @@ const styles = StyleSheet.create({
     
     picker: {
         height: 50,
-        width: 200,
+        width: "auto",
         color: "black", // Default color for selected values
     },
     error: {

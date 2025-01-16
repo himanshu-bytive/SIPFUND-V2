@@ -164,7 +164,7 @@ const PersonalDetails = (props) => {
             if (currentStep === 2) {
               setCurrentStep(1);
             } else {
-              props.navigation.goBack();
+              props.navigation.navigate("Home");
             }
           }}
           style={styles.arrowButton}

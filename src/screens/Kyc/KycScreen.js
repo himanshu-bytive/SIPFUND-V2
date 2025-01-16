@@ -16,7 +16,7 @@ import Button from '../../components/Atom/Button/Button';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 const KycScreen = props => {
-  const { users,profile } = props;
+  const { users, profile } = props;
   const { url } = props.route.params;
   console.log('haapy', profile);
   const [loading, setLoading] = useState(false);
@@ -56,52 +56,60 @@ const KycScreen = props => {
             <AntDesign name={'arrowleft'} size={30} color={Colors.RED} />
           </TouchableOpacity>
         }
-        rightComponent={
-          <View
-            style={{
-              marginTop: 25,
-              borderWidth: 1,
-              backgroundColor: Colors.WHITE,
-              borderColor: Colors.RED,
-              padding: 5,
-              borderRadius: 7,
-            }}
-          >
-            <Text style={styles.textkn}>
-              {profile?.INVESTOR_NAME
-                ? `${profile?.INVESTOR_NAME[0]}${profile?.INVESTOR_NAME.split(' ').pop()[0]}`
-                : ''}
-            </Text>
-          </View>
-        }
-        backgroundColor={Colors.LIGHT_WHITE}
-        containerStyle={styles.header}
         centerComponent={
           <Image
             source={require('../../../assets/icon.png')}
             style={styles.logimg}
           />
         }
+        rightComponent={
+          profile?.INVESTOR_NAME ? (
+            <View
+              style={{
+                marginTop: 25,
+                borderWidth: 1,
+                backgroundColor: Colors.WHITE,
+                borderColor: Colors.RED,
+                padding: 5,
+                borderRadius: 7,
+              }}
+            >
+              <Text style={styles.textkn}>
+                {`${profile?.INVESTOR_NAME[0]}${profile?.INVESTOR_NAME.split(' ').pop()[0]}`}
+              </Text>
+            </View>
+          ) : null
+        }
+        backgroundColor={Colors.LIGHT_WHITE}
+        containerStyle={styles.header}
       />
-      
+
       {status && errorDesc && (
         <View style={styles.infoView}>
-          <View style={{alignSelf:"flex-start",marginLeft:20}}>
-          <Text style={{marginTop: 20, color: "black",fontSize:18}}>Status: {status.toUpperCase() === "Y" ? "Success" : "Failed"}</Text>
-          <Text style={{marginTop:20,color:"black",fontSize:18}}>Description: {errorDesc}</Text>
+          <Text>{status}</Text>
+          <Text>{errorDesc}</Text>
+        </View>
+      )}
+
+
+      {status && errorDesc && (
+        <View style={styles.infoView}>
+          <View style={{ alignSelf: "flex-start", marginLeft: 20 }}>
+            <Text style={{ marginTop: 20, color: "black", fontSize: 18 }}>Status: {status.toUpperCase() === "Y" ? "Success" : "Failed"}</Text>
+            <Text style={{ marginTop: 20, color: "black", fontSize: 18 }}>Description: {errorDesc}</Text>
           </View>
-          <View style={{marginTop:50,justifyContent:"center",alignItems:"center"}}> 
-          <Button 
-            backgroundColor={Colors.RED}
-            text={"Go To Home"}
-            fontSize={responsiveFontSize(2)}
-            height={responsiveHeight(5)}
-            width={responsiveWidth(40)}
-            textColor={"white"}
-            onPress={()=>{
-              props.navigation.navigate("Home");
-            }}
-          />
+          <View style={{ marginTop: 50, justifyContent: "center", alignItems: "center" }}>
+            <Button
+              backgroundColor={Colors.RED}
+              text={"Go To Home"}
+              fontSize={responsiveFontSize(2)}
+              height={responsiveHeight(5)}
+              width={responsiveWidth(40)}
+              textColor={"white"}
+              onPress={() => {
+                props.navigation.navigate("Home");
+              }}
+            />
           </View>
         </View>
       )}
@@ -169,8 +177,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center"
   },
 });
 
