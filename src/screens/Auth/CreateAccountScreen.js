@@ -251,22 +251,27 @@ function CreateAccountScreen(props) {
       </View>) : (
         <KeyboardAvoidingView style={styles.container}>
           <Header
-            backgroundColor={Colors.LIGHT_WHITE}
-            containerStyle={styles.header}
-            centerComponent={
+            leftComponent={
+              <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+              </TouchableOpacity>
+            }
+            rightComponent={
               <Image
                 source={require("../../../assets/icon.png")}
                 style={styles.logimg}
               />
             }
+            containerStyle={styles.headerRow}
+            backgroundColor={Colors.WHITE}
           />
           <ScrollView style={styles.containerScroll}>
             <View style={styles.mainBox}>
-              <Image
+              {/* <Image
                 source={require("../../../assets/luck.png")}
                 style={styles.passwordimg2}
-              />
-              <Text style={styles.number}>Enter Email</Text>
+              /> */}
+              <Text style={styles.number}>Enter Your Email</Text>
               <TextInput
                 ref={emailInput}
                 style={styles.inputsec}
@@ -313,7 +318,7 @@ function CreateAccountScreen(props) {
               {referral && (
                 <View style={{ width: "100%" }}>
                   <Text
-                    style={[styles.number, { marginTop: 0, textAlign: "center" }]}
+                    style={[styles.number, { marginTop: 0, }]}
                   >
                     Referral Code
                   </Text>
@@ -361,7 +366,7 @@ function CreateAccountScreen(props) {
               />
               {errors.term && <Text style={styles.error}>{errors.term}</Text>}
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <Button backgroundColor={"white"} borderColor={"#FFB2AA"} borderWidth={2} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
+                <Button backgroundColor={"white"} borderColor={"#CD2700"} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
                     alert("Enter a valid Password!");
                     return;
@@ -393,13 +398,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   mainBox: {
-    alignItems: "center",
     paddingHorizontal: 30,
   },
   logimg: {
-    height: 65,
-    width: 203,
-    marginTop: 10,
+    height: 35,
+    width: 153,
   },
   passwordimg2: {
     marginTop: 30,
@@ -409,8 +412,8 @@ const styles = StyleSheet.create({
   },
   number: { fontSize: 22, marginTop: 20, color: "black" },
   inputsec: {
-    borderWidth: 2,
-    borderColor: "#FFB2AA",
+    borderWidth: 1,
+    borderColor: "#CD2700",
     width: "100%",
     height: 50,
     fontSize: 20,

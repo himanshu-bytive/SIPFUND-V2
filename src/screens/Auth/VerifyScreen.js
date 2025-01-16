@@ -142,8 +142,6 @@ function VerifyScreen(props) {
     console.log("GOT LOCATION",displayCurrentAddress);
   },[displayCurrentAddress])
 
-
-
   const requestCameraPermission = async () => {
     try {
       // Request CAMERA permission
@@ -376,9 +374,9 @@ function VerifyScreen(props) {
             style={styles.logoimg}
           />
         </View>
-        <View style={{ width: width - 50, marginTop: 30 }}>
+        <View style={{ width: width - 50, marginTop: 10 }}>
           {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
-          {phones.map((item, key) => (
+          {phones.slice(0,2).map((item, key) => (
             <TouchableOpacity
               key={key}
               onPress={() => onAction(item)}
@@ -432,15 +430,15 @@ function VerifyScreen(props) {
         )}
         <View style={{ marginTop: 20 }}>
           <Button isLoading={isLoading}
-            fontSize={responsiveFontSize(2.6)}
+            fontSize={responsiveFontSize(2.5)}
             textColor={"#000000"}
             onPress={() => onAction()}
             backgroundColor={Colors.WHITE}
             text="Enter"
-            borderColor={"#FFB2AA"}
-            borderWidth={2}
+            borderColor={"#CD2700"}
+            borderWidth={1}
             height={responsiveHeight(5)}
-            width={responsiveWidth(45)}
+            width={responsiveWidth(40)}
             loaderColor="black"
           />
         </View>
@@ -461,21 +459,23 @@ function VerifyScreen(props) {
   );
 }
 
+// Picker Select Styles
 const pickerSelectStyles = {
   inputIOS: {
     fontSize: 16,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
     color: '#000',
-    paddingRight: 30, // Ensure text isn't cut off
+    paddingVertical: 0,
+    paddingHorizontal: 5,
+    lineHeight: 22,
   },
   inputAndroid: {
-    fontSize: 18,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    fontSize: 16,
     color: '#000',
+    paddingHorizontal: 5,
+    paddingVertical: 0,
+    lineHeight: 20,
   },
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -485,6 +485,7 @@ const styles = StyleSheet.create({
   },
   sloganView: {
     marginTop: 40,
+    alignItems: 'center'
   },
   slogan: {
     fontSize: 30,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   },
   sloganRed: {
     //color: Colors.RED,
-    color: Colors.NEW_RED,
+    color: '#CD2700',
   },
   mainbox: {
     borderRadius: 25,
@@ -528,9 +529,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   code: {
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 5,
-    fontSize: 19,
+    fontSize: 15,
     color: "#000000",
     textAlign: "center",
     //paddingLeft: 70,
@@ -539,7 +540,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "45%",
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: "#CD2700",
     borderRadius: 8,
     paddingVertical: responsiveHeight(0.7),
     alignItems: "center",
@@ -582,49 +583,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   number_box: {
-    flexDirection: 'row', // Arrange items horizontally
-    alignItems: 'center', // Align vertically
-    marginHorizontal: 8, // Add spacing from the screen edges
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
     backgroundColor: Colors.WHITE,
-    
   },
   country_code_box: {
-    width: "auto", // Fixed width for the dropdown
+    width: 'auto',
     borderWidth: 1,
-    borderColor: '#FFB2AA',
-    borderRadius: 1, // Rounded corners
+    borderColor: '#CD2700',
+    borderRadius: 2,
     backgroundColor: Colors.WHITE,
-    justifyContent: 'center', // Center the picker vertically
-    marginRight: 10, // Spacing between dropdown and text box
-   justifyContent:"center",
-   alignItems:"center",
-   height:responsiveHeight(6)
-  },
-  pickerInput: {
-    fontSize: 14, // Text size
-    color: 'black', // Text color
-    textAlign: 'center', // Center align the text
-    paddingHorizontal: 5, // Add padding
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    height: responsiveHeight(4.6),
+    overflow: 'hidden',
   },
   text_box: {
     borderWidth: 1,
-    borderColor: '#FFB2AA',
-    borderRadius: 1,
+    borderColor: '#CD2700',
+    borderRadius: 2,
     backgroundColor: Colors.WHITE,
-    fontSize: 16,
-    width:responsiveWidth(40),
-    height:responsiveHeight(6)
+    width: responsiveWidth(40),
+    height: responsiveHeight(4.6),
+    justifyContent: 'center',
   },
+    
   inputsec: {
-    fontSize: 15,
-    paddingHorizontal: 10,
+    fontSize: 16,
+    paddingHorizontal: 5,
     height: '100%',
-    borderWidth: 1,
-    borderColor: '#f9f9f9',
     color: 'black',
     backgroundColor: Colors.WHITE,
+    textAlignVertical: 'center',
+    lineHeight: 16,
   },
-
+  
 });
 
 const mapStateToProps = (state) => ({
@@ -658,8 +653,4 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     resetData: () => dispatch(HomeActions.resetData())
   };
 };
-export default connect(
-  mapStateToProps,
-  undefined,
-  mapDispatchToProps
-)(VerifyScreen);
+export default connect(mapStateToProps, undefined, mapDispatchToProps)(VerifyScreen);
