@@ -366,7 +366,7 @@ function CreateAccountScreen(props) {
               />
               {errors.term && <Text style={styles.error}>{errors.term}</Text>}
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <Button backgroundColor={"white"} borderColor={"#CD2700"} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
+                <Button backgroundColor={"white"} borderColor={Colors.RED} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
                     alert("Enter a valid Password!");
                     return;
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   number: { fontSize: 22, marginTop: 20, color: "black" },
   inputsec: {
     borderWidth: 1,
-    borderColor: "#CD2700",
+    borderColor: Colors.RED,
     width: "100%",
     height: 50,
     fontSize: 20,

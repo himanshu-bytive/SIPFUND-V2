@@ -246,7 +246,7 @@ function LoginScreen(props) {
               onPress={() => onAction()}
               backgroundColor={Colors.WHITE}
               text="Proceed"
-              borderColor={"#FFB2AA"}
+              borderColor={Colors.RED}
               borderWidth={2}
               height={responsiveHeight(5)}
               width={responsiveWidth(45)}
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(0.7),
     alignItems: "center",
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   },
   inputsec: {
     borderWidth: 1,
-    borderColor: '#FFB2AA',
+    borderColor: Colors.RED,
     width: "100%",
     height: 40,
     fontSize: 17,

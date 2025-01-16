@@ -105,7 +105,7 @@ function ForgotPasswordScreen(props) {
         </View>
       </ScrollView>
       <View style={{justifyContent:"center",alignItems:"center",alignSelf:"center",flex:1,backgroundColor:"white"}}>
-       <Button backgroundColor={"white"} borderColor={"#FFB2AA"} borderWidth={2} fontSize={responsiveFontSize(2)} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={onAction} text={"Send My Password"} textColor={"black"} isLoading={isFetching}/>
+       <Button backgroundColor={"white"} borderColor={Colors.RED} borderWidth={2} fontSize={responsiveFontSize(2)} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={onAction} text={"Send My Password"} textColor={"black"} isLoading={isFetching}/>
       </View>
     </KeyboardAvoidingView>
   );
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   inputsec: {
     borderWidth: 2,
-    borderColor: '#FFB2AA',
+    borderColor: Colors.RED,
     height: 50,
     fontSize: 20,
     marginTop: 5,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "95%",
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
     alignItems: "center",

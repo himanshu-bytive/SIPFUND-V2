@@ -224,7 +224,7 @@ const AddNominee = (props) => {
             </Typography>
             <View style={styles.button}>
               <Button
-                borderColor={"#FFB2AA"}
+                borderColor={Colors.RED}
                 borderWidth={2}
                 text={"No, Skip for now"}
                 height={responsiveHeight(5)}
@@ -426,7 +426,7 @@ const AddNominee = (props) => {
               </TouchableOpacity>
               <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
                 <Button
-                  borderColor={"#FFB2AA"}
+                  borderColor={Colors.RED}
                   borderWidth={2}
                   fontSize={responsiveFontSize(2)}
                   height={responsiveHeight(5)}
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
   },
   inputsecWrapper: {
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     backgroundColor: Colors.WHITE,
     paddingHorizontal: 10,
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2),
     color: "black",
     backgroundColor: Colors.WHITE,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 10,

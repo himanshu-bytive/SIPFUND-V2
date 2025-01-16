@@ -435,7 +435,7 @@ function VerifyScreen(props) {
             onPress={() => onAction()}
             backgroundColor={Colors.WHITE}
             text="Enter"
-            borderColor={"#CD2700"}
+            borderColor={Colors.RED}
             borderWidth={1}
             height={responsiveHeight(5)}
             width={responsiveWidth(40)}
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
   },
   sloganRed: {
     //color: Colors.RED,
-    color: '#CD2700',
+    color: Colors.RED,
   },
   mainbox: {
     borderRadius: 25,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "45%",
     borderWidth: 1,
-    borderColor: "#CD2700",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(0.7),
     alignItems: "center",
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
   country_code_box: {
     width: 'auto',
     borderWidth: 1,
-    borderColor: '#CD2700',
+    borderColor: Colors.RED,
     borderRadius: 2,
     backgroundColor: Colors.WHITE,
     justifyContent: 'center',
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
   },
   text_box: {
     borderWidth: 1,
-    borderColor: '#CD2700',
+    borderColor: Colors.RED,
     borderRadius: 2,
     backgroundColor: Colors.WHITE,
     width: responsiveWidth(40),

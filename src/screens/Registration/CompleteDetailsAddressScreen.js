@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "90%",
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
     alignItems: "center",

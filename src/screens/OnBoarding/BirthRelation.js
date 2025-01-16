@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
   },
   inputsecWrapper: {
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     backgroundColor: Colors.WHITE,
     paddingHorizontal: 10,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "90%",
     borderWidth: 2,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
     alignItems: "center",

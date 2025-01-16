@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   inputsec: {
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     fontSize: responsiveFontSize(2),
     paddingHorizontal: responsiveWidth(3),
     height: responsiveHeight(6),
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "90%",
     borderWidth: 2,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
     alignItems: "center",
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: responsiveWidth(2),
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1.2),
     alignItems: "center",
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
   },
   
   titleButtonSelected: {
-    backgroundColor: "#FFB2AA",
+    backgroundColor: Colors.RED,
     borderColor: Colors.BLACK,
   },
   

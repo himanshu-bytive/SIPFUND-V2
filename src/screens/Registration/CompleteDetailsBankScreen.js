@@ -1139,10 +1139,10 @@ function CompleteDetailsBankScreen(props, route) {
                 : `As Your KYC is not Registered, Kindly Proceed with online KYC or  Upload Documents for Manual KYC`}
             </Text>
             {userDetails?.ekycIsDone ? <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
-              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, color: "black", borderRadius: 10 }} onPress={OnlineKYC}>Online Kyc</Button>
-              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={MannualKYC}>Mannual Kyc</Button>
+              <Button style={{ borderColor: Colors.RED, borderWidth: 2, color: "black", borderRadius: 10 }} onPress={OnlineKYC}>Online Kyc</Button>
+              <Button style={{ borderColor: Colors.RED, borderWidth: 2, borderRadius: 10 }} onPress={MannualKYC}>Mannual Kyc</Button>
             </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
-              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
+              <Button style={{ borderColor: Colors.RED, borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
             </View>}
           </View>
 

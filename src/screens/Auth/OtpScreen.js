@@ -241,7 +241,7 @@ function OtpScreen(props) {
                       borderBottomWidth: 1,
                       width: responsiveWidth(13),
                       height: responsiveHeight(8),
-                      borderColor: '#FFB2AA',
+                      borderColor: Colors.RED,
                       padding: 20
                     }}
                     pinCount={4}
@@ -252,7 +252,7 @@ function OtpScreen(props) {
                 </View>
                 <View>
                   <Button
-                    borderColor={"#FFB2AA"}
+                    borderColor={Colors.RED}
                     borderWidth={2}
                     height={responsiveHeight(5)}
                     width={responsiveWidth(45)}
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 5,
     marginBottom: 10,
-    borderColor: '#FFB2AA',
+    borderColor: Colors.RED,
     borderWidth: 2
   },
   proceedButtonText: {

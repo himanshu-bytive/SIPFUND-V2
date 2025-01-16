@@ -217,7 +217,7 @@ const OccupationAndIncome = (props) => {
       </View>
       {isFetching ? (
         <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-          <ActivityIndicator size="large" color="#FFB2AA" />
+          <ActivityIndicator size="large" color={Colors.RED} />
         </View>
       ) : (
         <ScrollView
@@ -438,13 +438,13 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(1),
     paddingVertical: responsiveHeight(1.5),
     borderWidth: 1,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     alignItems: "center",
     backgroundColor: Colors.WHITE,
   },
   optionButtonSelected: {
-    backgroundColor: "#FFB2AA",
+    backgroundColor: Colors.RED,
   },
   optionText: {
     fontSize: responsiveFontSize(2),
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: responsiveWidth(90),
     borderWidth: 2,
-    borderColor: "#FFB2AA",
+    borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
     alignItems: "center",
