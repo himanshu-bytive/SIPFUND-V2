@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   sloganRed: {
     //color: Colors.RED,
-    color: Colors.NEW_RED,
+    color: Colors.RED,
   },
   passwordimg2: {
     marginTop: 20,

@@ -686,7 +686,7 @@ function CompleteDetailsBankScreen(props, route) {
         <ScrollView>
           <View style={styles.heading_sec}>
             <Text style={styles.heading}>
-              Verify Bank Details of Himanshu Joshi
+             Verify Bank Details of {nseDetails?.inv_name}
             </Text>
           </View>
 

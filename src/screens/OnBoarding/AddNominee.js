@@ -63,7 +63,7 @@ const AddNominee = (props) => {
         nominee1_name: nseDetails?.nominee1_name,
         nominee1_relation: nseDetails?.nominee1_relation,
         nominee1_dob: nseDetails?.nominee1_dob,
-        nominee1_percent : 100
+        nominee1_percent: 100
       });
       setDateOfBirth(nseDetails?.nominee1_dob ? getDateInHuman(nseDetails.nominee1_dob) : null);
       setNomineeIsYours(nseDetails?.nominee1_relation);
@@ -103,8 +103,8 @@ const AddNominee = (props) => {
     // Validate fields
     let hasErrors = false;
 
-    console.log("Mystate",state);
-    
+    console.log("Mystate", state);
+
 
     // Check each required field and update errors state if empty
     if (!state.nominee1_name) {
@@ -141,9 +141,9 @@ const AddNominee = (props) => {
         nominee1_name: state?.nominee1_name,
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
-        no_of_nominee : "1",
-        nominee1_percent : 100,
-        nominee2_percent : "",
+        no_of_nominee: "1",
+        nominee1_percent: 100,
+        nominee2_percent: "",
         nominee2_name: "",
         nominee2_relation: "",
         nominee2_dob: "",
@@ -191,7 +191,7 @@ const AddNominee = (props) => {
     { value: "SON", label: "SON" },
     { value: "SON-IN-LAW", label: "SON-IN-LAW" }
   ];
-  
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -308,7 +308,7 @@ const AddNominee = (props) => {
                       }}
                       editable={false}
                       selectTextOnFocus={false}
-                      value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
+                      value={dateOfBirth ? dateOfBirth : ""}
                       placeholder={"DD-MM-YYYY"}
                       placeholderTextColor={"grey"}
                       maxLength={11}
@@ -339,14 +339,15 @@ const AddNominee = (props) => {
                       10
                     ); // Convert to number if needed
 
-                    setDateOfBirth(dateAsNumber); // Save original Date object
+                    const datevalue = getDateInHuman(dateAsNumber);
+                    setDateOfBirth(datevalue); // Save original Date object
                     setErrors({ ...errors, nominee1_dob: null });
                     setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
                   }}
                   onCancel={() => setIsDatePickerVisible(false)}
                 />
               </View>
-                {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
+              {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
               {/* <View style={{ marginTop: 10 }}>
                 <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 10,
     marginBottom: 10,
-    justifyContent:"center"
+    justifyContent: "center"
   },
 
   headerContainer: {

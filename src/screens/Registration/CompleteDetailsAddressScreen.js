@@ -342,8 +342,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   textBox: {
-    borderWidth: 2,
-    borderColor: '#FFB2AA',
+    borderWidth: 1,
+    borderColor: Colors.RED,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     fontSize: 16,
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     width: "90%",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: Colors.RED,
     borderRadius: 8,
     paddingVertical: responsiveHeight(1),
@@ -421,7 +421,6 @@ const styles = StyleSheet.create({
     width: "50%",
     backgroundColor: Colors.RED,
     paddingVertical: 10,
-    borderColor: Colors.DEEP_GRAY,
     marginHorizontal: 5,
   },
   get_otp: {

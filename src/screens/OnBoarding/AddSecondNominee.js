@@ -259,7 +259,7 @@ const AddNominee = (props) => {
                       }}
                       editable={false}
                       selectTextOnFocus={false}
-                      value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
+                      value={dateOfBirth ? dateOfBirth : ""}
                       placeholder={"DD-MM-YYYY"}
                       placeholderTextColor={"grey"}
                       maxLength={11}
@@ -290,7 +290,8 @@ const AddNominee = (props) => {
                       10
                     ); // Convert to number if needed
 
-                    setDateOfBirth(dateAsNumber); // Save original Date object
+                    const datevalue = getDateInHuman(dateAsNumber);
+                    setDateOfBirth(datevalue); // Save original Date object
                     setErrors({ ...errors, nominee2_dob: null });
                     setState({ ...state, nominee2_dob: dateAsNumber }); // Save formatted date
                   }}

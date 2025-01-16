@@ -196,6 +196,8 @@ const BirthRelations = (props) => {
       setEmailBelongsTo(
         nseDetails?.Email_relation
       );
+      console.log("DOB",dateOfBirth);
+      
     }
   }, [fatcaDetails, nseDetails, userDetails]);
 
@@ -297,7 +299,7 @@ const BirthRelations = (props) => {
                       }}
                       editable={false}
                       selectTextOnFocus={false}
-                      value={dateOfBirth ? getDateInHuman(dateOfBirth) : ""}
+                      value={dateOfBirth ? dateOfBirth : ""}
                       placeholder={"DD-MM-YYYY"}
                       placeholderTextColor={"grey"}
                       maxLength={11}
@@ -327,8 +329,8 @@ const BirthRelations = (props) => {
                       `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
                       10
                     ); // Convert to number if needed
-                  
-                    setDateOfBirth(dateAsNumber); // Save original Date object
+                    const datevalue = getDateInHuman(dateAsNumber);
+                    setDateOfBirth(datevalue); // Save original Date object
                     
                     
                     setErrors({ ...errors, dob: null });

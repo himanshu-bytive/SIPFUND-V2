@@ -138,9 +138,9 @@ function VerifyScreen(props) {
     initialize();
   }, []);
 
-  useEffect(()=>{
-    console.log("GOT LOCATION",displayCurrentAddress);
-  },[displayCurrentAddress])
+  useEffect(() => {
+    console.log("GOT LOCATION", displayCurrentAddress);
+  }, [displayCurrentAddress])
 
   const requestCameraPermission = async () => {
     try {
@@ -268,7 +268,7 @@ function VerifyScreen(props) {
           state: state,
           pincode: pincode,
         });
-        
+
       } else {
         console.error("Geocoding API error:", response.data.status);
         Alert.alert("Error", "Unable to fetch address details");
@@ -310,7 +310,7 @@ function VerifyScreen(props) {
           pincode: displayCurrentAddress?.pincode,
           address: displayCurrentAddress?.address,
           state: displayCurrentAddress?.state,
-          city : displayCurrentAddress?.city
+          city: displayCurrentAddress?.city
         },
       };
 
@@ -362,98 +362,96 @@ function VerifyScreen(props) {
       style={styles.container}
     >
       <ScrollView>
-      <View style={styles.sloganView}>
-        <Text style={styles.slogan}>
-          Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
-        </Text>
-      </View>
-      <View style={styles.mainbox}>
-        <View style={{ alignItems: "center" }}>
+        <View style={styles.sloganView}>
+          <Text style={styles.slogan}>
+            Achieve Your <Text style={styles.sloganRed}>Dreams</Text>
+          </Text>
+        </View>
+        <View style={styles.mainbox}>
+          <View style={{ alignItems: "center" }}>
+            <Image
+              source={require("../../../assets/SIPFUND-NEW-LOGIN.png")}
+              style={styles.logoimg}
+            />
+          </View>
+          <View style={{ width: width - 50, marginTop: 10 }}>
+            {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
+            {phones.slice(0, 2).map((item, key) => (
+              <TouchableOpacity
+                key={key}
+                onPress={() => onAction(item)}
+                style={styles.phone_number}
+              >
+                <MaterialIcons name="call" size={20} color="#838280" />
+                <Text style={styles.number}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={styles.or}>
+            {phones.length > 0 && <Text style={styles.code}>OR</Text>}
+            <Text style={[styles.code, { marginTop: 0 }]}>
+              Enter Your Mobile number
+            </Text>
+          </View>
+          <View style={styles.number_box}>
+            <View style={styles.country_code_box}>
+              <RNPickerSelect
+                onValueChange={(value) => setSelectedValue(value)} // Update state
+                items={[{ label: '🇮🇳 +91', value: '+91' }]} // Indian Flag
+                value={selectedValue} // Controlled component
+                style={pickerSelectStyles} // Custom styles
+                placeholder={{}} // Empty placeholder
+                useNativeAndroidPickerStyle={false} // For consistent behavior across platforms
+              />
+            </View>
+            <View style={styles.text_box}>
+              <TextInput
+                ref={phoneInput}
+                style={styles.inputsec}
+                placeholder={"Phone"}
+                placeholderTextColor="grey"
+                keyboardType="numeric"
+                maxLength={10}
+                onChangeText={(phone) => {
+                  setError({ ...errors, phone: null });
+                  setState({ ...state, phone });
+                }}
+                value={state.phone}
+              />
+            </View>
+          </View>
+
+          {errors.phone && (
+            <View style={styles.text_box}>
+              <Text style={styles.error}>{errors.phone}</Text>
+            </View>
+          )}
+          <View style={{ marginTop: 20 }}>
+            <Button isLoading={isLoading}
+              fontSize={responsiveFontSize(2.5)}
+              textColor={"#000000"}
+              onPress={() => onAction()}
+              backgroundColor={Colors.WHITE}
+              text="Enter"
+              borderColor={Colors.RED}
+              borderWidth={2}
+              height={responsiveHeight(5)}
+              width={responsiveWidth(40)}
+              loaderColor="black"
+            />
+          </View>
+          <View style={styles.otp}>
+            <Text style={{ color: "grey" }}>
+              OTP will be sent to this Mobile Number
+            </Text>
+          </View>
+        </View>
+        <View style={{ marginTop: 20, justifyContent: "center", alignItems: 'center' }}>
           <Image
-            source={require("../../../assets/SIPFUND-NEW-LOGIN.png")}
-            style={styles.logoimg}
+            source={require("../../../assets/nse.png")}
+            style={styles.nseimg}
           />
         </View>
-        <View style={{ width: width - 50, marginTop: 10 }}>
-          {phones.length > 0 && <Text style={styles.code}>Continue with</Text>}
-          {phones.slice(0,2).map((item, key) => (
-            <TouchableOpacity
-              key={key}
-              onPress={() => onAction(item)}
-              style={styles.phone_number}
-            >
-              <MaterialIcons name="call" size={20} color="#838280" />
-              <Text style={styles.number}>{item}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <View style={styles.or}>
-          {phones.length > 0 && <Text style={styles.code}>OR</Text>}
-          <Text style={[styles.code, { marginTop: 0 }]}>
-            Enter Your Mobile number
-          </Text>
-        </View>
-        <View style={styles.number_box}>
-          <View style={styles.country_code_box}>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedValue(value)} // Update state
-              items={[
-                { label: '🇮🇳 +91', value: '+91' }, // Indian Flag
-              ]}
-              value={selectedValue} // Controlled component
-              style={pickerSelectStyles} // Custom styles
-              placeholder={{}} // Empty placeholder
-              useNativeAndroidPickerStyle={false} // For consistent behavior across platforms
-            />
-          </View>
-          {/* Phone Number Input */}
-          <View style={styles.text_box}>
-            <TextInput
-              ref={phoneInput}
-              style={styles.inputsec}
-              placeholder={"Phone"}
-              placeholderTextColor="grey"
-              keyboardType="numeric"
-              maxLength={10}
-              onChangeText={(phone) => {
-                setError({ ...errors, phone: null });
-                setState({ ...state, phone });
-              }}
-              value={state.phone}
-            />
-          </View>
-        </View>
-        {errors.phone && (
-          <View style={styles.text_box}>
-            <Text style={styles.error}>{errors.phone}</Text>
-          </View>
-        )}
-        <View style={{ marginTop: 20 }}>
-          <Button isLoading={isLoading}
-            fontSize={responsiveFontSize(2.5)}
-            textColor={"#000000"}
-            onPress={() => onAction()}
-            backgroundColor={Colors.WHITE}
-            text="Enter"
-            borderColor={Colors.RED}
-            borderWidth={1}
-            height={responsiveHeight(5)}
-            width={responsiveWidth(40)}
-            loaderColor="black"
-          />
-        </View>
-        <View style={styles.otp}>
-          <Text style={{ color: "grey" }}>
-            OTP will be sent to this Mobile Number
-          </Text>
-        </View>
-      </View>
-      <View style={{marginTop:20,justifyContent:"center",alignItems:'center'}}>
-        <Image
-          source={require("../../../assets/nse.png")}
-          style={styles.nseimg}
-        />
-      </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -484,7 +482,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   sloganView: {
-    marginTop: 40,
+    marginTop: 50,
     alignItems: 'center'
   },
   slogan: {
@@ -502,7 +500,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: width - 50,
     alignItems: "center",
-    marginBottom:-20
+    marginBottom: 0
   },
   logoimg: {
     marginTop: 20,
@@ -531,10 +529,11 @@ const styles = StyleSheet.create({
   code: {
     marginTop: 5,
     marginBottom: 5,
-    fontSize: 15,
+    fontSize: 16,
     color: "#000000",
     textAlign: "center",
     //paddingLeft: 70,
+    fontWeight:"bold"
   },
   button: {
     alignItems: "center",
@@ -583,43 +582,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   number_box: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 8,
-    backgroundColor: Colors.WHITE,
+    flexDirection: 'row', // Arrange child elements in a row
+    alignItems: 'center', // Align items vertically in the center
+    justifyContent: 'space-between', // Optional: Adjusts spacing between children
+    gap: 5, // Adds a gap of 5 between children
+    marginTop:5
   },
   country_code_box: {
-    width: 'auto',
-    borderWidth: 1,
+    height: 40, // Fixed height for consistency
+    justifyContent: 'center', // Centers content vertically
     borderColor: Colors.RED,
-    borderRadius: 2,
-    backgroundColor: Colors.WHITE,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-    height: responsiveHeight(4.6),
-    overflow: 'hidden',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    backgroundColor: 'white', // White background
+    width:80
   },
   text_box: {
-    borderWidth: 1,
-    borderColor: Colors.RED,
-    borderRadius: 2,
-    backgroundColor: Colors.WHITE,
-    width: responsiveWidth(40),
-    height: responsiveHeight(4.6),
+    height: 40,
     justifyContent: 'center',
+    borderColor: Colors.RED,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+    width:150
   },
-    
   inputsec: {
-    fontSize: 16,
-    paddingHorizontal: 5,
-    height: '100%',
+    flex: 1, // Allow input to fill available space
     color: 'black',
-    backgroundColor: Colors.WHITE,
-    textAlignVertical: 'center',
-    lineHeight: 16,
   },
-  
+
 });
 
 const mapStateToProps = (state) => ({
