@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     color:"black"
   },
   inputsec: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: Colors.RED,
     height: 50,
     fontSize: 20,
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginHorizontal: 25,
     backgroundColor: Colors.WHITE,
+    borderRadius:5
   },
    bottomButtonContainer: {
     position: "absolute",

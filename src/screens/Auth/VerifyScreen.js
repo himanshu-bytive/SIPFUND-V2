@@ -408,7 +408,7 @@ function VerifyScreen(props) {
               <TextInput
                 ref={phoneInput}
                 style={styles.inputsec}
-                placeholder={"Phone"}
+                placeholder={"Enter Mobile Number"}
                 placeholderTextColor="grey"
                 keyboardType="numeric"
                 maxLength={10}
@@ -422,7 +422,7 @@ function VerifyScreen(props) {
           </View>
 
           {errors.phone && (
-            <View style={styles.text_box}>
+            <View style={styles.text_box2}>
               <Text style={styles.error}>{errors.phone}</Text>
             </View>
           )}
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Arrange child elements in a row
     alignItems: 'center', // Align items vertically in the center
     justifyContent: 'space-between', // Optional: Adjusts spacing between children
-    gap: 5, // Adds a gap of 5 between children
+    gap: 8, // Adds a gap of 5 between children
     marginTop:5
   },
   country_code_box: {
@@ -606,7 +606,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     backgroundColor: 'white',
-    width:150
+    width:180
+  },
+  text_box2: {
+    marginTop:10
   },
   inputsec: {
     flex: 1, // Allow input to fill available space
