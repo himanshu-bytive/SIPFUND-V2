@@ -20,6 +20,7 @@ import { reducer as ReportsRedux } from './ReportsRedux';
 import { reducer as FundDetailRedux } from './FundDetailRedux';
 import { reducer as PushNotificationRedux } from './PushNotificationRedux';
 import { locationReducer } from './FetchLocationRedux';
+import { pauseSipReducer } from './PauseSipRedux';
 const config = {
     key: 'root',
     storage: AsyncStorage,
@@ -47,4 +48,5 @@ export default persistCombineReducers(config, {
     fundDetail: FundDetailRedux,
     notification: PushNotificationRedux,
     location : locationReducer,
+    pauseSip : pauseSipReducer,
 });
