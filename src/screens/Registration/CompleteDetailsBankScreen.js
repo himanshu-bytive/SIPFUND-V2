@@ -13,6 +13,7 @@ import {
   Modal,
   SafeAreaView,
   PermissionsAndroid,
+  TextInput,
 } from "react-native";
 import moment from "moment";
 import { connect } from "react-redux";
@@ -24,11 +25,12 @@ import Cart from "../../components/Cart";
 import * as ImagePicker from "react-native-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 import { Camera, useCameraDevice } from 'react-native-vision-camera';
-import { Button, shadow } from "react-native-paper";
 import RNFetchBlob from "rn-fetch-blob";
 import { getDateInHuman } from "../../utils/getDateInFormat";
 import LottieView from "lottie-react-native";
-import { responsiveWidth } from "react-native-responsive-dimensions";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { Picker } from "@react-native-picker/picker";
+import Button from "../../components/Atom/Button/Button";
 
 function CompleteDetailsBankScreen(props, route) {
   const pageActive = useRef(false);
@@ -129,6 +131,21 @@ function CompleteDetailsBankScreen(props, route) {
       }
     } catch (err) {
       console.warn(err);
+    }
+  }
+
+  const onFetchBankDetails = () => {
+    if (
+      state.accountNumber.length < 9 ||
+      state.accountNumber.length > 21
+    ) {
+      setErrors({
+        ...errors,
+        accountNumber: "Please Add a Valid Value",
+      });
+    } else {
+      getBankDetails(state.ifsc, token);
+      setErrors({ ...errors, showBank: null });
     }
   }
 
@@ -622,7 +639,7 @@ function CompleteDetailsBankScreen(props, route) {
   const MannualKYC = () => {
     props.navigation.navigate('Reg', { screen: 'UploadDocument' })
   }
-  const GoToHome = () =>{
+  const GoToHome = () => {
     props.navigation.navigate("Home")
   }
   const OnlineKYC = () => {
@@ -669,10 +686,7 @@ function CompleteDetailsBankScreen(props, route) {
         <ScrollView>
           <View style={styles.heading_sec}>
             <Text style={styles.heading}>
-              Your bank account details are required as they need to be linked
-              to your mutual fund account so that you can do the transactions.
-              Your bank account details are safe and stored in encrypted format
-              in NSE.
+              Verify Bank Details of Himanshu Joshi
             </Text>
           </View>
 
@@ -681,25 +695,37 @@ function CompleteDetailsBankScreen(props, route) {
             <Text style={styles.occupation}>
               Account Type <Text style={styles.error}>*</Text>
             </Text>
-            <MySelectPicker
-              values={accountTypeList}
-              defultValue={state.accountType}
-              error={errors.accountType}
-              placeholder={"Select A/C type"}
-              onChange={(accountType) => {
-                setErrors({ ...errors, accountType: null });
-                setState({ ...state, accountType });
-              }}
-            />
+            <View style={[styles.inputsec]}>
+              {console.log("Hi", accountTypeList)}
+              <Picker
+                selectedValue={state.accountType}
+                onValueChange={(accountType) => {
+                  setErrors({ ...errors, accountType: null });
+                  setState({ ...state, accountType });
+                }}
+                style={[
+                  styles.picker,
+                  state.accountType === "" && { color: "grey" }, // Placeholder color
+                ]}
+              >
+                <Picker.Item label="Select A/C type" value="" />
+                {accountTypeList.map((item) => (
+                  <Picker.Item key={item.value} label={item.label} value={item.value} />
+                ))}
+              </Picker>
+            </View>
+            {errors.accountType && <Text style={styles.errorText}>{errors.accountType}</Text>}
 
             <Text style={styles.occupation}>
               Account No. <Text style={styles.error}>*</Text>
             </Text>
-            <MyTextInput
-              keyboardType="numeric"
+            <TextInput
+              style={styles.inputsec}
+              editable={true}
               maxLength={16}
-              value={state.accountNumber}
-              error={errors.accountNumber}
+              placeholderTextColor={"grey"}
+              placeholder="Enter A/C Number"
+              value={state.accountNumber ? state.accountNumber : ""}
               onChangeText={(accountNumber) => {
                 setErrors({ ...errors, accountNumber: null });
                 setState({ ...state, accountNumber });
@@ -709,117 +735,33 @@ function CompleteDetailsBankScreen(props, route) {
             <Text style={styles.occupation}>
               IFSC Code <Text style={styles.error}>*</Text>
             </Text>
-            <MyTextInput
-              value={state.ifsc}
-              error={errors.ifsc}
-              autoCapitalize={"characters"}
+            <TextInput
+              style={styles.inputsec}
+              editable={true}
+              autoCapitalize="characters"
+              placeholderTextColor={"grey"}
               maxLength={11}
+              placeholder="Enter IFSC"
+              value={state.ifsc ? state.ifsc : ""}
               onChangeText={(ifsc) => {
                 setErrors({ ...errors, ifsc: null });
                 setState({ ...state, ifsc });
               }}
             />
-
-            <View style={{ alignItems: "center" }}>
-              {isFetching ? (
-                <View style={styles.botton_box}>
-                  <ActivityIndicator size={30} color={Colors.WHITE} />
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      state.accountNumber.length < 9 ||
-                      state.accountNumber.length > 21
-                    ) {
-                      setErrors({
-                        ...errors,
-                        accountNumber: "Please Add a Valid Value",
-                      });
-                    } else {
-                      getBankDetails(state.ifsc, token);
-                      setErrors({ ...errors, showBank: null });
-                    }
-                  }}
-                  style={[styles.botton_box, { marginTop: 10 }]}
-                >
-                  <Text style={styles.get_otp}>Fetch Bank Details</Text>
-                </TouchableOpacity>
-              )}
+            <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
+              <Button
+                isLoading={isFetching}
+                borderColor={Colors.RED}
+                borderWidth={2}
+                fontSize={responsiveFontSize(2)}
+                height={responsiveHeight(5)}
+                width={responsiveWidth(60)}
+                text={"Fetch Bank Details"}
+                textColor={"black"}
+                onPress={onFetchBankDetails}
+              />
             </View>
           </View>
-          {/* <View style={styles.container_sec}>
-            <Text style={styles.occupation}>
-              Account Type <Text style={styles.error}>*</Text>
-            </Text>
-            <MySelectPicker
-              values={accountTypeList}
-              defultValue={state.accountType}
-              error={errors.accountType}
-              placeholder={"Select A/C type"}
-              onChange={(accountType) => {
-                setErrors({ ...errors, accountType: null });
-                setState({ ...state, accountType });
-              }}
-            />
-
-            <Text style={styles.occupation}>
-              Account No. <Text style={styles.error}>*</Text>
-            </Text>
-            <MyTextInput
-              keyboardType="numeric"
-              maxLength={16}
-              value={state.accountNumber}
-              error={errors.accountNumber}
-              onChangeText={(accountNumber) => {
-                setErrors({ ...errors, accountNumber: null });
-                setState({ ...state, accountNumber });
-              }}
-            />
-
-            <Text style={styles.occupation}>
-              IFSC Code <Text style={styles.error}>*</Text>
-            </Text>
-            <MyTextInput
-              value={state.ifsc}
-              error={errors.ifsc}
-              autoCapitalize={"characters"}
-              maxLength={20}
-              onChangeText={(ifsc) => {
-                setErrors({ ...errors, ifsc: null });
-                setState({ ...state, ifsc });
-              }}
-            />
-
-            <View style={{ alignItems: "center" }}>
-              {isFetching ? (
-                <View style={styles.botton_box}>
-                  <ActivityIndicator size={30} color={Colors.WHITE} />
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      state.accountNumber.length < 9 ||
-                      state.accountNumber.length > 21
-                    ) {
-                      setErrors({
-                        ...errors,
-                        accountNumber: "Please Add a Valid Value",
-                      });
-                    } else {
-                      getBankDetails(state.ifsc, token);
-                      setErrors({ ...errors, showBank: null });
-                    }
-                  }}
-                  style={[styles.botton_box, { marginTop: 10 }]}
-                >
-                  <Text style={styles.get_otp}>Fetch Bank Details</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View> */}
-
           {/* botton_box_sec */}
           <View
             style={{
@@ -840,22 +782,38 @@ function CompleteDetailsBankScreen(props, route) {
               <Text style={styles.occupation}>
                 Bank Name <Text style={styles.error}>*</Text>
               </Text>
-              <MySelectPicker
-                values={bankList}
-                defultValue={state.bank}
-                error={errors.bank}
-                onChange={(bank) => {
-                  setErrors({ ...errors, bank: null });
-                  setState({ ...state, bank });
-                }}
-              />
+
+              <View style={[styles.inputsec]}>
+                {console.log("Hi", accountTypeList)}
+                <Picker
+                  selectedValue={state.bank}
+                  onValueChange={(bank) => {
+                    setErrors({ ...errors, bank: null });
+                    setState({ ...state, bank });
+                  }}
+                  style={[
+                    styles.picker,
+                    state.bank === "" && { color: "grey" }, // Placeholder color
+                  ]}
+                >
+                  <Picker.Item label="Select A/C type" value="" />
+                  {bankList.map((item) => (
+                    <Picker.Item key={item.value} label={item.label} value={item.value} />
+                  ))}
+                </Picker>
+              </View>
+              {errors.bank && <Text style={styles.errorText}>{errors.bank}</Text>}
 
               <Text style={styles.occupation}>
                 Branch Name <Text style={styles.error}>*</Text>
               </Text>
-              <MyTextInput
-                value={state.branchName}
-                error={errors.branchName}
+              <TextInput
+                style={styles.inputsec}
+                editable={true}
+                autoCapitalize="characters"
+                placeholderTextColor={"grey"}
+                placeholder="Enter Branch Name"
+                value={state.branchName ? state.branchName : ""}
                 onChangeText={(branchName) => {
                   setErrors({ ...errors, branchName: null });
                   setState({ ...state, branchName });
@@ -865,9 +823,13 @@ function CompleteDetailsBankScreen(props, route) {
               <Text style={styles.occupation}>
                 Branch Address <Text style={styles.error}>*</Text>
               </Text>
-              <MyTextInput
-                value={state.branchAddress}
-                error={errors.branchAddress}
+               <TextInput
+                style={styles.inputsec}
+                editable={true}
+                autoCapitalize="characters"
+                placeholderTextColor={"grey"}
+                placeholder="Enter Branch Address"
+                value={state.branchName ? state.branchName : ""}
                 onChangeText={(branchAddress) => {
                   setErrors({ ...errors, branchAddress: null });
                   setState({ ...state, branchAddress });
@@ -1179,9 +1141,9 @@ function CompleteDetailsBankScreen(props, route) {
             {userDetails?.ekycIsDone ? <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
               <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, color: "black", borderRadius: 10 }} onPress={OnlineKYC}>Online Kyc</Button>
               <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={MannualKYC}>Mannual Kyc</Button>
-            </View> : <View  style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
-            <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
-             </View> }
+            </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
+              <Button style={{ borderColor: "#FFB2AA", borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
+            </View>}
           </View>
 
           {/* Trusted By Image */}
@@ -1231,6 +1193,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "space-between",
+  },
+  errorText: {
+    color: "red",
+    fontSize: responsiveFontSize(1.5),
+    marginTop: -5,
+    marginBottom: 10
+  },
+  picker: {
+    height: 50,
+    width: "auto",
+    color: "black", // Default color for selected values
+  },
+  inputsec: {
+    height: responsiveHeight(6),
+    fontSize: responsiveFontSize(2),
+    color: "black",
+    backgroundColor: Colors.WHITE,
+    borderColor: Colors.RED,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    justifyContent: "center",
+    marginTop: 5
   },
   modalOverlay: {
     flex: 1,
@@ -1294,14 +1280,15 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   heading: {
-    fontSize: 12,
-    color: "black"
+    fontSize: 14,
+    color: "black",
+    fontWeight: "bold"
   },
   occupation: {
     fontSize: 15,
     color: Colors.DEEP_GRAY,
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 0,
   },
   example: {
     fontSize: 15,
@@ -1326,20 +1313,26 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: "center",
+    marginBottom:20
   },
   click_box: {
     flexDirection: "row",
     marginHorizontal: 25,
+    borderRadius:15
   },
   botton_box: {
     width: "50%",
-    backgroundColor: Colors.RED,
+    backgroundColor: Colors.WHITE,
     paddingVertical: 10,
     marginHorizontal: 5,
+    borderRadius:12,
+    borderWidth:2,
+    borderColor:Colors.RED,
+    textColor:"black"
   },
   get_otp: {
-    color: Colors.WHITE,
-    fontSize: 18,
+    color: Colors.BLACK,
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
   },
