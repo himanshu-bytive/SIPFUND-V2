@@ -54,7 +54,7 @@ const initialState = {
 };
 
 export const pauseSipReducer = (state = initialState, action) => {
-  const { type, error, sipList } = action;
+  const { type, error, sipList, pauseSipRes } = action;
 
   switch (type) {
     case types.FETCH_SIP_DETAIL_PENDING: 
