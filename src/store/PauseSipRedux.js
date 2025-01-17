@@ -1,63 +1,76 @@
 import SiteAPI from "../services/SiteApis";
-import { Alert } from "react-native";
-const types = {
 
+const types = {
   FETCH_SIP_DETAIL_PENDING: "FETCH_SIP_DETAIL_PENDING",
   FETCH_SIP_DETAIL_FAILURE: "FETCH_SIP_DETAIL_FAILURE",
-  FETCH_SIP_DETAIL_SUCCES: "FETCH_SIP_DETAIL_SUCCES",
+  FETCH_SIP_DETAIL_SUCCESS: "FETCH_SIP_DETAIL_SUCCESS",
 
   PAUSE_SIP_PENDING: "PAUSE_SIP_PENDING",
   PAUSE_SIP_FAILURE: "PAUSE_SIP_FAILURE",
-  PAUSE_SIP_SUCCES: "PAUSE_SIP_SUCCES",
-
+  PAUSE_SIP_SUCCESS: "PAUSE_SIP_SUCCESS",
 };
 
 export const PauseSipRedux = {
-
   getSipDetail: async (dispatch, params, token) => {
-
     dispatch({ type: types.FETCH_SIP_DETAIL_PENDING });
 
-    let data = await SiteAPI.apiGetCall(`/sip?pan=${params}&null=null&type=START`, {}, token);
-    if (data.error) {
+    try {
+      let data = await SiteAPI.apiGetCall(`/sip?pan=${params}&null=null&type=START`, {}, token);
+      if (data.error) {
+        dispatch({
+          type: types.FETCH_SIP_DETAIL_FAILURE,
+          error: data.message,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_SIP_DETAIL_SUCCESS,
+          sipList: data,
+        });
+      }
+    } catch (err) {
       dispatch({
         type: types.FETCH_SIP_DETAIL_FAILURE,
-        error: data.message,
-      });
-    } else {
-      dispatch({
-        type: types.FETCH_SIP_DETAIL_SUCCES,
-        sipList: data,
+        error: "An error occurred while fetching SIP details.",
       });
     }
   },
   pauseSipEntry: async (dispatch, params, token) => {
     dispatch({ type: types.PAUSE_SIP_PENDING });
-    let data = await SiteAPI.apiPostCall("/customer/pauseSipEntry", params, token);
-    if (data.error) {
+
+    try {
+      let data = await SiteAPI.apiPostCall("/customer/pauseSipEntry", params, token);
+      if (data.error) {
+        dispatch({
+          type: types.PAUSE_SIP_FAILURE,
+          error: data.message,
+        });
+      } else {
+        dispatch({
+          type: types.PAUSE_SIP_SUCCESS,
+          pauseSipRes: data,
+        });
+      }
+    } catch (err) {
       dispatch({
         type: types.PAUSE_SIP_FAILURE,
-        error: data.message,
-      });
-    } else {
-      dispatch({
-        type: types.PAUSE_SIP_SUCCES,
-        pauseSipRes: data,
+        error: "An error occurred while pausing SIP entry.",
       });
     }
   },
 };
 
 const initialState = {
-  sipList : {},
-  pauseSipRes : {},
+  sipList: {},
+  pauseSipRes: {},
+  isFetching: false,
+  error: null,
 };
 
 export const pauseSipReducer = (state = initialState, action) => {
-  const { type, error, sipList } = action;
+  const { type, error, sipList, pauseSipRes } = action;
 
   switch (type) {
-    case types.FETCH_SIP_DETAIL_PENDING: 
+    case types.FETCH_SIP_DETAIL_PENDING:
     case types.PAUSE_SIP_PENDING: {
       return {
         ...state,
@@ -75,7 +88,7 @@ export const pauseSipReducer = (state = initialState, action) => {
       };
     }
 
-    case types.FETCH_SIP_DETAIL_SUCCES: {
+    case types.FETCH_SIP_DETAIL_SUCCESS: {
       return {
         ...state,
         isFetching: false,
@@ -84,13 +97,13 @@ export const pauseSipReducer = (state = initialState, action) => {
       };
     }
 
-    case types.PAUSE_SIP_SUCCES: {
+    case types.PAUSE_SIP_SUCCESS: {
       return {
         ...state,
-        isFinite: false,
+        isFetching: false,
         error: null,
         pauseSipRes,
-      }
+      };
     }
 
     default:

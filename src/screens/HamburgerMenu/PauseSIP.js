@@ -136,14 +136,14 @@ function PauseSIP(props) {
           {pauseSip.data.map((item) => 
             <View style={styles.listStyle} key={item._id}>
               <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
-              <Text>{item.sipReports.FROMSCHEME}</Text>
-              <Text>FOLIONO: {item.sipReports.FOLIONO}</Text>
+              <Text style={{color:"black"}}>{item.sipReports.FROMSCHEME}</Text>
+              <Text style={{color:"black"}}>FOLIONO: {item.sipReports.FOLIONO}</Text>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, }}>
                 <Picker
                   selectedValue={selectedMonths[item._id] || ""}
                   onValueChange={(value) => handleMonthChange(value, item._id)}
-                  style={{ flex: 1, height: 20, marginRight: 30 }}
+                  style={{ flex: 1, height: 20, marginRight: 30,color:"black" }}
                 >
                   <Picker.Item label="Select Month" value="" />
                   {monthList.map((month) => (
@@ -356,16 +356,15 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
+const mapDispatchToProps = (dispatch) => {
   const { PauseSipRedux } = require("../../store/PauseSipRedux");
   return {
-    ...stateProps,
-    ...ownProps,
     getSipDetail: (params, token) => {
+      console.log("Dispatching GET SIP DETAIL");
       PauseSipRedux.getSipDetail(dispatch, params, token);
     },
-    pauseSipEntry:(params, token) => {
+    pauseSipEntry: (params, token) => {
+      console.log("Dispatching PAUSE SIP ENTRY");
       PauseSipRedux.pauseSipEntry(dispatch, params, token);
     },
   };
