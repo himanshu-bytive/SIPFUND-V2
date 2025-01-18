@@ -1,4 +1,5 @@
 import SiteAPI from "../services/SiteApis";
+import { Alert } from "react-native";
 
 const types = {
   FETCH_SIP_DETAIL_PENDING: "FETCH_SIP_DETAIL_PENDING",
@@ -34,27 +35,35 @@ export const PauseSipRedux = {
       });
     }
   },
-  pauseSipEntry: async (dispatch, params, token) => {
+  pauseSipEntry: async (dispatch, params, token, setSelectedMonths, setSelectedItems) => {
     dispatch({ type: types.PAUSE_SIP_PENDING });
 
     try {
       let data = await SiteAPI.apiPostCall("/customer/pauseSipEntry", params, token);
       if (data.error) {
+        Alert.alert("An error occurred while pausing SIP entry, Try again");
         dispatch({
           type: types.PAUSE_SIP_FAILURE,
           error: data.message,
         });
+        setSelectedMonths({});
+        setSelectedItems([]);
       } else {
+        Alert.alert('Check your email and confirm.');
         dispatch({
           type: types.PAUSE_SIP_SUCCESS,
           pauseSipRes: data,
         });
+        setSelectedMonths({});
+        setSelectedItems([]);
       }
     } catch (err) {
       dispatch({
         type: types.PAUSE_SIP_FAILURE,
         error: "An error occurred while pausing SIP entry.",
       });
+      setSelectedMonths({});
+      setSelectedItems([]);
     }
   },
 };

@@ -14,93 +14,100 @@ import { Header } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import Cart from "../../components/Cart";
 import { Colors } from "../../common";
+import Button from "../../components/Atom/Button/Button";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { TextInput } from "react-native-gesture-handler";
 
 function CeaseSIP(props) {
-  const { token, user, getSipDetail, ceaseSip, ceaseSipEntry } = props;
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [selectedMonths, setSelectedMonths] = useState({});
+  const { token, user, getSipDetail, ceaseSip, isFetching, ceaseMaster, ceaseMasterLists, ceaseSipEntry } = props;
+  const [camsList, setCamsList] = useState([]);
+  const [karvyList, setKarvyList] = useState([]);
+  const [reasons, setReasons] = useState({});
+  const [reasonsText, setReasonsText] = useState('');
 
   useEffect(() => {
     getSipDetail(user.pan, token);
+    ceaseMaster(token);
   }, []);
 
   useEffect(() => {
-    console.log('ceaseSip', ceaseSip);
-  }, [ceaseSip]);
+    processCeaseMasterData(ceaseMasterLists);
+  }, [ceaseMasterLists]);
 
-  const monthList = [
-    { value: "01", label: "01" },
-    { value: "02", label: "02" },
-    { value: "03", label: "03" },
-  ];
-  
-  // Handle month selection per item
-  const handleMonthChange = (value, id) => {
-    setSelectedMonths((prev) => ({
+  const processCeaseMasterData = (data) => {
+    const cams = [];
+    const karvy = [];
+
+    data.forEach((item) => {
+      if (item.REGISTRAR_ID === "CAMS") {
+        cams.push(item);
+      } else if (item.REGISTRAR_ID === "KARVY") {
+        karvy.push(item);
+      }
+    });
+
+    setCamsList(cams);
+    setKarvyList(karvy);
+  };
+
+  const handleReasonChange = (schemeId, reasonCode) => {
+    setReasons((prev) => ({
       ...prev,
-      [id]: value,
+      [schemeId]: reasonCode,
     }));
   };
 
-  const handleSelectItem = (item) => {
-    console.log('items', item);
-    const month = selectedMonths[item._id];
-
-    if (!month) {
-      Alert.alert("Error", "Please select a month before proceeding.");
-      return;
-    }
-
-    if (selectedItems.some((selected) => selected._id === item._id)) {
-      Alert.alert("Error", "Duplicate selection is not allowed.");
-      return;
-    }
-
-    if (selectedItems.length >= 10) {
-      Alert.alert("Limit Reached", "You can select a maximum of 10 items.");
-      return;
-    }
-
-    setSelectedItems([...selectedItems, { ...item, cease_sip_months: month, auto_trxn_no: item.sipReports.AUTO_TRXN_NO }]);
+  const handleReasonInput = (schemeId, reasonText) => {
+    setReasonsText((prev) => ({
+      ...prev,
+      [schemeId]: reasonText,
+    }));
   };
 
-  // Check if an item is selected
-  const isItemSelected = (id) => selectedItems.some((item) => item._id === id);
+  const CeaseSipCheckout = (item) => {
+    const reasonCode = reasons[item._id];
+    const reasonsTextVal = reasonsText[item._id];
+    if (!reasonCode) {
+      Alert.alert("Error", "Please select a reason before proceeding.");
+      return;
+    }
 
-  const handleRemoveItem = (id) => {
-    console.log('remove', id);
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.filter((item) => item._id !== id)
-    );
-  
-    setSelectedMonths((prevSelectedMonths) => {
-      const updatedMonths = { ...prevSelectedMonths };
-      delete updatedMonths[id]; // Remove the month selection for the given ID
-      return updatedMonths;
-    });
-  };
-  
-  const CeaseSipCheckout = () => {
-    console.log("Selected Items:", selectedItems);
-    console.log("User", user);
-    let params = {
-      "service_request": {
-          "appln_id": "",
-          "password": "",
-          "broker_code": "",
-          "iin": "",
-          "trxn_no": "",
-          "cease_req_date": "",
-          "initiated_by": "",
-          "nigo_remarks": "",
-          "ceasetrxn_type": "",
-          "trxn_initiator": "",
-          "application_no": "", 
-          "cancellation_reason_code": ""
+    if((reasonCode === "SC13" || reasonCode === "13")) {
+      if (!reasonsTextVal) {
+        Alert.alert("Error", "Please Enter reason before proceeding.");
+        return;
       }
+    }
+
+    const formatDate = (date) => {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = months[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
     };
-    console.log("params=", params);
-    ceaseSipEntry(params, token);
+  
+    const todayDate = formatDate(new Date());
+  
+    const params = {
+      service_request: {
+        appln_id: "",
+        password: "",
+        broker_code: "",
+        iin: item.iin,
+        trxn_no: item.sipReports.AUTO_TRXN_NO,
+        cease_req_date: todayDate,
+        initiated_by: "I",
+        nigo_remarks: (reasonCode === "SC13" || reasonCode === "13") ? reasonsTextVal : "",
+        ceasetrxn_type: item.sipReports.AUTO_TRXN_TYPE,
+        trxn_initiator: "O",
+        application_no: item.sipReports.APPLICATION_NO ? item.sipReports.APPLICATION_NO : "",
+        cancellation_reason_code: reasonCode,
+      },
+    };
+  
+    //console.log("params=", params);
+    ceaseSipEntry(params, token, setReasons, setReasonsText);
   };
 
   return (
@@ -138,51 +145,65 @@ function CeaseSIP(props) {
         <View style={styles.switch_sec}>
           <Text style={styles.transaction}>Cease Sip</Text>
         </View>
-        {/* <View>
+        <View>
           {ceaseSip.data.map((item) => 
             <View style={styles.listStyle} key={item._id}>
               <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
               <Text>{item.sipReports.FROMSCHEME}</Text>
               <Text>FOLIONO: {item.sipReports.FOLIONO}</Text>
-
               <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                <Picker
-                  selectedValue={selectedMonths[item._id] || ""}
-                  onValueChange={(value) => handleMonthChange(value, item._id)}
-                  style={{ flex: 1, height: 20, marginRight: 30 }}
-                >
-                  <Picker.Item label="Select Month" value="" />
-                  {monthList.map((month) => (
-                    <Picker.Item key={month.value} label={month.label} value={month.value} />
-                  ))}
-                </Picker>
-
-                {isItemSelected(item._id) ? (
-                  <TouchableOpacity
-                    onPress={() => handleRemoveItem(item._id)}
-                    style={styles.botton_box2}
-                  >
-                    <Text style={styles.add}>Remove</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => handleSelectItem(item)}
-                    style={styles.botton_box2}
-                  >
-                    <Text style={styles.add}>Add</Text>
-                  </TouchableOpacity>
-                )}
+              <Picker
+                selectedValue={reasons[item._id] || ""}
+                style={{ flex: 1, height: 20, marginRight: 30 }}
+                onValueChange={(value) => handleReasonChange(item._id, value)} 
+              >
+                <Picker.Item label="Select Reason" value="" disabled />
+                {(item.sipReports.source === "CAMS" ? camsList : karvyList).map((source) => (
+                  <Picker.Item key={source.REASON_CODE} value={source.REASON_CODE} label={source.REASON_DETAIL} />
+                ))}
+              </Picker>
+              </View>
+              {(reasons[item._id] === "SC13" || reasons[item._id] === "13") ?
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                  <TextInput
+                    style={{
+                      flex: 1,
+                      height: 40,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      paddingHorizontal: 10,
+                      borderRadius: 5,
+                    }}
+                    maxLength={1000}
+                    minLength={20}
+                    multiline={true}
+                    placeholder="Enter your Reason"
+                    placeholderTextColor="gray"
+                    value={reasonsText[item._id] || ""}
+                    onChange={(event) => handleReasonInput(item._id, event.nativeEvent.text)} // Access text here
+                  />
+                </View>
+                : null }
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                <Button
+                  isLoading={isFetching}
+                  fontSize={responsiveFontSize(2.1)}
+                  textColor={"#FFF"}
+                  onPress={() => CeaseSipCheckout(item)}
+                  backgroundColor={Colors.RED}
+                  text="Cease SIP"
+                  borderRadius={1}
+                  borderColor={Colors.RED}
+                  borderWidth={1}
+                  height={responsiveHeight(5)}
+                  width={responsiveWidth(90)}
+                  loaderColor="white"
+                />
               </View>
             </View>
           )}
-        </View> */}
+        </View>
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => CeaseSipCheckout()}
-        style={styles.botton_box2}
-      >
-        <Text style={styles.proceed}>PROCEED</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -358,21 +379,23 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isFetching: state.pauseSip.isFetching,
   ceaseSip: state.ceaseSip.sipList,
+  ceaseMasterLists: state.ceaseSip.ceaseMasterLists,
   user: state.auth.user,
 });
 
-const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
+const mapDispatchToProps = (dispatch) => {
   const { CeaseSipRedux } = require("../../store/CeaseSipRedux");
   return {
-    ...stateProps,
-    ...ownProps,
     getSipDetail: (params, token) => {
       CeaseSipRedux.getSipDetail(dispatch, params, token);
     },
-    ceaseSipEntry:(params, token) => {
-      CeaseSipRedux.ceaseSipEntry(dispatch, params, token);
+    ceaseMaster: (token) => {
+      CeaseSipRedux.ceaseMaster(dispatch, token);
+    },
+    ceaseSipEntry: (params, token, setReasons, setReasonsText) => {
+      CeaseSipRedux.ceaseSipEntry(dispatch, params, token, setReasons, setReasonsText);
     },
   };
 };

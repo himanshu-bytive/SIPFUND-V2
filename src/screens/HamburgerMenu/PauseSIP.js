@@ -14,19 +14,17 @@ import { Header } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import Cart from "../../components/Cart";
 import { Colors } from "../../common";
+import Button from "../../components/Atom/Button/Button";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 function PauseSIP(props) {
-  const { token, user, getSipDetail, pauseSip, pauseSipEntry } = props;
+  const { token, user, getSipDetail, pauseSip, pauseSipEntry, isFetching } = props;
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState({});
 
   useEffect(() => {
     getSipDetail(user.pan, token);
   }, []);
-
-  useEffect(() => {
-    console.log('pauseSip', pauseSip);
-  }, [pauseSip]);
 
   const monthList = [
     { value: "01", label: "01" },
@@ -43,7 +41,6 @@ function PauseSIP(props) {
   };
 
   const handleSelectItem = (item) => {
-    console.log('items', item);
     const month = selectedMonths[item._id];
 
     if (!month) {
@@ -68,7 +65,6 @@ function PauseSIP(props) {
   const isItemSelected = (id) => selectedItems.some((item) => item._id === id);
 
   const handleRemoveItem = (id) => {
-    console.log('remove', id);
     setSelectedItems((prevSelectedItems) =>
       prevSelectedItems.filter((item) => item._id !== id)
     );
@@ -81,8 +77,6 @@ function PauseSIP(props) {
   };
   
   const PauseSipCheckout = () => {
-    console.log("Selected Items:", selectedItems);
-    console.log("User", user);
     let params = {
       "service_request": {
           "appln_id": "",
@@ -93,8 +87,8 @@ function PauseSIP(props) {
           },
       "childtrans": selectedItems
     };
-    console.log("params=", params);
-    pauseSipEntry(params, token);
+    pauseSipEntry(params, token, setSelectedMonths, setSelectedItems);
+    
   };
 
   return (
@@ -171,12 +165,27 @@ function PauseSIP(props) {
           )}
         </View>
       </ScrollView>
-      <TouchableOpacity
+        <View style={{ marginBottom: 20, alignItems: 'center' }}>
+          <Button isLoading={isFetching}
+            fontSize={responsiveFontSize(2.3)}
+            textColor={"#FFF"}
+            onPress={() => PauseSipCheckout()}
+            backgroundColor={Colors.RED}
+            text="PROCEED"
+            borderRadius={5}
+            borderColor={Colors.RED}
+            borderWidth={1}
+            height={responsiveHeight(5)}
+            width={responsiveWidth(90)}
+            loaderColor="white"
+          />
+        </View>
+      {/* <TouchableOpacity
         onPress={() => PauseSipCheckout()}
         style={styles.botton_box2}
       >
         <Text style={styles.proceed}>PROCEED</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
@@ -352,6 +361,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isFetching: state.pauseSip.isFetching,
   pauseSip: state.pauseSip.sipList,
   user: state.auth.user,
 });
@@ -360,12 +370,10 @@ const mapDispatchToProps = (dispatch) => {
   const { PauseSipRedux } = require("../../store/PauseSipRedux");
   return {
     getSipDetail: (params, token) => {
-      console.log("Dispatching GET SIP DETAIL");
       PauseSipRedux.getSipDetail(dispatch, params, token);
     },
-    pauseSipEntry: (params, token) => {
-      console.log("Dispatching PAUSE SIP ENTRY");
-      PauseSipRedux.pauseSipEntry(dispatch, params, token);
+    pauseSipEntry: (params, token, setSelectedMonths, setSelectedItems) => {
+      PauseSipRedux.pauseSipEntry(dispatch, params, token, setSelectedMonths, setSelectedItems);
     },
   };
 };
