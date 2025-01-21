@@ -11,29 +11,27 @@ import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 
-const UnderAgeNominee = (props) => {
+const UnderAgeNomineeSecond = (props) => {
     const {
         nseDetails,
         fatcaDetails,
         token,
         userDetails,
-        updateRegister,
-        route
+        updateRegister
     } = props
-    const { SecondNominee } = route.params || {};
     const [stepCount, setStepCount] = useState(1);
     const [NomineeIsYours, setNomineeIsYours] = useState("");
     const navigation = useNavigation();
     const [state, setState] = useState({
-        nominee1_guard_name: "",
-        nominee1_guard_pan: "",
-        nominee1_guard_relation: "",
+        nominee2_guard_name: "",
+        nominee2_guard_pan: "",
+        nominee2_relation: "",
     });
 
     const [errors, setErrors] = useState({
-        nominee1_guard_name: null,
-        nominee1_guard_pan: null,
-        nominee1_guard_relation: null,
+        nominee2_guard_name: null,
+        nominee2_guard_pan: null,
+        nominee2_relation: null,
     });
 
     useEffect(() => {
@@ -53,9 +51,9 @@ const UnderAgeNominee = (props) => {
         console.log("NomineeDetails", nseDetails);
         if (fatcaDetails || nseDetails || userDetails) {
             setState({
-                nominee1_guard_name: state.nominee1_guard_name,
-                nominee1_guard_pan: state?.nominee1_guard_pan,
-                nominee1_guard_relation: NomineeIsYours,
+                nominee2_guard_name: state.nominee2_guard_name,
+                nominee2_guard_pan: state?.nomine2_guard_pan,
+                nominee2_relation: NomineeIsYours,
             });
         }
     }, [fatcaDetails, nseDetails, userDetails]);
@@ -64,7 +62,7 @@ const UnderAgeNominee = (props) => {
         let hasErrors = false;
 
         // Validate Guardian Name
-        if (!state.nominee1_guard_name.trim()) {
+        if (!state.nominee2_guard_name.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 nominee1_guard_name: "Please enter the guardian's name.",
@@ -81,33 +79,33 @@ const UnderAgeNominee = (props) => {
         if (!NomineeIsYours) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_relation: "Please select the guardian's relation.",
+                nominee2_relation: "Please select the guardian's relation.",
             }));
             hasErrors = true;
         } else {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_relation: null,
+                nominee2_relation: null,
             }));
         }
 
         // Validate Guardian PAN
-        if (!state.nominee1_guard_pan.trim()) {
+        if (!state.nominee2_guard_pan.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_pan: "Please enter the guardian's PAN.",
+                nominee2_guard_pan: "Please enter the guardian's PAN.",
             }));
             hasErrors = true;
-        } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee1_guard_pan.trim())) {
+        } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee2_guard_pan.trim())) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+                nominee2_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
             }));
             hasErrors = true;
         } else {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_pan: null,
+                nominee2_guard_pan: null,
             }));
         }
 
@@ -118,20 +116,16 @@ const UnderAgeNominee = (props) => {
         const params = {
             nseDetails: {
                 ...nseDetails,
-                nominee1_guard_name: state.nominee1_guard_name.trim(),
-                nominee1_guard_pan: state.nominee1_guard_pan.trim(),
-                nominee1_guard_relation: NomineeIsYours,
+                nominee2_guard_name: state.nominee2_guard_name.trim(),
+                nominee2_guard_pan: state.nominee2_guard_pan.trim(),
+                nominee2_relation: NomineeIsYours,
             },
             fatcaDetails,
             userDetails,
         };
         console.log("passing params", params);
         updateRegister(params, token);
-        if (SecondNominee) {
-            navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
-        } else {
-            navigation.navigate("Reg", { screen: "RegisterAddress" });
-        }
+        navigation.navigate("Reg", { screen: "RegisterAddress" });
     };
 
     const mobileEmailRelation = [
@@ -164,7 +158,7 @@ const UnderAgeNominee = (props) => {
                     <View style={styles.stepContainer}>
                         <View style={{ marginBottom: 20 }}>
                             <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
-                                Add guardian for your nominee 1
+                                Add guardian for your 2nd nominee
                             </Typography>
                             <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
                                 As your nominees age is below 18 years, kindly add nominee’s guardian.
@@ -176,14 +170,14 @@ const UnderAgeNominee = (props) => {
                             editable={true}
                             placeholder="Enter Name"
                             placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_name || ""}
+                            value={state.nominee2_guard_name || ""}
                             onChangeText={(text) => {
-                                setState((prevState) => ({ ...prevState, nominee1_guard_name: text }));
-                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_name: null })); // Clear error on input
+                                setState((prevState) => ({ ...prevState, nominee2_guard_name: text }));
+                                setErrors((prevErrors) => ({ ...prevErrors, nominee2_guard_name: null })); // Clear error on input
                             }}
                         />
-                        {errors.nominee1_guard_name && (
-                            <Text style={styles.error}>{errors.nominee1_guard_name}</Text>
+                        {errors.nominee2_guard_name && (
+                            <Text style={styles.error}>{errors.nominee2_guard_name}</Text>
                         )}
 
                         <Typography style={styles.title}>Guardian Relation*</Typography>
@@ -192,7 +186,7 @@ const UnderAgeNominee = (props) => {
                                 selectedValue={NomineeIsYours || ""}
                                 onValueChange={(itemValue) => {
                                     setNomineeIsYours(itemValue);
-                                    setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_relation: null })); // Clear error on selection
+                                    setErrors((prevErrors) => ({ ...prevErrors, nominee2_relation: null })); // Clear error on selection
                                 }}
                                 style={[
                                     styles.picker,
@@ -205,8 +199,8 @@ const UnderAgeNominee = (props) => {
                                 ))}
                             </Picker>
                         </View>
-                        {errors.nominee1_guard_relation && (
-                            <Text style={styles.error}>{errors.nominee1_guard_relation}</Text>
+                        {errors.nominee2_relation && (
+                            <Text style={styles.error}>{errors.nominee2_relation}</Text>
                         )}
 
                         <Typography style={styles.title}>Guardian PAN*</Typography>
@@ -215,14 +209,14 @@ const UnderAgeNominee = (props) => {
                             editable={true}
                             placeholder="Enter PAN"
                             placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_pan || ""}
+                            value={state.nominee2_guard_pan || ""}
                             onChangeText={(text) => {
-                                setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }));
-                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_pan: null })); // Clear error on input
+                                setState((prevState) => ({ ...prevState, nominee2_guard_pan: text }));
+                                setErrors((prevErrors) => ({ ...prevErrors, nominee2_guard_pan: null })); // Clear error on input
                             }}
                         />
-                        {errors.nominee1_guard_pan && (
-                            <Text style={styles.error}>{errors.nominee1_guard_pan}</Text>
+                        {errors.nominee2_guard_pan && (
+                            <Text style={styles.error}>{errors.nominee2_guard_pan}</Text>
                         )}
 
                         <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
@@ -383,4 +377,4 @@ export default connect(
     mapStateToProps,
     undefined,
     mapDispatchToProps
-)(UnderAgeNominee);
+)(UnderAgeNomineeSecond);

@@ -154,17 +154,77 @@ const AddNominee = (props) => {
 
     if (isLessThan18(state.nominee1_dob)) {
       updateRegister(params, token);
-      navigation.navigate("UnderAgeNominee");
+      navigation.navigate("UnderAgeNominee",{ SecondNominee: false });
     } else {
       updateRegister(params, token);
       navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
   };
+  
+  const onActionSecondNominee = () => {
+    // Validate fields
+    let hasErrors = false;
+
+    console.log("Mystate", state);
+
+
+    // Check each required field and update errors state if empty
+    if (!state.nominee1_name) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_name: "Please enter Nominee Name.",
+      }));
+      hasErrors = true;
+    }
+
+    if (!NomineeIsYours) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_relation: "Please select Nominee Relation.",
+      }));
+      hasErrors = true;
+    }
+
+    if (!state.nominee1_dob) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nominee1_dob: "Please select Nominee's Date of Birth.",
+      }));
+      hasErrors = true;
+    }
+
+    // If there are errors, do not proceed
+    if (hasErrors) return;
+
+    // Proceed if no errors
+    const params = {
+      nseDetails: {
+        ...nseDetails,
+        nominee1_name: state?.nominee1_name,
+        nominee1_relation: NomineeIsYours,
+        nominee1_dob: state?.nominee1_dob,
+        no_of_nominee: "1",
+        nominee1_percent: 100,
+        nominee2_percent: "",
+        nominee2_name: "",
+        nominee2_relation: "",
+        nominee2_dob: "",
+      },
+      fatcaDetails,
+      userDetails,
+    };
+
+    if (isLessThan18(state.nominee1_dob)) {
+      updateRegister(params, token);
+      navigation.navigate("UnderAgeNominee",{ SecondNominee: true });
+    } else {
+      updateRegister(params, token);
+      navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
+    }
+  };
 
   const AddSecondNominee = () => {
-    console.log("jfhhd");
-    onAction();
-    props.navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
+    onActionSecondNominee();
   }
 
   const mobileEmailRelation = [

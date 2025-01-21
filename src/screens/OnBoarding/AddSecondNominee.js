@@ -140,7 +140,7 @@ const AddNominee = (props) => {
 
     if (isLessThan18(state.nominee2_dob)) {
       updateRegister(params, token);
-      navigation.navigate("UnderAgeNominee");
+      navigation.navigate("UnderAgeNomineeSecond");
     } else {
       updateRegister(params, token);
       navigation.navigate("Reg", { screen: "RegisterAddress" });

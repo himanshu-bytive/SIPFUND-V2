@@ -84,6 +84,7 @@ import UnderAgeNominee from '../screens/OnBoarding/UnderAgeNominee';
 import AddSecondNominee from '../screens/OnBoarding/AddSecondNominee';
 import CeaseSIP from '../screens/HamburgerMenu/CeaseSIP';
 import PauseSIP from '../screens/HamburgerMenu/PauseSIP';
+import UnderAgeNomineeSecond from '../screens/OnBoarding/UnderAgeNomineeSecond';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -118,6 +119,7 @@ export const OnBoardingPages = () =>(
      <Stack.Screen name='AddNominee' component={AddNominee} />
      <Stack.Screen name='AddSecondNominee' component={AddSecondNominee} />
      <Stack.Screen name='UnderAgeNominee' component={UnderAgeNominee}/>
+     <Stack.Screen name='UnderAgeNomineeSecond' component={UnderAgeNomineeSecond}/>
   </Stack.Navigator>
 )
 
