@@ -64,33 +64,43 @@ export const CeaseSipRedux = {
     }
   },
   
-  ceaseSipEntry: async (dispatch, params, token, setReasons, setReasonsText) => {
+  ceaseSipEntry: async (dispatch, params, token, setReasons, setReasonsText,setShowModal,setMessage) => {
     dispatch({ type: types.CEASE_SIP_PENDING });
 
     try {
       let data = await SiteAPI.apiPostCall("/customer/ceaseSipEntry", params, token);
       if (data.error) {
-        Alert.alert("An error occurred while ceaseing SIP entry, Try again");
         dispatch({
           type: types.CEASE_SIP_FAILURE,
           error: data.message,
         });
+        setMessage("An error occurred while ceaseing SIP entry, Try again")
         setReasons({});
         setReasonsText("");
+        setShowModal(false);
       } else {
-        Alert.alert(data.service_response.return_msg);
         dispatch({
           type: types.CEASE_SIP_SUCCESS,
           ceaseSipRes: data,
         });
+      console.log("Message",data?.service_response?.return_msg);
+      
+      const messages = data.service_response
+                .map((resp) => resp.return_msg) // Extract all return_msg values
+                .join("\n"); // Combine messages into a single string with new lines
+
+        setMessage(messages);
+        setShowModal(true);
         setReasons({});
         setReasonsText("");
       }
     } catch (err) {
+      setShowModal(false)
       dispatch({
         type: types.CEASE_SIP_FAILURE,
         error: "An error occurred while ceasing SIP entry.",
       });
+      setMessage("An error occurred while ceaseing SIP entry, Try again")
       setReasons({});
       setReasonsText("");
     }

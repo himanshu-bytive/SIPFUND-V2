@@ -7,6 +7,8 @@ import {
   Text,
   ScrollView,
   Alert,
+  ActivityIndicator,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -24,7 +26,8 @@ function CeaseSIP(props) {
   const [karvyList, setKarvyList] = useState([]);
   const [reasons, setReasons] = useState({});
   const [reasonsText, setReasonsText] = useState('');
-
+  const [showModal, setShowModal] = useState(false);
+  const [message,setMessage] = useState("");
   useEffect(() => {
     getSipDetail(user.pan, token);
     ceaseMaster(token);
@@ -72,7 +75,7 @@ function CeaseSIP(props) {
       return;
     }
 
-    if((reasonCode === "SC13" || reasonCode === "13")) {
+    if ((reasonCode === "SC13" || reasonCode === "13")) {
       if (!reasonsTextVal) {
         Alert.alert("Error", "Please Enter reason before proceeding.");
         return;
@@ -86,9 +89,9 @@ function CeaseSIP(props) {
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     };
-  
+
     const todayDate = formatDate(new Date());
-  
+
     const params = {
       service_request: {
         appln_id: "",
@@ -105,9 +108,9 @@ function CeaseSIP(props) {
         cancellation_reason_code: reasonCode,
       },
     };
-  
+
     //console.log("params=", params);
-    ceaseSipEntry(params, token, setReasons, setReasonsText);
+    ceaseSipEntry(params, token, setReasons, setReasonsText,setShowModal,setMessage);
   };
 
   return (
@@ -146,64 +149,100 @@ function CeaseSIP(props) {
           <Text style={styles.transaction}>Cease Sip</Text>
         </View>
         <View>
-          {ceaseSip.data.map((item) => 
-            <View style={styles.listStyle} key={item._id}>
-              <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
-              <Text>{item.sipReports.FROMSCHEME}</Text>
-              <Text>FOLIONO: {item.sipReports.FOLIONO}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-              <Picker
-                selectedValue={reasons[item._id] || ""}
-                style={{ flex: 1, height: 20, marginRight: 30 }}
-                onValueChange={(value) => handleReasonChange(item._id, value)} 
-              >
-                <Picker.Item label="Select Reason" value="" disabled />
-                {(item.sipReports.source === "CAMS" ? camsList : karvyList).map((source) => (
-                  <Picker.Item key={source.REASON_CODE} value={source.REASON_CODE} label={source.REASON_DETAIL} />
-                ))}
-              </Picker>
-              </View>
-              {(reasons[item._id] === "SC13" || reasons[item._id] === "13") ?
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                  <TextInput
-                    style={{
-                      flex: 1,
-                      height: 40,
-                      borderColor: 'gray',
-                      borderWidth: 1,
-                      paddingHorizontal: 10,
-                      borderRadius: 5,
-                    }}
-                    maxLength={1000}
-                    minLength={20}
-                    multiline={true}
-                    placeholder="Enter your Reason"
-                    placeholderTextColor="gray"
-                    value={reasonsText[item._id] || ""}
-                    onChange={(event) => handleReasonInput(item._id, event.nativeEvent.text)} // Access text here
-                  />
-                </View>
-                : null }
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                <Button
-                  isLoading={isFetching}
-                  fontSize={responsiveFontSize(2.1)}
-                  textColor={"#FFF"}
-                  onPress={() => CeaseSipCheckout(item)}
-                  backgroundColor={Colors.RED}
-                  text="Cease SIP"
-                  borderRadius={1}
-                  borderColor={Colors.RED}
-                  borderWidth={1}
-                  height={responsiveHeight(5)}
-                  width={responsiveWidth(90)}
-                  loaderColor="white"
-                />
-              </View>
+          {isFetching ? (
+            // Show loader while data is being fetched
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator color={Colors.RED} size="large" />
             </View>
-          )}
+          ) : ceaseSip?.data?.length > 0 ? (
+              ceaseSip.data.map((item) =>
+                <View style={styles.listStyle} key={item._id}>
+                  <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
+                  <Text style={{color:"black"}}>{item.sipReports.FROMSCHEME}</Text>
+                  <Text style={{color:"black"}}>FOLIONO: {item.sipReports.FOLIONO}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5  }}>
+                    <Picker
+                      selectedValue={reasons[item._id] || ""}
+                      style={{
+                        flex: 1,
+                        height: 20,
+                        marginRight: 30,
+                        color: "black",
+                      }}
+                      onValueChange={(value) => handleReasonChange(item._id, value)}
+                      dropdownIconColor="black"
+                    >
+                      <Picker.Item label="Select Reason" value="" disabled />
+                      {(item.sipReports.source === "CAMS" ? camsList : karvyList).map((source) => (
+                        <Picker.Item key={source.REASON_CODE} value={source.REASON_CODE} label={source.REASON_DETAIL} />
+                      ))}
+                    </Picker>
+                  </View>
+                  {(reasons[item._id] === "SC13" || reasons[item._id] === "13") ?
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                      <TextInput
+                        style={{
+                          flex: 1,
+                          height: 40,
+                          borderColor: 'gray',
+                          borderWidth: 1,
+                          paddingHorizontal: 10,
+                          borderRadius: 5,
+                          color:"black"
+                        }}
+                        maxLength={1000}
+                        minLength={20}
+                        multiline={true}
+                        placeholder="Enter your Reason"
+                        placeholderTextColor="gray"
+                        value={reasonsText[item._id] || ""}
+                        onChange={(event) => handleReasonInput(item._id, event.nativeEvent.text)} // Access text here
+                      />
+                    </View>
+                    : null}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                    <Button
+                      isLoading={isFetching}
+                      fontSize={responsiveFontSize(2.1)}
+                      textColor={"#FFF"}
+                      onPress={() => CeaseSipCheckout(item)}
+                      backgroundColor={Colors.RED}
+                      text="Cease SIP"
+                      borderRadius={1}
+                      borderColor={Colors.RED}
+                      borderWidth={1}
+                      height={responsiveHeight(5)}
+                      width={responsiveWidth(90)}
+                      loaderColor="white"
+                    />
+                  </View>
+                </View>
+              )) : (
+              // Show message if no data is available
+              <Text style={styles.noDataText}>No SIPs available to pause.</Text>
+            )}
         </View>
       </ScrollView>
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => setShowModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{message}</Text>
+            <Button
+              text="Close"
+              onPress={() => setShowModal(false)}
+              backgroundColor={Colors.RED}
+              textColor={Colors.WHITE}
+              height={40}
+              width={100}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -216,6 +255,41 @@ const styles = StyleSheet.create({
     height: 65,
     width: 203,
     marginTop: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    fontSize: 18,
+    color: Colors.GRAY_LIGHT,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  noDataText: {
+    textAlign: 'center',
+    color: Colors.GRAY_LIGHT,
+    marginVertical: 20,
+    fontSize: 16,
   },
   switch_sec: {
     backgroundColor: Colors.RED,
@@ -374,7 +448,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,               // Shadow spread
     elevation: 2,                  // For shadow on Android
   },
-  
+
 });
 
 const mapStateToProps = (state) => ({
@@ -394,8 +468,8 @@ const mapDispatchToProps = (dispatch) => {
     ceaseMaster: (token) => {
       CeaseSipRedux.ceaseMaster(dispatch, token);
     },
-    ceaseSipEntry: (params, token, setReasons, setReasonsText) => {
-      CeaseSipRedux.ceaseSipEntry(dispatch, params, token, setReasons, setReasonsText);
+    ceaseSipEntry: (params, token, setReasons, setReasonsText,setShowModal,setMessage) => {
+      CeaseSipRedux.ceaseSipEntry(dispatch, params, token, setReasons, setReasonsText,setShowModal,setMessage);
     },
   };
 };

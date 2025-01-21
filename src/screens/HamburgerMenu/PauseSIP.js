@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -31,7 +32,7 @@ function PauseSIP(props) {
     { value: "02", label: "02" },
     { value: "03", label: "03" },
   ];
-  
+
   // Handle month selection per item
   const handleMonthChange = (value, id) => {
     setSelectedMonths((prev) => ({
@@ -68,27 +69,27 @@ function PauseSIP(props) {
     setSelectedItems((prevSelectedItems) =>
       prevSelectedItems.filter((item) => item._id !== id)
     );
-  
+
     setSelectedMonths((prevSelectedMonths) => {
       const updatedMonths = { ...prevSelectedMonths };
       delete updatedMonths[id]; // Remove the month selection for the given ID
       return updatedMonths;
     });
   };
-  
+
   const PauseSipCheckout = () => {
     let params = {
       "service_request": {
-          "appln_id": "",
-          "password": "",
-          "broker_code": "",
-          "iin": user.IIN,
-          "trans_count": selectedItems.length
-          },
+        "appln_id": "",
+        "password": "",
+        "broker_code": "",
+        "iin": user.IIN,
+        "trans_count": selectedItems.length
+      },
       "childtrans": selectedItems
     };
     pauseSipEntry(params, token, setSelectedMonths, setSelectedItems);
-    
+
   };
 
   return (
@@ -127,59 +128,87 @@ function PauseSIP(props) {
           <Text style={styles.transaction}>Pause Sip</Text>
         </View>
         <View>
-          {pauseSip.data.map((item) => 
-            <View style={styles.listStyle} key={item._id}>
-              <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
-              <Text style={{color:"black"}}>{item.sipReports.FROMSCHEME}</Text>
-              <Text style={{color:"black"}}>FOLIONO: {item.sipReports.FOLIONO}</Text>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, }}>
-                <Picker
-                  selectedValue={selectedMonths[item._id] || ""}
-                  onValueChange={(value) => handleMonthChange(value, item._id)}
-                  style={{ flex: 1, height: 20, marginRight: 30,color:"black" }}
-                >
-                  <Picker.Item label="Select Month" value="" />
-                  {monthList.map((month) => (
-                    <Picker.Item key={month.value} label={month.label} value={month.value} />
-                  ))}
-                </Picker>
-
-                {isItemSelected(item._id) ? (
-                  <TouchableOpacity
-                    onPress={() => handleRemoveItem(item._id)}
-                    style={styles.botton_box2}
-                  >
-                    <Text style={styles.add}>Remove</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => handleSelectItem(item)}
-                    style={styles.botton_box2}
-                  >
-                    <Text style={styles.add}>Add</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+          {isFetching ? (
+            // Show loader while data is being fetched
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator color={Colors.RED} size="large" />
             </View>
+          ) : pauseSip?.data?.length > 0 ? (
+            // Render list when data is available
+            pauseSip.data.map((item) => (
+              <View style={styles.listStyle} key={item._id}>
+                <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
+                <Text style={{ color: "black" }}>{item.sipReports.FROMSCHEME}</Text>
+                <Text style={{ color: "black" }}>FOLIONO: {item.sipReports.FOLIONO}</Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 5,
+                  }}
+                >
+                  <Picker
+                    selectedValue={selectedMonths[item._id] || ""}
+                    onValueChange={(value) => handleMonthChange(value, item._id)}
+                    style={{
+                      flex: 1,
+                      height: 20,
+                      marginRight: 30,
+                      color: "black",
+                    }}
+                    dropdownIconColor="black"
+                  >
+                    <Picker.Item label="Select Month" value="" />
+                    {monthList.map((month) => (
+                      <Picker.Item
+                        key={month.value}
+                        label={month.label}
+                        value={month.value}
+                      />
+                    ))}
+                  </Picker>
+
+                  {isItemSelected(item._id) ? (
+                    <TouchableOpacity
+                      onPress={() => handleRemoveItem(item._id)}
+                      style={styles.botton_box2}
+                    >
+                      <Text style={styles.add}>Remove</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => handleSelectItem(item)}
+                      style={styles.botton_box2}
+                    >
+                      <Text style={styles.add}>Add</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            ))
+          ) : (
+            // Show message if no data is available
+            <Text style={styles.noDataText}>No SIPs available to pause.</Text>
           )}
         </View>
       </ScrollView>
-        <View style={{ marginBottom: 20, alignItems: 'center' }}>
-          <Button isLoading={isFetching}
-            fontSize={responsiveFontSize(2.3)}
-            textColor={"#FFF"}
-            onPress={() => PauseSipCheckout()}
-            backgroundColor={Colors.RED}
-            text="PROCEED"
-            borderRadius={5}
-            borderColor={Colors.RED}
-            borderWidth={1}
-            height={responsiveHeight(5)}
-            width={responsiveWidth(90)}
-            loaderColor="white"
-          />
-        </View>
+
+      <View style={{ marginBottom: 20, alignItems: 'center' }}>
+        <Button isLoading={isFetching}
+          fontSize={responsiveFontSize(2.3)}
+          textColor={"#FFF"}
+          onPress={() => PauseSipCheckout()}
+          backgroundColor={Colors.RED}
+          text="PROCEED"
+          borderRadius={5}
+          borderColor={Colors.RED}
+          borderWidth={1}
+          height={responsiveHeight(5)}
+          width={responsiveWidth(90)}
+          loaderColor="white"
+        />
+      </View>
       {/* <TouchableOpacity
         onPress={() => PauseSipCheckout()}
         style={styles.botton_box2}
@@ -201,6 +230,22 @@ const styles = StyleSheet.create({
   },
   switch_sec: {
     backgroundColor: Colors.RED,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    fontSize: 18,
+    color: Colors.GRAY_LIGHT,
+  },
+  noDataText: {
+    textAlign: 'center',
+    color: Colors.GRAY_LIGHT,
+    marginVertical: 20,
+    fontSize: 16,
   },
   transaction: {
     fontSize: 21,
@@ -356,7 +401,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,               // Shadow spread
     elevation: 2,                  // For shadow on Android
   },
-  
+
 });
 
 const mapStateToProps = (state) => ({
