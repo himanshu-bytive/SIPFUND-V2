@@ -30,7 +30,8 @@ const PersonalDetails = (props) => {
     users,
     user,
     updateRegister,
-    token
+    token,
+    pan
   } = props;
 
   const [currentStep, setCurrentStep] = useState(1); 
@@ -148,7 +149,9 @@ const PersonalDetails = (props) => {
   }, [fatcaDetails, nseDetails, userDetails]);
 
   useEffect(()=>{
-    console.log("ENTERED");
+    console.log("User Current",user);
+    console.log("User Pan",pan);
+    console.log("USERS",users);
     
   },[]);
 
@@ -441,6 +444,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   users: state.auth.user,
   user: state.auth.user,
+  pan: state.home.pan,
   nseDetails: state.registration.nseDetails,
   fatcaDetails: state.registration.fatcaDetails,
   userDetails: state.registration.userDetails,

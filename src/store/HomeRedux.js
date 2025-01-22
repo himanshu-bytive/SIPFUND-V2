@@ -58,14 +58,16 @@ export const HomeActions = {
       dispatch({ type: types.FETCH_UPDATE_PAN_PENDING });
 
       let data = await SiteAPI.apiPostCall("/user/userPan", params, tokan);
-      console.log("UPDATE PAN",data);
-      
+      console.log("UPDATE PAN", data);
+
       if (data.error) {
         if (data.message) Alert.alert(data.message);
         dispatch({ type: types.FETCH_UPDATE_PAN_FAILURE, error: data.message });
         // dispatch({ type: types.FETCH_UPDATE_PAN_SUCCESS, pan: params.pan });
       } else {
-        dispatch({ type: types.FETCH_UPDATE_PAN_SUCCESS, pan: data.data });
+        const updatedPan = data?.data; // Extract the PAN data from the response
+        dispatch({ type: types.FETCH_UPDATE_PAN_SUCCESS, pan: updatedPan });
+        AuthActions.updateUserPan(dispatch, updatedPan); // Pass the extracted PAN
       }
     }
     return;
@@ -87,7 +89,7 @@ export const HomeActions = {
       timeoutRef = setTimeout(() => {
         HomeActions.updatePan(dispatch, params, tokan);
         SideMenuActions.updateInn(dispatch, newParams, tokan);
-        AuthActions.getProfile(dispatch,{ service_request: { iin: newParams.iin  } }, tokan);
+        AuthActions.getProfile(dispatch, { service_request: { iin: newParams.iin } }, tokan);
         RegistrationActions.getDocuments(dispatch, tokan);
       }, 1000);
     } else {
@@ -172,7 +174,7 @@ export const reducer = (state = initialState, action) => {
         error: null,
         pan,
       };
-    }    
+    }
     case types.FETCH_UPDATE_PAN_FAIL: {
       return {
         isFetching: false,
