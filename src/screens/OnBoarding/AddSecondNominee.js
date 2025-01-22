@@ -128,18 +128,31 @@ const AddNominee = (props) => {
         nominee2_relation: NomineeIsYours,
         nominee2_dob: state?.nominee2_dob,
         no_of_nominee : "2",
+        nominee2_type:"N",
         nominee1_percent : 50,
         nominee2_percent : 50,
-        nominee2_name: NomineeIsYours,
-        nominee2_relation: state?.nominee2_relation,
+      },
+      fatcaDetails,
+      userDetails,
+    };
+
+    const newparams = {
+      nseDetails: {
+        ...nseDetails,
+        nominee2_name: state?.nominee2_name,
+        nominee2_relation: NomineeIsYours,
         nominee2_dob: state?.nominee2_dob,
+        no_of_nominee : "2",
+        nominee2_type : "Y",
+        nominee1_percent : 50,
+        nominee2_percent : 50,
       },
       fatcaDetails,
       userDetails,
     };
 
     if (isLessThan18(state.nominee2_dob)) {
-      updateRegister(params, token);
+      updateRegister(newparams, token);
       navigation.navigate("UnderAgeNomineeSecond");
     } else {
       updateRegister(params, token);

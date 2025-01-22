@@ -141,6 +141,25 @@ const AddNominee = (props) => {
         nominee1_name: state?.nominee1_name,
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
+        nominee1_type : "N",
+        no_of_nominee: "1",
+        nominee1_percent: 100,
+        nominee2_percent: "",
+        nominee2_name: "",
+        nominee2_relation: "",
+        nominee2_dob: "",
+      },
+      fatcaDetails,
+      userDetails,
+    };
+
+    const newparams = {
+      nseDetails: {
+        ...nseDetails,
+        nominee1_name: state?.nominee1_name,
+        nominee1_relation: NomineeIsYours,
+        nominee1_dob: state?.nominee1_dob,
+        nominee1_type : "Y",
         no_of_nominee: "1",
         nominee1_percent: 100,
         nominee2_percent: "",
@@ -153,7 +172,7 @@ const AddNominee = (props) => {
     };
 
     if (isLessThan18(state.nominee1_dob)) {
-      updateRegister(params, token);
+      updateRegister(newparams, token);
       navigation.navigate("UnderAgeNominee",{ SecondNominee: false });
     } else {
       updateRegister(params, token);
@@ -204,6 +223,25 @@ const AddNominee = (props) => {
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
         no_of_nominee: "1",
+        nominee1_type : "N",
+        nominee1_percent: 100,
+        nominee2_percent: "",
+        nominee2_name: "",
+        nominee2_relation: "",
+        nominee2_dob: "",
+      },
+      fatcaDetails,
+      userDetails,
+    };
+
+    const newparams = {
+      nseDetails: {
+        ...nseDetails,
+        nominee1_name: state?.nominee1_name,
+        nominee1_relation: NomineeIsYours,
+        nominee1_dob: state?.nominee1_dob,
+        no_of_nominee: "1",
+        nominee1_type : "Y",
         nominee1_percent: 100,
         nominee2_percent: "",
         nominee2_name: "",
@@ -215,7 +253,7 @@ const AddNominee = (props) => {
     };
 
     if (isLessThan18(state.nominee1_dob)) {
-      updateRegister(params, token);
+      updateRegister(newparams, token);
       navigation.navigate("UnderAgeNominee",{ SecondNominee: true });
     } else {
       updateRegister(params, token);

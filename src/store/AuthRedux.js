@@ -9,6 +9,7 @@ const types = {
   FETCH_VERIFY_PENDING: "FETCH_VERIFY_PENDING",
   FETCH_VERIFY_SUCCESS: "FETCH_VERIFY_SUCCESS",
   FETCH_VERIFY_FAILURE: "FETCH_VERIFY_FAILURE",
+  UPDATE_USER_PAN: "UPDATE_USER_PAN",
 
   FETCH_OTP_PENDING: "FETCH_OTP_PENDING",
   FETCH_OTP_SUCCESS: "FETCH_OTP_SUCCESS",
@@ -211,6 +212,16 @@ export const AuthActions = {
   resetApp() {
     return { type: types.RESET };
   },
+
+  updateUserPan: (dispatch, pan) => {
+    console.log("Got Pan",pan);
+    
+    dispatch({
+      type: types.UPDATE_USER_PAN,
+      pan,
+    });
+  },
+  
   creatAccount: async (dispatch, params) => {
     dispatch({ type: types.FETCH_CREAT_ACCOUNT_PENDING });
     let data = await SiteAPI.apiPostCall("/auth", params);
@@ -241,7 +252,7 @@ export const AuthActions = {
   getProfile: async (dispatch, params, token) => {
     dispatch({ type: types.FETCH_PROFILE_PENDING });
     let data = await SiteAPI.apiPostCall("/apiData/IINDETAILS", params, token);
-    console.log("Yes Data Got",data.Data.INVESTOR_NAME);
+    console.log("Yes Data Got",data.Data);
     const UserName = AsyncStorage.setItem("USERNAME",data.Data.INVESTOR_NAME);
     if (params?.service_request?.iin > 0 && params?.service_request?.iin) {
       let data1 = await SiteAPI.apiGetCall(
@@ -329,6 +340,15 @@ export const reducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         error,
+      };
+    }
+    case types.UPDATE_USER_PAN: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          pan: action.pan, // Update only the pan field
+        },
       };
     }
     case types.FETCH_LOGIN_FAILURE: {

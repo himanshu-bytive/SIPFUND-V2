@@ -1138,11 +1138,12 @@ function CompleteDetailsBankScreen(props, route) {
                 ? `Please check your email and approve the link sent by NSE for your account activation. Also please upload Your pan and bank proof in the document section for manual activation in case digital activation is not successful.d`
                 : `As Your KYC is not Registered, Kindly Proceed with online KYC or  Upload Documents for Manual KYC`}
             </Text>
-            {userDetails?.ekycIsDone ? <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
-              <Button style={{ borderColor: Colors.RED, borderWidth: 2, color: "black", borderRadius: 10 }} onPress={OnlineKYC}>Online Kyc</Button>
-              <Button style={{ borderColor: Colors.RED, borderWidth: 2, borderRadius: 10 }} onPress={MannualKYC}>Mannual Kyc</Button>
-            </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 50 }} >
-              <Button style={{ borderColor: Colors.RED, borderWidth: 2, borderRadius: 10 }} onPress={GoToHome}>Go Back To Home</Button>
+            {!userDetails?.ekycIsDone ? 
+           <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 20, }} >
+              <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={OnlineKYC} backgroundColor={Colors.RED} text={"Online KYC"}  textColor={"white"} />
+              <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={MannualKYC} backgroundColor={Colors.RED} text={"Manual KYC"}  textColor={"white"} />
+            </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 5,paddingHorizontal:10 }} >
+              <Button height={responsiveHeight(5)} width={responsiveWidth(50)} backgroundColor={Colors.RED} text={"Go To Home"}  textColor={"white"}  onPress={GoToHome} />
             </View>}
           </View>
 
