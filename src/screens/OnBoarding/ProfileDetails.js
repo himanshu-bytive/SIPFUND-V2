@@ -152,7 +152,6 @@ const PersonalDetails = (props) => {
     console.log("User Current",user);
     console.log("User Pan",pan);
     console.log("USERS",users);
-    
   },[]);
 
   return (
