@@ -85,6 +85,7 @@ import AddSecondNominee from '../screens/OnBoarding/AddSecondNominee';
 import CeaseSIP from '../screens/HamburgerMenu/CeaseSIP';
 import PauseSIP from '../screens/HamburgerMenu/PauseSIP';
 import UnderAgeNomineeSecond from '../screens/OnBoarding/UnderAgeNomineeSecond';
+import Portfolio from '../screens/HamburgerMenu/Portfolio';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -196,6 +197,7 @@ export const HoldingsSummaryStack = () => (
     <Stack.Screen name="NoGoals" component={NoGoalsScreen} />
     <Stack.Screen name='CeaseSIP' component={CeaseSIP} />
     <Stack.Screen name='PauseSIP' component={PauseSIP} />
+    <Stack.Screen name='Portfolio' component={Portfolio} />
     <Stack.Screen name="GoalsList" component={GoalsListScreen} />
     <Stack.Screen name="GoalDetail" component={GoalDetailScreen} />
     <Stack.Screen name="InvestmentList" component={InvestmentListScreen} />
