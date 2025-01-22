@@ -503,6 +503,50 @@ function DashboardScreen(props) {
             </View>
           </TouchableOpacity>
         </View>
+        <View style={styles.history_sec2}>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('Hold', { screen: 'Portfolio' })
+            }>
+            <View style={styles.Switch_sec}>
+              <View style={styles.box}>
+                <Image
+                  source={require('../../../assets/choice.png')}
+                  style={styles.fundsmg}
+                />
+              </View>
+              <Text style={styles.transaction}>Portfolio</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('Hold', { screen: 'CeaseSIP' })
+            }>
+            <View style={styles.Switch_sec}>
+              <View style={styles.box}>
+                <Image
+                  source={require('../../../assets/choice.png')}
+                  style={styles.fundsmg}
+                />
+              </View>
+              <Text style={styles.transaction}>Cease{'\n'}SIP </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('Hold', { screen: 'PauseSIP' })
+            }>
+            <View style={styles.Switch_sec}>
+              <View style={styles.box}>
+                <Image
+                  source={require('../../../assets/choice.png')}
+                  style={styles.fundsmg}
+                />
+              </View>
+              <Text style={styles.transaction}>Pause{'\n'} SIP</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );

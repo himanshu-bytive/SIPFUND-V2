@@ -22,6 +22,7 @@ import { reducer as PushNotificationRedux } from './PushNotificationRedux';
 import { locationReducer } from './FetchLocationRedux';
 import { pauseSipReducer } from './PauseSipRedux';
 import { ceaseSipReducer } from './CeaseSipRedux';
+import { portfolioReducer } from './PortfolioRedux';
 const config = {
     key: 'root',
     storage: AsyncStorage,
@@ -51,4 +52,5 @@ export default persistCombineReducers(config, {
     location : locationReducer,
     pauseSip : pauseSipReducer,
     ceaseSip : ceaseSipReducer,
+    portfolio : portfolioReducer,
 });
