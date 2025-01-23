@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     },
     imgbox: {
       alignItems: "center",
-      marginBottom: 10,
+      marginBottom: 0,
     },
     Panimg: {
       height: 130,
@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
       width: "100%", // Full width of the screen
       alignItems: "center", // Center the button horizontally
       backgroundColor: Colors.WHITE, // Match background to the container
-      paddingVertical: 10, // Space inside the container
+      paddingVertical: 5, // Space inside the container
       width: "100%",
       padding: responsiveWidth(1),
       backgroundColor: Colors.WHITE,
@@ -100,7 +100,7 @@ export const styles = StyleSheet.create({
     sub_slogan: {
       fontSize: responsiveFontSize(1.9),
       color: Colors.BLACK,
-      marginBottom: responsiveHeight(1),
+      marginBottom: 10,
       fontFamily: "Jomolhari",
     },
     bottomButton: {

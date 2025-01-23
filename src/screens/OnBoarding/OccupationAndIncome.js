@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   View,
   Platform,
-  ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Text,
   ActivityIndicator,
-  Alert,
   Modal,
+  FlatList,
 } from "react-native";
-import { Styles, Colors, FormValidate } from "../../common";
-import { Image, Header, CheckBox } from "react-native-elements";
+import { Image } from "react-native-elements";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {
   responsiveFontSize,
@@ -21,174 +19,135 @@ import {
 } from "react-native-responsive-dimensions";
 import { connect } from "react-redux";
 import Button from "../../components/Atom/Button/Button";
-
-const pepList = [
-  { value: "N", label: "No" },
-  { value: "Y", label: "Yes" },
-];
+import { Colors } from "../../common";
 
 const OccupationAndIncome = (props) => {
   const {
     nseDetails,
     fatcaDetails,
     userDetails,
-    users,
-    updateRegister,
     token,
     occupations,
-    incomes,
     settings,
-    isFetching,
+    updateRegister,
   } = props;
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [occupationsList, setOccupationsList] = useState([]);
-  const [incomesList, setIncomesList] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  useEffect(() => {
-    settings(token);
-  }, []);
-
-  useEffect(() => {
-    const occupationsList = occupations
-      ? occupations.map((item) => ({
-        value: item.OCCUPATION_CODE,
-        label: String(item.OCCUPATION_DESC),
-      }))
-      : [];
-    setOccupationsList(occupationsList);
-
-    const incomesList = incomes
-      ? incomes.map((item) => ({
-        value: item.APP_INCOME_CODE,
-        label: String(item.APP_INCOME_DESC),
-      }))
-      : [];
-    setIncomesList(incomesList);
-    console.log("INCOMELIST",incomesList);
-    
-  }, [occupations, incomes]);
-
   const [state, setState] = useState({
     occupation: "",
-    income: "",
-    pep: undefined,
   });
 
   const [errors, setErrors] = useState({
     occupation: null,
-    income: null,
-    pep: null,
   });
 
-  const validateStepOne = () => {
-    const { occupation } = state;
-    let isValid = true;
-  
-    if (!occupation || !occupation.OCCUPATION_CODE) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        occupation: "Please Select Occupation",
-      }));
-      setShowModal(true); // Show the modal when there’s an error
-      isValid = false;
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        occupation: null, // Clear the error if the validation passes
-      }));
-      setShowModal(false); // Hide the modal when validation passes
-    }
-  
-    return isValid;
-  };
-  
+  // Memoize occupations list to prevent re-renders
+  const occupationsList = useMemo(
+    () =>
+      occupations
+        ? occupations.map((item) => ({
+            value: item.OCCUPATION_CODE,
+            label: String(item.OCCUPATION_DESC),
+          }))
+        : [],
+    [occupations]
+  );
 
-  const validateStepTwo = () => {
-    const { income } = state;
-    let isValid = true;
-  
-    if (!income || !income.APP_INCOME_CODE) {  // Checking for the income's code
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        income: "Please Select Annual Income",  // Displaying error message
-      }));
-      isValid = false;
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        income: null, // Clear the error message if income is selected
-      }));
-    }
-  
-    return isValid;
-  };
-  
-
-  const validateStepThree = () => {
-    const { pep } = state;
-    let isValid = true;
-  
-    // Ensure that pep has a value before allowing progression
-    if (!pep || !pep.code) {  // Check if pep is not selected or the code is not set
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        pep: "Please Select if You are a PEP", // Set the error message if PEP is not selected
-      }));
-      isValid = false;
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        pep: null, // Clear any error message if PEP is selected
-      }));
-    }
-  
-    return isValid;
-  };
-  
-
-  const onAction = () => {
-    if (currentStep === 1) {
-      if (validateStepOne()) {
-        setCurrentStep(2);
-        setErrors({});
-      }
-    } else if (currentStep === 2) {
-      if (validateStepTwo()) {
-        setCurrentStep(3);
-        setErrors({});
-      }
-    } else if (currentStep === 3) {
-      if (validateStepThree()) {
-        const params = {
-          nseDetails: {
-            ...nseDetails,
-            occupation: state.occupation,
-          },
-          fatcaDetails: {
-            ...fatcaDetails,
-            app_income: state.income,
-            pep: state.pep,
-          },
-          userDetails,
-        };
-        console.log("paasing params", params);
-        updateRegister(params, token);
-        //Add navigation to next screen for DOB, mob-Email relation details.
-        props.navigation.navigate("OnBoard", { screen: "BirthRelation" })
-      }
-    }
-  };
+  useEffect(() => {
+    settings(token); // Fetch settings using the token
+  }, [token, settings]);
 
   useEffect(() => {
     if (fatcaDetails || nseDetails || userDetails) {
       setState({
-        occupation: nseDetails.occupation,
-        income: fatcaDetails.app_income,
-        pep: fatcaDetails.pep,
+        occupation: nseDetails?.occupation || "",
       });
     }
   }, [fatcaDetails, nseDetails, userDetails]);
+
+  const validateStepOne = () => {
+    const { occupation } = state;
+    let isValid = true;
+
+    if (!occupation?.OCCUPATION_CODE) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        occupation: "Please Select Occupation",
+      }));
+      setShowModal(true);
+      isValid = false;
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        occupation: null,
+      }));
+      setShowModal(false);
+    }
+    return isValid;
+  };
+
+  const onAction = () => {
+    if (validateStepOne()) {
+      const params = {
+        nseDetails: {
+          ...nseDetails,
+          occupation: state.occupation,
+        },
+        fatcaDetails,
+        userDetails,
+      };
+      updateRegister(params, token);
+      props.navigation.navigate("OnBoard", { screen: "Income" });
+    }
+  };
+
+  const renderContent = () => {
+    if (!occupations || occupations.length === 0) {
+      return (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color={Colors.RED} />
+        </View>
+      );
+    } else {
+      return (
+        <FlatList
+          data={occupationsList}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          contentContainerStyle={styles.optionsContainer}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                state.occupation?.OCCUPATION_CODE === item.value &&
+                  styles.optionButtonSelected,
+              ]}
+              onPress={() =>
+                setState({
+                  ...state,
+                  occupation: {
+                    OCCUPATION_CODE: item.value,
+                    OCCUPATION_DESC: item.label,
+                  },
+                })
+              }
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  state.occupation?.OCCUPATION_CODE === item.value &&
+                    styles.optionTextSelected,
+                ]}
+              >
+                {item.label}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      );
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -198,12 +157,12 @@ const OccupationAndIncome = (props) => {
       <View style={styles.headerRow}>
         <TouchableOpacity
           onPress={() => {
-            if (currentStep === 3) {
-              setCurrentStep(2);
-            } else if (currentStep === 2) {
-              setCurrentStep(1);
+            if (currentStep > 1) {
+              setCurrentStep((prevStep) => prevStep - 1);
             } else {
-              props.navigation.navigate("OnBoard",{screen : "ProfileDetailsForm"});
+              props.navigation.navigate("OnBoard", {
+                screen: "ProfileDetailsForm",
+              });
             }
           }}
           style={styles.arrowButton}
@@ -215,152 +174,42 @@ const OccupationAndIncome = (props) => {
           style={styles.logimg}
         />
       </View>
-      {isFetching ? (
-        <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-          <ActivityIndicator size="large" color={Colors.RED} />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.slogan}>Occupation</Text>
+        <View style={styles.text_box}>
+          <Text style={styles.sub_slogan}>Select one of the options.</Text>
         </View>
-      ) : (
-        <ScrollView
-          style={styles.containerScroll}
-          contentContainerStyle={{ flexGrow: 1 }}
+        {renderContent()}
+        <Modal
+          visible={showModal}
+          transparent={true}
+          animationType="none"
+          onRequestClose={() => setShowModal(false)}
         >
-          <View style={styles.containBox}>
-            {currentStep === 1 ? (
-              <>
-                <Text style={styles.slogan}>Occupation</Text>
-                <View style={styles.text_box}>
-                  <Text style={styles.sub_slogan}>Select one of the options.</Text>
-                  <View style={styles.optionsContainer}>
-                    {occupationsList.map((option, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        style={[
-                          styles.optionButton,
-                          state.occupation.OCCUPATION_CODE === option.value &&
-                          styles.optionButtonSelected,
-                        ]}
-                        onPress={() =>
-                          setState({
-                            ...state,
-                            occupation: { OCCUPATION_CODE: option.value, OCCUPATION_DESC: option.label },
-                          })
-                        }
-                      >
-                        <Text
-                          style={[
-                            styles.optionText,
-                            state.occupation.OCCUPATION_CODE === option.value && styles.optionTextSelected,
-                          ]}
-                        >
-                          {option.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-                <Modal
-                    visible={showModal}
-                    transparent={true}
-                    animationType="none"
-                    onRequestClose={() => setShowModal(false)}
-                  >
-                    <View style={styles.modalContainer}>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.modalText}>Please Select Occupation Before Proceeding.</Text>
-                        <Button
-                          text="OK"
-                          onPress={() => setShowModal(false)}
-                          backgroundColor={Colors.RED}
-                          textColor={Colors.WHITE}
-                          height={40}
-                          width={100}
-                        />
-                      </View>
-                    </View>
-                  </Modal>
-              </>
-            ) : currentStep === 2 ? (
-              <>
-                <Text style={styles.slogan}>Annual Income</Text>
-                <View style={styles.text_box}>
-                  <Text style={styles.sub_slogan}>Select one of the options.</Text>
-                  <View style={styles.optionsContainer}>
-                    {incomesList.map((option, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        style={[
-                          styles.optionButton,
-                          state.income.APP_INCOME_CODE === option.value &&
-                          styles.optionButtonSelected,
-                        ]}
-                        onPress={() =>
-                          setState({
-                            ...state,
-                            income: { APP_INCOME_CODE: option.value, APP_INCOME_DESC: option.label },
-                          })
-                        }
-                      >
-                        <Text
-                          style={[
-                            styles.optionText,
-                            state.income.APP_INCOME_CODE === option.value && styles.optionTextSelected,
-                          ]}
-                        >
-                          {option.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                  {errors.income && <Text style={styles.errorText}>{errors.income}</Text>}
-                </View>
-              </>
-            ) : currentStep === 3 ? (
-              <>
-                <Text style={styles.slogan}>PEP</Text>
-                <View style={styles.text_box}>
-                  <Text style={styles.sub_slogan}>Politically exposed person.</Text>
-                  <View style={styles.optionsContainer}>
-                    {pepList.map((option, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        style={[
-                          styles.optionButton,
-                          state.pep.code === option.value && styles.optionButtonSelected,
-                        ]}
-                        onPress={() => setState({ ...state, pep: { code: option.value, desc: option.label } })}
-                      >
-                        <Text
-                          style={[
-                            styles.optionText,
-                            state.pep.code === option.value && styles.optionTextSelected,
-                          ]}
-                        >
-                          {option.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                  {errors.pep && <Text style={styles.errorText}>{errors.pep}</Text>}
-                </View>
-              </>
-            ) : null}
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>
+                Please Select Occupation Before Proceeding.
+              </Text>
+              <Button
+                text="OK"
+                onPress={() => setShowModal(false)}
+                backgroundColor={Colors.RED}
+                textColor={Colors.WHITE}
+                height={40}
+                width={100}
+              />
+            </View>
           </View>
-        </ScrollView>
-      )}
-      {/* Update button container */}
+        </Modal>
+      </View>
       <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={() => {
-            onAction(); // Call onAction to handle validation and step transition
-          }}
-        >
+        <TouchableOpacity style={styles.bottomButton} onPress={onAction}>
           <Text style={styles.buttonText}> Next </Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -393,50 +242,35 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  containBox: {
-    paddingHorizontal: 12,
-    width: "100%",
-  },
-  // headerRow: {
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   alignItems: "center",
-  //   paddingHorizontal: responsiveWidth(4),
-  //   marginTop: responsiveHeight(2),
-  // },
-  // arrowButton: {
-  //   marginLeft: responsiveWidth(2),
-  // },
   headerRow: {
     flexDirection: "row",
-    justifyContent: "space-between", // Distribute items (back arrow and logo) evenly
-    alignItems: "center",            // Center items vertically
-    width: "100%",                   // Ensure the row spans the full width
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
     paddingHorizontal: responsiveWidth(4),
     paddingVertical: responsiveHeight(2),
-    backgroundColor: Colors.WHITE,  // Maintain background consistency
-    marginTop: 20
+    backgroundColor: Colors.WHITE,
+    marginTop: 20,
   },
   arrowButton: {
     marginLeft: responsiveWidth(2),
-    //alignSelf: "flex-start",         // Ensure the back arrow aligns to the start
   },
   logimg: {
-    width: responsiveWidth(35),      // Adjust the size of the logo as needed
+    width: responsiveWidth(35),
     height: responsiveHeight(7),
     resizeMode: "contain",
-    //alignSelf: "center",            // Keep the logo centered within its container
   },
   optionsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "auto",
+    height: "auto",
+    alignItems: "center",
+    paddingHorizontal: 10,
   },
   optionButton: {
     width: "48%",
-    marginVertical: responsiveHeight(1),
-    paddingVertical: responsiveHeight(1.5),
+    padding: 10,
+    margin: 5,
     borderWidth: 1,
     borderColor: Colors.RED,
     borderRadius: 8,
@@ -454,17 +288,13 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
     fontWeight: "bold",
   },
-  // logimg: {
-  //   width: responsiveWidth(35),
-  //   height: responsiveHeight(7),
-  //   resizeMode: "contain",
-  // },
   slogan: {
     fontSize: responsiveFontSize(3),
     color: Colors.BLACK,
     marginTop: responsiveHeight(2),
     marginBottom: responsiveHeight(1),
     fontFamily: "Jomolhari",
+    marginLeft: 10,
   },
   sub_slogan: {
     fontSize: responsiveFontSize(1.5),
@@ -472,23 +302,22 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(1),
     fontFamily: "Jomolhari",
   },
-  containerScroll: {
-    flex: 1, // Ensures it takes up available space
-    width: "100%",
-    backgroundColor: Colors.WHITE,
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-
   text_box: {
     flexDirection: "column",
-    width: "100%",
+    width: "auto",
+    marginLeft: 10,
   },
   bottomButtonContainer: {
     padding: responsiveWidth(4),
     backgroundColor: Colors.WHITE,
     alignItems: "center",
-    marginBottom: responsiveHeight(2), // Add a little margin for spacing
+    marginBottom: responsiveHeight(2),
   },
-
   bottomButton: {
     width: responsiveWidth(90),
     borderWidth: 2,
@@ -503,36 +332,19 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
     fontSize: responsiveFontSize(2),
   },
-  checkboxContainer: {
-    marginTop: responsiveHeight(2),
-  },
-  checkboxText: {
-    fontSize: responsiveFontSize(1.5),
-    color: Colors.BLACK,
-  },
 });
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  users: state.auth.user,
   nseDetails: state.registration.nseDetails,
   fatcaDetails: state.registration.fatcaDetails,
   userDetails: state.registration.userDetails,
-  pan: state.home.pan,
-  isFetching: state.registration.isFetching,
   occupations: state.registration.occupations,
-  incomes: state.registration.incomes,
-  updateSuccess: state.registration.updateSuccess,
-  relationList: state.registration.nomineeRelationship,
-  minor_gaurdian_relationship_list: state.registration.minorGaurdianRelationship,
 });
 
-const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
+const mapDispatchToProps = (dispatch) => {
   const { RegistrationActions } = require("../../store/RegistrationRedux");
   return {
-    ...stateProps,
-    ...ownProps,
     settings: (token) => {
       RegistrationActions.settings(dispatch, token);
     },
@@ -541,4 +353,5 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     },
   };
 };
-export default connect(mapStateToProps, undefined, mapDispatchToProps)(OccupationAndIncome);
+
+export default connect(mapStateToProps, mapDispatchToProps)(OccupationAndIncome);

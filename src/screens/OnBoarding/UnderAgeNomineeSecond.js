@@ -52,8 +52,8 @@ const UnderAgeNomineeSecond = (props) => {
         if (fatcaDetails || nseDetails || userDetails) {
             setState({
                 nominee2_guard_name: state.nominee2_guard_name,
-                nominee2_guard_pan: state?.nomine2_guard_pan,
-                nominee2_relation: NomineeIsYours,
+                nominee2_guard_pan: state?.nominee2_guard_pan,
+                nominee2_guard_relation: NomineeIsYours,
             });
         }
     }, [fatcaDetails, nseDetails, userDetails]);

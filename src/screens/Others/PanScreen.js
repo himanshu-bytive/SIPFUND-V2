@@ -121,14 +121,13 @@ function PanScreen(props) {
           {errors.pannumber && (
             <Text style={Styles.error}>{errors.pannumber}</Text>
           )}
-          
         </View>
       </ScrollView>
      
       <View style={styles.bottomButtonContainer}>
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom:10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginBottom:5 }}>
         <FontAwesome5 name="shield-alt" size={20} color="#838280" />
-        <Text style={{ marginLeft: 5, fontSize: 12 }}>
+        <Text style={{ marginLeft: 5, fontSize: 12 ,color:"black"}}>
           Your PAN details are completely safe and secure with us.
         </Text>
       </View>

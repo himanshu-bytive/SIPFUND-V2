@@ -383,7 +383,7 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('OtherStackYou', {screen: 'BankAccount'})
+            props.navigation.navigate('OtherStackYou', {screen: 'ReferEarn'})
           }
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>
