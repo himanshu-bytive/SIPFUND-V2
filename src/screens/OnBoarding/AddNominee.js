@@ -173,7 +173,8 @@ const AddNominee = (props) => {
 
     if (isLessThan18(state.nominee1_dob)) {
       updateRegister(newparams, token);
-      navigation.navigate("UnderAgeNominee",{ SecondNominee: false });
+      // navigation.navigate("UnderAgeNominee",{ SecondNominee: false });
+      navigation.navigate("UnderAgeNominee");
     } else {
       updateRegister(params, token);
       navigation.navigate("Reg", { screen: "RegisterAddress" });
@@ -514,7 +515,7 @@ const AddNominee = (props) => {
                   </View>
                 </>
               )} */}
-              <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
+              {/* <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
                 <View style={styles.circleIcon}>
                   <Icon name="plus" size={14} color="white" />
                 </View>
@@ -522,7 +523,7 @@ const AddNominee = (props) => {
                   fontSize: responsiveFontSize(1.5),
                   color: Colors.BLACK,
                 }}>Add another nominee</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
                 <Button
                   borderColor={Colors.RED}

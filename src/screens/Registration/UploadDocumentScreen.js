@@ -27,16 +27,16 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const documentsMap = {
   PC: "Pan Card",
-  AA1: "Aadhaar Card Front",
-  AA2: "Aadhaar Card Back",
+  // AA1: "Aadhaar Card Front",
+  // AA2: "Aadhaar Card Back",
   CH: "Cancelled Cheque",
-  PA: "Passport",
-  PIC: "Passport Size Image",
-  AVATAR: "Avatar",
-  DL: "Driving License",
-  IP: "IIN Physical Form",
+  // PA: "Passport",
+  // PIC: "Passport Size Image",
+  // AVATAR: "Avatar",
+  // DL: "Driving License",
+  // IP: "IIN Physical Form",
   // KF: "Investor Form",
-  AC: "Investor Form",
+  // AC: "Investor Form",
 };
 
 let documentsKyc = [
@@ -47,14 +47,14 @@ let documentsKyc = [
     type: "attachment",
     icon: <FontAwesome5 name="credit-card" size={18} color="#EE4248" />,
   },
-  {
-    name: "Aadhaar Card Front",
-    multi: true,
-    fileType: "AA1",
-    info: "Upload Select Doc",
-    type: "attachment",
-    icon: <AntDesign name="idcard" size={20} color="#EE4248" />,
-  },
+  // {
+  //   name: "Aadhaar Card Front",
+  //   multi: true,
+  //   fileType: "AA1",
+  //   info: "Upload Select Doc",
+  //   type: "attachment",
+  //   icon: <AntDesign name="idcard" size={20} color="#EE4248" />,
+  // },
   {
     name: "Cancelled Cheque",
     fileType: "CH",
@@ -72,14 +72,14 @@ let documents = [
     type: "attachment",
     icon: <FontAwesome5 name="credit-card" size={18} color="#EE4248" />,
   },
-  {
-    name: "Aadhaar Card Front",
-    multi: true,
-    fileType: "AA1",
-    info: "Upload Select Doc",
-    type: "attachment",
-    icon: <AntDesign name="idcard" size={20} color="#EE4248" />,
-  },
+  // {
+  //   name: "Aadhaar Card Front",
+  //   multi: true,
+  //   fileType: "AA1",
+  //   info: "Upload Select Doc",
+  //   type: "attachment",
+  //   icon: <AntDesign name="idcard" size={20} color="#EE4248" />,
+  // },
   {
     name: "Cancelled Cheque",
     fileType: "CH",
@@ -87,28 +87,28 @@ let documents = [
     type: "attachment",
     icon: <MaterialIcons name="cancel" size={22} color="#EE4248" />,
   },
-  {
-    name: "Investor Form",
-    fileType: "AC",
-    info: "Upload Investor Form",
-    type: "attachment",
-    icon: <FontAwesome name="wpforms" size={22} color="#EE4248" />,
-  },
-  {
-    name: "Passport Size Image",
-    fileType: "PIC",
-    info: "Upload Passport Size Image",
-    type: "attachment",
-    icon: <FontAwesome name="file-image-o" size={22} color="#EE4248" />,
-  },
+  // {
+  //   name: "Investor Form",
+  //   fileType: "AC",
+  //   info: "Upload Investor Form",
+  //   type: "attachment",
+  //   icon: <FontAwesome name="wpforms" size={22} color="#EE4248" />,
+  // },
+  // {
+  //   name: "Passport Size Image",
+  //   fileType: "PIC",
+  //   info: "Upload Passport Size Image",
+  //   type: "attachment",
+  //   icon: <FontAwesome name="file-image-o" size={22} color="#EE4248" />,
+  // },
   //{ name: "Upload Video", fileType: "VID", info: "Upload Upload Video", type: "attachment", icon: <Foundation name="play-video" size={25} color="#EE4248" /> },
-  {
-    name: "Upload Signature",
-    fileType: "SIGN",
-    info: "Upload Upload Signature",
-    type: "form",
-    icon: <FontAwesome5 name="file-signature" size={20} color="#EE4248" />,
-  },
+  // {
+  //   name: "Upload Signature",
+  //   fileType: "SIGN",
+  //   info: "Upload Upload Signature",
+  //   type: "form",
+  //   icon: <FontAwesome5 name="file-signature" size={20} color="#EE4248" />,
+  // },
 ];
 
 function UploadDocumentScreen(props) {
@@ -134,7 +134,11 @@ function UploadDocumentScreen(props) {
   },[DocumentUploadStatus])
   const carosuelref = useRef();
   const [reUploadInd, setReUploadInd] = useState([]);
-  
+  useEffect(()=>{
+   console.log("Docyyment",document);
+   console.log("DOC",docs);
+   
+  },[]);
   useEffect(() => {
     setShowLoader(true); // Show loader immediately on mount
   
@@ -270,7 +274,7 @@ function UploadDocumentScreen(props) {
           />
         }
         rightComponent={
-          <View style={{marginTop:30}}>
+          <View style={{marginTop:0}}>
            <Cart
             nav={() => {
               props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });

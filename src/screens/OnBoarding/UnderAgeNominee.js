@@ -18,9 +18,8 @@ const UnderAgeNominee = (props) => {
         token,
         userDetails,
         updateRegister,
-        route
     } = props
-    const { SecondNominee } = route.params || {};
+    // const { SecondNominee } = route.params || {};
     const [stepCount, setStepCount] = useState(1);
     const [NomineeIsYours, setNomineeIsYours] = useState("");
     const navigation = useNavigation();
@@ -53,12 +52,88 @@ const UnderAgeNominee = (props) => {
         console.log("NomineeDetails", nseDetails);
         if (fatcaDetails || nseDetails || userDetails) {
             setState({
-                nominee1_guard_name: state.nominee1_guard_name,
-                nominee1_guard_pan: state?.nominee1_guard_pan,
-                nominee1_guard_relation: NomineeIsYours,
+                nominee1_guard_name: nseDetails.nominee1_guard_name,
+                nominee1_guard_pan: nseDetails?.nominee1_guard_pan,
+                nominee1_guard_relation: nseDetails?.nominee1_guard_relation,
             });
+            setNomineeIsYours(nseDetails?.nominee1_guard_relation)
         }
     }, [fatcaDetails, nseDetails, userDetails]);
+    // const onAction = () => {
+    //     // Initialize a flag to track errors
+    //     let hasErrors = false;
+
+    //     // Validate Guardian Name
+    //     if (!state.nominee1_guard_name.trim()) {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_name: "Please enter the guardian's name.",
+    //         }));
+    //         hasErrors = true;
+    //     } else {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_name: null,
+    //         }));
+    //     }
+
+    //     // Validate Guardian Relation
+    //     if (!NomineeIsYours) {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_relation: "Please select the guardian's relation.",
+    //         }));
+    //         hasErrors = true;
+    //     } else {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_relation: null,
+    //         }));
+    //     }
+
+    //     // Validate Guardian PAN
+    //     if (!state.nominee1_guard_pan.trim()) {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_pan: "Please enter the guardian's PAN.",
+    //         }));
+    //         hasErrors = true;
+    //     } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee1_guard_pan.trim())) {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+    //         }));
+    //         hasErrors = true;
+    //     } else {
+    //         setErrors((prevErrors) => ({
+    //             ...prevErrors,
+    //             nominee1_guard_pan: null,
+    //         }));
+    //     }
+
+    //     // Prevent navigation if there are errors
+    //     if (hasErrors) return;
+
+    //     // Proceed with valid data
+    //     const params = {
+    //         nseDetails: {
+    //             ...nseDetails,
+    //             nominee1_guard_name: state.nominee1_guard_name.trim(),
+    //             nominee1_guard_pan: state.nominee1_guard_pan.trim(),
+    //             nominee1_guard_relation: NomineeIsYours,
+    //         },
+    //         fatcaDetails,
+    //         userDetails,
+    //     };
+    //     console.log("passing params", params);
+    //     updateRegister(params, token);
+    //     if (SecondNominee) {
+    //         navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
+    //     } else {
+    //         navigation.navigate("Reg", { screen: "RegisterAddress" });
+    //     }
+    // };
+
     const onAction = () => {
         // Initialize a flag to track errors
         let hasErrors = false;
@@ -127,12 +202,9 @@ const UnderAgeNominee = (props) => {
         };
         console.log("passing params", params);
         updateRegister(params, token);
-        if (SecondNominee) {
-            navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
-        } else {
-            navigation.navigate("Reg", { screen: "RegisterAddress" });
-        }
+        navigation.navigate("Reg", { screen: "RegisterAddress" });
     };
+
 
     const mobileEmailRelation = [
         { value: "M", label: "Mother" },
