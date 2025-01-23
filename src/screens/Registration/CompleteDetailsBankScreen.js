@@ -31,7 +31,7 @@ import LottieView from "lottie-react-native";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../../components/Atom/Button/Button";
-
+import SIPLOGO from '../../../assets/SVG-ICONS/SipLogo.svg';
 function CompleteDetailsBankScreen(props, route) {
   const pageActive = useRef(false);
   const [visible, setVisible] = useState(false);
@@ -645,32 +645,23 @@ function CompleteDetailsBankScreen(props, route) {
   const OnlineKYC = () => {
     setShowAMC(true);
   }
+  const handleBackPress = () =>{
+    props.navigation.navigate("RegisterAddress")
+  }
   return (
     <>
       <Header
+        containerStyle={[styles.headerContainer, { backgroundColor: 'white' }]}
+        statusBarProps={{ backgroundColor: 'white', barStyle: 'dark-content' }}
         leftComponent={
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={{ marginTop: 20 }}
-          >
-            <AntDesign name={"arrowleft"} size={40} color={Colors.RED} />
-          </TouchableOpacity>
-        }
-        containerStyle={styles.header}
-        backgroundColor={Colors.LIGHT_WHITE}
-        centerComponent={
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={styles.logimg}
+          <AntDesign
+            name="arrowleft"
+            size={25}
+            color={Colors.BLACK}
+            onPress={handleBackPress}
           />
         }
-        rightComponent={
-          <Cart
-            nav={() => {
-              props.navigation.navigate("TopRatedList");
-            }}
-          />
-        }
+        rightComponent={<SIPLOGO width={95} height={25} />}
       />
       {isFetching && (
         <View style={Styles.loading}>
@@ -686,7 +677,7 @@ function CompleteDetailsBankScreen(props, route) {
         <ScrollView>
           <View style={styles.heading_sec}>
             <Text style={styles.heading}>
-             Verify Bank Details of {nseDetails?.inv_name}
+              Verify Bank Details of {nseDetails?.inv_name}
             </Text>
           </View>
 
@@ -823,7 +814,7 @@ function CompleteDetailsBankScreen(props, route) {
               <Text style={styles.occupation}>
                 Branch Address <Text style={styles.error}>*</Text>
               </Text>
-               <TextInput
+              <TextInput
                 style={styles.inputsec}
                 editable={true}
                 autoCapitalize="characters"
@@ -1138,13 +1129,13 @@ function CompleteDetailsBankScreen(props, route) {
                 ? `Please check your email and approve the link sent by NSE for your account activation. Also please upload Your pan and bank proof in the document section for manual activation in case digital activation is not successful.d`
                 : `As Your KYC is not Registered, Kindly Proceed with online KYC or  Upload Documents for Manual KYC`}
             </Text>
-            {!userDetails?.ekycIsDone ? 
-           <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 20, }} >
-              <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={OnlineKYC} backgroundColor={Colors.RED} text={"Online KYC"}  textColor={"white"} />
-              <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={MannualKYC} backgroundColor={Colors.RED} text={"Manual KYC"}  textColor={"white"} />
-            </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 5,paddingHorizontal:10 }} >
-              <Button height={responsiveHeight(5)} width={responsiveWidth(50)} backgroundColor={Colors.RED} text={"Go To Home"}  textColor={"white"}  onPress={GoToHome} />
-            </View>}
+            {!userDetails?.ekycIsDone ?
+              <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 20, }} >
+                <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={OnlineKYC} backgroundColor={Colors.RED} text={"Online KYC"} textColor={"white"} />
+                <Button height={responsiveHeight(5)} width={responsiveWidth(30)} onPress={MannualKYC} backgroundColor={Colors.RED} text={"Manual KYC"} textColor={"white"} />
+              </View> : <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", marginTop: 50, gap: 5, paddingHorizontal: 10 }} >
+                <Button height={responsiveHeight(5)} width={responsiveWidth(50)} backgroundColor={Colors.RED} text={"Go To Home"} textColor={"white"} onPress={GoToHome} />
+              </View>}
           </View>
 
           {/* Trusted By Image */}
@@ -1314,22 +1305,22 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: "center",
-    marginBottom:20
+    marginBottom: 20
   },
   click_box: {
     flexDirection: "row",
     marginHorizontal: 25,
-    borderRadius:15
+    borderRadius: 15
   },
   botton_box: {
     width: "50%",
     backgroundColor: Colors.WHITE,
     paddingVertical: 10,
     marginHorizontal: 5,
-    borderRadius:12,
-    borderWidth:2,
-    borderColor:Colors.RED,
-    textColor:"black"
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.RED,
+    textColor: "black"
   },
   get_otp: {
     color: Colors.BLACK,

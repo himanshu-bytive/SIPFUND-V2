@@ -86,6 +86,7 @@ import CeaseSIP from '../screens/HamburgerMenu/CeaseSIP';
 import PauseSIP from '../screens/HamburgerMenu/PauseSIP';
 import UnderAgeNomineeSecond from '../screens/OnBoarding/UnderAgeNomineeSecond';
 import Portfolio from '../screens/HamburgerMenu/Portfolio';
+import Income from '../screens/OnBoarding/Income';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -117,6 +118,7 @@ export const OnBoardingPages = () =>(
      <Stack.Screen name="ProfileDetailsForm" component={ProfileDetails}/>
      <Stack.Screen name="BirthRelation" component={BirthRelation}/>
      <Stack.Screen name="OccupationAndIncome" component={OccupationAndIncome} />
+     <Stack.Screen name='Income' component={Income} />
      <Stack.Screen name='AddNominee' component={AddNominee} />
      <Stack.Screen name='AddSecondNominee' component={AddSecondNominee} />
      <Stack.Screen name='UnderAgeNominee' component={UnderAgeNominee}/>
