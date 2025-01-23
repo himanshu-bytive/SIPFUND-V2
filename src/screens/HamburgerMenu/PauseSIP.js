@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     textAlign: 'center',
-    color: Colors.GRAY_LIGHT,
+    color: Colors.BLACK,
     marginVertical: 20,
     fontSize: 16,
   },
