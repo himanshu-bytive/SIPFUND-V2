@@ -24,50 +24,47 @@ const Portfolio = (props) => {
   const { token, user, getPortfolioDetail, isFetching, portfolioList } = props;
 
   useEffect(() => {
-    getPortfolioDetail(user.pan, token);
+    const postData = {"pan":user.pan};
+    getPortfolioDetail(postData, token);
   }, []);
 
   useEffect(() => {
     console.log('portfolioList::', portfolioList);
   }, [portfolioList]);
 
-  const pieData = [
-    {
-      name: 'Seoul',
-      population: 21500000,
-      color: 'rgba(131, 167, 234, 1)',
+  // Function to generate random colors
+  const generateRandomColors = (numColors) => {
+    const colors = [];
+    for (let i = 0; i < numColors; i++) {
+      const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+      colors.push(randomColor);
+    }
+    return colors;
+  };
+
+  // Generate random colors based on the number of keys in the data
+  const randomColors1 = generateRandomColors(Object.keys(portfolioList.broadCategoryPercentages).length);
+  const randomColors2 = generateRandomColors(Object.keys(portfolioList.categoryNamePercentages).length);
+
+  const pieData1 = portfolioList?.broadCategoryPercentages
+  ? Object.keys(portfolioList.broadCategoryPercentages).map((key, index) => ({
+      name: key,
+      value: portfolioList.broadCategoryPercentages[key],
+      color: randomColors1[index],
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
-    },
-    {
-      name: 'Toronto',
-      population: 2800000,
-      color: '#F00',
+    }))
+  : [];
+
+const pieData2 = portfolioList?.categoryNamePercentages
+  ? Object.keys(portfolioList.categoryNamePercentages).map((key, index) => ({
+      name: key,
+      value: portfolioList.categoryNamePercentages[key],
+      color: randomColors2[index],
       legendFontColor: '#7F7F7F',
       legendFontSize: 15,
-    },
-    {
-      name: 'Beijing',
-      population: 527612,
-      color: 'yellow',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'New York',
-      population: 8538000,
-      color: '#00008B',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'Moscow',
-      population: 11920000,
-      color: 'rgb(0, 255, 0)',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-  ];
+    }))
+  : [];
 
   return (
     <View style={styles.container}>
@@ -104,29 +101,58 @@ const Portfolio = (props) => {
         <View style={styles.switch_sec}>
           <Text style={styles.transaction}>Portfolio</Text>
         </View>
-        <View style={{alignItems:'center'}}>
-            <Text>Hello</Text>
-            <PieChart
-              data={pieData}
-              width={responsiveWidth(90)}
-              height={220}
-              chartConfig={{
-                backgroundColor: '#1cc910',
-                backgroundGradientFrom: '#eff3ff',
-                backgroundGradientTo: '#efefef',
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              }}
-              accessor="population"
-              backgroundColor="transparent"
-              paddingLeft="15"
-              absolute
-            />
-          
-            {/*<Text style={styles.noDataText}>No SIPs to show Summary.</Text>*/}
+        <View>
+          <Text>chat1</Text>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <PieChart
+            donut={true}
+            isThreeD
+            showText
+            data={pieData1}
+            width={responsiveWidth(90)}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#ffffff',
+              backgroundGradientFrom: '#ffffff',
+              backgroundGradientTo: '#ffffff',
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            }}
+            accessor="value"
+            backgroundColor="transparent"
+            paddingLeft="15"
+            absolute
+            innerRadius={60}  
+          />
+        </View>
+        <View>
+          <Text>chat2</Text>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <PieChart
+            donut
+            isThreeD
+            showText
+            data={pieData2}
+            width={responsiveWidth(90)}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#ffffff',
+              backgroundGradientFrom: '#ffffff',
+              backgroundGradientTo: '#ffffff',
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            }}
+            accessor="value"
+            backgroundColor="transparent"
+            paddingLeft="15"
+            absolute
+            innerRadius={60}  
+          />
+          {/* <Text style={styles.noDataText}>No SIPs to show Summary.</Text> */}
         </View>
       </ScrollView>
     </View>
-  )
+  );  
 }
 
 const styles = StyleSheet.create({
