@@ -111,6 +111,7 @@ const OccupationAndIncome = (props) => {
       );
     } else {
       return (
+        <>
         <FlatList
           data={occupationsList}
           keyExtractor={(item, index) => index.toString()}
@@ -145,6 +146,12 @@ const OccupationAndIncome = (props) => {
             </TouchableOpacity>
           )}
         />
+        <View style={styles.bottomButtonContainer}>
+        <TouchableOpacity style={styles.bottomButton} onPress={onAction}>
+          <Text style={styles.buttonText}> Next </Text>
+        </TouchableOpacity>
+      </View>
+      </>
       );
     }
   };
@@ -180,7 +187,8 @@ const OccupationAndIncome = (props) => {
           <Text style={styles.sub_slogan}>Select one of the options.</Text>
         </View>
         {renderContent()}
-        <Modal
+      </View>
+      <Modal
           visible={showModal}
           transparent={true}
           animationType="none"
@@ -202,12 +210,6 @@ const OccupationAndIncome = (props) => {
             </View>
           </View>
         </Modal>
-      </View>
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity style={styles.bottomButton} onPress={onAction}>
-          <Text style={styles.buttonText}> Next </Text>
-        </TouchableOpacity>
-      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -220,8 +222,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    fontSize: responsiveFontSize(1.5),
-    marginTop: responsiveHeight(0.5),
+    fontSize: 14,
+    marginTop: 10,
   },
   modalContainer: {
     flex: 1,
@@ -247,13 +249,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(2),
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     backgroundColor: Colors.WHITE,
     marginTop: 20,
   },
   arrowButton: {
-    marginLeft: responsiveWidth(2),
+    marginLeft: 10,
   },
   logimg: {
     width: responsiveWidth(35),
@@ -291,15 +293,15 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: responsiveFontSize(3),
     color: Colors.BLACK,
-    marginTop: responsiveHeight(2),
-    marginBottom: responsiveHeight(1),
+    marginTop: 10,
+    marginBottom: 10,
     fontFamily: "Jomolhari",
     marginLeft: 10,
   },
   sub_slogan: {
     fontSize: responsiveFontSize(1.5),
     color: Colors.BLACK,
-    marginBottom: responsiveHeight(1),
+    marginBottom: 10,
     fontFamily: "Jomolhari",
   },
   loaderContainer: {
@@ -313,17 +315,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   bottomButtonContainer: {
-    padding: responsiveWidth(4),
+    padding: 10,
     backgroundColor: Colors.WHITE,
     alignItems: "center",
-    marginBottom: responsiveHeight(2),
+    marginBottom: 10,
   },
   bottomButton: {
     width: responsiveWidth(90),
     borderWidth: 2,
     borderColor: Colors.RED,
     borderRadius: 8,
-    paddingVertical: responsiveHeight(1),
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.WHITE,
