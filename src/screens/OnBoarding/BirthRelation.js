@@ -120,12 +120,12 @@ const BirthRelations = (props) => {
 
   const onAction = () => {
     console.log("DOB state:", dateOfBirth);
-  
+
     if (currentStep === 1) {
       // Step 1 validation
       let hasError = false;
       const newErrors = {};
-  
+
       if (!placeOfBirth.STATE_CODE) {
         newErrors.place_birth = "Please select a place of birth.";
         hasError = true;
@@ -134,18 +134,18 @@ const BirthRelations = (props) => {
         newErrors.dob = "Please select a date of birth.";
         hasError = true;
       }
-  
+
       setErrors(newErrors);
-  
+
       if (hasError) return;
-  
+
       // If no errors, proceed to Step 2
       setCurrentStep(2);
     } else if (currentStep === 2) {
       // Step 2 validation
       let hasError = false;
       const newErrors = {};
-  
+
       if (!mobileNumberBelongsTo) {
         newErrors.mobile_relation = "Please select the mobile number relation.";
         hasError = true;
@@ -154,11 +154,11 @@ const BirthRelations = (props) => {
         newErrors.email_relation = "Please select the email ID relation.";
         hasError = true;
       }
-  
+
       setErrors(newErrors);
-  
+
       if (hasError) return;
-  
+
       // If no errors, proceed with submission
       const params = {
         nseDetails: {
@@ -174,13 +174,13 @@ const BirthRelations = (props) => {
         userDetails,
       };
       console.log("passing params", params);
-  
+
       updateRegister(params, token);
       props.navigation.navigate("OnBoard", { screen: "AddNominee" });
     }
   };
-  
-  
+
+
   useEffect(() => {
     console.log("DOB", nseDetails.dob);
     console.log("DOB", nseDetails);
@@ -196,8 +196,8 @@ const BirthRelations = (props) => {
       setEmailBelongsTo(
         nseDetails?.Email_relation
       );
-      console.log("DOB",dateOfBirth);
-      
+      console.log("DOB", dateOfBirth);
+
     }
   }, [fatcaDetails, nseDetails, userDetails]);
 
@@ -214,17 +214,14 @@ const BirthRelations = (props) => {
 
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+     <>
       <View style={styles.headerRow}>
         <TouchableOpacity
           onPress={() => {
             if (currentStep === 2) {
               setCurrentStep(1);
             } else {
-              props.navigation.navigate("OnBoard", { screen: "OccupationAndIncome" });
+              props.navigation.navigate("OnBoard", { screen: "PEP" });
             }
           }}
           style={styles.arrowButton}
@@ -236,7 +233,6 @@ const BirthRelations = (props) => {
           style={styles.logimg}
         />
       </View>
-      <ScrollView style={styles.containerScroll} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.containBox}>
           {currentStep === 1 ? (
             <>
@@ -270,7 +266,7 @@ const BirthRelations = (props) => {
                     flexDirection: "row",
                     justifyContent: "center",
                     marginTop: 10,
-                    width:"auto"
+                    width: "auto"
                   }}
                 >
                   <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
@@ -294,7 +290,7 @@ const BirthRelations = (props) => {
                         marginLeft: 10,
                         marginTop: -2,
                         fontSize: 18,
-                        width:"auto",
+                        width: "auto",
                         color: "black",
                       }}
                       editable={false}
@@ -306,7 +302,7 @@ const BirthRelations = (props) => {
                     />
                   </TouchableOpacity>
                 </View>
-                
+
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
@@ -315,24 +311,24 @@ const BirthRelations = (props) => {
                   minimumDate={new Date(1900, 0, 1)}
                   onConfirm={(dob) => {
                     setIsDatePickerVisible(false);
-                     console.log("hgh",dob);
-                     
-                     const formattedDate = dob.toLocaleDateString("en-US", {
+                    console.log("hgh", dob);
+
+                    const formattedDate = dob.toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
-                  
+
                     console.log("Formatted Date:", formattedDate); // For verification
-                  
+
                     const dateAsNumber = parseInt(
                       `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
                       10
                     ); // Convert to number if needed
                     const datevalue = getDateInHuman(dateAsNumber);
                     setDateOfBirth(datevalue); // Save original Date object
-                    
-                    
+
+
                     setErrors({ ...errors, dob: null });
                     setState({ ...state, dob: dateAsNumber }); // Save formatted date
                   }}
@@ -379,13 +375,12 @@ const BirthRelations = (props) => {
             </>
           ) : null}
         </View>
-      </ScrollView>
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity style={styles.bottomButton} onPress={onAction}>
-          <Text style={styles.buttonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        <View style={styles.bottomSection}>
+          <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+        </>
   );
 };
 
@@ -400,21 +395,41 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   containBox: {
-    paddingHorizontal: responsiveWidth(7),
+    paddingHorizontal:20,
     width: "100%",
+    flex:1,
+    backgroundColor:"white"
+  },
+  bottomSection: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+  },
+  nextButton: {
+    backgroundColor: Colors.RED,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between", // Space between arrow and logo
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: responsiveWidth(4),
-    paddingVertical: responsiveHeight(2), // Add some spacing for better appearance
+    paddingHorizontal: 10,
+    paddingVertical: 20, // Add some spacing for better appearance
     backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
     marginTop: 25
   },
   arrowButton: {
-    marginLeft: responsiveWidth(2),
+    marginLeft: 10,
   },
   logimg: {
     width: responsiveWidth(35),
@@ -424,13 +439,13 @@ const styles = StyleSheet.create({
   sub_slogan: {
     fontSize: responsiveFontSize(2.5),
     color: Colors.BLACK,
-    marginBottom: responsiveHeight(1),
+    marginBottom: 10,
   },
   errorText: {
     color: "red",
     fontSize: responsiveFontSize(1.5),
     marginTop: -15,
-    marginBottom:10
+    marginBottom: 10
   },
   containerScroll: {
     width: "100%",
@@ -446,12 +461,12 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     marginBottom: 20,
-    width:"auto"
+    width: "auto"
   },
   inputsec: {
     height: responsiveHeight(6),
     fontSize: responsiveFontSize(2),
-    paddingHorizontal: responsiveWidth(3),
+    paddingHorizontal: 10,
     color: "black",
     flex: 1,
     backgroundColor: Colors.WHITE,
@@ -465,28 +480,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
     marginTop: 10
-  },
-  bottomButtonContainer: {
-    position: "absolute",
-    bottom: responsiveHeight(1),
-    width: "100%",
-    padding: responsiveWidth(4),
-    backgroundColor: Colors.WHITE,
-    alignItems: "center",
-  },
-  bottomButton: {
-    width: "90%",
-    borderWidth: 2,
-    borderColor: Colors.RED,
-    borderRadius: 8,
-    paddingVertical: responsiveHeight(1),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.WHITE,
-  },
-  buttonText: {
-    color: Colors.BLACK,
-    fontSize: responsiveFontSize(2),
   },
 });
 

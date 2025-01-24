@@ -429,15 +429,13 @@ function VerifyScreen(props) {
           <View style={{ marginTop: 20 }}>
             <Button isLoading={isLoading}
               fontSize={responsiveFontSize(2.5)}
-              textColor={"#000000"}
+              textColor={"#fff"}
               onPress={() => onAction()}
-              backgroundColor={Colors.WHITE}
               text="Enter"
-              borderColor={Colors.RED}
-              borderWidth={2}
-              height={responsiveHeight(5)}
-              width={responsiveWidth(40)}
-              loaderColor="black"
+              backgroundColor={Colors.RED}
+              height={responsiveHeight(6)}
+              width={responsiveWidth(70)}
+              loaderColor="white"
             />
           </View>
           <View style={styles.otp}>

@@ -668,7 +668,7 @@ function CompleteDetailsBankScreen(props, route) {
           <ActivityIndicator color={Colors.BLACK} size="large" />
         </View>
       )}
-      <KeyboardAvoidingView
+      <View
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
         // behavior="position"
@@ -742,13 +742,12 @@ function CompleteDetailsBankScreen(props, route) {
             <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
               <Button
                 isLoading={isFetching}
-                borderColor={Colors.RED}
-                borderWidth={2}
+                backgroundColor={Colors.RED}
                 fontSize={responsiveFontSize(2)}
                 height={responsiveHeight(5)}
                 width={responsiveWidth(60)}
                 text={"Fetch Bank Details"}
-                textColor={"black"}
+                textColor={"white"}
                 onPress={onFetchBankDetails}
               />
             </View>
@@ -1056,7 +1055,7 @@ function CompleteDetailsBankScreen(props, route) {
             </>
           )}
         </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
       <Overlay
         isVisible={visible}
         overlayStyle={{
@@ -1317,13 +1316,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     paddingVertical: 10,
     marginHorizontal: 5,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: Colors.RED,
-    textColor: "black"
+    borderRadius: 10,
+    backgroundColor:Colors.RED,
+    textColor: "white"
   },
   get_otp: {
-    color: Colors.BLACK,
+    color: Colors.WHITE,
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",

@@ -210,109 +210,99 @@ const UnderAgeNominee = (props) => {
         { value: "M", label: "Mother" },
         { value: "F", label: "Father" },
         { value: "C", label: "Court Appointed Legal Guardian" },
-      ];
+    ];
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            {/* Header */}
-            <Header
-                containerStyle={[styles.headerContainer, { backgroundColor: 'white' }]}
-                statusBarProps={{ backgroundColor: 'white', barStyle: 'dark-content' }}
-                leftComponent={
-                    <AntDesign
-                        name="arrowleft"
-                        size={25}
-                        color={Colors.BLACK}
-                        onPress={handleBackPress}
-                    />
-                }
-                rightComponent={<SIPLOGO width={95} height={25} />}
-            />
-
-            <View style={styles.container}>
-                <ScrollView>
-                    <View style={styles.stepContainer}>
-                        <View style={{ marginBottom: 20 }}>
-                            <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
-                                Add guardian for your nominee 1
-                            </Typography>
-                            <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
-                                As your nominees age is below 18 years, kindly add nominee’s guardian.
-                            </Typography>
-                        </View>
-                        <Typography style={styles.title}>Guardian name*</Typography>
-                        <TextInput
-                            style={styles.inputsec}
-                            editable={true}
-                            placeholder="Enter Name"
-                            placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_name || ""}
-                            onChangeText={(text) => {
-                                setState((prevState) => ({ ...prevState, nominee1_guard_name: text }));
-                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_name: null })); // Clear error on input
-                            }}
+        <>
+            <ScrollView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                {/* Header */}
+                <Header
+                    containerStyle={[styles.headerContainer, { backgroundColor: 'white' }]}
+                    statusBarProps={{ backgroundColor: 'white', barStyle: 'dark-content' }}
+                    leftComponent={
+                        <AntDesign
+                            name="arrowleft"
+                            size={25}
+                            color={Colors.BLACK}
+                            onPress={handleBackPress}
                         />
-                        {errors.nominee1_guard_name && (
-                            <Text style={styles.error}>{errors.nominee1_guard_name}</Text>
-                        )}
+                    }
+                    rightComponent={<SIPLOGO width={95} height={25} />}
+                />
 
-                        <Typography style={styles.title}>Guardian Relation*</Typography>
-                        <View style={[styles.inputsec]}>
-                            <Picker
-                                selectedValue={NomineeIsYours || ""}
-                                onValueChange={(itemValue) => {
-                                    setNomineeIsYours(itemValue);
-                                    setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_relation: null })); // Clear error on selection
-                                }}
-                                style={[
-                                    styles.picker,
-                                    NomineeIsYours === "" && { color: "grey" }, // Placeholder color
-                                ]}
-                            >
-                                <Picker.Item label="Select" value="" />
-                                {mobileEmailRelation.map((state) => (
-                                    <Picker.Item key={state.value} label={state.label} value={state.value} />
-                                ))}
-                            </Picker>
-                        </View>
-                        {errors.nominee1_guard_relation && (
-                            <Text style={styles.error}>{errors.nominee1_guard_relation}</Text>
-                        )}
-
-                        <Typography style={styles.title}>Guardian PAN*</Typography>
-                        <TextInput
-                            style={styles.inputsec}
-                            editable={true}
-                            placeholder="Enter PAN"
-                            placeholderTextColor={"grey"}
-                            value={state.nominee1_guard_pan || ""}
-                            onChangeText={(text) => {
-                                setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }));
-                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_pan: null })); // Clear error on input
-                            }}
-                        />
-                        {errors.nominee1_guard_pan && (
-                            <Text style={styles.error}>{errors.nominee1_guard_pan}</Text>
-                        )}
-
-                        <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
-                            <Button
-                                borderColor={Colors.RED}
-                                borderWidth={2}
-                                fontSize={responsiveFontSize(2)}
-                                height={responsiveHeight(5)}
-                                width={responsiveWidth(90)}
-                                text={"Next"}
-                                textColor={"black"}
-                                onPress={onAction}
-                            />
-                        </View>
+                <View style={styles.maincontainer}>
+                    <View style={{ marginBottom: 20 }}>
+                        <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
+                            Add guardian for your nominee 1
+                        </Typography>
+                        <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
+                            As your nominees age is below 18 years, kindly add nominee’s guardian.
+                        </Typography>
                     </View>
-                </ScrollView>
+                    <Typography style={styles.title}>Guardian name*</Typography>
+                    <TextInput
+                        style={styles.inputsec}
+                        editable={true}
+                        placeholder="Enter Name"
+                        placeholderTextColor={"grey"}
+                        value={state.nominee1_guard_name || ""}
+                        onChangeText={(text) => {
+                            setState((prevState) => ({ ...prevState, nominee1_guard_name: text }));
+                            setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_name: null })); // Clear error on input
+                        }}
+                    />
+                    {errors.nominee1_guard_name && (
+                        <Text style={styles.error}>{errors.nominee1_guard_name}</Text>
+                    )}
+
+                    <Typography style={styles.title}>Guardian Relation*</Typography>
+                    <View style={[styles.inputsec]}>
+                        <Picker
+                            selectedValue={NomineeIsYours || ""}
+                            onValueChange={(itemValue) => {
+                                setNomineeIsYours(itemValue);
+                                setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_relation: null })); // Clear error on selection
+                            }}
+                            style={[
+                                styles.picker,
+                                NomineeIsYours === "" && { color: "grey" }, // Placeholder color
+                            ]}
+                        >
+                            <Picker.Item label="Select" value="" />
+                            {mobileEmailRelation.map((state) => (
+                                <Picker.Item key={state.value} label={state.label} value={state.value} />
+                            ))}
+                        </Picker>
+                    </View>
+                    {errors.nominee1_guard_relation && (
+                        <Text style={styles.error}>{errors.nominee1_guard_relation}</Text>
+                    )}
+
+                    <Typography style={styles.title}>Guardian PAN*</Typography>
+                    <TextInput
+                        style={styles.inputsec}
+                        editable={true}
+                        placeholder="Enter PAN"
+                        placeholderTextColor={"grey"}
+                        value={state.nominee1_guard_pan || ""}
+                        onChangeText={(text) => {
+                            setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }));
+                            setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_pan: null })); // Clear error on input
+                        }}
+                    />
+                    {errors.nominee1_guard_pan && (
+                        <Text style={styles.error}>{errors.nominee1_guard_pan}</Text>
+                    )}
+                </View>
+            </ScrollView>
+            <View style={styles.bottomSection}>
+                <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+                    <Text style={styles.buttonText}>Next</Text>
+                </TouchableOpacity>
             </View>
-        </KeyboardAvoidingView>
+        </>
     );
 };
 
@@ -320,13 +310,36 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffff',
+        paddingHorizontal: 10
+    },
+    bottomSection: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderTopWidth: 1,
+        borderColor: '#ccc',
+    },
+    nextButton: {
+        backgroundColor: Colors.RED,
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    maincontainer: {
+        backgroundColor: "white",
+        marginTop: 25
     },
     error: {
         color: "#FF0000",
         fontSize: responsiveFontSize(1.5),
         marginBottom: 10,
     },
-    
+
     picker: {
         height: 50,
         width: "auto",
@@ -398,12 +411,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
     },
-    stepContainer: {
-        flex: 1,
-        width: '100%',
-        marginTop: 20,
-        paddingHorizontal: 20,
-    },
+
     title: {
         fontSize: 18,
         fontWeight: 'bold',

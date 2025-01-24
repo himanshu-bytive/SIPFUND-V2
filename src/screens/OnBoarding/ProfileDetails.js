@@ -131,7 +131,7 @@ const PersonalDetails = (props) => {
           userDetails,
         };
         updateRegister(params, token);
-        props.navigation.navigate("OnBoard", { screen: "OccupationAndIncome" });
+        props.navigation.navigate("OnBoard", { screen: "Occupation" });
       }
     }
   };
@@ -155,10 +155,7 @@ const PersonalDetails = (props) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+    <>
       {/* HeaderRow outside the ScrollView */}
       <View style={styles.headerRow}>
         <TouchableOpacity
@@ -178,107 +175,99 @@ const PersonalDetails = (props) => {
           style={styles.logimg}
         />
       </View>
-  
-      <ScrollView
-        style={styles.containerScroll}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        {currentStep === 1 && (
-          <View style={styles.containBox}>
-            <Text style={styles.slogan}>Title</Text>
-            <View style={styles.titleButtonsContainer}>
-              {titleList.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
+      {currentStep === 1 && (
+        <View style={styles.containBox}>
+          <Text style={styles.slogan}>Title</Text>
+          <View style={styles.titleButtonsContainer}>
+            {titleList.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.titleButton,
+                  state.title === item.value && styles.titleButtonSelected,
+                ]}
+                onPress={() => {
+                  setErrors({ ...errors, title: null });
+                  setState({ ...state, title: item.value });
+                }}
+              >
+                <Text
                   style={[
-                    styles.titleButton,
-                    state.title === item.value && styles.titleButtonSelected,
+                    styles.titleButtonText,
+                    state.title === item.value && styles.titleButtonTextSelected,
                   ]}
-                  onPress={() => {
-                    setErrors({ ...errors, title: null });
-                    setState({ ...state, title: item.value });
-                  }}
                 >
-                  <Text
-                    style={[
-                      styles.titleButtonText,
-                      state.title === item.value && styles.titleButtonTextSelected,
-                    ]}
-                  >
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
-            <View style={styles.text_box}>
-              <Text style={styles.sub_slogan}>Name</Text>
-              <TextInput
-                style={styles.inputsec}
-                color="black"
-                placeholderTextColor={"grey"}
-                autoCapitalize={"characters"}
-                placeholder={"Enter Your Name"}
-                value={state.investor}
-                maxLength={30}
-                onChangeText={(investor) => {
-                  setErrors({ ...errors, investor: null });
-                  setState({ ...state, investor });
-                }}
-              />
-            </View>
-            {errors.investor && <Text style={styles.errorText}>{errors.investor}</Text>}
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
-        )}
-  
-        {currentStep === 2 && (
-          <View style={styles.containBox}>
-            <Text style={styles.slogan}>Parents' Names</Text>
-            <View style={styles.text_box}>
-              <Text style={styles.sub_slogan}>Father's Name</Text>
-              <TextInput
-                style={styles.inputsec}
-                color="black"
-                placeholderTextColor={"grey"}
-                autoCapitalize={"characters"}
-                placeholder={"Father's Name"}
-                value={state.fatherName}
-                maxLength={30}
-                onChangeText={(fatherName) => {
-                  setErrors({ ...errors, fatherName: null });
-                  setState({ ...state, fatherName });
-                }}
-              />
-            </View>
-            {errors.fatherName && <Text style={styles.errorText}>{errors.fatherName}</Text>}
-            <View style={styles.text_box}>
-              <Text style={styles.sub_slogan}>Mother's Name</Text>
-              <TextInput
-                style={styles.inputsec}
-                color="black"
-                placeholderTextColor={"grey"}
-                autoCapitalize={"characters"}
-                placeholder={"Mother's Name"}
-                value={state.motherName}
-                maxLength={30}
-                onChangeText={(motherName) => {
-                  setErrors({ ...errors, motherName: null });
-                  setState({ ...state, motherName });
-                }}
-              />
-            </View>
-            {errors.motherName && <Text style={styles.errorText}>{errors.motherName}</Text>}
+          {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
+          <View style={styles.text_box}>
+            <Text style={styles.sub_slogan}>Name</Text>
+            <TextInput
+              style={styles.inputsec}
+              color="black"
+              placeholderTextColor={"grey"}
+              autoCapitalize={"characters"}
+              placeholder={"Enter Your Name"}
+              value={state.investor}
+              maxLength={30}
+              onChangeText={(investor) => {
+                setErrors({ ...errors, investor: null });
+                setState({ ...state, investor });
+              }}
+            />
           </View>
-        )}
-      </ScrollView>
-  
-      {/* Bottom Button Container outside ScrollView */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity onPress={onAction} style={styles.bottomButton}>
+          {errors.investor && <Text style={styles.errorText}>{errors.investor}</Text>}
+        </View>
+      )}
+
+      {currentStep === 2 && (
+        <View style={styles.containBox}>
+          <Text style={styles.slogan}>Parents' Names</Text>
+          <View style={styles.text_box}>
+            <Text style={styles.sub_slogan}>Father's Name</Text>
+            <TextInput
+              style={styles.inputsec}
+              color="black"
+              placeholderTextColor={"grey"}
+              autoCapitalize={"characters"}
+              placeholder={"Father's Name"}
+              value={state.fatherName}
+              maxLength={30}
+              onChangeText={(fatherName) => {
+                setErrors({ ...errors, fatherName: null });
+                setState({ ...state, fatherName });
+              }}
+            />
+          </View>
+          {errors.fatherName && <Text style={styles.errorText}>{errors.fatherName}</Text>}
+          <View style={styles.text_box}>
+            <Text style={styles.sub_slogan}>Mother's Name</Text>
+            <TextInput
+              style={styles.inputsec}
+              color="black"
+              placeholderTextColor={"grey"}
+              autoCapitalize={"characters"}
+              placeholder={"Mother's Name"}
+              value={state.motherName}
+              maxLength={30}
+              onChangeText={(motherName) => {
+                setErrors({ ...errors, motherName: null });
+                setState({ ...state, motherName });
+              }}
+            />
+          </View>
+          {errors.motherName && <Text style={styles.errorText}>{errors.motherName}</Text>}
+        </View>
+      )}
+      <View style={styles.bottomSection}>
+        <TouchableOpacity style={styles.nextButton} onPress={onAction}>
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </>
   );
 };
 
@@ -293,9 +282,29 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(1.5),
     marginTop: responsiveHeight(0.5),
   },
+  bottomSection: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+  },
+  nextButton: {
+    backgroundColor: Colors.RED,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   containBox: {
+    flex:1,
     paddingHorizontal: 20,
     width: "100%",
+    backgroundColor:"white"
   },
   headerRow: {
     flexDirection: "row",
@@ -389,20 +398,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     alignItems: "center",
   },
-  bottomButton: {
-    width: "90%",
-    borderWidth: 2,
-    borderColor: Colors.RED,
-    borderRadius: 8,
-    paddingVertical: responsiveHeight(1),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.WHITE,
-  },
-  buttonText: {
-    color: Colors.BLACK,
-    fontSize: responsiveFontSize(2),
-  },
+
   titleButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -418,7 +414,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.WHITE,
-    width:60
+    width: 60
   },
 
   titleButtonSelected: {

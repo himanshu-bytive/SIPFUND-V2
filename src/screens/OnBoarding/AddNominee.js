@@ -141,7 +141,7 @@ const AddNominee = (props) => {
         nominee1_name: state?.nominee1_name,
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
-        nominee1_type : "N",
+        nominee1_type: "N",
         no_of_nominee: "1",
         nominee1_percent: 100,
         nominee2_percent: "",
@@ -159,7 +159,7 @@ const AddNominee = (props) => {
         nominee1_name: state?.nominee1_name,
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
-        nominee1_type : "Y",
+        nominee1_type: "Y",
         no_of_nominee: "1",
         nominee1_percent: 100,
         nominee2_percent: "",
@@ -180,7 +180,7 @@ const AddNominee = (props) => {
       navigation.navigate("Reg", { screen: "RegisterAddress" });
     }
   };
-  
+
   const onActionSecondNominee = () => {
     // Validate fields
     let hasErrors = false;
@@ -224,7 +224,7 @@ const AddNominee = (props) => {
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
         no_of_nominee: "1",
-        nominee1_type : "N",
+        nominee1_type: "N",
         nominee1_percent: 100,
         nominee2_percent: "",
         nominee2_name: "",
@@ -242,7 +242,7 @@ const AddNominee = (props) => {
         nominee1_relation: NomineeIsYours,
         nominee1_dob: state?.nominee1_dob,
         no_of_nominee: "1",
-        nominee1_type : "Y",
+        nominee1_type: "Y",
         nominee1_percent: 100,
         nominee2_percent: "",
         nominee2_name: "",
@@ -255,7 +255,7 @@ const AddNominee = (props) => {
 
     if (isLessThan18(state.nominee1_dob)) {
       updateRegister(newparams, token);
-      navigation.navigate("UnderAgeNominee",{ SecondNominee: true });
+      navigation.navigate("UnderAgeNominee", { SecondNominee: true });
     } else {
       updateRegister(params, token);
       navigation.navigate("OnBoard", { screen: "AddSecondNominee" });
@@ -326,8 +326,8 @@ const AddNominee = (props) => {
                 borderColor={Colors.RED}
                 borderWidth={2}
                 text={"No, Skip for now"}
-                height={responsiveHeight(5)}
-                width={responsiveWidth(70)}
+                height={responsiveHeight(6)}
+                width={responsiveWidth(90)}
                 textColor={"black"}
                 onPress={() => { navigation.navigate("Reg", { screen: "RegisterAddress" }); }}
               />
@@ -336,118 +336,118 @@ const AddNominee = (props) => {
                 textColor={"white"}
                 text={"Yes, Proceed"}
                 backgroundColor={"red"}
-                height={responsiveHeight(5)}
-                width={responsiveWidth(70)}
+                height={responsiveHeight(6)}
+                width={responsiveWidth(90)}
               />
             </View>
           </View>
         ) : (
-          <ScrollView>
-            <View style={styles.stepContainer}>
-              <Typography style={styles.title}>Nominee name*</Typography>
-              <TextInput
-                style={styles.inputsec}
-                editable={true}
-                placeholderTextColor={"grey"}
-                placeholder="Enter Name"
-                value={state.nominee1_name ? state.nominee1_name : ""}
-                onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
-              />
-              {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
-              <Typography style={styles.title}>Nominee is your*</Typography>
-              <View style={[styles.inputsec]}>
-                <Picker
-                  selectedValue={NomineeIsYours ? NomineeIsYours : ""}
-                  onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
-                  style={[
-                    styles.picker,
-                    NomineeIsYours === "" && { color: "grey" }, // Placeholder color
-                  ]}
-                >
-                  <Picker.Item label="Select" value="" />
-                  {mobileEmailRelation.map((state) => (
-                    <Picker.Item key={state.value} label={state.label} value={state.value} />
-                  ))}
-                </Picker>
-              </View>
-              {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
-              <Typography style={styles.title}>Nominee’s date of birth*</Typography>
-              <View style={styles.inputsecWrapper}>
-                <View
+          <>
+          <View style={styles.stepContainer}>
+            <Typography style={styles.title}>Nominee name*</Typography>
+            <TextInput
+              style={styles.inputsec}
+              editable={true}
+              placeholderTextColor={"grey"}
+              placeholder="Enter Name"
+              value={state.nominee1_name ? state.nominee1_name : ""}
+              onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
+            />
+            {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
+            <Typography style={styles.title}>Nominee is your*</Typography>
+            <View style={[styles.inputsec]}>
+              <Picker
+                selectedValue={NomineeIsYours ? NomineeIsYours : ""}
+                onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
+                style={[
+                  styles.picker,
+                  NomineeIsYours === "" && { color: "grey" }, // Placeholder color
+                ]}
+              >
+                <Picker.Item label="Select" value="" />
+                {mobileEmailRelation.map((state) => (
+                  <Picker.Item key={state.value} label={state.label} value={state.value} />
+                ))}
+              </Picker>
+            </View>
+            {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
+            <Typography style={styles.title}>Nominee’s date of birth*</Typography>
+            <View style={styles.inputsecWrapper}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10,
+                  width: "auto"
+                }}
+              >
+                <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+                  <AntDesign
+                    style={{ marginTop: 0 }}
+                    name="calendar"
+                    color={"#EE4248"}
+                    size={25}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setIsDatePickerVisible(true)}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginTop: 10,
-                    width: "auto"
+                    flex: 1,
                   }}
                 >
-                  <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
-                    <AntDesign
-                      style={{ marginTop: 0 }}
-                      name="calendar"
-                      color={"#EE4248"}
-                      size={25}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setIsDatePickerVisible(true)}
+                  <TextInput
+                    keyboardType="numeric"
                     style={{
-                      flex: 1,
+                      marginLeft: 10,
+                      marginTop: -2,
+                      fontSize: 18,
+                      width: "auto",
+                      color: "black",
                     }}
-                  >
-                    <TextInput
-                      keyboardType="numeric"
-                      style={{
-                        marginLeft: 10,
-                        marginTop: -2,
-                        fontSize: 18,
-                        width: "auto",
-                        color: "black",
-                      }}
-                      editable={false}
-                      selectTextOnFocus={false}
-                      value={dateOfBirth ? dateOfBirth : ""}
-                      placeholder={"DD-MM-YYYY"}
-                      placeholderTextColor={"grey"}
-                      maxLength={11}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  date={new Date()}
-                  maximumDate={new Date()}
-                  minimumDate={new Date(1900, 0, 1)}
-                  onConfirm={(dob) => {
-                    setIsDatePickerVisible(false);
-                    console.log("hgh", dob);
-
-                    const formattedDate = dob.toLocaleDateString("en-US", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
-
-                    console.log("Formatted Date:", formattedDate); // For verification
-
-                    const dateAsNumber = parseInt(
-                      `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
-                      10
-                    ); // Convert to number if needed
-
-                    const datevalue = getDateInHuman(dateAsNumber);
-                    setDateOfBirth(datevalue); // Save original Date object
-                    setErrors({ ...errors, nominee1_dob: null });
-                    setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
-                  }}
-                  onCancel={() => setIsDatePickerVisible(false)}
-                />
+                    editable={false}
+                    selectTextOnFocus={false}
+                    value={dateOfBirth ? dateOfBirth : ""}
+                    placeholder={"DD-MM-YYYY"}
+                    placeholderTextColor={"grey"}
+                    maxLength={11}
+                  />
+                </TouchableOpacity>
               </View>
-              {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
-              {/* <View style={{ marginTop: 10 }}>
+
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                date={new Date()}
+                maximumDate={new Date()}
+                minimumDate={new Date(1900, 0, 1)}
+                onConfirm={(dob) => {
+                  setIsDatePickerVisible(false);
+                  console.log("hgh", dob);
+
+                  const formattedDate = dob.toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
+
+                  console.log("Formatted Date:", formattedDate); // For verification
+
+                  const dateAsNumber = parseInt(
+                    `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                    10
+                  ); // Convert to number if needed
+
+                  const datevalue = getDateInHuman(dateAsNumber);
+                  setDateOfBirth(datevalue); // Save original Date object
+                  setErrors({ ...errors, nominee1_dob: null });
+                  setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
+                }}
+                onCancel={() => setIsDatePickerVisible(false)}
+              />
+            </View>
+            {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
+            {/* <View style={{ marginTop: 10 }}>
                 <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
                   <Picker
@@ -465,7 +465,7 @@ const AddNominee = (props) => {
                   </Picker>
                 </View>
               </View> */}
-              {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
+            {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
                 <CheckboxSquare
                   value={isChecked}
                   onValueChange={(newValue) => setIsChecked(newValue)}
@@ -474,7 +474,7 @@ const AddNominee = (props) => {
                   Nominee address is same as my address
                 </Text>
               </View> */}
-              {/* {!isChecked && (
+            {/* {!isChecked && (
                 <>
                   <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
                     <View style={{ flexDirection: "column", width: "50%" }}>
@@ -515,7 +515,7 @@ const AddNominee = (props) => {
                   </View>
                 </>
               )} */}
-              {/* <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
+            {/* <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
                 <View style={styles.circleIcon}>
                   <Icon name="plus" size={14} color="white" />
                 </View>
@@ -524,20 +524,26 @@ const AddNominee = (props) => {
                   color: Colors.BLACK,
                 }}>Add another nominee</Text>
               </TouchableOpacity> */}
-              <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
-                <Button
-                  borderColor={Colors.RED}
-                  borderWidth={2}
-                  fontSize={responsiveFontSize(2)}
-                  height={responsiveHeight(5)}
-                  width={responsiveWidth(80)}
-                  text={"Next"}
-                  textColor={"black"}
-                  onPress={onAction}
-                />
-              </View>
-            </View>
-          </ScrollView>
+            {/* <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
+              <Button
+                borderColor={Colors.RED}
+                borderWidth={2}
+                fontSize={responsiveFontSize(2)}
+                height={responsiveHeight(5)}
+                width={responsiveWidth(80)}
+                text={"Next"}
+                textColor={"black"}
+                onPress={onAction}
+              />
+            </View> */}
+          </View>
+           <View style={styles.bottomSection}>
+           <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+             <Text style={styles.buttonText}>Next</Text>
+           </TouchableOpacity>
+         </View>
+         </>
+
         )}
       </View>
     </KeyboardAvoidingView>
@@ -553,6 +559,24 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: responsiveFontSize(1.5),
     marginTop: -5,
+  },
+  bottomSection: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+  },
+  nextButton: {
+    backgroundColor: Colors.RED,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   errorText2: {
     color: "red",
@@ -636,7 +660,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     flex: 1,
     width: '100%',
-    marginTop: responsiveHeight(5),
+    marginTop: 10,
     paddingHorizontal: 20,
   },
   title: {

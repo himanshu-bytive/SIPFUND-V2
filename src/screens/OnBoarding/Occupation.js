@@ -7,109 +7,113 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image } from 'react-native-elements';
 
-const Income = (props) => {
+const Occupation = (props) => {
     const {
         nseDetails,
         fatcaDetails,
         userDetails,
         token,
-        incomes,
+        occupations,
         settings,
         updateRegister,
     } = props;
 
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState(null);
-    const [incomesList, setIncomesList] = useState([]);
-
     const [state, setState] = useState({
-        income: "",
-        pep: undefined,
+        occupation: "",
     });
     const [errors, setErrors] = useState({
-        income: null,
-        pep: null,
+        occupation: null,
     });
 
-    // Check if data is loading (i.e., incomes is not yet available)
-    const isLoading = !incomes || incomes.length === 0;
+    // Check if data is loading (i.e., occupations is not yet available)
+    const isLoading = !occupations || occupations.length === 0;
 
-    // Memoized list of incomes
-    const incomesListMemo = useMemo(() => {
-        return incomes
-            ? incomes.map((item) => ({
-                value: item.APP_INCOME_CODE,
-                label: String(item.APP_INCOME_DESC),
-            }))
-            : [];
-    }, [incomes]);
-
-    useEffect(() => {
-        // Update incomesList state when incomesListMemo changes
-        setIncomesList(incomesListMemo);
-    }, [incomesListMemo]);
+    // Memoized list of occupations
+    const occupationsList = useMemo(
+        () =>
+            occupations
+                ? occupations.map((item) => ({
+                    value: item.OCCUPATION_CODE,
+                    label: String(item.OCCUPATION_DESC),
+                }))
+                : [],
+        [occupations]
+    );
 
     useEffect(() => {
         settings(token); // Fetch settings using the token
     }, [token, settings]);
 
+    // Preselect the occupation if nseDetails?.occupation has value
     useEffect(() => {
-        // Check if fatcaDetails and app_income are available and if the APP_INCOME_CODE is not empty
-        if (fatcaDetails && fatcaDetails.app_income && fatcaDetails.app_income.APP_INCOME_CODE !== "") {
-            setState((prevState) => ({
-                ...prevState,
-                income: fatcaDetails.app_income.APP_INCOME_CODE || "",
-            }));
-            setSelected(fatcaDetails.app_income.APP_INCOME_CODE); // Set selected income if available
-        } else {
-            setState((prevState) => ({
-                ...prevState,
-                income: "", // If not available, ensure income is empty
-            }));
-            setSelected(null); // Reset selected income if not available
+        if (nseDetails?.occupation) {
+            const preSelectedOccupation = occupationsList.find(
+                (occupation) => occupation.label === nseDetails.occupation // Matching by label
+            );
+            if (preSelectedOccupation) {
+                setState((prevState) => ({
+                    ...prevState,
+                    occupation: preSelectedOccupation.value, // Set the value based on the selected label
+                }));
+                setSelected(preSelectedOccupation.value); // Preselect the occupation
+            }
         }
-    }, [fatcaDetails]);
+    }, [nseDetails, occupationsList]); // Ensure occupationsList is ready before setting the selected value
 
-    const handleSelect = (income) => {
-        setSelected(income.value); // Set selected value
-        setState((prevState) => ({ ...prevState, income: income.value })); // Store the income code
+    const handleSelect = (occupation) => {
+        setSelected(occupation.value); // Set selected value
+        setState((prevState) => ({ ...prevState, occupation: occupation.value })); // Store the occupation code
     };
 
+    const validateStepOne = () => {
+        const { occupation } = state;
+        let isValid = true;
+
+        if (!occupation) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                occupation: "Please Select Occupation",
+            }));
+            setShowModal(true);
+            isValid = false;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                occupation: null,
+            }));
+            setShowModal(false);
+        }
+        return isValid;
+    };
 
     const onAction = () => {
-        console.log("INCOMES", incomes);
+        console.log("OCC", occupations);
 
-        // Check if an income value is selected
-        if (!state.income) {
-            // If no income is selected, show the modal
-            setShowModal(true);
-            return;
-        }
+        if (validateStepOne()) {
+            // Find the selected occupation by its code
+            const selectedOccupation = occupations.find(
+                (occupation) => occupation.OCCUPATION_CODE === state.occupation
+            );
 
-        // Proceed with the action if an income is selected
-        const selectedIncome = incomes.find(
-            (income) => income.APP_INCOME_CODE === state.income
-        );
-
-        const params = {
-            nseDetails,
-            fatcaDetails: {
-                ...fatcaDetails,
-                app_income: {
-                    APP_INCOME_CODE: selectedIncome ? selectedIncome.APP_INCOME_CODE : "",
-                    APP_INCOME_DESC: selectedIncome ? selectedIncome.APP_INCOME_DESC : "",
+            // Create the params object with the occupation description
+            const params = {
+                nseDetails: {
+                    ...nseDetails,
+                    occupation: selectedOccupation ? selectedOccupation.OCCUPATION_DESC : "", // Use the description instead of the code
                 },
-            },
-            userDetails,
-        };
+                fatcaDetails,
+                userDetails,
+            };
 
-        console.log("GOT PARAMS", params);
+            console.log("GOT PARAMS", params);
 
-        // Proceed with the registration update
-        updateRegister(params, token);
-        props.navigation.navigate("OnBoard", { screen: "PEP" });
+            // Proceed with the registration update
+            updateRegister(params, token);
+            props.navigation.navigate("OnBoard", { screen: "Income" });
+        }
     };
-
 
     return (
         <View style={styles.mainContainer}>
@@ -122,9 +126,7 @@ const Income = (props) => {
                 <>
                     <View style={styles.headerRow}>
                         <TouchableOpacity
-                            onPress={() => {
-                                props.navigation.navigate("OnBoard", { screen: "Occupation" });
-                            }}
+                            onPress={() => { props.navigation.navigate("OnBoard", { screen: "ProfileDetailsForm" }) }}
                             style={styles.arrowButton}
                         >
                             <AntDesign name={"arrowleft"} size={35} color="#000" />
@@ -134,21 +136,27 @@ const Income = (props) => {
                             style={styles.logimg}
                         />
                     </View>
-                    {/* Income Grid */}
+                    {/* Occupation Grid */}
                     <ScrollView contentContainerStyle={styles.scrollContainer}>
                         <View>
-                            <Text style={{ marginLeft: 20, color: "black", fontWeight: "bold", fontSize: 20 }}>Annual Income</Text>
-                            <Text style={{ marginLeft: 20, color: "black" }}>Select one of the option</Text>
+                            <Text style={{ marginLeft: 20, color: "black", fontWeight: "bold",fontSize:20 }}>Occupation</Text>
+                            <Text style={{marginLeft:20,color:"black"}}>Select one of the option</Text>
                         </View>
                         <View style={styles.container}>
-                            {incomesList.map((income, index) => (
+
+                            {occupationsList.map((occupation, index) => (
                                 <TouchableOpacity
                                     key={index}
-                                    style={[styles.option, selected === income.value ? styles.selectedOption : styles.unselectedOption]}
-                                    onPress={() => handleSelect(income)}
+                                    style={[
+                                        styles.option,
+                                        selected === occupation.value
+                                            ? styles.selectedOption
+                                            : styles.unselectedOption,
+                                    ]}
+                                    onPress={() => handleSelect(occupation)}
                                 >
-                                    <Text style={[styles.text, selected === income.value ? styles.buttonSelected : styles.buttonUnselected]}>
-                                        {income.label}
+                                    <Text style={[styles.text, selected === occupation.value ? styles.buttonSelected : styles.buttonUnselected]}>
+                                        {occupation.label}
                                     </Text>
                                 </TouchableOpacity>
                             ))}
@@ -162,7 +170,7 @@ const Income = (props) => {
                             <View style={styles.modalContainer}>
                                 <View style={styles.modalContent}>
                                     <Text style={styles.modalText}>
-                                        Please Select Income Before Proceeding.
+                                        Please Select Occupation Before Proceeding.
                                     </Text>
                                     <Button
                                         text="OK"
@@ -195,16 +203,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     buttonSelected: {
-        color: "white",
+        color: "white"
     },
     buttonUnselected: {
-        color: "black",
+        color: "black"
     },
     loaderContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'white', // Ensures a solid white background
     },
     headerRow: {
         flexDirection: "row",
@@ -242,7 +250,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         borderWidth: 1,
-        padding: 5,
+        padding: 5
     },
     unselectedOption: {
         borderColor: Colors.RED,
@@ -302,7 +310,7 @@ const mapStateToProps = (state) => ({
     nseDetails: state.registration.nseDetails,
     fatcaDetails: state.registration.fatcaDetails,
     userDetails: state.registration.userDetails,
-    incomes: state.registration.incomes,
+    occupations: state.registration.occupations,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -317,4 +325,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Income);
+export default connect(mapStateToProps, mapDispatchToProps)(Occupation);

@@ -100,12 +100,12 @@ function ForgotPasswordScreen(props) {
         <View style={styles.bottom}>
           
           <TouchableOpacity onPress={() => props.navigation.goBack()}>
-            <Text style={{ color: "red" }}>Back to Login</Text>
+            <Text style={{ color: "red" ,marginTop:10}}>Back to Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
       <View style={{justifyContent:"center",alignItems:"center",alignSelf:"center",flex:1,backgroundColor:"white"}}>
-       <Button backgroundColor={"white"} borderColor={Colors.RED} borderWidth={2} fontSize={responsiveFontSize(2)} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={onAction} text={"Send My Password"} textColor={"black"} isLoading={isFetching}/>
+       <Button backgroundColor={Colors.RED} fontSize={responsiveFontSize(2)} height={responsiveHeight(6)} width={responsiveWidth(70)} onPress={onAction} text={"Send My Password"} textColor={"white"} isLoading={isFetching}/>
       </View>
     </KeyboardAvoidingView>
   );
