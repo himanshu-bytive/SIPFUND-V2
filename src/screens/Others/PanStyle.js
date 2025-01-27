@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     },
     mainbox: {
       padding: 10,
-      flex: 1, // Make sure the mainbox takes up available space
       //justifyContent: 'flex-start', // Align items at the top (or space them out based on content)
     },
     logimg: {
@@ -26,8 +25,8 @@ export const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingHorizontal: responsiveWidth(3),
-      marginTop: responsiveHeight(0),
+      paddingHorizontal: 10,
+      marginTop: 5,
     },
     imgbox: {
       alignItems: "center",
@@ -60,7 +59,8 @@ export const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center', // Ensure proper alignment of the icon and input
       width: "90%", // Ensure text_box takes up full width
-      height:100
+      height:100,
+      marginTop:-10
     },
     button: {
       alignItems: "center",
@@ -83,17 +83,17 @@ export const styles = StyleSheet.create({
       width: "100%", // Full width of the screen
       alignItems: "center", // Center the button horizontally
       backgroundColor: Colors.WHITE, // Match background to the container
-      paddingVertical: 5, // Space inside the container
+      paddingVertical: 2, // Space inside the container
       width: "100%",
-      padding: responsiveWidth(1),
+      padding: 5,
       backgroundColor: Colors.WHITE,
       alignItems: "center",
     },
     slogan: {
       fontSize: responsiveFontSize(3),
       color: Colors.BLACK,
-      marginTop: responsiveHeight(2),
-      marginBottom: responsiveHeight(1),
+      marginTop: 5,
+      marginBottom: 5,
       fontFamily: "Jomolhari",
       fontWeight: "600"
     },
@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: "#FFB2AA",
       borderRadius: 8,
-      paddingVertical: responsiveHeight(1),
+      paddingVertical: 5,
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: Colors.WHITE,
@@ -119,7 +119,7 @@ export const styles = StyleSheet.create({
       fontSize: responsiveFontSize(2),
     },
     containBox: {
-      paddingHorizontal: responsiveWidth(7),
+      paddingHorizontal: 10,
       width: "100%",
     },
   });
