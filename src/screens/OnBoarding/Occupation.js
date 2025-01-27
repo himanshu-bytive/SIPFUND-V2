@@ -101,7 +101,10 @@ const Occupation = (props) => {
             const params = {
                 nseDetails: {
                     ...nseDetails,
-                    occupation: selectedOccupation ? selectedOccupation.OCCUPATION_DESC : "", // Use the description instead of the code
+                    occupation: {
+                        OCCUPATION_CODE : selectedOccupation?.OCCUPATION_CODE,
+                        OCCUPATION_DESC : selectedOccupation?.OCCUPATION_DESC
+                    }
                 },
                 fatcaDetails,
                 userDetails,

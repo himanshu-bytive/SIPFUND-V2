@@ -447,7 +447,7 @@ function CompleteDetailsBankScreen(props, route) {
         nri_country: "",
         nri_pincode: params.nseDetails.nri_pincode,
         nri_state: params.nseDetails.nri_state,
-        occupation: params.nseDetails.occupation,
+        occupation: params.nseDetails.occupation.OCCUPATION_DESC,
         off_fax: params.nseDetails.off_fax,
         off_phone: params.nseDetails.off_phone,
         pan: user.pan,
