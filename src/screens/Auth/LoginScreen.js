@@ -242,16 +242,14 @@ function LoginScreen(props) {
           <View style={{marginTop:10}}>
             <Button 
               fontSize={responsiveFontSize(2.2)}
-              textColor={"#000000"}
+              textColor={"#ffff"}
               onPress={() => onAction()}
-              backgroundColor={Colors.WHITE}
+              backgroundColor={Colors.RED}
               text="Proceed"
-              borderColor={Colors.RED}
-              borderWidth={2}
-              height={responsiveHeight(5)}
+              height={responsiveHeight(6)}
               width={responsiveWidth(45)}
               isLoading={isFetching}
-              loaderColor="black"     
+              loaderColor="white"     
             />
           </View>
         </View>

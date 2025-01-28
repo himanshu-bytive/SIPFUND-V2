@@ -366,13 +366,13 @@ function CreateAccountScreen(props) {
               />
               {errors.term && <Text style={styles.error}>{errors.term}</Text>}
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <Button backgroundColor={"white"} borderColor={Colors.RED} borderWidth={1} height={responsiveHeight(5)} width={responsiveWidth(70)} onPress={() => {
+                <Button backgroundColor={Colors.RED} height={responsiveHeight(6)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
                     alert("Enter a valid Password!");
                     return;
                   }
                   onAction();
-                }} text={"CONFIRM"} isLoading={isFetching} textColor={"black"} />
+                }} text={"CONFIRM"} isLoading={isFetching} textColor={"white"} loaderColor="white"/>
               </View>
             </View>
           </ScrollView>

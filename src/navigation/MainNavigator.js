@@ -77,7 +77,6 @@ import { Image } from 'react-native';
 import E_KYC from '../screens/Kyc/E_KYC';
 import KycScreen from '../screens/Kyc/KycScreen';
 import BirthRelation from '../screens/OnBoarding/BirthRelation';
-import OccupationAndIncome from '../screens/OnBoarding/OccupationAndIncome';
 import ProfileDetails from '../screens/OnBoarding/ProfileDetails';
 import AddNominee from '../screens/OnBoarding/AddNominee';
 import UnderAgeNominee from '../screens/OnBoarding/UnderAgeNominee';
@@ -87,6 +86,8 @@ import PauseSIP from '../screens/HamburgerMenu/PauseSIP';
 import UnderAgeNomineeSecond from '../screens/OnBoarding/UnderAgeNomineeSecond';
 import Portfolio from '../screens/HamburgerMenu/Portfolio';
 import Income from '../screens/OnBoarding/Income';
+import Occupation from '../screens/OnBoarding/Occupation';
+import Pep from '../screens/OnBoarding/Pep';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -117,11 +118,12 @@ export const OnBoardingPages = () =>(
   <Stack.Navigator initialRouteName="ProfileDetailsForm" screenOptions={{headerShown:false}}>
      <Stack.Screen name="ProfileDetailsForm" component={ProfileDetails}/>
      <Stack.Screen name="BirthRelation" component={BirthRelation}/>
-     <Stack.Screen name="OccupationAndIncome" component={OccupationAndIncome} />
      <Stack.Screen name='Income' component={Income} />
+     <Stack.Screen name='PEP' component={Pep} />
      <Stack.Screen name='AddNominee' component={AddNominee} />
      <Stack.Screen name='AddSecondNominee' component={AddSecondNominee} />
      <Stack.Screen name='UnderAgeNominee' component={UnderAgeNominee}/>
+     <Stack.Screen name='Occupation' component={Occupation} />
      <Stack.Screen name='UnderAgeNomineeSecond' component={UnderAgeNomineeSecond}/>
   </Stack.Navigator>
 )

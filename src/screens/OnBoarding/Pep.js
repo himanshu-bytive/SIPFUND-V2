@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import Button from '../../components/Atom/Button/Button';
@@ -7,97 +7,71 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image } from 'react-native-elements';
 
-const Income = (props) => {
+const pepList = [
+    { value: "N", label: "No" },
+    { value: "Y", label: "Yes" },
+];
+
+const Pep = (props) => {
     const {
         nseDetails,
         fatcaDetails,
         userDetails,
         token,
-        incomes,
         settings,
-        updateRegister,
+        updateRegister
     } = props;
 
     const [showModal, setShowModal] = useState(false);
-    const [selected, setSelected] = useState(null);
-    const [incomesList, setIncomesList] = useState([]);
-
-    const [state, setState] = useState({
-        income: "",
-        pep: undefined,
-    });
+    const [pep, setPep] = useState(undefined);
     const [errors, setErrors] = useState({
-        income: null,
         pep: null,
     });
 
-    // Check if data is loading (i.e., incomes is not yet available)
-    const isLoading = !incomes || incomes.length === 0;
-
-    // Memoized list of incomes
-    const incomesListMemo = useMemo(() => {
-        return incomes
-            ? incomes.map((item) => ({
-                value: item.APP_INCOME_CODE,
-                label: String(item.APP_INCOME_DESC),
-            }))
-            : [];
-    }, [incomes]);
-
-    useEffect(() => {
-        // Update incomesList state when incomesListMemo changes
-        setIncomesList(incomesListMemo);
-    }, [incomesListMemo]);
+    const isLoading = !nseDetails || !fatcaDetails || !userDetails;
 
     useEffect(() => {
         settings(token); // Fetch settings using the token
     }, [token, settings]);
 
     useEffect(() => {
-        // Check if fatcaDetails and app_income are available and if the APP_INCOME_CODE is not empty
-        if (fatcaDetails && fatcaDetails.app_income && fatcaDetails.app_income.APP_INCOME_CODE !== "") {
-            setState((prevState) => ({
-                ...prevState,
-                income: fatcaDetails.app_income.APP_INCOME_CODE || "",
-            }));
-            setSelected(fatcaDetails.app_income.APP_INCOME_CODE); // Set selected income if available
-        } else {
-            setState((prevState) => ({
-                ...prevState,
-                income: "", // If not available, ensure income is empty
-            }));
-            setSelected(null); // Reset selected income if not available
-        }
-    }, [fatcaDetails]);
+        if (fatcaDetails || nseDetails || userDetails) {
+            // Preselect PEP if available in fatcaDetails
+            const pepFromFatca = fatcaDetails?.pep?.code;
 
-    const handleSelect = (income) => {
-        setSelected(income.value); // Set selected value
-        setState((prevState) => ({ ...prevState, income: income.value })); // Store the income code
+            if (pepFromFatca) {
+                setPep(pepFromFatca); // Set the PEP value (Y or N) if it's available
+            } else {
+                setPep(undefined); // If no PEP value, reset to undefined
+            }
+        }
+    }, [fatcaDetails, nseDetails, userDetails]);
+
+    const handleSelectPep = (value) => {
+        setPep(value); // Set selected PEP value (Yes/No)
     };
 
-
     const onAction = () => {
-        console.log("INCOMES", incomes);
+        console.log("Selected PEP", pep);
 
-        // Check if an income value is selected
-        if (!state.income) {
-            // If no income is selected, show the modal
+        // Check if a PEP value is selected
+        if (pep === undefined) {
+            // If no PEP is selected, show the modal
             setShowModal(true);
             return;
         }
 
-        // Proceed with the action if an income is selected
-        const selectedIncome = incomes.find(
-            (income) => income.APP_INCOME_CODE === state.income
-        );
+        // Get selected PEP object from pepList
+        const selectedPep = pepList.find(item => item.value === pep);
 
+        // Proceed with the action and include pep, code, and desc in fatcaDetails
         const params = {
             nseDetails,
             fatcaDetails: {
                 ...fatcaDetails,
-                app_income: {
-                    APP_INCOME_CODE: selectedIncome ? selectedIncome.APP_INCOME_CODE : "",
-                    APP_INCOME_DESC: selectedIncome ? selectedIncome.APP_INCOME_DESC : "",
+                pep: {
+                    code: selectedPep?.value || "", // PEP code (Y/N)
+                    desc: selectedPep?.label || "", // PEP description (Yes/No)
                 },
             },
             userDetails,
@@ -107,9 +81,8 @@ const Income = (props) => {
 
         // Proceed with the registration update
         updateRegister(params, token);
-        props.navigation.navigate("OnBoard", { screen: "PEP" });
+        props.navigation.navigate("OnBoard", { screen: "BirthRelation" });
     };
-
 
     return (
         <View style={styles.mainContainer}>
@@ -123,7 +96,7 @@ const Income = (props) => {
                     <View style={styles.headerRow}>
                         <TouchableOpacity
                             onPress={() => {
-                                props.navigation.navigate("OnBoard", { screen: "Occupation" });
+                                props.navigation.navigate("OnBoard", { screen: "Income" });
                             }}
                             style={styles.arrowButton}
                         >
@@ -134,25 +107,27 @@ const Income = (props) => {
                             style={styles.logimg}
                         />
                     </View>
-                    {/* Income Grid */}
+
+                    {/* PEP Selection */}
                     <ScrollView contentContainerStyle={styles.scrollContainer}>
                         <View>
-                            <Text style={{ marginLeft: 20, color: "black", fontWeight: "bold", fontSize: 20 }}>Annual Income</Text>
-                            <Text style={{ marginLeft: 20, color: "black" }}>Select one of the option</Text>
+                            <Text style={{ marginLeft: 20, color: "black", fontWeight: "bold", fontSize: 20 }}>PEP</Text>
+                            <Text style={{ marginLeft: 20, color: "black" }}>(Politically exposed person)</Text>
                         </View>
                         <View style={styles.container}>
-                            {incomesList.map((income, index) => (
+                            {pepList.map((item) => (
                                 <TouchableOpacity
-                                    key={index}
-                                    style={[styles.option, selected === income.value ? styles.selectedOption : styles.unselectedOption]}
-                                    onPress={() => handleSelect(income)}
+                                    key={item.value}
+                                    style={[styles.option, pep === item.value ? styles.selectedOption : styles.unselectedOption]}
+                                    onPress={() => handleSelectPep(item.value)}
                                 >
-                                    <Text style={[styles.text, selected === income.value ? styles.buttonSelected : styles.buttonUnselected]}>
-                                        {income.label}
+                                    <Text style={[styles.text, pep === item.value ? styles.buttonSelected : styles.buttonUnselected]}>
+                                        {item.label}
                                     </Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
+
                         <Modal
                             visible={showModal}
                             transparent={true}
@@ -162,7 +137,7 @@ const Income = (props) => {
                             <View style={styles.modalContainer}>
                                 <View style={styles.modalContent}>
                                     <Text style={styles.modalText}>
-                                        Please Select Income Before Proceeding.
+                                        Please Select PEP Before Proceeding.
                                     </Text>
                                     <Button
                                         text="OK"
@@ -302,7 +277,6 @@ const mapStateToProps = (state) => ({
     nseDetails: state.registration.nseDetails,
     fatcaDetails: state.registration.fatcaDetails,
     userDetails: state.registration.userDetails,
-    incomes: state.registration.incomes,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -317,4 +291,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Income);
+export default connect(mapStateToProps, mapDispatchToProps)(Pep);

@@ -252,15 +252,13 @@ function OtpScreen(props) {
                 </View>
                 <View>
                   <Button
-                    borderColor={Colors.RED}
-                    borderWidth={2}
-                    height={responsiveHeight(5)}
+                    height={responsiveHeight(6)}
                     width={responsiveWidth(45)}
-                    backgroundColor={Colors.WHITE}
+                    backgroundColor={Colors.RED}
                     fontSize={responsiveFontSize(2)}
-                    textColor={"black"}
+                    textColor={"white"}
                     isLoading={isFetching}
-                    loaderColor="black"
+                    loaderColor="white"
                     text={"Proceed"}
                     onPress={() => onAction(verificationCode)}
                   />

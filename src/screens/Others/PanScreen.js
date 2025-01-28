@@ -18,6 +18,8 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Header } from "react-native-elements";
 import appsFlyer from "react-native-appsflyer";
+import Button from "../../components/Atom/Button/Button";
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 function PanScreen(props) {
   const pageActive = useRef(false);
@@ -123,23 +125,26 @@ function PanScreen(props) {
           )}
         </View>
       </ScrollView>
-     
+
       <View style={styles.bottomButtonContainer}>
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom:5 }}>
-        <FontAwesome5 name="shield-alt" size={20} color="#838280" />
-        <Text style={{ marginLeft: 5, fontSize: 12 ,color:"black"}}>
-          Your PAN details are completely safe and secure with us.
-        </Text>
-      </View>
-        {isFetching ? (
-          <View style={styles.botton_box}>
-            <ActivityIndicator size={30} color={Colors.WHITE} />
-          </View>
-        ) : (
-          <TouchableOpacity style={styles.bottomButton} onPress={() => onAction()}>
-            <Text style={styles.buttonText}>Next</Text>
-          </TouchableOpacity>
-        )}
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+          <FontAwesome5 name="shield-alt" size={20} color="#838280" />
+          <Text style={{ marginLeft: 5, fontSize: 12, color: "black" }}>
+            Your PAN details are completely safe and secure with us.
+          </Text>
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <Button isLoading={isFetching}
+            fontSize={responsiveFontSize(2.5)}
+            textColor={"#fff"}
+            onPress={() => onAction()}
+            text="Enter"
+            backgroundColor={Colors.RED}
+            height={responsiveHeight(6)}
+            width={responsiveWidth(90)}
+            loaderColor="white"
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

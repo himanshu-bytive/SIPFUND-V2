@@ -56,7 +56,7 @@ function CompleteDetailsAddressScreen(props) {
   useEffect(() => {
     if (updateSuccess && pageActive.current) {
       pageActive.current = false;
-      props.navigation.navigate("Reg",{screen : "RegisterBankDetails"});
+      props.navigation.navigate("Reg", { screen: "RegisterBankDetails" });
     }
   }, [updateSuccess]);
 
@@ -79,9 +79,9 @@ function CompleteDetailsAddressScreen(props) {
     if (statess) {
       const stateList = statess
         ? statess.map((item) => ({
-            value: item.STATE_CODE,
-            label: String(item.STATE_NAME),
-          }))
+          value: item.STATE_CODE,
+          label: String(item.STATE_NAME),
+        }))
         : [];
       setStateList(stateList);
     }
@@ -97,7 +97,7 @@ function CompleteDetailsAddressScreen(props) {
   }, [statess, citys]);
 
   useEffect(() => {
-    if (pincodeInfo && pincodeInfo?.stateCode) {     
+    if (pincodeInfo && pincodeInfo?.stateCode) {
       // getCitys(pincodeInfo.stateCode, token);
       setState({
         ...state,
@@ -114,7 +114,7 @@ function CompleteDetailsAddressScreen(props) {
       city: pincodeInfo?.cityName,
     });
   }, [cityList])
-  
+
 
   const getStateCitys = async (pincode) => {
     if (pincode && pincode?.length > 5) {
@@ -175,10 +175,10 @@ function CompleteDetailsAddressScreen(props) {
   }, []);
 
   return (
-    <KeyboardAvoidingView behavior={"height"} enabled style={styles.container}>
+    <View behavior={"height"} enabled style={styles.container}>
       <Header
         leftComponent={
-          <TouchableOpacity onPress={() => props.navigation.navigate("OnBoard",{screen : "AddNominee"})}>
+          <TouchableOpacity onPress={() => props.navigation.navigate("OnBoard", { screen: "AddNominee" })}>
             <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
           </TouchableOpacity>
         }
@@ -229,10 +229,10 @@ function CompleteDetailsAddressScreen(props) {
               error={errors.pincode}
               onChangeText={(pincode) => {
                 setErrors({ ...errors, pincode: null });
-                setState({ ...state, pincode:pincode,states:null, city: "" });
+                setState({ ...state, pincode: pincode, states: null, city: "" });
                 getStateCitys(pincode);
                 // setErrors({ ...errors, states: null });
-                    // setState({ ...state, states:null, city: "" });
+                // setState({ ...state, states:null, city: "" });
               }}
             />
           </View>
@@ -285,12 +285,9 @@ function CompleteDetailsAddressScreen(props) {
       </ScrollView>
       {/* click_box */}
       {/* Footer Section */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={onAction}
-        >
-          <Text style={styles.buttonText}> Next </Text>
+      <View style={styles.bottomSection}>
+        <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+          <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
       {/* <View
@@ -315,7 +312,7 @@ function CompleteDetailsAddressScreen(props) {
           </TouchableOpacity>
         </View>
       </View> */}
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -332,6 +329,24 @@ const styles = StyleSheet.create({
     height: 80, // Set a consistent height for the header
     backgroundColor: Colors.WHITE, // Ensure background matches
   },
+  bottomSection: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+},
+nextButton: {
+    backgroundColor: Colors.RED,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+},
+buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+},
   logimg: {
     height: 35,
     width: 153,
@@ -347,14 +362,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     fontSize: 16,
-    marginTop:10,
+    marginTop: 10,
   },
   inputsec: {
     fontSize: 17,
     paddingHorizontal: 10,
     color: 'black',
     backgroundColor: Colors.WHITE,
-    borderBottomWidth : 0
+    borderBottomWidth: 0
   },
   error: {
     color: "#ff0000",
@@ -365,28 +380,6 @@ const styles = StyleSheet.create({
     color: Colors.DEEP_GRAY,
     fontWeight: "bold",
     marginTop: 10,
-  },
-  bottomButtonContainer: {
-    position: "absolute",
-    bottom: responsiveHeight(1),
-    width: "100%",
-    padding: responsiveWidth(4),
-    backgroundColor: Colors.WHITE,
-    alignItems: "center",
-  },
-  bottomButton: {
-    width: "90%",
-    borderWidth: 2,
-    borderColor: Colors.RED,
-    borderRadius: 8,
-    paddingVertical: responsiveHeight(1),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.WHITE,
-  },
-  buttonText: {
-    color: Colors.BLACK,
-    fontSize: responsiveFontSize(2),
   },
   example: {
     fontSize: 15,
