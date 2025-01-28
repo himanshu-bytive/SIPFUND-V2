@@ -1119,12 +1119,12 @@ const styles = StyleSheet.create({
   },
   Helloimg: {
     marginTop: 10,
-    height: 150,
+    height: 120,
     resizeMode: 'contain',
   },
   Helloimgsmall: {
-    maxWidth: '40%',
-    height: 120,
+    maxWidth: '30%',
+    height: 100,
     // resizeMode: "contain",
   },
   HelloIinvestor: {

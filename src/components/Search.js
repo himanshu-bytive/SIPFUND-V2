@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
@@ -12,32 +12,35 @@ import {
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) => {
+const SuggestionInput = ({ navigate, fundDetails }) => {
   const [inputText, setInputText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const inputRef = useRef(null);
-  useEffect(() => {
-    console.log("got",showSearch);
-    
-    if (showSearch) {
-      inputRef.current?.focus(); // Automatically focus the input field
-    }
-  }, [showSearch]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (inputText.length >= 1) {
+      if (inputText.length >= 3) {
         try {
           const response = await axios.get(
             `https://sipfund.com/api/amc/search?amcname=${inputText}`
           );
-          if (response?.data?.results && response?.data?.results?.length > 10) {
-            setShowSuggestions(true);
-            setSuggestions(response.data.results.slice(0, 10));
+          console.log("Got response", response.data.results?.[0]?.productName);
+  
+          if (response?.data?.results && response?.data?.results?.length > 0) {
+            // Filter suggestions to prioritize those that start with the inputText
+            const filteredSuggestions = response.data.results.filter(item =>
+              item.productDisplayName.toLowerCase().startsWith(inputText.toLowerCase())
+            );
+  
+            // If no results match, show suggestions anyway
+            if (filteredSuggestions.length === 0) {
+              setShowSuggestions(false);
+            } else {
+              setShowSuggestions(true);
+              setSuggestions(filteredSuggestions.slice(0, 10)); // Limit to 10 results
+            }
           } else {
             setShowSuggestions(false);
-            // setSuggestions(response.data.results);
           }
         } catch (error) {
           setShowSuggestions(false);
@@ -47,9 +50,10 @@ const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) =>
         setShowSuggestions(false);
       }
     };
-
+  
     fetchSuggestions();
   }, [inputText]);
+  
 
   const handleSuggestionSelect = (suggestion) => {
     fundDetails({
@@ -65,7 +69,7 @@ const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) =>
   },
 });
 
-    setShowSearch(false);
+
     setInputText("");
   };
 
@@ -79,7 +83,6 @@ const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) =>
   return (
     <View style={styles.container}>
       <TextInput
-        ref={inputRef}
         style={[
           styles.input,
           {
@@ -102,7 +105,7 @@ const SuggestionInput = ({ navigate, fundDetails,setShowSearch ,showSearch }) =>
           onPress={handleBlur}
         />
       ) : null}
-      {showSuggestions && inputText.length >=1 && (
+      {showSuggestions && inputText.length >=3 && (
         <View style={styles.suggestionContainer}>
           <FlatList
             data={suggestions}
