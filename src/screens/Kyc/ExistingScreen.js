@@ -103,6 +103,7 @@ function ExistingScreen(props) {
             ref={innInput}
             style={styles.inputsec}
             placeholder={"Enter your Investor Identification Number"}
+            placeholderTextColor={"grey"}
             onChangeText={(inn) => {
               setError({ ...errors, inn: null });
               setState({ ...state, inn });
@@ -115,6 +116,7 @@ function ExistingScreen(props) {
             ref={panInput}
             style={styles.inputsec}
             placeholder={"Enter your PAN number"}
+            placeholderTextColor={"grey"}
             autoCapitalize={"characters"}
             onChangeText={(pan) => {
               setError({ ...errors, pan: null });
@@ -164,6 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontSize: 16,
     borderColor: "#828282",
+    color:"black"
   },
   invest_sec: {
     marginTop: 120,

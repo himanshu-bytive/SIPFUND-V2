@@ -83,6 +83,8 @@ export const RegistrationActions = {
       {},
       token
     );
+    console.log("Got Income",income);
+    
     let state = await SiteAPI.apiGetCall("/apiData/State", {}, token);
     let accountType = await SiteAPI.apiGetCall(
       "/apiData/AccountType",

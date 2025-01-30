@@ -198,6 +198,7 @@ function OwnChoiceHoldings(props) {
                         ]}
                         key={key}
                       >
+                        {console.log("Trx",trxn)}
                         <View>
                           <Text style={{color:"black"}}>
                             {moment(new Date(trxn?.navDate)).format(
@@ -208,7 +209,7 @@ function OwnChoiceHoldings(props) {
                           <Text style={{color:"black"}}>₹{trxn?.amount}</Text>
                         </View>
                         <View>
-                          <Text style={{color:"black"}}>Nav: ₹{trxn?.currentNavValue}</Text>
+                          <Text style={{color:"black"}}>Nav: ₹{trxn?.purPrice}</Text>
                           <Text style={{color:"black"}}>Units: {trxn?.units}</Text>
                         </View>
                       </View>

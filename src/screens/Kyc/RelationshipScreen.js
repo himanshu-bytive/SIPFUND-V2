@@ -103,13 +103,11 @@ function RelationshipScreen(props) {
           />
         }
         rightComponent={
-          <View style={{marginTop:0}}>
-           <Cart
+          <Cart
             nav={() => {
-              props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+              props.navigation.navigate("TopRatedList");
             }}
           />
-         </View>
         }
       />
       {isFetching && (

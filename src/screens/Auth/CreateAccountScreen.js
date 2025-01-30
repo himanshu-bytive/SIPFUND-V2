@@ -425,6 +425,8 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.RED,
     fontSize: 13,
+    marginBottom:10,
+    alignSelf:"center"
   },
   refreshcode: {
     textAlign: "right",

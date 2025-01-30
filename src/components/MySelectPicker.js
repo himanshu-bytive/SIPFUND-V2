@@ -76,9 +76,7 @@ const MySelectPicker = (props) => {
 };
 const styles = StyleSheet.create({
   container: {
-    borderBottomWidth: 2,
     backgroundColor: Colors.TRANSPARENT,
-    borderColor: Colors.GRAY_LIGHT,
     marginTop: 5,
     textAlign: "left",
   },

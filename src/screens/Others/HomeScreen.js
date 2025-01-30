@@ -488,14 +488,16 @@ function HomeScreen(props) {
 
         {/* investment section */}
         <Text style={styles.Plan}>Investment Plans</Text>
+        <View>
         <InvestmentLists
-          data={showMorePlans ? investments : investments.slice(0, 3)}
+          data={showMorePlans ? investments : investments.slice(0, 4)}
           onPress={item => {
             toggleLoading(true);
             investmentPlans(item, token);
             pageActiveInvest.current = true;
           }}
         />
+        </View>
         <TouchableOpacity
           style={styles.showMorePlansContainer}
           onPress={() => setShowMorePlans(!showMorePlans)}>
