@@ -95,7 +95,7 @@ const BirthRelations = (props) => {
 
   const [state, setState] = useState({
     place_birth: "",
-    dob: null,
+    dob: nseDetails?.dob,
     mobile_relation: "",
     email_relation: "",
   });
