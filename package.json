@@ -68,7 +68,7 @@
     "react-native-simple-toast": "^3.3.1",
     "react-native-sms-retriever": "^1.1.1",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-svg": "^15.8.0",
+    "react-native-svg": "^15.11.1",
     "react-native-svg-transformer": "^1.5.0",
     "react-native-svg-uri": "^1.2.3",
     "react-native-vector-icons": "^10.2.0",
@@ -80,7 +80,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "rn-fetch-blob": "^0.12.0",
-    "victory-native": "^37.1.2"
+    "victory-native": "^37.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
