@@ -488,14 +488,16 @@ function HomeScreen(props) {
 
         {/* investment section */}
         <Text style={styles.Plan}>Investment Plans</Text>
+        <View>
         <InvestmentLists
-          data={showMorePlans ? investments : investments.slice(0, 3)}
+          data={showMorePlans ? investments : investments.slice(0, 4)}
           onPress={item => {
             toggleLoading(true);
             investmentPlans(item, token);
             pageActiveInvest.current = true;
           }}
         />
+        </View>
         <TouchableOpacity
           style={styles.showMorePlansContainer}
           onPress={() => setShowMorePlans(!showMorePlans)}>
@@ -1119,12 +1121,12 @@ const styles = StyleSheet.create({
   },
   Helloimg: {
     marginTop: 10,
-    height: 150,
+    height: 120,
     resizeMode: 'contain',
   },
   Helloimgsmall: {
-    maxWidth: '40%',
-    height: 120,
+    maxWidth: '30%',
+    height: 100,
     // resizeMode: "contain",
   },
   HelloIinvestor: {

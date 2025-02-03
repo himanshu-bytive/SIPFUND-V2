@@ -443,7 +443,7 @@ function SideMenu(props) {
             if (steps >= 4 && steps < 6) {
               alert('Your IIN is inactive. Please wait for activation!');
             } else {
-              props.navigation.navigate('You', {screen: 'Existing'});
+              props.navigation.navigate('OtherStackYou', {screen: 'Existing'});
             }
           }}
           style={[styles.profile_sec, styles.profile]}>
@@ -461,7 +461,7 @@ function SideMenu(props) {
 
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('You', {screen: 'Relationship'})
+            props.navigation.navigate('OtherStackYou', {screen: 'Relationship'})
           }
           style={[styles.profile_sec, styles.profile]}>
           <View style={styles.sideIcon}>

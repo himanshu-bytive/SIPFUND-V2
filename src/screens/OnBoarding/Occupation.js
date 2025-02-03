@@ -50,7 +50,7 @@ const Occupation = (props) => {
     useEffect(() => {
         if (nseDetails?.occupation) {
             const preSelectedOccupation = occupationsList.find(
-                (occupation) => occupation.label === nseDetails.occupation // Matching by label
+                (occupation) => occupation.label === nseDetails.occupation.OCCUPATION_DESC// Matching by label
             );
             if (preSelectedOccupation) {
                 setState((prevState) => ({
