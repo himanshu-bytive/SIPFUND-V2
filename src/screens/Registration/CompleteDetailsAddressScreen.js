@@ -126,12 +126,9 @@ function CompleteDetailsAddressScreen(props) {
     const { address, pincode, states, city } = state;
     if (!address) {
       setErrors({ ...errors, address: "Please Add a Address" });
-      return;
     }
     if (!pincode || pincode.length < 6 || isNaN(pincode)) {
-      alert(pincode);
       setErrors({ ...errors, pincode: "Please Enter a Valid Pincode" });
-      return;
     }
     if (!states) {
       setErrors({ ...errors, states: "Please Select a Value" });
@@ -176,21 +173,20 @@ function CompleteDetailsAddressScreen(props) {
 
   return (
     <View behavior={"height"} enabled style={styles.container}>
-      <Header
-        leftComponent={
-          <TouchableOpacity onPress={() => props.navigation.navigate("OnBoard", { screen: "AddNominee" })}>
-            <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
-          </TouchableOpacity>
-        }
-        backgroundColor={Colors.WHITE}
-        containerStyle={styles.header}
-        rightComponent={
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={styles.logimg}
-          />
-        }
-      />
+      <View style={styles.headerRow}>
+        <TouchableOpacity
+          onPress={() => {
+              props.navigation.navigate("OnBoard", { screen: "BirthRelation" });
+          }}
+          style={styles.arrowButton}
+        >
+          <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+        </TouchableOpacity>
+        <Image
+          source={require("../../../assets/icon.png")}
+          style={styles.logimg}
+        />
+      </View>
       {isFetching && (
         <View style={Styles.loading}>
           <ActivityIndicator color={Colors.BLACK} size="large" />
@@ -207,13 +203,13 @@ function CompleteDetailsAddressScreen(props) {
               style={styles.inputsec}
               placeholder={"Add Address"}
               value={state.address}
-              error={errors.address}
               onChangeText={(address) => {
                 setErrors({ ...errors, address: null });
                 setState({ ...state, address });
               }}
             />
           </View>
+          {errors.address && <Text style={{color:Colors.RED}}>{errors.address}</Text>}
 
           {/* DOB/DOI_sec */}
           <Text style={styles.occupation}>
@@ -226,7 +222,6 @@ function CompleteDetailsAddressScreen(props) {
               maxLength={6}
               keyboardType="numeric"
               value={state.pincode}
-              error={errors.pincode}
               onChangeText={(pincode) => {
                 setErrors({ ...errors, pincode: null });
                 setState({ ...state, pincode: pincode, states: null, city: "" });
@@ -236,6 +231,7 @@ function CompleteDetailsAddressScreen(props) {
               }}
             />
           </View>
+          {errors.pincode && <Text style={{color : Colors.RED}}>{errors.pincode}</Text>}
           <View style={[styles.example, { flexDirection: "row" }]}>
             {/* State Section */}
             {state.pincode != "" && state.pincode.length > 5 && (
@@ -248,7 +244,6 @@ function CompleteDetailsAddressScreen(props) {
                     style={styles.inputsec}
                     values={stateList}
                     defultValue={state.states}
-                    error={errors.states}
                     onChange={(states) => {
                       setErrors({ ...errors, states: null });
                       setState({ ...state, states, city: "" });
@@ -256,6 +251,7 @@ function CompleteDetailsAddressScreen(props) {
                     }}
                   />
                 </View>
+                {errors.states && <Text style={{color : Colors.RED}}>{errors.states}</Text>}
               </View>
             )}
 
@@ -270,13 +266,13 @@ function CompleteDetailsAddressScreen(props) {
                     style={styles.inputsec}
                     values={cityList}
                     defultValue={state.city}
-                    error={errors.city}
                     onChange={(city) => {
                       setErrors({ ...errors, city: null });
                       setState({ ...state, city });
                     }}
                   />
                 </View>
+                {errors.city && <Text style={{color : Colors.RED}}>{errors.city}</Text>}
               </View>
             )}
           </View>
@@ -321,48 +317,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: "row", // Arrange items in a row
-    justifyContent: "space-between", // Space out items evenly
-    alignItems: "center", // Center items vertically
-    paddingHorizontal: 10, // Add spacing from edges
-    height: 80, // Set a consistent height for the header
-    backgroundColor: Colors.WHITE, // Ensure background matches
+ headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Space between arrow and logo
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 20, // Add some spacing for better appearance
+    backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
+    marginTop: 25
+  },
+  arrowButton: {
+    marginLeft: 10,
+  },
+  logimg: {
+    width: responsiveWidth(35),
+    height: responsiveHeight(7),
+    resizeMode: "contain",
   },
   bottomSection: {
     backgroundColor: 'white',
     padding: 15,
     borderTopWidth: 1,
     borderColor: '#ccc',
-},
-nextButton: {
+  },
+  nextButton: {
     backgroundColor: Colors.RED,
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 8,
     alignItems: 'center',
-},
-buttonText: {
+  },
+  buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-},
-  logimg: {
-    height: 35,
-    width: 153,
   },
   container_sec: {
-    flex: 1,
     padding: 10,
     backgroundColor: "#fff",
   },
   textBox: {
     borderWidth: 1,
     borderColor: Colors.RED,
-    borderRadius: 4,
+    borderRadius: 2,
     backgroundColor: Colors.WHITE,
     fontSize: 16,
-    marginTop: 10,
+    marginTop: 8,
   },
   inputsec: {
     fontSize: 17,

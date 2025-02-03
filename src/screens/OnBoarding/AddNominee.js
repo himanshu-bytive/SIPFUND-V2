@@ -297,19 +297,24 @@ const AddNominee = (props) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Header */}
-      <Header
-        containerStyle={[styles.headerContainer, { backgroundColor: 'white' }]}
-        statusBarProps={{ backgroundColor: 'white', barStyle: 'dark-content' }}
-        leftComponent={
-          <AntDesign
-            name="arrowleft"
-            size={25}
-            color={Colors.BLACK}
-            onPress={handleBackPress}
-          />
-        }
-        rightComponent={<SIPLOGO width={95} height={25} />}
-      />
+      <View style={styles.headerRow}>
+        <TouchableOpacity
+          onPress={() => {
+            if (stepCount === 2) {
+              setStepCount(1);
+            } else {
+              props.navigation.navigate("OnBoard", { screen: "BirthRelation" });
+            }
+          }}
+          style={styles.arrowButton}
+        >
+          <AntDesign name={"arrowleft"} size={35} color={Colors.BLACK} />
+        </TouchableOpacity>
+        <Image
+          source={require("../../../assets/icon.png")}
+          style={styles.logimg}
+        />
+      </View>
 
       <View style={styles.container}>
         {/* Content */}
@@ -343,111 +348,111 @@ const AddNominee = (props) => {
           </View>
         ) : (
           <>
-          <View style={styles.stepContainer}>
-            <Typography style={styles.title}>Nominee name*</Typography>
-            <TextInput
-              style={styles.inputsec}
-              editable={true}
-              placeholderTextColor={"grey"}
-              placeholder="Enter Name"
-              value={state.nominee1_name ? state.nominee1_name : ""}
-              onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
-            />
-            {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
-            <Typography style={styles.title}>Nominee is your*</Typography>
-            <View style={[styles.inputsec]}>
-              <Picker
-                selectedValue={NomineeIsYours ? NomineeIsYours : ""}
-                onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
-                style={[
-                  styles.picker,
-                  NomineeIsYours === "" && { color: "grey" }, // Placeholder color
-                ]}
-              >
-                <Picker.Item label="Select" value="" />
-                {mobileEmailRelation.map((state) => (
-                  <Picker.Item key={state.value} label={state.label} value={state.value} />
-                ))}
-              </Picker>
-            </View>
-            {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
-            <Typography style={styles.title}>Nominee’s date of birth*</Typography>
-            <View style={styles.inputsecWrapper}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10,
-                  width: "auto"
-                }}
-              >
-                <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
-                  <AntDesign
-                    style={{ marginTop: 0 }}
-                    name="calendar"
-                    color={"#EE4248"}
-                    size={25}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => setIsDatePickerVisible(true)}
+            <View style={styles.stepContainer}>
+              <Typography style={styles.title}>Nominee name*</Typography>
+              <TextInput
+                style={styles.inputsec}
+                editable={true}
+                placeholderTextColor={"grey"}
+                placeholder="Enter Name"
+                value={state.nominee1_name ? state.nominee1_name : ""}
+                onChangeText={(text) => setState((prevState) => ({ ...prevState, nominee1_name: text }))}
+              />
+              {errors.nominee1_name && <Text style={styles.errorText}>{errors.nominee1_name}</Text>}
+              <Typography style={styles.title}>Nominee is your*</Typography>
+              <View style={[styles.inputsec]}>
+                <Picker
+                  selectedValue={NomineeIsYours ? NomineeIsYours : ""}
+                  onValueChange={(itemValue) => setNomineeIsYours(itemValue)}
+                  style={[
+                    styles.picker,
+                    NomineeIsYours === "" && { color: "grey" }, // Placeholder color
+                  ]}
+                >
+                  <Picker.Item label="Select" value="" />
+                  {mobileEmailRelation.map((state) => (
+                    <Picker.Item key={state.value} label={state.label} value={state.value} />
+                  ))}
+                </Picker>
+              </View>
+              {errors.nominee1_relation && <Text style={styles.errorText}>{errors.nominee1_relation}</Text>}
+              <Typography style={styles.title}>Nominee’s date of birth*</Typography>
+              <View style={styles.inputsecWrapper}>
+                <View
                   style={{
-                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10,
+                    width: "auto"
                   }}
                 >
-                  <TextInput
-                    keyboardType="numeric"
+                  <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+                    <AntDesign
+                      style={{ marginTop: 0 }}
+                      name="calendar"
+                      color={"#EE4248"}
+                      size={25}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => setIsDatePickerVisible(true)}
                     style={{
-                      marginLeft: 10,
-                      marginTop: -2,
-                      fontSize: 18,
-                      width: "auto",
-                      color: "black",
+                      flex: 1,
                     }}
-                    editable={false}
-                    selectTextOnFocus={false}
-                    value={dateOfBirth ? dateOfBirth : ""}
-                    placeholder={"DD-MM-YYYY"}
-                    placeholderTextColor={"grey"}
-                    maxLength={11}
-                  />
-                </TouchableOpacity>
+                  >
+                    <TextInput
+                      keyboardType="numeric"
+                      style={{
+                        marginLeft: 10,
+                        marginTop: -2,
+                        fontSize: 18,
+                        width: "auto",
+                        color: "black",
+                      }}
+                      editable={false}
+                      selectTextOnFocus={false}
+                      value={dateOfBirth ? dateOfBirth : ""}
+                      placeholder={"DD-MM-YYYY"}
+                      placeholderTextColor={"grey"}
+                      maxLength={11}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  date={new Date()}
+                  maximumDate={new Date()}
+                  minimumDate={new Date(1900, 0, 1)}
+                  onConfirm={(dob) => {
+                    setIsDatePickerVisible(false);
+                    console.log("hgh", dob);
+
+                    const formattedDate = dob.toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
+
+                    console.log("Formatted Date:", formattedDate); // For verification
+
+                    const dateAsNumber = parseInt(
+                      `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                      10
+                    ); // Convert to number if needed
+
+                    const datevalue = getDateInHuman(dateAsNumber);
+                    setDateOfBirth(datevalue); // Save original Date object
+                    setErrors({ ...errors, nominee1_dob: null });
+                    setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
+                  }}
+                  onCancel={() => setIsDatePickerVisible(false)}
+                />
               </View>
-
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                date={new Date()}
-                maximumDate={new Date()}
-                minimumDate={new Date(1900, 0, 1)}
-                onConfirm={(dob) => {
-                  setIsDatePickerVisible(false);
-                  console.log("hgh", dob);
-
-                  const formattedDate = dob.toLocaleDateString("en-US", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
-
-                  console.log("Formatted Date:", formattedDate); // For verification
-
-                  const dateAsNumber = parseInt(
-                    `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
-                    10
-                  ); // Convert to number if needed
-
-                  const datevalue = getDateInHuman(dateAsNumber);
-                  setDateOfBirth(datevalue); // Save original Date object
-                  setErrors({ ...errors, nominee1_dob: null });
-                  setState({ ...state, nominee1_dob: dateAsNumber }); // Save formatted date
-                }}
-                onCancel={() => setIsDatePickerVisible(false)}
-              />
-            </View>
-            {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
-            {/* <View style={{ marginTop: 10 }}>
+              {errors.nominee1_dob && <Text style={styles.errorText2}>{errors.nominee1_dob}</Text>}
+              {/* <View style={{ marginTop: 10 }}>
                 <Typography style={styles.title}>Nominee’s identity proof (optional)</Typography>
                 <View style={styles.inputsec}>
                   <Picker
@@ -465,7 +470,7 @@ const AddNominee = (props) => {
                   </Picker>
                 </View>
               </View> */}
-            {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
+              {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 10, marginLeft: 5 }}>
                 <CheckboxSquare
                   value={isChecked}
                   onValueChange={(newValue) => setIsChecked(newValue)}
@@ -474,7 +479,7 @@ const AddNominee = (props) => {
                   Nominee address is same as my address
                 </Text>
               </View> */}
-            {/* {!isChecked && (
+              {/* {!isChecked && (
                 <>
                   <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
                     <View style={{ flexDirection: "column", width: "50%" }}>
@@ -515,7 +520,7 @@ const AddNominee = (props) => {
                   </View>
                 </>
               )} */}
-            {/* <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
+              {/* <TouchableOpacity onPress={AddSecondNominee} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginLeft: 5 }}>
                 <View style={styles.circleIcon}>
                   <Icon name="plus" size={14} color="white" />
                 </View>
@@ -524,7 +529,7 @@ const AddNominee = (props) => {
                   color: Colors.BLACK,
                 }}>Add another nominee</Text>
               </TouchableOpacity> */}
-            {/* <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
+              {/* <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
               <Button
                 borderColor={Colors.RED}
                 borderWidth={2}
@@ -536,13 +541,13 @@ const AddNominee = (props) => {
                 onPress={onAction}
               />
             </View> */}
-          </View>
-           <View style={styles.bottomSection}>
-           <TouchableOpacity style={styles.nextButton} onPress={onAction}>
-             <Text style={styles.buttonText}>Next</Text>
-           </TouchableOpacity>
-         </View>
-         </>
+            </View>
+            <View style={styles.bottomSection}>
+              <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </>
 
         )}
       </View>
@@ -554,6 +559,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffff',
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Space between arrow and logo
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 20, // Add some spacing for better appearance
+    backgroundColor: Colors.WHITE,       // Optional: Maintain consistency
+    marginTop: 25
+  },
+  arrowButton: {
+    marginLeft: 10,
+  },
+  logimg: {
+    width: responsiveWidth(35),
+    height: responsiveHeight(7),
+    resizeMode: "contain",
   },
   errorText: {
     color: "red",
@@ -646,6 +669,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: 'white',
     height: responsiveHeight(8),
+    padding: 20,
     marginTop: 20
   },
   headerTitle: {
