@@ -204,7 +204,7 @@ const PersonalDetails = (props) => {
           </View>
           {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
           <View style={styles.text_box}>
-            <Text style={styles.sub_slogan}>Name</Text>
+            <Text style={styles.sub_slogan}>Name <Text style={{color:Colors.RED}}>(as per PAN Card)</Text></Text>
             <TextInput
               style={styles.inputsec}
               color="black"

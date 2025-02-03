@@ -110,7 +110,7 @@ const AddNominee = (props) => {
     if (!state.nominee1_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee1_name: "Please enter Nominee Name.",
+        nominee1_name: "Please Enter Nominee Name.",
       }));
       hasErrors = true;
     }
@@ -192,7 +192,7 @@ const AddNominee = (props) => {
     if (!state.nominee1_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee1_name: "Please enter Nominee Name.",
+        nominee1_name: "Please Enter Nominee Name.",
       }));
       hasErrors = true;
     }

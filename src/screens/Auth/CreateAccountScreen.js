@@ -175,13 +175,13 @@ function CreateAccountScreen(props) {
   const onAction = async () => {
     if (!FormValidate.isEmail(state.email)) {
       emailInput.current.focus();
-      setError({ ...errors, email: "Please enter Email Address" });
-      return;
+      setError({ ...errors, email: "Please Enter Email Address" });
     }
     if (!state.password) {
+      console.log("State",state);
+      
       passwordInput.current.focus();
-      setError({ ...errors, password: "Please enter Password" });
-      return;
+      setError({ ...errors, password: "Please Enter Password" });
     }
     if (!state.term) {
       setError({ ...errors, term: "Please check Terms" });
@@ -299,9 +299,7 @@ function CreateAccountScreen(props) {
                 }}
                 value={state.password}
               />
-              {errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
+              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
               <View style={styles.passwordValidationContainer}>
                 {validatePass(state.password).map((item, index) => (
                   <Text key={index} style={styles.passwordValidationText}>
@@ -342,6 +340,7 @@ function CreateAccountScreen(props) {
               <Text style={styles.confrom_button}>
                 By tapping confirm button, you agreeing to the
               </Text>
+              <View style={{marginLeft:-18}}>
               <CheckBox
                 title={
                   <TouchableOpacity
@@ -364,7 +363,8 @@ function CreateAccountScreen(props) {
                   setState({ ...state, term: !state.term });
                 }}
               />
-              {errors.term && <Text style={styles.error}>{errors.term}</Text>}
+               {errors.term && <Text style={styles.errorTerms}>{errors.term}</Text>}
+              </View>
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                 <Button backgroundColor={Colors.RED} height={responsiveHeight(6)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
@@ -425,8 +425,16 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.RED,
     fontSize: 13,
-    marginBottom:10,
-    alignSelf:"center"
+    marginBottom:0,
+    alignSelf:"flex-start",
+    marginTop:5
+  },
+  errorTerms: {
+    color: Colors.RED,
+    fontSize: 13,
+    marginBottom:20,
+    alignSelf:"center",
+    marginTop:5
   },
   refreshcode: {
     textAlign: "right",

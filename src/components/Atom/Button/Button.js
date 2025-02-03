@@ -33,7 +33,7 @@ const Button = ({
           borderColor,
           backgroundColor, 
           borderRadius: 10,
-          opacity: isLoading || disabled ? 0.8 : 1, // Conditionally reduce opacity based on loading or disabled
+          opacity: isLoading || disabled ? 1 : 1, // Conditionally reduce opacity based on loading or disabled
         }, // Customized styles for height, width, and backgroundColor
         style, // Additional custom styles passed from parent component
       ]}

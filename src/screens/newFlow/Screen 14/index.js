@@ -51,12 +51,12 @@ function PanScreen(props) {
   const onAction = async () => {
     if (!state.pannumber) {
       pannumberInput.current.focus();
-      setError({ ...errors, pannumber: "Please enter Pan" });
+      setError({ ...errors, pannumber: "Please Enter Pan" });
       return;
     }
     if (!FormValidate.validatePan(state.pannumber)) {
       pannumberInput.current.focus();
-      setError({ ...errors, pannumber: "Please enter Validate Pan" });
+      setError({ ...errors, pannumber: "Please Enter Validate Pan" });
       return;
     }
     pageActive.current = true;

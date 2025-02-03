@@ -119,6 +119,16 @@ function DashboardScreen(props) {
       setProfitLoss(0);
     }
   };
+  const NavigateUser = () =>{
+    
+    if(users?.pan){
+      console.log("Yes pan");
+      props.navigation.navigate('OnBoard', {screen: 'ProfileDetailsForm'})
+    }else {
+      console.log("no pan");
+      props.navigation.navigate('HomeScreen', {screen: 'Pan'})
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -219,10 +229,7 @@ function DashboardScreen(props) {
                       },
                       {
                         text: 'YES',
-                        onPress: () =>
-                          props.navigation.navigate('Reg', {
-                            screen: 'RegisterDetails',
-                          }),
+                        onPress: () => NavigateUser()
                       },
                     ],
                   );
@@ -614,7 +621,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   token: state.auth.token,
-  users: state.auth.users,
+  users: state.auth.user,
   steps: state.home.steps,
   summaryRetrieve: state.goals.summaryRetrieve,
 });

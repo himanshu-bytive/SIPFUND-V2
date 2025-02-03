@@ -103,7 +103,7 @@ function SwitchItem(props) {
       return;
     }
     if (amount && amountValue.length === 0) {
-      alert("Please enter the amount");
+      alert("Please Enter the amount");
       return;
     }
     if (

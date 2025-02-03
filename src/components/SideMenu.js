@@ -344,7 +344,7 @@ function SideMenu(props) {
       <ScrollView>
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('Dashboard', {screen: 'dashboard'})
+            props.navigation.navigate('OnBoard', {screen: 'ProfileDetailsForm'})
           }
           style={styles.profile_sec}>
           <View style={styles.sideIcon}>

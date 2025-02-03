@@ -147,7 +147,7 @@ function LoginScreen(props) {
   const onAction = async () => {
     if (!state.password) {
       passwordInput.current.focus();
-      setError({ ...errors, password: "Please enter Password" });
+      setError({ ...errors, password: "Please Enter Password" });
       return;
     }
     pageActive.current = true;
@@ -243,7 +243,11 @@ function LoginScreen(props) {
             <Button 
               fontSize={responsiveFontSize(2.2)}
               textColor={"#ffff"}
-              onPress={() => onAction()}
+              onPress={() => {
+                setShowModal(false);
+                setIsLogin(null);
+                onAction();
+              }}
               backgroundColor={Colors.RED}
               text="Proceed"
               height={responsiveHeight(6)}
@@ -282,6 +286,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+  },
+  error:{
+   color : Colors.RED,
+   marginBottom:10
   },
   header: {
     backgroundColor: Colors.WHITE,
