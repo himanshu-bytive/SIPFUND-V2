@@ -260,6 +260,7 @@ const BirthRelations = (props) => {
                 </View>
                 {errors.place_birth && <Text style={styles.errorText}>{errors.place_birth}</Text>}
               </View>
+              <Text style={styles.sub_slogan}>Date of Birth</Text>
               <View style={styles.inputsecWrapper}>
                 <View
                   style={{

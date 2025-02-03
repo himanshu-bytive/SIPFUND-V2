@@ -481,8 +481,8 @@ function DashboardScreen(props) {
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require('../../../assets/choice.png')}
-                  style={styles.fundsmg}
+                  source={require('../../../assets/Icons/Cease.jpeg')}
+                  style={styles.fundsmg2}
                 />
               </View>
               <Text style={styles.transaction}>Cease{'\n'}SIP </Text>
@@ -495,8 +495,8 @@ function DashboardScreen(props) {
             <View style={styles.Switch_sec}>
               <View style={styles.box}>
                 <Image
-                  source={require('../../../assets/choice.png')}
-                  style={styles.fundsmg}
+                  source={require('../../../assets/Icons/Pause.jpeg')}
+                  style={styles.fundsmg2}
                 />
               </View>
               <Text style={styles.transaction}>Pause{'\n'} SIP</Text>
@@ -559,7 +559,11 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   fundsmg: {
-    height: 32,
+    height: 36,
+    width: 36,
+  },
+  fundsmg2: {
+    height: 36,
     width: 36,
   },
   holdings_sec: {

@@ -194,7 +194,7 @@ function PauseSIP(props) {
         </View>
       </ScrollView>
 
-      <View style={{ marginBottom: 20, alignItems: 'center' }}>
+      {pauseSip?.data?.length > 0 &&  <View style={{ marginBottom: 20, alignItems: 'center' }}>
         <Button isLoading={isFetching}
           fontSize={responsiveFontSize(2.3)}
           textColor={"#FFF"}
@@ -208,7 +208,7 @@ function PauseSIP(props) {
           width={responsiveWidth(90)}
           loaderColor="white"
         />
-      </View>
+      </View>}
       {/* <TouchableOpacity
         onPress={() => PauseSipCheckout()}
         style={styles.botton_box2}
