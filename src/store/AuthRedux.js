@@ -222,16 +222,22 @@ export const AuthActions = {
     });
   },
   
-  creatAccount: async (dispatch, params) => {
+  creatAccount: async (dispatch, params,setShowModal,setMessage) => {
     dispatch({ type: types.FETCH_CREAT_ACCOUNT_PENDING });
     let data = await SiteAPI.apiPostCall("/auth", params);
     if (data.error) {
-      if (data.message) Alert.alert(data.message);
+      if (data.message){
+      const msg = data.message;
+      setMessage(msg);
+      setShowModal(true);
       dispatch({
         type: types.FETCH_CREAT_ACCOUNT_FAILURE,
         error: data.message,
       });
+    }
     } else {
+      setShowModal(false);
+      setMessage("");
       Alert.alert(
         "SIP Fund",
         "Congrats! Your signup is successful. Proceed further to set up your Account",

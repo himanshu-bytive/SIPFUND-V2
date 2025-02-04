@@ -70,6 +70,17 @@ function FundsHomeScreen(props) {
   );
   const [inception, setInception] = useState(0);
 
+  useEffect(() => {
+    // Reset state variables to initial values
+    setAssets(0);
+    setInvest(0);
+    setCategory(0);
+    setNavPercentage(0);
+    setLabels(["", "", "", ""]);
+    setDatasets([0, 0, 0, 0]);
+    setInception(0);
+  }, [props.fundDetail]); // Trigger when fundDetail changes
+
   const refreshFunds = (value) => {
     let date = new Date(),
       y = date.getFullYear(),
@@ -131,6 +142,7 @@ function FundsHomeScreen(props) {
     }
   }, [users]);
 
+  // Existing useEffect for fetching data
   useEffect(() => {
     if (token) {
       fundDetailsList(
@@ -169,6 +181,8 @@ function FundsHomeScreen(props) {
       setInvest(invest);
       setCategory(category);
     }
+    console.log("Got it",Number(detailsInfo[0].api["DP-Return2Yr"]).toFixed(2));
+    console.log("Got it",Number(detailsInfo[0].api["DP-Return3Yr"]).toFixed(2));
   }, [detailsInfo]);
 
   // if(detailsInfo){

@@ -42,7 +42,6 @@ const BirthRelations = (props) => {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [city, setCity] = useState("");
   const stateList = [
     { value: "AN", label: "Andaman and Nicobar Islands" },
     { value: "AP", label: "Andhra Pradesh" },
@@ -99,6 +98,7 @@ const BirthRelations = (props) => {
     dob: nseDetails?.dob,
     mobile_relation: "",
     email_relation: "",
+    city : ""
   });
 
   const [errors, setErrors] = useState({
@@ -106,13 +106,14 @@ const BirthRelations = (props) => {
     dob: null,
     mobile_relation: null,
     email_relation: null,
+    city : null
   });
 
   const [placeOfBirth, setPlaceOfBirth] = useState({ STATE_CODE: "", STATE_NAME: "" });
   const [mobileNumberBelongsTo, setMobileNumberBelongsTo] = useState("");
   const [emailBelongsTo, setEmailBelongsTo] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
-
+  const [city,setCity] = useState("");
   useEffect(() => {
     console.log("NSE from bbirth", nseDetails);
     console.log("FAtca", fatcaDetails);
@@ -155,6 +156,10 @@ const BirthRelations = (props) => {
         newErrors.email_relation = "Please select the email ID relation.";
         hasError = true;
       }
+      if (!city) {
+        newErrors.email_relation = "Please Enter City.";
+        hasError = true;
+      }
 
       setErrors(newErrors);
 
@@ -172,7 +177,10 @@ const BirthRelations = (props) => {
           ...fatcaDetails,
           place_birth: placeOfBirth,
         },
-        userDetails,
+        userDetails :{
+          ...userDetails,
+          City : city
+        },
       };
       console.log("passing params", params);
 

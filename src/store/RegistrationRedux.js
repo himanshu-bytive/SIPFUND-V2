@@ -135,7 +135,7 @@ export const RegistrationActions = {
       }
     }
   },
-  getPincode: async (dispatch, code, token) => {
+  getPincode: async (dispatch, code, token,setIsPincodeNotWorked,setShowStateCity) => {
     if (code) {
       dispatch({ type: types.FETCH_PINCODE_INFO_PENDING });
       let pincodes = await SiteAPI.apiGetCall(
@@ -143,9 +143,17 @@ export const RegistrationActions = {
         {},
         token
       );
-      if (pincodes.data) {
-        console.log("GOT",pincodes.data);
-        
+      if (pincodes.data && Object.keys(pincodes.data).length > 0) {
+        console.log("GOT", pincodes.data);
+        setIsPincodeNotWorked(false);
+        setShowStateCity(true);
+        dispatch({
+          type: types.FETCH_PINCODE_INFO_SUCCESS,
+          pincodeInfo: pincodes.data,
+        });
+      } else {
+        setIsPincodeNotWorked(true);
+        console.log("empty");
         dispatch({
           type: types.FETCH_PINCODE_INFO_SUCCESS,
           pincodeInfo: pincodes.data,

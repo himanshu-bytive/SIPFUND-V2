@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -22,10 +23,18 @@ function PauseSIP(props) {
   const { token, user, getSipDetail, pauseSip, pauseSipEntry, isFetching } = props;
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState({});
-
+  const [showModal,setShowModal] = useState(false);
+  const [message,setMessage] = useState("");
   useEffect(() => {
     getSipDetail(user.pan, token);
   }, []);
+
+  useEffect(()=>{
+   console.log("MODAL",showModal);
+   console.log("Mes",message);
+   
+   
+  },[showModal,message]);
 
   const monthList = [
     { value: "01", label: "01" },
@@ -88,7 +97,7 @@ function PauseSIP(props) {
       },
       "childtrans": selectedItems
     };
-    pauseSipEntry(params, token, setSelectedMonths, setSelectedItems);
+    pauseSipEntry(params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal);
 
   };
 
@@ -193,12 +202,32 @@ function PauseSIP(props) {
           )}
         </View>
       </ScrollView>
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => setShowModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{message}</Text>
+            <Button
+              text="OK"
+              onPress={() => setShowModal(false)}
+              backgroundColor={Colors.RED}
+              textColor={Colors.WHITE}
+              height={40}
+              width={100}
+            />
+          </View>
+        </View>
+      </Modal>
 
       {pauseSip?.data?.length > 0 &&  <View style={{ marginBottom: 20, alignItems: 'center' }}>
-        <Button isLoading={isFetching}
+        <Button isLoading={false}
           fontSize={responsiveFontSize(2.3)}
           textColor={"#FFF"}
-          onPress={() => PauseSipCheckout()}
+          onPress={PauseSipCheckout}
           backgroundColor={Colors.RED}
           text="PROCEED"
           borderRadius={5}
@@ -401,6 +430,25 @@ const styles = StyleSheet.create({
     shadowRadius: 3,               // Shadow spread
     elevation: 2,                  // For shadow on Android
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 
 });
 
@@ -417,8 +465,8 @@ const mapDispatchToProps = (dispatch) => {
     getSipDetail: (params, token) => {
       PauseSipRedux.getSipDetail(dispatch, params, token);
     },
-    pauseSipEntry: (params, token, setSelectedMonths, setSelectedItems) => {
-      PauseSipRedux.pauseSipEntry(dispatch, params, token, setSelectedMonths, setSelectedItems);
+    pauseSipEntry: (params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal) => {
+      PauseSipRedux.pauseSipEntry(dispatch, params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal);
     },
   };
 };

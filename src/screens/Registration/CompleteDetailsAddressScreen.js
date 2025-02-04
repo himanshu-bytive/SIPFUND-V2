@@ -11,6 +11,7 @@ import {
   Text,
   Keyboard,
   Dimensions,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Colors } from "../../common";
@@ -19,6 +20,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import Button from "../../components/Atom/Button/Button";
 
 function CompleteDetailsAddressScreen(props) {
   const pageActive = useRef(false);
@@ -38,7 +40,8 @@ function CompleteDetailsAddressScreen(props) {
   } = props;
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
-
+  const [isPincodeWorked,setIsPincodeNotWorked] = useState(false);
+  const [showStateCity,setShowStateCity] = useState(false);
   const [state, setState] = useState({
     address: "",
     pincode: "",
@@ -61,19 +64,20 @@ function CompleteDetailsAddressScreen(props) {
   }, [updateSuccess]);
 
   useEffect(() => {
-    if (fatcaDetails || nseDetails || userDetails) {
-      // console.log(fatcaDetails, nseDetails, userDetails)
+    if (nseDetails) {
+      console.log("nseDetails in Address:", nseDetails.addr1);
       setState({
-        address: nseDetails.addr1,
-        pincode: nseDetails.pincode,
-        states: nseDetails.state.STATE_CODE,
-        city: nseDetails.city.CITY,
+        address: nseDetails.addr1 || "",
+        pincode: nseDetails.pincode || "",
+        states: nseDetails.state?.STATE_CODE || "",
+        city: nseDetails.city?.CITY || "",
       });
-      if (nseDetails.state.STATE_CODE) {
+      if (nseDetails.state?.STATE_CODE) {
         getCitys(nseDetails.state.STATE_CODE, token);
+        setShowStateCity(true);
       }
-    }
-  }, [fatcaDetails, nseDetails, userDetails]);
+    } 
+  }, [nseDetails]);
 
   useEffect(() => {
     if (statess) {
@@ -98,27 +102,28 @@ function CompleteDetailsAddressScreen(props) {
 
   useEffect(() => {
     if (pincodeInfo && pincodeInfo?.stateCode) {
-      // getCitys(pincodeInfo.stateCode, token);
-      setState({
-        ...state,
-        states: pincodeInfo?.stateCode,
-        city: pincodeInfo?.cityName,
-      });
+      setState((prevState) => ({
+        ...prevState,
+        states: pincodeInfo?.stateCode || prevState.states,
+        city: pincodeInfo?.cityName || prevState.city,
+      }));
     }
   }, [pincodeInfo]);
 
   useEffect(() => {
-    setState({
-      ...state,
-      // states: pincodeInfo.stateCode,
-      city: pincodeInfo?.cityName,
-    });
-  }, [cityList])
+    if (nseDetails?.city?.CITY && cityList.length > 0) {
+      setState((prevState) => ({
+        ...prevState,
+        city: nseDetails.city?.CITY,
+      }));
+    }
+  }, [cityList]);
+  
 
 
   const getStateCitys = async (pincode) => {
     if (pincode && pincode?.length > 5) {
-      getPincode(pincode, token);
+      getPincode(pincode, token,setIsPincodeNotWorked,setShowStateCity);
     }
   };
 
@@ -199,6 +204,7 @@ function CompleteDetailsAddressScreen(props) {
             Address1 (As per address proof) <Text style={styles.error}>*</Text>
           </Text>
           <View style={styles.textBox}>
+
             <MyTextInput
               style={styles.inputsec}
               placeholder={"Add Address"}
@@ -234,7 +240,7 @@ function CompleteDetailsAddressScreen(props) {
           {errors.pincode && <Text style={{color : Colors.RED}}>{errors.pincode}</Text>}
           <View style={[styles.example, { flexDirection: "row" }]}>
             {/* State Section */}
-            {state.pincode != "" && state.pincode.length > 5 && (
+            {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginRight: 5 }}>
                 <Text style={styles.occupation}>
                   State <Text style={styles.error}>*</Text>
@@ -256,7 +262,7 @@ function CompleteDetailsAddressScreen(props) {
             )}
 
             {/* City Section */}
-            {state.pincode != "" && state.pincode.length > 5 && (
+            {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginLeft: 5 }}>
                 <Text style={styles.occupation}>
                   City <Text style={styles.error}>*</Text>
@@ -276,7 +282,6 @@ function CompleteDetailsAddressScreen(props) {
               </View>
             )}
           </View>
-
         </View>
       </ScrollView>
       {/* click_box */}
@@ -286,6 +291,26 @@ function CompleteDetailsAddressScreen(props) {
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={isPincodeWorked}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => setIsPincodeNotWorked(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Please Enter Correct Pincode.</Text>
+            <Button
+              text="Close"
+              onPress={() => setIsPincodeNotWorked(false)}
+              backgroundColor={Colors.RED}
+              textColor={Colors.WHITE}
+              height={40}
+              width={100}
+            />
+          </View>
+        </View>
+      </Modal>
       {/* <View
         style={[
           styles.footer,
@@ -423,6 +448,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 });
 const mapStateToProps = (state) => ({
   token: state.auth.token,
@@ -445,8 +489,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getCitys: (code, token) => {
       RegistrationActions.getCitys(dispatch, code, token);
     },
-    getPincode: (code, token) => {
-      RegistrationActions.getPincode(dispatch, code, token);
+    getPincode: (code, token,setIsPincodeNotWorked,setShowStateCity) => {
+      RegistrationActions.getPincode(dispatch, code, token,setIsPincodeNotWorked,setShowStateCity);
     },
     updateRegister: (params, token) => {
       RegistrationActions.updateRegister(dispatch, params, token);
