@@ -23,18 +23,18 @@ function PauseSIP(props) {
   const { token, user, getSipDetail, pauseSip, pauseSipEntry, isFetching } = props;
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState({});
-  const [showModal,setShowModal] = useState(false);
-  const [message,setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState("");
   useEffect(() => {
     getSipDetail(user.pan, token);
   }, []);
 
-  useEffect(()=>{
-   console.log("MODAL",showModal);
-   console.log("Mes",message);
-   
-   
-  },[showModal,message]);
+  useEffect(() => {
+    console.log("MODAL", showModal);
+    console.log("Mes", message);
+
+
+  }, [showModal, message]);
 
   const monthList = [
     { value: "01", label: "01" },
@@ -97,7 +97,7 @@ function PauseSIP(props) {
       },
       "childtrans": selectedItems
     };
-    pauseSipEntry(params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal);
+    pauseSipEntry(params, token, setSelectedMonths, setSelectedItems, setMessage, setShowModal);
 
   };
 
@@ -149,12 +149,14 @@ function PauseSIP(props) {
                 <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
                 <Text style={{ color: "black" }}>{item.sipReports.FROMSCHEME}</Text>
                 <Text style={{ color: "black" }}>FOLIONO: {item.sipReports.FOLIONO}</Text>
-
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: '60%' }}>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginVertical: 5,
+                    borderWidth: 1,
+                    borderColor: "black"
                   }}
                 >
                   <Picker
@@ -165,6 +167,8 @@ function PauseSIP(props) {
                       height: 20,
                       marginRight: 30,
                       color: "black",
+                      borderWidth: 1,
+                      borderColor: "black"
                     }}
                     dropdownIconColor="black"
                   >
@@ -177,22 +181,23 @@ function PauseSIP(props) {
                       />
                     ))}
                   </Picker>
+                </View>
 
-                  {isItemSelected(item._id) ? (
-                    <TouchableOpacity
-                      onPress={() => handleRemoveItem(item._id)}
-                      style={styles.botton_box2}
-                    >
-                      <Text style={styles.add}>Remove</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => handleSelectItem(item)}
-                      style={styles.botton_box2}
-                    >
-                      <Text style={styles.add}>Add</Text>
-                    </TouchableOpacity>
-                  )}
+                {isItemSelected(item._id) ? (
+                  <TouchableOpacity
+                    onPress={() => handleRemoveItem(item._id)}
+                    style={styles.botton_box2}
+                  >
+                    <Text style={styles.add}>Remove</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => handleSelectItem(item)}
+                    style={styles.botton_box2}
+                  >
+                    <Text style={styles.add}>Add</Text>
+                  </TouchableOpacity>
+                )}
                 </View>
               </View>
             ))
@@ -223,7 +228,7 @@ function PauseSIP(props) {
         </View>
       </Modal>
 
-      {pauseSip?.data?.length > 0 &&  <View style={{ marginBottom: 20, alignItems: 'center' }}>
+      {pauseSip?.data?.length > 0 && <View style={{ marginBottom: 20, alignItems: 'center' }}>
         <Button isLoading={false}
           fontSize={responsiveFontSize(2.3)}
           textColor={"#FFF"}
@@ -465,8 +470,8 @@ const mapDispatchToProps = (dispatch) => {
     getSipDetail: (params, token) => {
       PauseSipRedux.getSipDetail(dispatch, params, token);
     },
-    pauseSipEntry: (params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal) => {
-      PauseSipRedux.pauseSipEntry(dispatch, params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal);
+    pauseSipEntry: (params, token, setSelectedMonths, setSelectedItems, setMessage, setShowModal) => {
+      PauseSipRedux.pauseSipEntry(dispatch, params, token, setSelectedMonths, setSelectedItems, setMessage, setShowModal);
     },
   };
 };

@@ -32,9 +32,7 @@ const MyTextInput = (props) => {
 };
 const styles = StyleSheet.create({
   inputsec: {
-    borderBottomWidth: 2,
     backgroundColor: Colors.TRANSPARENT,
-    borderColor: Colors.GRAY_LIGHT,
     width: "100%",
     fontSize: 20,
     marginTop: 5,

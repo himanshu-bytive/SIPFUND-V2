@@ -98,7 +98,7 @@ const BirthRelations = (props) => {
     dob: nseDetails?.dob,
     mobile_relation: "",
     email_relation: "",
-    city : ""
+    // city : ""
   });
 
   const [errors, setErrors] = useState({
@@ -106,14 +106,14 @@ const BirthRelations = (props) => {
     dob: null,
     mobile_relation: null,
     email_relation: null,
-    city : null
+    // city : null
   });
 
   const [placeOfBirth, setPlaceOfBirth] = useState({ STATE_CODE: "", STATE_NAME: "" });
   const [mobileNumberBelongsTo, setMobileNumberBelongsTo] = useState("");
   const [emailBelongsTo, setEmailBelongsTo] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [city,setCity] = useState("");
+  // const [city,setCity] = useState("");
   useEffect(() => {
     console.log("NSE from bbirth", nseDetails);
     console.log("FAtca", fatcaDetails);
@@ -156,10 +156,10 @@ const BirthRelations = (props) => {
         newErrors.email_relation = "Please select the email ID relation.";
         hasError = true;
       }
-      if (!city) {
-        newErrors.email_relation = "Please Enter City.";
-        hasError = true;
-      }
+      // if (!city) {
+      //   newErrors.email_relation = "Please Enter City.";
+      //   hasError = true;
+      // }
 
       setErrors(newErrors);
 
@@ -177,10 +177,7 @@ const BirthRelations = (props) => {
           ...fatcaDetails,
           place_birth: placeOfBirth,
         },
-        userDetails :{
-          ...userDetails,
-          City : city
-        },
+        userDetails,
       };
       console.log("passing params", params);
 
@@ -270,7 +267,7 @@ const BirthRelations = (props) => {
               </View>
               {errors.place_birth && <Text style={styles.errorText}>{errors.place_birth}</Text>}
             </View>
-            <Text style={styles.sub_slogan}>City</Text>
+            {/* <Text style={styles.sub_slogan}>City</Text>
             <View style={{ marginBottom: 20, marginTop: 0 }}>
               <TextInput
                 style={{
@@ -287,7 +284,7 @@ const BirthRelations = (props) => {
                 placeholder="Enter Your City "
                 onChangeText={setCity}
               />
-            </View>
+            </View> */}
 
             <Text style={styles.sub_slogan}>Date of Birth</Text>
             <View style={styles.inputsecWrapper}>

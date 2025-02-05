@@ -12,6 +12,7 @@ import {
   Keyboard,
   Dimensions,
   Modal,
+  TextInput,
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Colors } from "../../common";
@@ -21,6 +22,7 @@ import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import Button from "../../components/Atom/Button/Button";
+import Typography from "../../components/Atom/Typography/Typography";
 
 function CompleteDetailsAddressScreen(props) {
   const pageActive = useRef(false);
@@ -40,8 +42,8 @@ function CompleteDetailsAddressScreen(props) {
   } = props;
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
-  const [isPincodeWorked,setIsPincodeNotWorked] = useState(false);
-  const [showStateCity,setShowStateCity] = useState(false);
+  const [isPincodeWorked, setIsPincodeNotWorked] = useState(false);
+  const [showStateCity, setShowStateCity] = useState(false);
   const [state, setState] = useState({
     address: "",
     pincode: "",
@@ -76,7 +78,7 @@ function CompleteDetailsAddressScreen(props) {
         getCitys(nseDetails.state.STATE_CODE, token);
         setShowStateCity(true);
       }
-    } 
+    }
   }, [nseDetails]);
 
   useEffect(() => {
@@ -118,12 +120,12 @@ function CompleteDetailsAddressScreen(props) {
       }));
     }
   }, [cityList]);
-  
+
 
 
   const getStateCitys = async (pincode) => {
     if (pincode && pincode?.length > 5) {
-      getPincode(pincode, token,setIsPincodeNotWorked,setShowStateCity);
+      getPincode(pincode, token, setIsPincodeNotWorked, setShowStateCity);
     }
   };
 
@@ -181,7 +183,7 @@ function CompleteDetailsAddressScreen(props) {
       <View style={styles.headerRow}>
         <TouchableOpacity
           onPress={() => {
-              props.navigation.navigate("OnBoard", { screen: "BirthRelation" });
+            props.navigation.navigate("OnBoard", { screen: "BirthRelation" });
           }}
           style={styles.arrowButton}
         >
@@ -200,51 +202,42 @@ function CompleteDetailsAddressScreen(props) {
       <ScrollView>
         {/* container_sec */}
         <View style={styles.container_sec}>
-          <Text style={styles.occupation}>
-            Address1 (As per address proof) <Text style={styles.error}>*</Text>
-          </Text>
-          <View style={styles.textBox}>
-
-            <MyTextInput
-              style={styles.inputsec}
-              placeholder={"Add Address"}
-              value={state.address}
-              onChangeText={(address) => {
-                setErrors({ ...errors, address: null });
-                setState({ ...state, address });
-              }}
-            />
-          </View>
-          {errors.address && <Text style={{color:Colors.RED}}>{errors.address}</Text>}
-
-          {/* DOB/DOI_sec */}
-          <Text style={styles.occupation}>
-            Pincode <Text style={styles.error}>*</Text>
-          </Text>
-          <View style={styles.textBox}>
-            <MyTextInput
-              style={styles.inputsec}
-              placeholder={"Pincode"}
-              maxLength={6}
-              keyboardType="numeric"
-              value={state.pincode}
-              onChangeText={(pincode) => {
-                setErrors({ ...errors, pincode: null });
-                setState({ ...state, pincode: pincode, states: null, city: "" });
-                getStateCitys(pincode);
-                // setErrors({ ...errors, states: null });
-                // setState({ ...state, states:null, city: "" });
-              }}
-            />
-          </View>
-          {errors.pincode && <Text style={{color : Colors.RED}}>{errors.pincode}</Text>}
+          <Typography style={styles.title}>Address1 (As per address proof)<Text style={styles.error}>*</Text></Typography>
+          <TextInput
+            style={styles.inputsec2}
+            editable={true}
+            placeholder={"Add Address"}
+            placeholderTextColor={"grey"}
+            value={state.address}
+            onChangeText={(address) => {
+              setErrors({ ...errors, address: null });
+              setState({ ...state, address });
+            }}
+          />
+          {errors.address && <Text style={{ color: Colors.RED }}>{errors.address}</Text>}
+          <Typography style={styles.title}>Pincode <Text style={styles.error}>*</Text></Typography>
+          <TextInput
+            style={styles.inputsec2}
+            editable={true}
+            placeholder={"Pincode"}
+            maxLength={6}
+            keyboardType="numeric"
+            placeholderTextColor={"grey"}
+            value={state.pincode}
+            onChangeText={(pincode) => {
+              setErrors({ ...errors, pincode: null });
+              setState({ ...state, pincode: pincode, states: null, city: "" });
+              getStateCitys(pincode);
+              // setErrors({ ...errors, states: null });
+              // setState({ ...state, states:null, city: "" });
+            }}
+          />
+          {errors.pincode && <Text style={{ color: Colors.RED }}>{errors.pincode}</Text>}
           <View style={[styles.example, { flexDirection: "row" }]}>
             {/* State Section */}
             {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginRight: 5 }}>
-                <Text style={styles.occupation}>
-                  State <Text style={styles.error}>*</Text>
-                </Text>
+                <Typography style={styles.title}>State <Text style={styles.error}>*</Text></Typography>
                 <View style={styles.textBox}>
                   <MySelectPicker
                     style={styles.inputsec}
@@ -257,16 +250,14 @@ function CompleteDetailsAddressScreen(props) {
                     }}
                   />
                 </View>
-                {errors.states && <Text style={{color : Colors.RED}}>{errors.states}</Text>}
+                {errors.states && <Text style={{ color: Colors.RED }}>{errors.states}</Text>}
               </View>
             )}
 
             {/* City Section */}
             {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginLeft: 5 }}>
-                <Text style={styles.occupation}>
-                  City <Text style={styles.error}>*</Text>
-                </Text>
+                <Typography style={styles.title}>State <Text style={styles.error}>*</Text></Typography>
                 <View style={styles.textBox}>
                   <MySelectPicker
                     style={styles.inputsec}
@@ -278,7 +269,7 @@ function CompleteDetailsAddressScreen(props) {
                     }}
                   />
                 </View>
-                {errors.city && <Text style={{color : Colors.RED}}>{errors.city}</Text>}
+                {errors.city && <Text style={{ color: Colors.RED }}>{errors.city}</Text>}
               </View>
             )}
           </View>
@@ -342,7 +333,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
- headerRow: {
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    textAlign: 'left',
+    marginTop: 10
+  },
+  headerRow: {
     flexDirection: "row",
     justifyContent: "space-between", // Space between arrow and logo
     alignItems: "center",
@@ -385,7 +383,7 @@ const styles = StyleSheet.create({
   textBox: {
     borderWidth: 1,
     borderColor: Colors.RED,
-    borderRadius: 2,
+    borderRadius: 12,
     backgroundColor: Colors.WHITE,
     fontSize: 16,
     marginTop: 8,
@@ -395,7 +393,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: 'black',
     backgroundColor: Colors.WHITE,
-    borderBottomWidth: 0
+    borderBottomWidth: 8
+  },
+  inputsec2: {
+    height: responsiveHeight(6),
+    fontSize: responsiveFontSize(2),
+    color: "black",
+    backgroundColor: Colors.WHITE,
+    borderColor: Colors.RED,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    justifyContent: "center"
   },
   error: {
     color: "#ff0000",
@@ -489,8 +499,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getCitys: (code, token) => {
       RegistrationActions.getCitys(dispatch, code, token);
     },
-    getPincode: (code, token,setIsPincodeNotWorked,setShowStateCity) => {
-      RegistrationActions.getPincode(dispatch, code, token,setIsPincodeNotWorked,setShowStateCity);
+    getPincode: (code, token, setIsPincodeNotWorked, setShowStateCity) => {
+      RegistrationActions.getPincode(dispatch, code, token, setIsPincodeNotWorked, setShowStateCity);
     },
     updateRegister: (params, token) => {
       RegistrationActions.updateRegister(dispatch, params, token);

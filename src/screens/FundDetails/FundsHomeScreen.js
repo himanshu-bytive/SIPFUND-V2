@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Text,
   BackHandler,
+  ActivityIndicator,
 } from "react-native";
 import moment from "moment";
 import { connect } from "react-redux";
@@ -33,6 +34,7 @@ import { Image, Header, CheckBox } from "react-native-elements";
 import { VictoryChartCode } from "../../components";
 import FundDetailScreen from "./FundDetailScreen";
 import Cart from "../../components/Cart";
+import { useFocusEffect } from "@react-navigation/native";
 
 const rupees = [
   { text: "1M", value: null },
@@ -64,12 +66,18 @@ function FundsHomeScreen(props) {
   const [navPercentage, setNavPercentage] = useState(0);
   const [labels, setLabels] = useState(["", "", "", ""]);
   const [datasets, setDatasets] = useState([0, 0, 0, 0]);
+  const [isLoading, setIsLoading] = useState(true);
   console.log(
     "🚀 ~ file: FundsHomeScreen.js:68 ~ FundsHomeScreen ~ datasets:",
     datasets
   );
   const [inception, setInception] = useState(0);
 
+  useEffect(()=>{
+    console.log("SBI",detailsInfo);
+    
+  },[detailsInfo])
+  
   useEffect(() => {
     // Reset state variables to initial values
     setAssets(0);
@@ -80,6 +88,22 @@ function FundsHomeScreen(props) {
     setDatasets([0, 0, 0, 0]);
     setInception(0);
   }, [props.fundDetail]); // Trigger when fundDetail changes
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+
+      // Simulate loading by setting a timeout (this is where you'd load your data)
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+
+      return () => {
+        // Cleanup if needed when screen loses focus
+        setIsLoading(false);
+      };
+    }, [])
+  );
 
   const refreshFunds = (value) => {
     let date = new Date(),
@@ -173,6 +197,8 @@ function FundsHomeScreen(props) {
       let category = detailedPortFolio["DP-CategoryName"]
         ? detailedPortFolio["DP-CategoryName"]
         : "";
+      console.log("Heloo",detailsInfo[0].api["DP-ReturnSinceInception"]);
+        
       setInception(
         Number(detailsInfo[0].api["DP-ReturnSinceInception"]).toFixed(2)
       );
@@ -181,8 +207,6 @@ function FundsHomeScreen(props) {
       setInvest(invest);
       setCategory(category);
     }
-    console.log("Got it",Number(detailsInfo[0].api["DP-Return2Yr"]).toFixed(2));
-    console.log("Got it",Number(detailsInfo[0].api["DP-Return3Yr"]).toFixed(2));
   }, [detailsInfo]);
 
   // if(detailsInfo){
@@ -321,159 +345,166 @@ function FundsHomeScreen(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        leftComponent={
-          <TouchableOpacity
-            onPress={() =>
-              props.navigation.navigate(
-                props.route.params?.fromScreen
-              )
-            }
-            style={{ marginTop: 20 }}
-          >
-            <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
-          </TouchableOpacity>
-        }
-        containerStyle={styles.header}
-        backgroundColor={Colors.LIGHT_WHITE}
-        centerComponent={
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={styles.logimg}
-          />
-        }
-        rightComponent={
-          <View style={{ marginTop: 0 }}>
-            <Cart
-              nav={() => {
-                props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
-              }}
-            />
-          </View>
-        }
-      />
-      <ScrollView style={styles.containerScroll}>
-        <View style={styles.management_company}>
-          <View style={styles.axis}>
+    <>
+      <View style={styles.container}>
+        <Header
+          leftComponent={
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate(
+                  props.route.params?.fromScreen
+                )
+              }
+              style={{ marginTop: 20 }}
+            >
+              <AntDesign name={"arrowleft"} size={30} color={Colors.RED} />
+            </TouchableOpacity>
+          }
+          containerStyle={styles.header}
+          backgroundColor={Colors.LIGHT_WHITE}
+          centerComponent={
             <Image
-              source={{
-                uri: fundDetail?.imagePath
-                  ? fundDetail?.imagePath
-                  : fundDetail?.image_path,
-              }}
-              style={styles.axis_img}
+              source={require("../../../assets/icon.png")}
+              style={styles.logimg}
             />
-            <View style={{ marginHorizontal: 10, flex: 1 }}>
-              <Text numberOfLines={2} style={styles.axis_asset}>
-                {fundDetail?.name ? fundDetail?.name : fundDetail?.product_name}
-              </Text>
-              {/*<Text style={styles.midcap}>{fundDetail?.productCode}</Text>*/}
+          }
+          rightComponent={
+            <View style={{ marginTop: 0 }}>
+              <Cart
+                nav={() => {
+                  props.navigation.navigate("TopRatedFunds", { screen: "TopRatedList" });
+                }}
+              />
             </View>
-          </View>
-        </View>
-
-        <View style={{ padding: 20 }}>
-          <View style={styles.fund_returns}>
-            <Text style={styles.fund}>Fund Returns</Text>
-            <View style={styles.since_inception}>
-              <Text style={styles.number}>{inception}%</Text>
-              <Text style={styles.since}>
-                {selectTab
-                  .replace("Y", " Years")
-                  .replace("M", " Month")
-                  .replace("ALL", "Since Inception")}
-              </Text>
-            </View>
-          </View>
-          <LineChart
-            data={{
-              labels: labels,
-              datasets: [{ data: datasets }],
-            }}
-            width={Dimensions.get("window").width - 40} // from react-native
-            height={220}
-            yAxisLabel=""
-            yAxisSuffix=""
-            yAxisInterval={1}
-            chartConfig={{
-              backgroundColor: "transparent",
-              backgroundGradientFrom: "#F9F9F9",
-              backgroundGradientTo: "#F9F9F9",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `#000`,
-              labelColor: (opacity = 1) => `#000`,
-              style: {
-                borderRadius: 0,
-                backgroundColor: "transparent",
-              },
-              propsForDots: {
-                r: "4",
-                strokeWidth: "2",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-          {/* <VictoryChartCode data={mapData} /> */}
-          <View
-            style={{ borderWidth: 1, borderColor: Colors.DEEP_GRAY }}
-          ></View>
-          {/* imges_sec */}
-          <View style={styles.footer_sec}>
-            {rupees.map((item, key) => (
-              <TouchableOpacity
-                onPress={() => toggleTab(item.text)}
-                key={key}
-                style={styles.rupees_sec}
-              >
-                <Image
-                  source={
-                    selectTab == item.text
-                      ? require("../../../assets/layer_img2.png")
-                      : require("../../../assets/layer_img.png")
-                  }
-                  style={styles.rupees}
-                />
-                <Text style={styles.rupees_text}>{item.text}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* Min Investment_sec */}
-          <View style={styles.investment_sec}>
-            <View style={styles.investment}>
-              <Text numberOfLines={1} style={styles.price}>
-                ₹{(parseInt(assets) / 10000000).toFixed(0)} Cr
-              </Text>
-              <Text style={styles.min}>Total Assets</Text>
-            </View>
-            <View style={styles.investment}>
-              <Text numberOfLines={1} style={styles.price}>
-                ₹{parseInt(invest).toFixed(0)}
-              </Text>
-              <Text style={styles.min}>Min. Invest</Text>
-            </View>
-            <View style={styles.investment}>
-              <Text numberOfLines={2} style={styles.price}>
-                {category}
-              </Text>
-              <Text style={styles.min}>Category</Text>
-            </View>
-          </View>
-        </View>
-        <FundDetailScreen
-          fromScreen={props.route.params?.fromScreen}
-          goBack={() =>
-            props.navigation.navigate(props.route.params?.fromScreen)
           }
         />
-      </ScrollView>
-    </View>
+        <ScrollView style={styles.containerScroll}>
+          <View style={styles.management_company}>
+            <View style={styles.axis}>
+              <Image
+                source={{
+                  uri: fundDetail?.imagePath
+                    ? fundDetail?.imagePath
+                    : fundDetail?.image_path,
+                }}
+                style={styles.axis_img}
+              />
+              <View style={{ marginHorizontal: 10, flex: 1 }}>
+                <Text numberOfLines={2} style={styles.axis_asset}>
+                  {fundDetail?.name ? fundDetail?.name : fundDetail?.product_name}
+                </Text>
+                {/*<Text style={styles.midcap}>{fundDetail?.productCode}</Text>*/}
+              </View>
+            </View>
+          </View>
+
+          <View style={{ padding: 20 }}>
+            <View style={styles.fund_returns}>
+              <Text style={styles.fund}>Fund Returns</Text>
+              <View style={styles.since_inception}>
+                <Text style={styles.number}>{inception}%</Text>
+                <Text style={styles.since}>
+                  {selectTab
+                    .replace("Y", " Years")
+                    .replace("M", " Month")
+                    .replace("ALL", "Since Inception")}
+                </Text>
+              </View>
+            </View>
+            <LineChart
+              data={{
+                labels: labels,
+                datasets: [{ data: datasets }],
+              }}
+              width={Dimensions.get("window").width - 40} // from react-native
+              height={220}
+              yAxisLabel=""
+              yAxisSuffix=""
+              yAxisInterval={1}
+              chartConfig={{
+                backgroundColor: "transparent",
+                backgroundGradientFrom: "#F9F9F9",
+                backgroundGradientTo: "#F9F9F9",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 1) => `#000`,
+                labelColor: (opacity = 1) => `#000`,
+                style: {
+                  borderRadius: 0,
+                  backgroundColor: "transparent",
+                },
+                propsForDots: {
+                  r: "4",
+                  strokeWidth: "2",
+                  stroke: "#ffa726",
+                },
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
+                borderRadius: 16,
+              }}
+            />
+            {/* <VictoryChartCode data={mapData} /> */}
+            <View
+              style={{ borderWidth: 1, borderColor: Colors.DEEP_GRAY }}
+            ></View>
+            {/* imges_sec */}
+            <View style={styles.footer_sec}>
+              {rupees.map((item, key) => (
+                <TouchableOpacity
+                  onPress={() => toggleTab(item.text)}
+                  key={key}
+                  style={styles.rupees_sec}
+                >
+                  <Image
+                    source={
+                      selectTab == item.text
+                        ? require("../../../assets/layer_img2.png")
+                        : require("../../../assets/layer_img.png")
+                    }
+                    style={styles.rupees}
+                  />
+                  <Text style={styles.rupees_text}>{item.text}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Min Investment_sec */}
+            <View style={styles.investment_sec}>
+              <View style={styles.investment}>
+                <Text numberOfLines={1} style={styles.price}>
+                  ₹{(parseInt(assets) / 10000000).toFixed(0)} Cr
+                </Text>
+                <Text style={styles.min}>Total Assets</Text>
+              </View>
+              <View style={styles.investment}>
+                <Text numberOfLines={1} style={styles.price}>
+                  ₹{parseInt(invest).toFixed(0)}
+                </Text>
+                <Text style={styles.min}>Min. Invest</Text>
+              </View>
+              <View style={styles.investment}>
+                <Text numberOfLines={2} style={styles.price}>
+                  {category}
+                </Text>
+                <Text style={styles.min}>Category</Text>
+              </View>
+            </View>
+          </View>
+          <FundDetailScreen
+            fromScreen={props.route.params?.fromScreen}
+            goBack={() =>
+              props.navigation.navigate(props.route.params?.fromScreen)
+            }
+          />
+
+        </ScrollView>
+      </View>
+      {isLoading && (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color={Colors.RED} />
+        </View>)}
+    </>
   );
 }
 
@@ -481,6 +512,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  loaderContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   containerScroll: {
     width: "100%",
