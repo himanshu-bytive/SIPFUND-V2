@@ -53,10 +53,10 @@ class ApiClient {
         .catch((error) => {
           if (error.response) {
             // Request made and server responded
-            if (error.response.data === "Unauthorized") {
-              Alert.alert("Session Expired!!");
-              NativeModules.DevSettings.reload();
-            }
+            // if (error.response.data === "Unauthorized") {
+            //   Alert.alert("Session Expired!!");
+            //   // NativeModules.DevSettings.reload();
+            // }
             let message = "";
             let status = null;
             if (
