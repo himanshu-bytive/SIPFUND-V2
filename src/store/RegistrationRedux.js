@@ -83,6 +83,8 @@ export const RegistrationActions = {
       {},
       token
     );
+    console.log("Got Income",income);
+    
     let state = await SiteAPI.apiGetCall("/apiData/State", {}, token);
     let accountType = await SiteAPI.apiGetCall(
       "/apiData/AccountType",
@@ -133,7 +135,7 @@ export const RegistrationActions = {
       }
     }
   },
-  getPincode: async (dispatch, code, token) => {
+  getPincode: async (dispatch, code, token,setShowStateCity,setIsPincodeNotWorked) => {
     if (code) {
       dispatch({ type: types.FETCH_PINCODE_INFO_PENDING });
       let pincodes = await SiteAPI.apiGetCall(
@@ -141,7 +143,17 @@ export const RegistrationActions = {
         {},
         token
       );
-      if (pincodes.data) {
+      if (pincodes.data && Object.keys(pincodes.data).length > 0) {
+        dispatch({
+          type: types.FETCH_PINCODE_INFO_SUCCESS,
+          pincodeInfo: pincodes.data,
+        });
+        setShowStateCity(true);
+        setIsPincodeNotWorked(false);
+      } else {
+        setShowStateCity(false);
+        setIsPincodeNotWorked(true);
+        console.log("empty");
         dispatch({
           type: types.FETCH_PINCODE_INFO_SUCCESS,
           pincodeInfo: pincodes.data,

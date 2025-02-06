@@ -70,6 +70,7 @@ function HomeScreen(props) {
     getUserData,
     fundDetails,
     setdocumentStatus,
+    isInn
   } = props;
   // console.log("🚀 ~ HomeScreen ~ investments:", JSON.stringify(investments));
 
@@ -248,7 +249,7 @@ function HomeScreen(props) {
 
   function JustNavigate(){
     console.log("UER",userDetails);  
-    if(!username){
+    if(!isInn){
       props.navigation.navigate("OnBoard",{screen : "ProfileDetailsForm"});
     }else if(userDetails?.ekycIsDone === false && username){
       props.navigation.navigate("Reset", { screen: "EKYC" });
@@ -1528,6 +1529,7 @@ const mapStateToProps = state => ({
   pan: state.home.pan,
   error: state.home.error,
   steps: state.home.steps,
+  isInn: state.registration.isInn,
   home: state.home.home,
   cart: state.cartActions.cart,
   goals: state.goals.goals,

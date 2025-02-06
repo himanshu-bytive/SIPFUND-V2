@@ -11,6 +11,8 @@ import {
   Text,
   Keyboard,
   Dimensions,
+  TextInput,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Colors } from "../../common";
@@ -19,6 +21,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { Image, Header } from "react-native-elements";
 import Cart from "../../components/Cart";
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import Button from "../../components/Atom/Button/Button";
 
 function CompleteDetailsAddressScreen(props) {
   const pageActive = useRef(false);
@@ -38,6 +41,8 @@ function CompleteDetailsAddressScreen(props) {
   } = props;
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
+  const [isPincodeWorked, setIsPincodeNotWorked] = useState(false);
+  const [showStateCity, setShowStateCity] = useState(false);
 
   const [state, setState] = useState({
     address: "",
@@ -56,7 +61,7 @@ function CompleteDetailsAddressScreen(props) {
   useEffect(() => {
     if (updateSuccess && pageActive.current) {
       pageActive.current = false;
-      props.navigation.navigate("Reg",{screen : "RegisterBankDetails"});
+      props.navigation.navigate("Reg", { screen: "RegisterBankDetails" });
     }
   }, [updateSuccess]);
 
@@ -79,9 +84,9 @@ function CompleteDetailsAddressScreen(props) {
     if (statess) {
       const stateList = statess
         ? statess.map((item) => ({
-            value: item.STATE_CODE,
-            label: String(item.STATE_NAME),
-          }))
+          value: item.STATE_CODE,
+          label: String(item.STATE_NAME),
+        }))
         : [];
       setStateList(stateList);
     }
@@ -98,7 +103,7 @@ function CompleteDetailsAddressScreen(props) {
 
   useEffect(() => {
     if (pincodeInfo && pincodeInfo?.stateCode) {
-      
+
       // getCitys(pincodeInfo.stateCode, token);
       setState({
         ...state,
@@ -115,11 +120,11 @@ function CompleteDetailsAddressScreen(props) {
       city: pincodeInfo?.cityName,
     });
   }, [cityList])
-  
+
 
   const getStateCitys = async (pincode) => {
     if (pincode && pincode?.length > 5) {
-      getPincode(pincode, token);
+      getPincode(pincode, token,setShowStateCity,setIsPincodeNotWorked);
     }
   };
 
@@ -176,7 +181,7 @@ function CompleteDetailsAddressScreen(props) {
   }, []);
 
   return (
-    <KeyboardAvoidingView behavior={"height"} enabled style={styles.container}>
+    <View behavior={"height"} enabled style={styles.container}>
       <Header
         leftComponent={
           <TouchableOpacity onPress={() => props.navigation.goBack()}>
@@ -198,12 +203,12 @@ function CompleteDetailsAddressScreen(props) {
         </View>
       )}
       <ScrollView>
-        {/* container_sec */}
+
         <View style={styles.container_sec}>
           <Text style={styles.occupation}>
             Address1 (As per address proof) <Text style={styles.error}>*</Text>
           </Text>
-          <View style={styles.textBox}>
+          {/* <View style={styles.textBox}>
             <MyTextInput
               style={styles.inputsec}
               placeholder={"Add Address"}
@@ -214,32 +219,42 @@ function CompleteDetailsAddressScreen(props) {
                 setState({ ...state, address });
               }}
             />
-          </View>
+          </View> */}
+          <TextInput
+            style={styles.inputbox}
+            editable={true}
+            placeholderTextColor={"grey"}
+            placeholder="Enter Name"
+            value={state.address}
+            onChangeText={(address) => {
+              setErrors({ ...errors, address: null });
+              setState({ ...state, address });
+            }}
+          />
 
           {/* DOB/DOI_sec */}
           <Text style={styles.occupation}>
             Pincode <Text style={styles.error}>*</Text>
           </Text>
-          <View style={styles.textBox}>
-            <MyTextInput
-              style={styles.inputsec}
-              placeholder={"Pincode"}
-              maxLength={6}
-              keyboardType="numeric"
-              value={state.pincode}
-              error={errors.pincode}
-              onChangeText={(pincode) => {
-                setErrors({ ...errors, pincode: null });
-                setState({ ...state, pincode:pincode,states:null, city: "" });
-                getStateCitys(pincode);
-                // setErrors({ ...errors, states: null });
-                    // setState({ ...state, states:null, city: "" });
-              }}
-            />
-          </View>
+          <TextInput
+            style={styles.inputbox}
+            editable={true}
+            placeholderTextColor={"grey"}
+            maxLength={6}
+            placeholder="Enter Name"
+            keyboardType="numeric"
+            value={state.pincode}
+            onChangeText={(pincode) => {
+              setErrors({ ...errors, pincode: null });
+              setState({ ...state, pincode: pincode, states: null, city: "" });
+              getStateCitys(pincode);
+              // setErrors({ ...errors, states: null });
+              // setState({ ...state, states:null, city: "" });
+            }}
+          />
           <View style={[styles.example, { flexDirection: "row" }]}>
             {/* State Section */}
-            {state.pincode != "" && state.pincode.length > 5 && (
+            {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginRight: 5 }}>
                 <Text style={styles.occupation}>
                   State <Text style={styles.error}>*</Text>
@@ -261,7 +276,7 @@ function CompleteDetailsAddressScreen(props) {
             )}
 
             {/* City Section */}
-            {state.pincode != "" && state.pincode.length > 5 && (
+            {state.pincode != "" && state.pincode.length > 5 && showStateCity && (
               <View style={{ flex: 1, marginLeft: 5 }}>
                 <Text style={styles.occupation}>
                   City <Text style={styles.error}>*</Text>
@@ -285,38 +300,32 @@ function CompleteDetailsAddressScreen(props) {
         </View>
       </ScrollView>
       {/* click_box */}
-      {/* Footer Section */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={onAction}
-        >
-          <Text style={styles.buttonText}> Next </Text>
+      <View style={styles.bottomSection}>
+        <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+          <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
-      {/* <View
-        style={[
-          styles.footer,
-          {
-            position: "absolute",
-            top: Dimensions.get("window").height / 1.2,
-            alignSelf: "center",
-          },
-        ]}
+      <Modal
+        visible={isPincodeWorked}
+        transparent={true}
+        animationType="none"
+        onRequestClose={() => setIsPincodeNotWorked(false)}
       >
-        <View style={styles.click_box}>
-          <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={styles.botton_box}
-          >
-            <Text style={styles.get_otp}>Previous</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onAction} style={styles.botton_box}>
-            <Text style={styles.get_otp}>Next</Text>
-          </TouchableOpacity>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Please Enter Correct Pincode.</Text>
+            <Button
+              text="Close"
+              onPress={() => setIsPincodeNotWorked(false)}
+              backgroundColor={Colors.RED}
+              textColor={Colors.WHITE}
+              height={40}
+              width={100}
+            />
+          </View>
         </View>
-      </View> */}
-    </KeyboardAvoidingView>
+      </Modal>
+    </View>
   );
 }
 
@@ -324,6 +333,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  bottomSection: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+  },
+  nextButton: {
+    backgroundColor: Colors.RED,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   header: {
     flexDirection: "row", // Arrange items in a row
@@ -343,12 +389,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   textBox: {
-    borderWidth: 2,
-    borderColor: '#FFB2AA',
-    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.RED,
+    borderRadius: 8,
     backgroundColor: Colors.WHITE,
     fontSize: 16,
-    marginTop:10,
+    marginTop: 10,
   },
   inputsec: {
     fontSize: 17,
@@ -356,6 +402,19 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 0,
     backgroundColor: Colors.WHITE,
+  },
+  inputbox: {
+    height: responsiveHeight(6),
+    fontSize: responsiveFontSize(2),
+    color: "black",
+    backgroundColor: Colors.WHITE,
+    borderColor: Colors.RED,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    justifyContent: "center",
+    marginTop: 10
   },
   error: {
     color: "#ff0000",
@@ -384,10 +443,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.WHITE,
-  },
-  buttonText: {
-    color: Colors.BLACK,
-    fontSize: responsiveFontSize(2),
   },
   example: {
     fontSize: 15,
@@ -453,8 +508,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
     getCitys: (code, token) => {
       RegistrationActions.getCitys(dispatch, code, token);
     },
-    getPincode: (code, token) => {
-      RegistrationActions.getPincode(dispatch, code, token);
+    getPincode: (code, token,setShowStateCity,setIsPincodeNotWorked) => {
+      RegistrationActions.getPincode(dispatch, code, token,setShowStateCity,setIsPincodeNotWorked);
     },
     updateRegister: (params, token) => {
       RegistrationActions.updateRegister(dispatch, params, token);
