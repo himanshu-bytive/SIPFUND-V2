@@ -16,7 +16,7 @@ const PanEntryScreen = () => {
     if (panNumber.trim().length === 10) {
       Alert.alert("Valid PAN", "Proceeding to the next step");
     } else {
-      Alert.alert("Invalid PAN", "Please enter a valid 10-digit PAN");
+      Alert.alert("Invalid PAN", "Please Enter a valid 10-digit PAN");
     }
   };
 

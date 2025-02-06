@@ -27,7 +27,7 @@ function CeaseSIP(props) {
   const [reasons, setReasons] = useState({});
   const [reasonsText, setReasonsText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [message,setMessage] = useState("");
+  const [message, setMessage] = useState("");
   useEffect(() => {
     getSipDetail(user.pan, token);
     ceaseMaster(token);
@@ -110,7 +110,7 @@ function CeaseSIP(props) {
     };
 
     //console.log("params=", params);
-    ceaseSipEntry(params, token, setReasons, setReasonsText,setShowModal,setMessage);
+    ceaseSipEntry(params, token, setReasons, setReasonsText, setShowModal, setMessage);
   };
 
   return (
@@ -155,18 +155,27 @@ function CeaseSIP(props) {
               <ActivityIndicator color={Colors.RED} size="large" />
             </View>
           ) : ceaseSip?.data?.length > 0 ? (
-              ceaseSip.data.map((item) =>
-                <View style={styles.listStyle} key={item._id}>
-                  <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
-                  <Text style={{color:"black"}}>{item.sipReports.FROMSCHEME}</Text>
-                  <Text style={{color:"black"}}>FOLIONO: {item.sipReports.FOLIONO}</Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5  }}>
+            ceaseSip.data.map((item) =>
+              <View style={styles.listStyle} key={item._id}>
+                <Text style={{ color: 'red' }}>{item.sipReports.LONG_NAME}</Text>
+                <Text style={{ color: "black" }}>{item.sipReports.FROMSCHEME}</Text>
+                <Text style={{ color: "black" }}>FOLIONO: {item.sipReports.FOLIONO}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      height: 40,
+                      marginRight: 30,
+                      borderWidth: 1,
+                      borderColor: "black",
+                      borderRadius: 5,
+                      justifyContent: "center",
+                    }}
+                  >
                     <Picker
                       selectedValue={reasons[item._id] || ""}
                       style={{
-                        flex: 1,
-                        height: 20,
-                        marginRight: 30,
+                        height: 40,
                         color: "black",
                       }}
                       onValueChange={(value) => handleReasonChange(item._id, value)}
@@ -178,49 +187,51 @@ function CeaseSIP(props) {
                       ))}
                     </Picker>
                   </View>
-                  {(reasons[item._id] === "SC13" || reasons[item._id] === "13") ?
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                      <TextInput
-                        style={{
-                          flex: 1,
-                          height: 40,
-                          borderColor: 'gray',
-                          borderWidth: 1,
-                          paddingHorizontal: 10,
-                          borderRadius: 5,
-                          color:"black"
-                        }}
-                        maxLength={1000}
-                        minLength={20}
-                        multiline={true}
-                        placeholder="Enter your Reason"
-                        placeholderTextColor="gray"
-                        value={reasonsText[item._id] || ""}
-                        onChange={(event) => handleReasonInput(item._id, event.nativeEvent.text)} // Access text here
-                      />
-                    </View>
-                    : null}
+                </View>
+
+                {(reasons[item._id] === "SC13" || reasons[item._id] === "13") ?
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                    <Button
-                      isLoading={isFetching}
-                      fontSize={responsiveFontSize(2.1)}
-                      textColor={"#FFF"}
-                      onPress={() => CeaseSipCheckout(item)}
-                      backgroundColor={Colors.RED}
-                      text="Cease SIP"
-                      borderRadius={1}
-                      borderColor={Colors.RED}
-                      borderWidth={1}
-                      height={responsiveHeight(5)}
-                      width={responsiveWidth(90)}
-                      loaderColor="white"
+                    <TextInput
+                      style={{
+                        flex: 1,
+                        height: 40,
+                        borderColor: 'gray',
+                        borderWidth: 1,
+                        paddingHorizontal: 10,
+                        borderRadius: 5,
+                        color: "black"
+                      }}
+                      maxLength={1000}
+                      minLength={20}
+                      multiline={true}
+                      placeholder="Enter your Reason"
+                      placeholderTextColor="gray"
+                      value={reasonsText[item._id] || ""}
+                      onChange={(event) => handleReasonInput(item._id, event.nativeEvent.text)} // Access text here
                     />
                   </View>
+                  : null}
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                  <Button
+                    isLoading={isFetching}
+                    fontSize={responsiveFontSize(2.1)}
+                    textColor={"#FFF"}
+                    onPress={() => CeaseSipCheckout(item)}
+                    backgroundColor={Colors.RED}
+                    text="Cease SIP"
+                    borderRadius={1}
+                    borderColor={Colors.RED}
+                    borderWidth={1}
+                    height={responsiveHeight(5)}
+                    width={responsiveWidth(90)}
+                    loaderColor="white"
+                  />
                 </View>
-              )) : (
-              // Show message if no data is available
-              <Text style={styles.noDataText}>No SIPs available to pause.</Text>
-            )}
+              </View>
+            )) : (
+            // Show message if no data is available
+            <Text style={styles.noDataText}>No SIPs available to pause.</Text>
+          )}
         </View>
       </ScrollView>
       <Modal
@@ -468,8 +479,8 @@ const mapDispatchToProps = (dispatch) => {
     ceaseMaster: (token) => {
       CeaseSipRedux.ceaseMaster(dispatch, token);
     },
-    ceaseSipEntry: (params, token, setReasons, setReasonsText,setShowModal,setMessage) => {
-      CeaseSipRedux.ceaseSipEntry(dispatch, params, token, setReasons, setReasonsText,setShowModal,setMessage);
+    ceaseSipEntry: (params, token, setReasons, setReasonsText, setShowModal, setMessage) => {
+      CeaseSipRedux.ceaseSipEntry(dispatch, params, token, setReasons, setReasonsText, setShowModal, setMessage);
     },
   };
 };

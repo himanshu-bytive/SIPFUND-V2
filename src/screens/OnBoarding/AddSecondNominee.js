@@ -96,7 +96,7 @@ const AddNominee = (props) => {
     if (!state.nominee2_name) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        nominee2_name: "Please enter Nominee Name.",
+        nominee2_name: "Please Enter Nominee Name.",
       }));
       hasErrors = true;
     }

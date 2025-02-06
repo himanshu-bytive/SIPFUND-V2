@@ -60,7 +60,7 @@ const MySelectPicker = (props) => {
             if (icon) return icon;
             return (
               <AntDesign
-                style={iconStyle ? iconStyle : { right: 10 }}
+                style={iconStyle ? iconStyle : { right: 10,marginTop:12 }}
                 name="down"
                 color={"#444"}
                 size={18}

@@ -35,13 +35,14 @@ export const PauseSipRedux = {
       });
     }
   },
-  pauseSipEntry: async (dispatch, params, token, setSelectedMonths, setSelectedItems) => {
+  pauseSipEntry: async (dispatch, params, token, setSelectedMonths, setSelectedItems,setMessage,setShowModal) => {
     dispatch({ type: types.PAUSE_SIP_PENDING });
 
     try {
       let data = await SiteAPI.apiPostCall("/customer/pauseSipEntry", params, token);
       if (data.error) {
-        Alert.alert("An error occurred while pausing SIP entry, Try again");
+        setShowModal(true);
+        setMessage("An error occurred while pausing SIP entry, Try again");
         dispatch({
           type: types.PAUSE_SIP_FAILURE,
           error: data.message,
@@ -49,7 +50,8 @@ export const PauseSipRedux = {
         setSelectedMonths({});
         setSelectedItems([]);
       } else {
-        Alert.alert('Check your email and confirm.');
+        setShowModal(true);
+        setMessage("A confirmation email for your SIP pause request has been sent to your registered email. Please check and confirm.")
         dispatch({
           type: types.PAUSE_SIP_SUCCESS,
           pauseSipRes: data,
@@ -58,6 +60,8 @@ export const PauseSipRedux = {
         setSelectedItems([]);
       }
     } catch (err) {
+      setMessage("");
+      setShowModal(false);
       dispatch({
         type: types.PAUSE_SIP_FAILURE,
         error: "An error occurred while pausing SIP entry.",

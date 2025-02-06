@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20,
         backgroundColor: Colors.WHITE,
+        marginTop:20
     },
     logimg: {
         width: responsiveWidth(35),
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 16,
-        color: Colors.GRAY,
+        color: Colors.BLACK,
         marginBottom: 20,
     },
     gridContainer: {

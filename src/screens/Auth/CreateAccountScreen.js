@@ -13,6 +13,7 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
@@ -48,7 +49,8 @@ function CreateAccountScreen(props) {
   const [referral, setReferral] = useState(false);
   const [appToken, setAppToken] = useState("-");
   const [isLogin, setIsLogin] = useState(null);
-
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const passwordValidationMessages = {
     length: "Must be between 8 to 16 characters",
     caps: "Must have at least one capital letter",
@@ -175,13 +177,13 @@ function CreateAccountScreen(props) {
   const onAction = async () => {
     if (!FormValidate.isEmail(state.email)) {
       emailInput.current.focus();
-      setError({ ...errors, email: "Please enter Email Address" });
-      return;
+      setError({ ...errors, email: "Please Enter Email Address" });
     }
     if (!state.password) {
+      console.log("State", state);
+
       passwordInput.current.focus();
-      setError({ ...errors, password: "Please enter Password" });
-      return;
+      setError({ ...errors, password: "Please Enter Password" });
     }
     if (!state.term) {
       setError({ ...errors, term: "Please check Terms" });
@@ -220,7 +222,7 @@ function CreateAccountScreen(props) {
       }
     );
 
-    creatAccount(params);
+    creatAccount(params,setShowModal,setMessage);
   };
 
   return (
@@ -237,17 +239,17 @@ function CreateAccountScreen(props) {
             }}
           />
           <Text style={{ color: "black", fontSize: 18, fontWeight: "500", marginTop: -20, textAlign: "center", lineHeight: 26 }}>
-          Congrats! Your sign-up is successful.{"\n"}
-          Proceed further to setup your account.
+            Congrats! Your sign-up is successful.{"\n"}
+            Proceed further to setup your account.
           </Text>
         </View>
-       <View style={{justifyContent:"center",alignItems:"center",marginBottom: 50}}> 
-       <Image
-          source={require("../../../assets/TrustedBy.png")}
-          style={{ width: 250, height: 80, alignSelf: "center"}}
-          resizeMode="contain"
-        />
-       </View>
+        <View style={{ justifyContent: "center", alignItems: "center", marginBottom: 50 }}>
+          <Image
+            source={require("../../../assets/TrustedBy.png")}
+            style={{ width: 250, height: 80, alignSelf: "center" }}
+            resizeMode="contain"
+          />
+        </View>
       </View>) : (
         <KeyboardAvoidingView style={styles.container}>
           <Header
@@ -299,9 +301,7 @@ function CreateAccountScreen(props) {
                 }}
                 value={state.password}
               />
-              {errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
+              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
               <View style={styles.passwordValidationContainer}>
                 {validatePass(state.password).map((item, index) => (
                   <Text key={index} style={styles.passwordValidationText}>
@@ -342,29 +342,31 @@ function CreateAccountScreen(props) {
               <Text style={styles.confrom_button}>
                 By tapping confirm button, you agreeing to the
               </Text>
-              <CheckBox
-                title={
-                  <TouchableOpacity
-                    onPress={() =>
-                      Linking.openURL(
-                        "https://sipfund.com/SipFund_Terms&Conditions.html"
-                      )
-                    }
-                  >
-                    <Text style={{ color: Colors.RED }}>Terms & Conditions</Text>
-                  </TouchableOpacity>
-                }
-                containerStyle={styles.checkbox_style}
-                textStyle={{ color: Colors.RED, fontSize: 14 }}
-                checked={state.term}
-                checkedColor={Colors.BLACK}
-                uncheckedColor={Colors.RED}
-                onPress={() => {
-                  setError({ ...errors, term: null });
-                  setState({ ...state, term: !state.term });
-                }}
-              />
-              {errors.term && <Text style={styles.error}>{errors.term}</Text>}
+              <View style={{ marginLeft: -18 }}>
+                <CheckBox
+                  title={
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          "https://sipfund.com/SipFund_Terms&Conditions.html"
+                        )
+                      }
+                    >
+                      <Text style={{ color: Colors.RED }}>Terms & Conditions</Text>
+                    </TouchableOpacity>
+                  }
+                  containerStyle={styles.checkbox_style}
+                  textStyle={{ color: Colors.RED, fontSize: 14 }}
+                  checked={state.term}
+                  checkedColor={Colors.BLACK}
+                  uncheckedColor={Colors.RED}
+                  onPress={() => {
+                    setError({ ...errors, term: null });
+                    setState({ ...state, term: !state.term });
+                  }}
+                />
+                {errors.term && <Text style={styles.errorTerms}>{errors.term}</Text>}
+              </View>
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                 <Button backgroundColor={Colors.RED} height={responsiveHeight(6)} width={responsiveWidth(70)} onPress={() => {
                   if (validatePass(state.password).length > 0) {
@@ -372,10 +374,30 @@ function CreateAccountScreen(props) {
                     return;
                   }
                   onAction();
-                }} text={"CONFIRM"} isLoading={isFetching} textColor={"white"} loaderColor="white"/>
+                }} text={"CONFIRM"} isLoading={isFetching} textColor={"white"} loaderColor="white" />
               </View>
             </View>
           </ScrollView>
+          <Modal
+            visible={showModal}
+            transparent={true}
+            animationType="none"
+            onRequestClose={() => setShowModal(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>{message}</Text>
+                <Button
+                  text="Close"
+                  onPress={() => setShowModal(false)}
+                  backgroundColor={Colors.RED}
+                  textColor={Colors.WHITE}
+                  height={40}
+                  width={100}
+                />
+              </View>
+            </View>
+          </Modal>
         </KeyboardAvoidingView>)}
     </>
   );
@@ -425,8 +447,16 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.RED,
     fontSize: 13,
-    marginBottom:10,
-    alignSelf:"center"
+    marginBottom: 0,
+    alignSelf: "flex-start",
+    marginTop: 5
+  },
+  errorTerms: {
+    color: Colors.RED,
+    fontSize: 13,
+    marginBottom: 20,
+    alignSelf: "center",
+    marginTop: 5
   },
   refreshcode: {
     textAlign: "right",
@@ -462,6 +492,25 @@ const styles = StyleSheet.create({
   passwordValidationText: {
     color: "red",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 });
 
 const mapStateToProps = (state) => ({
@@ -482,8 +531,8 @@ const mapDispatchToProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...stateProps,
     ...ownProps,
-    creatAccount: (params) => {
-      AuthActions.creatAccount(dispatch, params);
+    creatAccount: (params, setShowModal, setMessage) => {
+      AuthActions.creatAccount(dispatch, params, setShowModal, setMessage);
     },
     login: (params, token, setIsLogin) => {
       AuthActions.login(dispatch, params, token, setIsLogin);

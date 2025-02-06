@@ -38,7 +38,7 @@ function ExistingScreen(props) {
   const onAction = async () => {
     if (!state.inn || state.inn.length < 10) {
       innInput.current.focus();
-      setError({ ...errors, inn: "Please enter valid INN" });
+      setError({ ...errors, inn: "Please Enter valid INN" });
       return;
     }
     if (
@@ -47,7 +47,7 @@ function ExistingScreen(props) {
       !FormValidate.validatePan(state?.pan)
     ) {
       panInput.current.focus();
-      setError({ ...errors, pan: "Please enter valid PAN" });
+      setError({ ...errors, pan: "Please Enter valid PAN" });
       return;
     }
     pageActive.current = true;

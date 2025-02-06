@@ -67,7 +67,7 @@ const UnderAgeNominee = (props) => {
     //     if (!state.nominee1_guard_name.trim()) {
     //         setErrors((prevErrors) => ({
     //             ...prevErrors,
-    //             nominee1_guard_name: "Please enter the guardian's name.",
+    //             nominee1_guard_name: "Please Enter the guardian's name.",
     //         }));
     //         hasErrors = true;
     //     } else {
@@ -95,13 +95,13 @@ const UnderAgeNominee = (props) => {
     //     if (!state.nominee1_guard_pan.trim()) {
     //         setErrors((prevErrors) => ({
     //             ...prevErrors,
-    //             nominee1_guard_pan: "Please enter the guardian's PAN.",
+    //             nominee1_guard_pan: "Please Enter the guardian's PAN.",
     //         }));
     //         hasErrors = true;
     //     } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee1_guard_pan.trim())) {
     //         setErrors((prevErrors) => ({
     //             ...prevErrors,
-    //             nominee1_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+    //             nominee1_guard_pan: "Please Enter a valid PAN (e.g., ABCDE1234F).",
     //         }));
     //         hasErrors = true;
     //     } else {
@@ -142,7 +142,7 @@ const UnderAgeNominee = (props) => {
         if (!state.nominee1_guard_name.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_name: "Please enter the guardian's name.",
+                nominee1_guard_name: "Please Enter the guardian's name.",
             }));
             hasErrors = true;
         } else {
@@ -170,13 +170,13 @@ const UnderAgeNominee = (props) => {
         if (!state.nominee1_guard_pan.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_pan: "Please enter the guardian's PAN.",
+                nominee1_guard_pan: "Please Enter the guardian's PAN.",
             }));
             hasErrors = true;
         } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee1_guard_pan.trim())) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+                nominee1_guard_pan: "Please Enter a valid PAN (e.g., ABCDE1234F).",
             }));
             hasErrors = true;
         } else {
@@ -235,7 +235,7 @@ const UnderAgeNominee = (props) => {
                 <View style={styles.maincontainer}>
                     <View style={{ marginBottom: 20 }}>
                         <Typography fontSize={responsiveFontSize(2.5)} lineHeight={25} fontWeight={"700"}>
-                            Add guardian for your nominee 1
+                            Add guardian for your nominee
                         </Typography>
                         <Typography fontSize={responsiveFontSize(2)} lineHeight={25}>
                             As your nominees age is below 18 years, kindly add nominee’s guardian.
@@ -288,7 +288,8 @@ const UnderAgeNominee = (props) => {
                         placeholderTextColor={"grey"}
                         value={state.nominee1_guard_pan || ""}
                         onChangeText={(text) => {
-                            setState((prevState) => ({ ...prevState, nominee1_guard_pan: text }));
+                            const uppercaseText = text.toUpperCase();
+                            setState((prevState) => ({ ...prevState, nominee1_guard_pan: uppercaseText }));
                             setErrors((prevErrors) => ({ ...prevErrors, nominee1_guard_pan: null })); // Clear error on input
                         }}
                     />

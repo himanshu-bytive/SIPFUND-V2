@@ -98,6 +98,7 @@ const BirthRelations = (props) => {
     dob: nseDetails?.dob,
     mobile_relation: "",
     email_relation: "",
+    // city : ""
   });
 
   const [errors, setErrors] = useState({
@@ -105,13 +106,14 @@ const BirthRelations = (props) => {
     dob: null,
     mobile_relation: null,
     email_relation: null,
+    // city : null
   });
 
   const [placeOfBirth, setPlaceOfBirth] = useState({ STATE_CODE: "", STATE_NAME: "" });
   const [mobileNumberBelongsTo, setMobileNumberBelongsTo] = useState("");
   const [emailBelongsTo, setEmailBelongsTo] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
-
+  // const [city,setCity] = useState("");
   useEffect(() => {
     console.log("NSE from bbirth", nseDetails);
     console.log("FAtca", fatcaDetails);
@@ -154,6 +156,10 @@ const BirthRelations = (props) => {
         newErrors.email_relation = "Please select the email ID relation.";
         hasError = true;
       }
+      // if (!city) {
+      //   newErrors.email_relation = "Please Enter City.";
+      //   hasError = true;
+      // }
 
       setErrors(newErrors);
 
@@ -191,10 +197,10 @@ const BirthRelations = (props) => {
       });
       setDateOfBirth(nseDetails?.dob ? getDateInHuman(nseDetails.dob) : null);
       setMobileNumberBelongsTo(
-        nseDetails?.Mobile_relation
+        nseDetails?.Mobile_relation || "SE" // Default to SE if no value
       );
       setEmailBelongsTo(
-        nseDetails?.Email_relation
+        nseDetails?.Email_relation || "SE" // Default to SE if no value
       );
       console.log("DOB", dateOfBirth);
 
@@ -214,7 +220,7 @@ const BirthRelations = (props) => {
 
 
   return (
-     <>
+    <>
       <View style={styles.headerRow}>
         <TouchableOpacity
           onPress={() => {
@@ -233,155 +239,183 @@ const BirthRelations = (props) => {
           style={styles.logimg}
         />
       </View>
-        <View style={styles.containBox}>
-          {currentStep === 1 ? (
-            <>
-              <View style={styles.text_box}>
-                <Text style={styles.sub_slogan}>Place of Birth</Text>
-                <View style={styles.inputsecWrapper}>
-                  <Picker
-                    selectedValue={placeOfBirth.STATE_CODE}
-                    onValueChange={(itemValue) => {
-                      const selectedState = stateList.find((state) => state.value === itemValue);
-                      if (selectedState) {
-                        setPlaceOfBirth({
-                          STATE_CODE: selectedState.value,
-                          STATE_NAME: selectedState.label,
-                        });
-                      }
-                    }}
-                    style={styles.inputsec}
-                  >
-                    <Picker.Item label="Select Place of Birth" value="" />
-                    {stateList.map((state) => (
-                      <Picker.Item key={state.value} label={state.label} value={state.value} />
-                    ))}
-                  </Picker>
-                </View>
-                {errors.place_birth && <Text style={styles.errorText}>{errors.place_birth}</Text>}
-              </View>
-              <Text style={styles.sub_slogan}>Date of Birth</Text>
+      <View style={styles.containBox}>
+        {currentStep === 1 ? (
+          <>
+            <View style={styles.text_box}>
+              <Text style={styles.sub_slogan}>Place of Birth</Text>
+              <Text style={styles.sub_slogan}>State</Text>
               <View style={styles.inputsecWrapper}>
-                <View
+                <Picker
+                  selectedValue={placeOfBirth.STATE_CODE}
+                  onValueChange={(itemValue) => {
+                    const selectedState = stateList.find((state) => state.value === itemValue);
+                    if (selectedState) {
+                      setPlaceOfBirth({
+                        STATE_CODE: selectedState.value,
+                        STATE_NAME: selectedState.label,
+                      });
+                    }
+                  }}
+                  style={styles.inputsec}
+                >
+                  <Picker.Item label="Select Your State" value="" />
+                  {stateList.map((state) => (
+                    <Picker.Item key={state.value} label={state.label} value={state.value} />
+                  ))}
+                </Picker>
+              </View>
+              {errors.place_birth && <Text style={styles.errorText}>{errors.place_birth}</Text>}
+            </View>
+            {/* <Text style={styles.sub_slogan}>City</Text>
+            <View style={{ marginBottom: 20, marginTop: 0 }}>
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: Colors.RED,
+                  fontSize: responsiveFontSize(2),
+                  paddingHorizontal: responsiveWidth(3),
+                  height: responsiveHeight(6),
+                  borderRadius: 8,
+                  backgroundColor: Colors.WHITE,
+                  color: "black",
+                }}
+                placeholderTextColor={"grey"}
+                placeholder="Enter Your City "
+                onChangeText={setCity}
+              />
+            </View> */}
+
+            <Text style={styles.sub_slogan}>Date of Birth</Text>
+            <View style={styles.inputsecWrapper}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10,
+                  width: "auto"
+                }}
+              >
+                <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+                  <AntDesign
+                    style={{ marginTop: 0 }}
+                    name="calendar"
+                    color={"#EE4248"}
+                    size={25}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setIsDatePickerVisible(true)}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginTop: 10,
-                    width: "auto"
+                    flex: 1,
                   }}
                 >
-                  <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
-                    <AntDesign
-                      style={{ marginTop: 0 }}
-                      name="calendar"
-                      color={"#EE4248"}
-                      size={25}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setIsDatePickerVisible(true)}
+                  <TextInput
+                    keyboardType="numeric"
                     style={{
-                      flex: 1,
+                      marginLeft: 10,
+                      marginTop: -2,
+                      fontSize: 18,
+                      width: "auto",
+                      color: "black",
                     }}
-                  >
-                    <TextInput
-                      keyboardType="numeric"
-                      style={{
-                        marginLeft: 10,
-                        marginTop: -2,
-                        fontSize: 18,
-                        width: "auto",
-                        color: "black",
-                      }}
-                      editable={false}
-                      selectTextOnFocus={false}
-                      value={dateOfBirth ? dateOfBirth : ""}
-                      placeholder={"DD-MM-YYYY"}
-                      placeholderTextColor={"grey"}
-                      maxLength={11}
+                    editable={false}
+                    selectTextOnFocus={false}
+                    value={dateOfBirth ? dateOfBirth : ""}
+                    placeholder={"DD-MM-YYYY"}
+                    placeholderTextColor={"grey"}
+                    maxLength={11}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                date={new Date()}
+                maximumDate={new Date()}
+                minimumDate={new Date(1900, 0, 1)}
+                onConfirm={(dob) => {
+                  setIsDatePickerVisible(false);
+                  console.log("hgh", dob);
+
+                  const formattedDate = dob.toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
+
+                  console.log("Formatted Date:", formattedDate); // For verification
+
+                  const dateAsNumber = parseInt(
+                    `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
+                    10
+                  ); // Convert to number if needed
+                  const datevalue = getDateInHuman(dateAsNumber);
+                  setDateOfBirth(datevalue); // Save original Date object
+
+
+                  setErrors({ ...errors, dob: null });
+                  setState({ ...state, dob: dateAsNumber }); // Save formatted date
+                }}
+                onCancel={() => setIsDatePickerVisible(false)}
+              />
+            </View>
+            {errors.dob && <Text style={styles.errorText}>{errors.dob}</Text>}
+          </>
+        ) : currentStep === 2 ? (
+          <>
+            <View style={styles.text_box}>
+              <Text style={styles.sub_slogan}>Mobile Number belongs to</Text>
+              <View style={styles.inputsecWrapper}>
+                <Picker
+                  selectedValue={mobileNumberBelongsTo}
+                  onValueChange={setMobileNumberBelongsTo}
+                  style={styles.inputsec}
+                >
+                  <Picker.Item label="Select Relation" value="" />
+                  {mobileEmailRelation.map((relation) => (
+                    <Picker.Item
+                      key={relation.value}
+                      label={relation.label}
+                      value={relation.value}
                     />
-                  </TouchableOpacity>
-                </View>
-
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  date={new Date()}
-                  maximumDate={new Date()}
-                  minimumDate={new Date(1900, 0, 1)}
-                  onConfirm={(dob) => {
-                    setIsDatePickerVisible(false);
-                    console.log("hgh", dob);
-
-                    const formattedDate = dob.toLocaleDateString("en-US", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    }).replace(",", ""); // Remove the comma (e.g., "10-Jan-2025")
-
-                    console.log("Formatted Date:", formattedDate); // For verification
-
-                    const dateAsNumber = parseInt(
-                      `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`,
-                      10
-                    ); // Convert to number if needed
-                    const datevalue = getDateInHuman(dateAsNumber);
-                    setDateOfBirth(datevalue); // Save original Date object
-
-
-                    setErrors({ ...errors, dob: null });
-                    setState({ ...state, dob: dateAsNumber }); // Save formatted date
-                  }}
-                  onCancel={() => setIsDatePickerVisible(false)}
-                />
+                  ))}
+                </Picker>
               </View>
-              {errors.dob && <Text style={styles.errorText}>{errors.dob}</Text>}
-            </>
-          ) : currentStep === 2 ? (
-            <>
-              <View style={styles.text_box}>
-                <Text style={styles.sub_slogan}>Mobile Number belongs to</Text>
-                <View style={styles.inputsecWrapper}>
-                  <Picker
-                    selectedValue={mobileNumberBelongsTo}
-                    onValueChange={(itemValue) => setMobileNumberBelongsTo(itemValue)}
-                    style={styles.inputsec}
-                  >
-                    <Picker.Item label="Select Relation" value="" />
-                    {mobileEmailRelation.map((relation) => (
-                      <Picker.Item key={relation.value} label={relation.label} value={relation.value} />
-                    ))}
-                  </Picker>
-                </View>
-                {errors.mobile_relation && <Text style={styles.errorText}>{errors.mobile_relation}</Text>}
-              </View>
+              {errors.mobile_relation && <Text style={styles.errorText}>{errors.mobile_relation}</Text>}
+            </View>
 
-              <View style={styles.text_box2}>
-                <Text style={styles.sub_slogan}>Email ID belongs to</Text>
-                <View style={styles.inputsecWrapper}>
-                  <Picker
-                    selectedValue={emailBelongsTo}
-                    onValueChange={(itemValue) => setEmailBelongsTo(itemValue)}
-                    style={styles.inputsec}
-                  >
-                    <Picker.Item label="Select Relation" value="" />
-                    {mobileEmailRelation.map((relation) => (
-                      <Picker.Item key={relation.value} label={relation.label} value={relation.value} />
-                    ))}
-                  </Picker>
-                </View>
-                {errors.email_relation && <Text style={styles.errorText}>{errors.email_relation}</Text>}
+            <View style={styles.text_box2}>
+              <Text style={styles.sub_slogan}>Email ID belongs to</Text>
+              <View style={styles.inputsecWrapper}>
+                <Picker
+                  selectedValue={emailBelongsTo}
+                  onValueChange={setEmailBelongsTo}
+                  style={styles.inputsec}
+                >
+                  <Picker.Item label="Select Relation" value="" />
+                  {mobileEmailRelation.map((relation) => (
+                    <Picker.Item
+                      key={relation.value}
+                      label={relation.label}
+                      value={relation.value}
+                    />
+                  ))}
+                </Picker>
               </View>
-            </>
-          ) : null}
-        </View>
-        <View style={styles.bottomSection}>
-          <TouchableOpacity style={styles.nextButton} onPress={onAction}>
-            <Text style={styles.buttonText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-        </>
+              {errors.email_relation && <Text style={styles.errorText}>{errors.email_relation}</Text>}
+            </View>
+          </>
+        ) : null}
+      </View>
+      <View style={styles.bottomSection}>
+        <TouchableOpacity style={styles.nextButton} onPress={onAction}>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -396,10 +430,10 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   containBox: {
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
     width: "100%",
-    flex:1,
-    backgroundColor:"white"
+    flex: 1,
+    backgroundColor: "white"
   },
   bottomSection: {
     backgroundColor: 'white',

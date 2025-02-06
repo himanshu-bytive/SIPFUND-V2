@@ -16,6 +16,17 @@ export const styles = StyleSheet.create({
       padding: 10,
       //justifyContent: 'flex-start', // Align items at the top (or space them out based on content)
     },
+    loaderOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.3)", // Dim background
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 10,
+    },     
     logimg: {
       width: responsiveWidth(35), // Adjusted width
       height: responsiveHeight(5), // Adjusted height

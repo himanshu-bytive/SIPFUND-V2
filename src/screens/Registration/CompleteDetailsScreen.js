@@ -279,7 +279,7 @@ function CompleteDetailsScreen(props) {
     //console.log("heyyyy");
     //setErrors({
     //...errors,
-    //nominate1guard_pan: "Please enter a valid PAN",
+    //nominate1guard_pan: "Please Enter a valid PAN",
     //});
     //return;
     //}

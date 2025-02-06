@@ -42,7 +42,7 @@ function ForgotPasswordScreen(props) {
   const onAction = async () => {
     if (!FormValidate.isEmail(state.email)) {
       emailInput.current.focus();
-      setError({ ...errors, email: "Please enter Email Address" });
+      setError({ ...errors, email: "Please Enter Email Address" });
       return;
     }
     pageActive.current = true;

@@ -271,7 +271,7 @@ function VerifyScreen(props) {
 
       } else {
         console.error("Geocoding API error:", response.data.status);
-        Alert.alert("Error", "Unable to fetch address details");
+        // Alert.alert("Error", "Unable to fetch address details");
       }
     })
   };
@@ -290,7 +290,7 @@ function VerifyScreen(props) {
     let phone = ph ? ph : state.phone;
     if (phone === "") {
       phoneInput.current.focus();
-      setError({ ...errors, phone: "Please enter phone number" });
+      setError({ ...errors, phone: "Please Enter phone number" });
       setIsLoading(false); // Hide loader immediately if there's an error
       return;
     }

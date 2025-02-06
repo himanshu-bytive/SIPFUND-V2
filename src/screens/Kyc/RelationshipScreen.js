@@ -72,7 +72,7 @@ function RelationshipScreen(props) {
   const onAction = async () => {
     if (!state.data) {
       dataInput.current.focus();
-      setError({ ...errors, data: "Please enter Query" });
+      setError({ ...errors, data: "Please Enter Query" });
       return;
     }
     pageActive.current = true;

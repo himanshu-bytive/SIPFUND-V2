@@ -7,9 +7,8 @@ import {
   KeyboardAvoidingView,
   Text,
   ScrollView,
-  Alert,
-  TextInput,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { connect } from "react-redux";
 import { Styles, Config, Colors, FormValidate } from "../../common";
@@ -43,12 +42,12 @@ function PanScreen(props) {
   const onAction = async () => {
     if (!state.pannumber) {
       pannumberInput.current.focus();
-      setError({ ...errors, pannumber: "Please enter Pan" });
+      setError({ ...errors, pannumber: "Please Enter Pan" });
       return;
     }
     if (!FormValidate.validatePan(state.pannumber)) {
       pannumberInput.current.focus();
-      setError({ ...errors, pannumber: "Please enter Validate Pan" });
+      setError({ ...errors, pannumber: "Please Enter Validate Pan" });
       return;
     }
     pageActive.current = true;
@@ -111,6 +110,7 @@ function PanScreen(props) {
               placeholderTextColor={"grey"}
               autoCapitalize={"characters"}
               placeholder={"PAN Number"}
+              editable={!isFetching}
               onChangeText={(pannumber) => {
                 if (pannumber.length <= 10) {
                   setError({ ...errors, pannumber: null });
@@ -134,7 +134,8 @@ function PanScreen(props) {
           </Text>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Button isLoading={isFetching}
+          <Button 
+            isLoading={false}
             fontSize={responsiveFontSize(2.5)}
             textColor={"#fff"}
             onPress={() => onAction()}
@@ -146,6 +147,13 @@ function PanScreen(props) {
           />
         </View>
       </View>
+
+      {/* Loader Overlay */}
+      {isFetching && (
+        <View style={styles.loaderOverlay}>
+          <ActivityIndicator size="large" color={Colors.RED} />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }

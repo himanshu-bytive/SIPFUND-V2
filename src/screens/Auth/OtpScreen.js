@@ -42,21 +42,23 @@ function OtpScreen(props) {
   const [onSuccess, setOnSuccess] = useState(false);
   useEffect(() => {
     let interval;
-    if (isDisabled) {
+    if (isDisabled && timer > 0) {
       interval = setInterval(() => {
         setTimer((prevTimer) => {
-          if (prevTimer > 1) {
-            return prevTimer - 1; // Decrease timer by 1 second
-          } else {
-            clearInterval(interval); // Clear the timer
-            setIsDisabled(false); // Enable the button
+          if (prevTimer <= 1) {
+            setIsDisabled(false);
             return 0;
+          } else {
+            return prevTimer - 1;
           }
         });
       }, 1000);
     }
-    return () => clearInterval(interval); // Cleanup interval
-  }, [isDisabled]);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isDisabled]); // Dependency on isDisabled only
+  
 
   const handleResend = () => {
     reSendAction(); // Call your resend function

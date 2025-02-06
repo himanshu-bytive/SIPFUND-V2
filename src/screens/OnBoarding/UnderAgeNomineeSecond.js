@@ -65,7 +65,7 @@ const UnderAgeNomineeSecond = (props) => {
         if (!state.nominee2_guard_name.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee1_guard_name: "Please enter the guardian's name.",
+                nominee1_guard_name: "Please Enter the guardian's name.",
             }));
             hasErrors = true;
         } else {
@@ -93,13 +93,13 @@ const UnderAgeNomineeSecond = (props) => {
         if (!state.nominee2_guard_pan.trim()) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee2_guard_pan: "Please enter the guardian's PAN.",
+                nominee2_guard_pan: "Please Enter the guardian's PAN.",
             }));
             hasErrors = true;
         } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(state.nominee2_guard_pan.trim())) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                nominee2_guard_pan: "Please enter a valid PAN (e.g., ABCDE1234F).",
+                nominee2_guard_pan: "Please Enter a valid PAN (e.g., ABCDE1234F).",
             }));
             hasErrors = true;
         } else {

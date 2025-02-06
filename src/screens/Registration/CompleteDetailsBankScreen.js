@@ -741,7 +741,7 @@ function CompleteDetailsBankScreen(props, route) {
             />
             <View style={{ flexDirection: "row", marginTop: 20, justifyContent: "center", alignItems: "center", alignSelf: "center" }}>
               <Button
-                isLoading={isFetching}
+                isLoading={false}
                 backgroundColor={Colors.RED}
                 fontSize={responsiveFontSize(2)}
                 height={responsiveHeight(5)}
@@ -838,7 +838,7 @@ function CompleteDetailsBankScreen(props, route) {
                 >
                   <Text style={styles.get_otp}>Previous</Text>
                 </TouchableOpacity>
-                {isFetching ? (
+                {false ? (
                   <View style={styles.botton_box}>
                     <ActivityIndicator size={30} color={Colors.WHITE} />
                   </View>
