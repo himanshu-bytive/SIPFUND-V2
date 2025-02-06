@@ -60,8 +60,12 @@ function DashboardScreen(props) {
             token,
           );
           // Log the data received from the API call
-          setDashboardData(apiData?.data);
-
+          if(apiData?.data.error === true){
+            setDashboardData(0);            
+          }else{
+            setDashboardData(apiData?.data);
+          }
+   
           console.log('API data:', apiData);
 
           // If needed, update the state or handle the response here
@@ -305,10 +309,7 @@ function DashboardScreen(props) {
                       },
                       {
                         text: 'YES',
-                        onPress: () =>
-                          props.navigation.navigate('OnBoard', {
-                            screen: 'ProfileDetailsForm',
-                          }),
+                        onPress: () => NavigateUser()
                       },
                     ],
                   );
@@ -364,10 +365,7 @@ function DashboardScreen(props) {
                       },
                       {
                         text: 'YES',
-                        onPress: () =>
-                          props.navigation.navigate('OnBoard', {
-                            screen: 'ProfileDetailsForm',
-                          }),
+                        onPress: () => NavigateUser()
                       },
                     ],
                   );
@@ -425,10 +423,7 @@ function DashboardScreen(props) {
                       },
                       {
                         text: 'YES',
-                        onPress: () =>
-                          props.navigation.navigate('OnBoard', {
-                            screen: 'ProfileDetailsForm',
-                          }),
+                        onPress: () => NavigateUser()
                       },
                     ],
                   );
@@ -565,7 +560,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
-  fundsmg: {
+   fundsmg: {
     height: 36,
     width: 36,
   },
