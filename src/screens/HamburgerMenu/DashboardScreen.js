@@ -48,7 +48,7 @@ function DashboardScreen(props) {
         try {
           // Call goalSummary and goalSummaryRetrieve (assuming these are async functions)
           await goalSummary(data, token);
-          await goalSummaryRetrieve(data, token);
+          // await goalSummaryRetrieve(data, token);
 
           // Log the current steps (assuming steps is updated correctly in your state)
           console.log('Current steps', steps);
@@ -306,8 +306,8 @@ function DashboardScreen(props) {
                       {
                         text: 'YES',
                         onPress: () =>
-                          props.navigation.navigate('Reg', {
-                            screen: 'RegisterDetails',
+                          props.navigation.navigate('OnBoard', {
+                            screen: 'ProfileDetailsForm',
                           }),
                       },
                     ],
@@ -365,8 +365,8 @@ function DashboardScreen(props) {
                       {
                         text: 'YES',
                         onPress: () =>
-                          props.navigation.navigate('Reg', {
-                            screen: 'RegisterDetails',
+                          props.navigation.navigate('OnBoard', {
+                            screen: 'ProfileDetailsForm',
                           }),
                       },
                     ],
@@ -426,8 +426,8 @@ function DashboardScreen(props) {
                       {
                         text: 'YES',
                         onPress: () =>
-                          props.navigation.navigate('Reg', {
-                            screen: 'RegisterDetails',
+                          props.navigation.navigate('OnBoard', {
+                            screen: 'ProfileDetailsForm',
                           }),
                       },
                     ],
